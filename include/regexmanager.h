@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "configactionhandler.h"
+#include "dialog.h"
 #include "matcher.h"
 #include "regexowner.h"
 #include "stflrichtext.h"
@@ -22,16 +23,16 @@ public:
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
-	void quote_and_highlight(StflRichText& stflString, const std::string& location);
-	void remove_last_regex(const std::string& location);
+	void quote_and_highlight(StflRichText& stflString, Dialog location);
+	void remove_last_regex(Dialog location);
 	int article_matches(Matchable* item);
 	int feed_matches(Matchable* feed);
-	std::string get_attrs_stfl_string(const std::string& location, bool hasFocus);
+	std::string get_attrs_stfl_string(Dialog location, bool hasFocus);
 
 private:
 	typedef std::vector<std::pair<std::shared_ptr<Regex>, std::string>>
 		RegexStyleVector;
-	std::map<std::string, RegexStyleVector> locations;
+	std::map<Dialog, RegexStyleVector> locations;
 	std::vector<std::string> cheat_store_for_dump_config;
 	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers_article;
 	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers_feed;

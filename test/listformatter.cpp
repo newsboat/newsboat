@@ -69,7 +69,7 @@ TEST_CASE("format_list() uses regex manager if one is passed",
 	"[ListFormatter]")
 {
 	RegexManager rxmgr;
-	ListFormatter fmt(&rxmgr, "article");
+	ListFormatter fmt(&rxmgr, Dialog::Article);
 
 	add_lines(fmt, {
 		"Highlight me please!",

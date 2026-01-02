@@ -37,10 +37,9 @@ public:
 		type = t;
 	}
 	void handle_cmdline(const std::string& cmd) override;
-	std::string id() const override
+	Dialog id() const override
 	{
-		return (type == SelectionType::TAG) ? "tagselection"
-			: "filterselection";
+		return (type == SelectionType::TAG) ? Dialog::TagSelection : Dialog::FilterSelection;
 	}
 	std::string title() override;
 

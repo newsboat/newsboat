@@ -270,7 +270,7 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	unsigned int text_width,
 	unsigned int window_width,
 	RegexManager* rxman,
-	const std::string& location,
+	Dialog location,
 	Links& links)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
@@ -323,7 +323,7 @@ std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
 	unsigned int text_width,
 	unsigned int window_width,
 	RegexManager* rxman,
-	const std::string& location)
+	Dialog location)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
 	Links links;

@@ -130,7 +130,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 		auto binding_state = MultiKeyBindingState::NotFound;
 		BindingType type = BindingType::Bind;
-		auto cmds = keys.get_operation(key_sequence, "podboat", binding_state, type);
+		auto cmds = keys.get_operation(key_sequence, Dialog::Podboat, binding_state, type);
 
 		if (binding_state == MultiKeyBindingState::MoreInputNeeded) {
 			continue;
@@ -324,7 +324,7 @@ void PbView::run_help()
 
 	title_line_help_form.set_text(_("Help"));
 
-	const auto descs = keys.get_keymap_descriptions("podboat");
+	const auto descs = keys.get_keymap_descriptions(Dialog::Podboat);
 
 	ListFormatter listfmt;
 
@@ -362,7 +362,7 @@ void PbView::run_help()
 		}
 		auto binding_state = MultiKeyBindingState::NotFound;
 		BindingType type = BindingType::Bind;
-		auto cmds = keys.get_operation(key_sequence, "help", binding_state, type);
+		auto cmds = keys.get_operation(key_sequence, Dialog::Help, binding_state, type);
 
 		if (binding_state == MultiKeyBindingState::MoreInputNeeded) {
 			continue;
@@ -418,7 +418,7 @@ void PbView::run_help()
 void PbView::set_help_keymap_hint()
 {
 	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")}};
-	const auto keymap_hint = keys.prepare_keymap_hint(hints, "podboat");
+	const auto keymap_hint = keys.prepare_keymap_hint(hints, Dialog::Podboat);
 	help_form.set("help", keymap_hint);
 }
 
@@ -435,7 +435,7 @@ void PbView::set_dllist_keymap_hint()
 		{OP_HELP, _("Help")}
 	};
 
-	const auto keymap_hint = keys.prepare_keymap_hint(hints, "podboat");
+	const auto keymap_hint = keys.prepare_keymap_hint(hints, Dialog::Podboat);
 	dllist_form.set("help", keymap_hint);
 }
 

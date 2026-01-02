@@ -121,7 +121,7 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width,
 std::vector<std::string> format_text_plain_helper(
 	const std::vector<std::pair<LineType, std::string>>& lines,
 	RegexManager* rxman,
-	const std::string& location,
+	std::optional<Dialog> location,
 	// wrappable lines are wrapped at this width
 	const size_t wrap_width,
 	// if non-zero, softwrappable lines are wrapped at this width
@@ -134,7 +134,7 @@ std::vector<std::string> format_text_plain_helper(
 		"wrap_width = %" PRIu64 ", total_width = %" PRIu64 ", %" PRIu64
 		" lines",
 		rxman,
-		location,
+		location.has_value() ? dialog_name(location.value()) : "",
 		static_cast<uint64_t>(wrap_width),
 		static_cast<uint64_t>(total_width),
 		static_cast<uint64_t>(lines.size()));
@@ -159,10 +159,10 @@ std::vector<std::string> format_text_plain_helper(
 			text,
 			static_cast<unsigned int>(type));
 
-		if (rxman && type != LineType::hr) {
+		if (rxman && location.has_value() && type != LineType::hr) {
 			// TODO: Propagate usage of StflRichText
 			auto x = StflRichText::from_quoted(text);
-			rxman->quote_and_highlight(x, location);
+			rxman->quote_and_highlight(x, location.value());
 			text = x.stfl_quoted();
 		}
 
@@ -208,7 +208,7 @@ std::vector<std::string> format_text_plain_helper(
 
 std::pair<std::string, std::size_t> TextFormatter::format_text_to_list(
 	RegexManager* rxman,
-	const std::string& location,
+	std::optional<Dialog> location,
 	const size_t wrap_width,
 	const size_t total_width)
 {
@@ -235,7 +235,7 @@ std::string TextFormatter::format_text_plain(const size_t width,
 {
 	std::string result;
 	auto formatted = format_text_plain_helper(
-			lines, nullptr, "", width, total_width, true);
+			lines, nullptr, {}, width, total_width, true);
 	for (const auto& line : formatted) {
 		result += line + "\n";
 	}

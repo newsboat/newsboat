@@ -31,9 +31,9 @@ public:
 	std::vector<KeyMapHintEntry> get_keymap_hint() const override;
 	std::shared_ptr<RssFeed> get_feed();
 
-	std::string id() const override
+	Dialog id() const override
 	{
-		return "feedlist";
+		return Dialog::FeedList;
 	}
 	std::string title() override;
 

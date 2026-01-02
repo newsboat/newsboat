@@ -10,7 +10,7 @@
 
 namespace newsboat {
 
-ListFormatter::ListFormatter(RegexManager* r, const std::string& loc)
+ListFormatter::ListFormatter(RegexManager* r, std::optional<Dialog> loc)
 	: rxman(r)
 	, location(loc)
 {}
@@ -40,8 +40,8 @@ std::string ListFormatter::format_list() const
 {
 	std::string format_cache = "{list";
 	for (auto str : lines) {
-		if (rxman) {
-			rxman->quote_and_highlight(str, location);
+		if (rxman && location.has_value()) {
+			rxman->quote_and_highlight(str, location.value());
 		}
 		format_cache.append(strprintf::fmt(
 				"{listitem text:%s}", Stfl::quote(str.stfl_quoted())));

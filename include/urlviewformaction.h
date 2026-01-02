@@ -21,9 +21,9 @@ public:
 	{
 		links = l;
 	}
-	std::string id() const override
+	Dialog id() const override
 	{
-		return "urlview";
+		return Dialog::UrlView;
 	}
 	std::string title() override;
 	void handle_cmdline(const std::string& cmd) override;

@@ -1,9 +1,12 @@
 #ifndef NEWSBOAT_TEXTFORMATTER_H_
 #define NEWSBOAT_TEXTFORMATTER_H_
 
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
+
+#include "dialog.h"
 
 namespace newsboat {
 
@@ -36,7 +39,7 @@ public:
 		const std::vector<std::pair<LineType, std::string>>& lines);
 	std::pair<std::string, std::size_t> format_text_to_list(
 		RegexManager* r = nullptr,
-		const std::string& location = "",
+		std::optional<Dialog> location = {},
 		const size_t wrap_width = 80,
 		const size_t total_width = 0);
 	std::string format_text_plain(const size_t width = 80,

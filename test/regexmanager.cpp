@@ -70,14 +70,14 @@ TEST_CASE("RegexManager highlights according to definition", "[RegexManager]")
 	SECTION("In articlelist") {
 		rxman.handle_action("highlight", {"articlelist", "foo", "blue", "red"});
 		auto input = StflRichText::from_plaintext("xfoox");
-		rxman.quote_and_highlight(input, "articlelist");
+		rxman.quote_and_highlight(input, Dialog::ArticleList);
 		REQUIRE(input.stfl_quoted() == "x<0>foo</>x");
 	}
 
 	SECTION("In feedlist") {
 		rxman.handle_action("highlight", {"feedlist", "foo", "blue", "red"});
 		auto input = StflRichText::from_plaintext("yfooy");
-		rxman.quote_and_highlight(input, "feedlist");
+		rxman.quote_and_highlight(input, Dialog::FeedList);
 		REQUIRE(input.stfl_quoted() == "y<0>foo</>y");
 	}
 }
@@ -90,13 +90,13 @@ TEST_CASE("quote_and_highlight() only matches `^` at the start of the line",
 
 	SECTION("^.") {
 		rxman.handle_action("highlight", {"article", "^.", "blue", "red"});
-		rxman.quote_and_highlight(input, "article");
+		rxman.quote_and_highlight(input, Dialog::Article);
 		REQUIRE(input.stfl_quoted() == "<0>T</>his is a test");
 	}
 
 	SECTION("(^Th|^is)") {
 		rxman.handle_action("highlight", {"article", "(^Th|^is)", "blue", "red"});
-		rxman.quote_and_highlight(input, "article");
+		rxman.quote_and_highlight(input, Dialog::Article);
 		REQUIRE(input.stfl_quoted() == "<0>Th</>is is a test");
 	}
 }
@@ -115,7 +115,7 @@ TEST_CASE("RegexManager::quote_and_highlight works fine even if there were "
 	rxman.handle_action("highlight-article", {"title==\"\"", "blue", "red"});
 
 	auto input = StflRichText::from_plaintext("xfoox");
-	rxman.quote_and_highlight(input, "articlelist");
+	rxman.quote_and_highlight(input, Dialog::ArticleList);
 	REQUIRE(input.stfl_quoted() == "x<0>foo</>x");
 }
 
@@ -124,16 +124,16 @@ TEST_CASE("RegexManager preserves text when there's nothing to highlight",
 {
 	RegexManager rxman;
 	auto input = StflRichText::from_plaintext("xbarx");
-	rxman.quote_and_highlight(input, "feedlist");
+	rxman.quote_and_highlight(input, Dialog::FeedList);
 	REQUIRE(input.stfl_quoted() == "xbarx");
 
 	input = StflRichText::from_quoted("a<b>");
-	rxman.quote_and_highlight(input, "feedlist");
+	rxman.quote_and_highlight(input, Dialog::FeedList);
 	REQUIRE(input.stfl_quoted() == "a<b>");
 
 	SECTION("encode `<` as `<>` for stfl") {
 		input = StflRichText::from_plaintext("<");
-		rxman.quote_and_highlight(input, "feedlist");
+		rxman.quote_and_highlight(input, Dialog::FeedList);
 		REQUIRE(input.stfl_quoted() == "<>");
 	}
 }
@@ -146,9 +146,9 @@ TEST_CASE("`highlight all` adds rules for all locations", "[RegexManager]")
 	auto input = StflRichText::from_plaintext("xxfooyy");
 
 	for (auto location : {
-			"article", "articlelist", "feedlist"
+			Dialog::Article, Dialog::ArticleList, Dialog::FeedList
 		}) {
-		SECTION(location) {
+		SECTION(dialog_name(location)) {
 			rxman.quote_and_highlight(input, location);
 			REQUIRE(input.stfl_quoted() == "xx<0>foo</>yy");
 		}
@@ -163,7 +163,7 @@ TEST_CASE("RegexManager does not hang on regexes that can match empty strings",
 		StflRichText::from_plaintext("The quick brown fox jumps over the lazy dog");
 
 	rxman.handle_action("highlight", {"feedlist", "w*", "blue", "red"});
-	rxman.quote_and_highlight(input, "feedlist");
+	rxman.quote_and_highlight(input, Dialog::FeedList);
 	REQUIRE(input.stfl_quoted() == "The quick bro<0>w</>n fox jumps over the lazy dog");
 }
 
@@ -177,19 +177,19 @@ TEST_CASE("RegexManager does not hang on regexes that match empty strings",
 
 	SECTION("testing end of line empty.") {
 		rxman.handle_action("highlight", {"feedlist", "$", "blue", "red"});
-		rxman.quote_and_highlight(input, "feedlist");
+		rxman.quote_and_highlight(input, Dialog::FeedList);
 		REQUIRE(input.stfl_quoted() == compare);
 	}
 
 	SECTION("testing beginning of line empty") {
 		rxman.handle_action("highlight", {"feedlist", "^", "blue", "red"});
-		rxman.quote_and_highlight(input, "feedlist");
+		rxman.quote_and_highlight(input, Dialog::FeedList);
 		REQUIRE(input.stfl_quoted() == compare);
 	}
 
 	SECTION("testing empty line") {
 		rxman.handle_action("highlight", {"feedlist", "^$", "blue", "red"});
-		rxman.quote_and_highlight(input, "feedlist");
+		rxman.quote_and_highlight(input, Dialog::FeedList);
 		REQUIRE(input.stfl_quoted() == compare);
 	}
 }
@@ -206,7 +206,7 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 			"<0>The</> quick <1>brown</> fox jumps over <0>the</> lazy dog";
 		rxman.handle_action("highlight", {"article", "the", "red"});
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
-		rxman.quote_and_highlight(input, "article");
+		rxman.quote_and_highlight(input, Dialog::Article);
 		REQUIRE(input.stfl_quoted() == output);
 	}
 
@@ -215,7 +215,7 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 			"<1>The</> quick <0>brown</> fox jumps over <1>the</> lazy dog";
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
 		rxman.handle_action("highlight", {"article", "the", "red"});
-		rxman.quote_and_highlight(input, "article");
+		rxman.quote_and_highlight(input, Dialog::Article);
 		REQUIRE(input.stfl_quoted() == output);
 	}
 
@@ -224,7 +224,7 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 			"The <0>quick</> <1>brown</> fox jumps over the lazy dog";
 		rxman.handle_action("highlight", {"article", "quick", "red"});
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
-		rxman.quote_and_highlight(input, "article");
+		rxman.quote_and_highlight(input, Dialog::Article);
 		REQUIRE(input.stfl_quoted() == output);
 	}
 }
@@ -607,21 +607,21 @@ TEST_CASE("RegexManager::remove_last_regex removes last added `highlight` rule",
 	const auto INPUT = std::string("xfoobarx");
 
 	auto input = StflRichText::from_plaintext(INPUT);
-	rxman.quote_and_highlight(input, "articlelist");
+	rxman.quote_and_highlight(input, Dialog::ArticleList);
 	REQUIRE(input.stfl_quoted() == "x<0>foo<1>bar</>x");
 
 	input = StflRichText::from_plaintext(INPUT);
-	rxman.quote_and_highlight(input, "feedlist");
+	rxman.quote_and_highlight(input, Dialog::FeedList);
 	REQUIRE(input.stfl_quoted() == INPUT);
 
-	REQUIRE_NOTHROW(rxman.remove_last_regex("articlelist"));
+	REQUIRE_NOTHROW(rxman.remove_last_regex(Dialog::ArticleList));
 
 	input = StflRichText::from_plaintext(INPUT);
-	rxman.quote_and_highlight(input, "articlelist");
+	rxman.quote_and_highlight(input, Dialog::ArticleList);
 	REQUIRE(input.stfl_quoted() == "x<0>foo</>barx");
 
 	input = StflRichText::from_plaintext(INPUT);
-	rxman.quote_and_highlight(input, "feedlist");
+	rxman.quote_and_highlight(input, Dialog::FeedList);
 	REQUIRE(input.stfl_quoted() == INPUT);
 }
 
@@ -632,14 +632,14 @@ TEST_CASE("RegexManager::remove_last_regex does not crash if there are "
 	RegexManager rxman;
 
 	SECTION("No rules existed") {
-		rxman.remove_last_regex("articlelist");
+		rxman.remove_last_regex(Dialog::ArticleList);
 
 		SECTION("Repeated calls don't crash either") {
-			rxman.remove_last_regex("articlelist");
-			rxman.remove_last_regex("articlelist");
-			rxman.remove_last_regex("articlelist");
+			rxman.remove_last_regex(Dialog::ArticleList);
+			rxman.remove_last_regex(Dialog::ArticleList);
+			rxman.remove_last_regex(Dialog::ArticleList);
 
-			rxman.remove_last_regex("feedlist");
+			rxman.remove_last_regex(Dialog::FeedList);
 		}
 	}
 
@@ -648,18 +648,18 @@ TEST_CASE("RegexManager::remove_last_regex does not crash if there are "
 		rxman.handle_action("highlight", {"articlelist", "another test", "red"});
 		rxman.handle_action("highlight", {"articlelist", "more", "green", "blue"});
 
-		rxman.remove_last_regex("articlelist");
-		rxman.remove_last_regex("articlelist");
-		rxman.remove_last_regex("articlelist");
+		rxman.remove_last_regex(Dialog::ArticleList);
+		rxman.remove_last_regex(Dialog::ArticleList);
+		rxman.remove_last_regex(Dialog::ArticleList);
 		// At this point, all the rules are removed
-		rxman.remove_last_regex("articlelist");
+		rxman.remove_last_regex(Dialog::ArticleList);
 
 		SECTION("Repeated calls don't crash either") {
-			rxman.remove_last_regex("articlelist");
-			rxman.remove_last_regex("articlelist");
-			rxman.remove_last_regex("articlelist");
+			rxman.remove_last_regex(Dialog::ArticleList);
+			rxman.remove_last_regex(Dialog::ArticleList);
+			rxman.remove_last_regex(Dialog::ArticleList);
 
-			rxman.remove_last_regex("feedlist");
+			rxman.remove_last_regex(Dialog::FeedList);
 		}
 	}
 }
@@ -694,7 +694,7 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 		}
 
 		auto input = StflRichText::from_plaintext("*]+");
-		rxman.quote_and_highlight(input, "articlelist");
+		rxman.quote_and_highlight(input, Dialog::ArticleList);
 		REQUIRE(input.stfl_quoted() == "*]+");
 	}
 
@@ -708,7 +708,7 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 		}
 
 		auto input = StflRichText::from_plaintext("value");
-		rxman.quote_and_highlight(input, "articlelist");
+		rxman.quote_and_highlight(input, Dialog::ArticleList);
 		REQUIRE(input.stfl_quoted() == "value");
 	}
 
@@ -722,7 +722,7 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 		}
 
 		auto input = StflRichText::from_plaintext("\x07");
-		rxman.quote_and_highlight(input, "articlelist");
+		rxman.quote_and_highlight(input, Dialog::ArticleList);
 		REQUIRE(input.stfl_quoted() == "\x07");
 	}
 
@@ -736,7 +736,7 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 		}
 
 		auto input = StflRichText::from_plaintext("\x08");
-		rxman.quote_and_highlight(input, "articlelist");
+		rxman.quote_and_highlight(input, Dialog::ArticleList);
 		REQUIRE(input.stfl_quoted() == "\x08");
 	}
 
@@ -752,14 +752,14 @@ TEST_CASE("quote_and_highlight() does not break existing tags like <unread>",
 	WHEN("matching `read`") {
 		const std::string output = "<unread>This entry is un<0>read</>";
 		rxman.handle_action("highlight", {"article", "read", "red"});
-		rxman.quote_and_highlight(input, "article");
+		rxman.quote_and_highlight(input, Dialog::Article);
 		REQUIRE(input.stfl_quoted() == output);
 	}
 
 	WHEN("matching `unread`") {
 		const std::string output = "<unread>This entry is <0>unread</>";
 		rxman.handle_action("highlight", {"article", "unread", "red"});
-		rxman.quote_and_highlight(input, "article");
+		rxman.quote_and_highlight(input, Dialog::Article);
 		REQUIRE(input.stfl_quoted() == output);
 	}
 
@@ -768,7 +768,7 @@ TEST_CASE("quote_and_highlight() does not break existing tags like <unread>",
 
 		THEN("the <unread> tag is overwritten") {
 			const std::string output = "<0>This entry is unread</>";
-			rxman.quote_and_highlight(input, "article");
+			rxman.quote_and_highlight(input, Dialog::Article);
 			REQUIRE(input.stfl_quoted() == output);
 		}
 	}
@@ -785,7 +785,7 @@ TEST_CASE("quote_and_highlight() ignores tags when matching the regular expressi
 
 		THEN("the <unread> tag should be ignored") {
 			const std::string output = "<0>This<unread> entry is unread</>";
-			rxman.quote_and_highlight(input, "article");
+			rxman.quote_and_highlight(input, Dialog::Article);
 			REQUIRE(input.stfl_quoted() == output);
 		}
 	}
@@ -795,7 +795,7 @@ TEST_CASE("quote_and_highlight() ignores tags when matching the regular expressi
 
 		THEN("the closing tag `</>` (related to <unread>) should be ignored") {
 			const std::string output = "<unread>This entry is <0>unread</>";
-			rxman.quote_and_highlight(input, "article");
+			rxman.quote_and_highlight(input, Dialog::Article);
 			REQUIRE(input.stfl_quoted() == output);
 		}
 	}
@@ -806,7 +806,7 @@ TEST_CASE("quote_and_highlight() ignores tags when matching the regular expressi
 
 		THEN("the tags should be ignored when matching text with a regular expression") {
 			const std::string output = "<0>Something</> is underlined";
-			rxman.quote_and_highlight(input, "article");
+			rxman.quote_and_highlight(input, Dialog::Article);
 			REQUIRE(input.stfl_quoted() == output);
 		}
 	}
@@ -826,7 +826,7 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 		THEN("the first style should be restored at the end of the second match") {
 			const std::string output =
 				"<0>The <1>quick<0> brown</> fox jumps over the lazy dog";
-			rxman.quote_and_highlight(input, "article");
+			rxman.quote_and_highlight(input, Dialog::Article);
 			REQUIRE(input.stfl_quoted() == output);
 		}
 	}
@@ -838,7 +838,7 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 		THEN("the first style should not be present anymore") {
 			const std::string output =
 				"<1>The quick brown</> fox jumps over the lazy dog";
-			rxman.quote_and_highlight(input, "article");
+			rxman.quote_and_highlight(input, Dialog::Article);
 			REQUIRE(input.stfl_quoted() == output);
 		}
 	}
@@ -850,7 +850,7 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 		THEN("the first style should only be overwritten for the part where the matches intersect") {
 			const std::string output =
 				"The <0>quick <1>brown fox</> jumps over the lazy dog";
-			rxman.quote_and_highlight(input, "article");
+			rxman.quote_and_highlight(input, Dialog::Article);
 			REQUIRE(input.stfl_quoted() == output);
 		}
 	}
@@ -862,7 +862,7 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 		THEN("the first style should only be overwritten for the part where the matches intersect") {
 			const std::string output =
 				"The <1>quick brown<0> fox</> jumps over the lazy dog";
-			rxman.quote_and_highlight(input, "article");
+			rxman.quote_and_highlight(input, Dialog::Article);
 			REQUIRE(input.stfl_quoted() == output);
 		}
 	}
@@ -875,7 +875,7 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 		THEN("newer matches overwrite older matches") {
 			const std::string output =
 				"The <0>quick <2>brown fox<1> jumps over<0> the lazy dog</>";
-			rxman.quote_and_highlight(input, "article");
+			rxman.quote_and_highlight(input, Dialog::Article);
 			REQUIRE(input.stfl_quoted() == output);
 		}
 	}
@@ -889,7 +889,7 @@ TEST_CASE("quote_and_highlight() keeps stfl-encoded angle brackets and allows ma
 
 	SECTION("stfl-encoded angle brackets are kept/restored") {
 		const std::string output = "<unread>title with <>literal> angle brackets</>";
-		rxman.quote_and_highlight(input, "article");
+		rxman.quote_and_highlight(input, Dialog::Article);
 		REQUIRE(input.stfl_quoted() == output);
 	}
 
@@ -897,7 +897,7 @@ TEST_CASE("quote_and_highlight() keeps stfl-encoded angle brackets and allows ma
 		const std::string output =
 			"<unread>title with <0><>literal><unread> angle brackets</>";
 		rxman.handle_action("highlight", {"article", "<literal>", "red"});
-		rxman.quote_and_highlight(input, "article");
+		rxman.quote_and_highlight(input, Dialog::Article);
 		REQUIRE(input.stfl_quoted() == output);
 	}
 }

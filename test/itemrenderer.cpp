@@ -686,7 +686,7 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 
 		Links links;
 		const auto result = item_renderer::to_stfl_list(cfg, *item, 80, 80, &rxman,
-				"article", links);
+				Dialog::Article, links);
 		REQUIRE(result.first == expected);
 	}
 
@@ -705,7 +705,7 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 
 		Links links;
 		const auto result = item_renderer::source_to_stfl_list(*item, 80, 80, &rxman,
-				"article");
+				Dialog::Article);
 		REQUIRE(result.first == expected);
 	}
 }

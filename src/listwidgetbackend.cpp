@@ -6,7 +6,7 @@
 namespace newsboat {
 
 ListWidgetBackend::ListWidgetBackend(const std::string& list_name,
-	const std::string& context, Stfl::Form& form, RegexManager& rxman)
+	Dialog context, Stfl::Form& form, RegexManager& rxman)
 	: list_name(list_name)
 	, form(form)
 	, listfmt(&rxman, context)

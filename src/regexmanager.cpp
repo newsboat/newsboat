@@ -14,9 +14,9 @@ RegexManager::RegexManager()
 {
 	// this creates the entries in the map. we need them there to have the
 	// "all" location work.
-	locations["article"];
-	locations["articlelist"];
-	locations["feedlist"];
+	locations[Dialog::Article];
+	locations[Dialog::ArticleList];
+	locations[Dialog::FeedList];
 }
 
 void RegexManager::dump_config(std::vector<std::string>& config_output) const
@@ -65,7 +65,7 @@ int RegexManager::feed_matches(Matchable* feed)
 	return -1;
 }
 
-void RegexManager::remove_last_regex(const std::string& location)
+void RegexManager::remove_last_regex(Dialog location)
 {
 	auto& regexes = locations[location];
 	if (regexes.empty()) {
@@ -75,8 +75,7 @@ void RegexManager::remove_last_regex(const std::string& location)
 	regexes.pop_back();
 }
 
-void RegexManager::quote_and_highlight(StflRichText& stflString,
-	const std::string& location)
+void RegexManager::quote_and_highlight(StflRichText& stflString, Dialog location)
 {
 	auto& regexes = locations[location];
 
@@ -116,11 +115,21 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 		throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 	}
 
-	std::string location = params[0];
-	if (location != "all" && location != "article" &&
-		location != "articlelist" && location != "feedlist") {
+	std::string location_str = params[0];
+	const auto location = dialog_from_name(location_str);
+
+	std::vector<Dialog> applicable_locations;
+	if (location_str == "all") {
+		for (const auto& l : locations) {
+			applicable_locations.push_back(l.first);
+		}
+	} else if (location.has_value() &&
+		(location.value() == Dialog::FeedList || location.value() == Dialog::ArticleList
+			|| location.value() == Dialog::Article)) {
+		applicable_locations.push_back(location.value());
+	} else {
 		throw ConfigHandlerException(strprintf::fmt(
-				_("`%s' is an invalid dialog type"), location));
+				_("`%s' is not a valid context"), location_str));
 	}
 
 	std::string errorMessage;
@@ -175,26 +184,14 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 			}
 		}
 	}
-	if (location != "all") {
+	std::shared_ptr<Regex> sharedRegex(std::move(regex));
+	for (auto& l : applicable_locations) {
 		LOG(Level::DEBUG,
-			"RegexManager::handle_action: adding rx = %s "
-			"colorstr = %s to location %s",
+			"RegexManager::handle_action: adding rx = %s colorstr = %s to location %s",
 			params[1],
 			colorstr,
-			location);
-		locations[location].push_back({std::move(regex), colorstr});
-	} else {
-		std::shared_ptr<Regex> sharedRegex(std::move(regex));
-		for (auto& location : locations) {
-			LOG(Level::DEBUG,
-				"RegexManager::handle_action: adding "
-				"rx = "
-				"%s colorstr = %s to location %s",
-				params[1],
-				colorstr,
-				location.first);
-			location.second.push_back({sharedRegex, colorstr});
-		}
+			dialog_name(l));
+		locations[l].push_back({sharedRegex, colorstr});
 	}
 }
 
@@ -258,13 +255,13 @@ void RegexManager::handle_highlight_item_action(const std::string& action,
 	}
 
 	if (action == "highlight-article") {
-		int pos = locations["articlelist"].size();
-		locations["articlelist"].push_back({nullptr, colorstr});
+		int pos = locations[Dialog::ArticleList].size();
+		locations[Dialog::ArticleList].push_back({nullptr, colorstr});
 		matchers_article.push_back(
 			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
 	} else if (action == "highlight-feed") {
-		int pos = locations["feedlist"].size();
-		locations["feedlist"].push_back({nullptr, colorstr});
+		int pos = locations[Dialog::FeedList].size();
+		locations[Dialog::FeedList].push_back({nullptr, colorstr});
 		matchers_feed.push_back(
 			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
 	} else {
@@ -273,7 +270,7 @@ void RegexManager::handle_highlight_item_action(const std::string& action,
 	}
 }
 
-std::string RegexManager::get_attrs_stfl_string(const std::string& location,
+std::string RegexManager::get_attrs_stfl_string(Dialog location,
 	bool hasFocus)
 {
 	const auto& attributes = locations[location];

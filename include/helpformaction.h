@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_HELPFORMACTION_H_
 #define NEWSBOAT_HELPFORMACTION_H_
 
+#include "dialog.h"
 #include "formaction.h"
 #include "textviewwidget.h"
 
@@ -8,15 +9,14 @@ namespace newsboat {
 
 class HelpFormAction : public FormAction {
 public:
-	HelpFormAction(View&, std::string formstr, ConfigContainer* cfg,
-		const std::string& ctx);
+	HelpFormAction(View&, std::string formstr, ConfigContainer* cfg, Dialog ctx);
 	~HelpFormAction() override = default;
 	void prepare() override;
 	void init() override;
 	std::vector<KeyMapHintEntry> get_keymap_hint() const override;
-	std::string id() const override
+	Dialog id() const override
 	{
-		return "help";
+		return Dialog::Help;
 	}
 	std::string title() override;
 
@@ -35,7 +35,7 @@ private:
 	std::string make_colorstring(const std::vector<std::string>& colors);
 	bool apply_search;
 	std::string searchphrase;
-	const std::string context;
+	const Dialog context;
 	TextviewWidget textview;
 };
 
