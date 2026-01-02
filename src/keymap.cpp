@@ -1211,6 +1211,31 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 			}
 			apply_bind(context_keymaps[context], key_sequence, cmds, description, BindingType::Bind);
 		}
+	} else if (action == "unbind") {
+		bool parsing_failed = false;
+		const auto unbind = keymap::bridged::tokenize_unbind(params, parsing_failed);
+		if (parsing_failed) {
+			throw ConfigHandlerException(strprintf::fmt(_("failed to parse binding")));
+		}
+		auto unbind_contexts = std::vector<std::string>(unbind.contexts.begin(),
+				unbind.contexts.end());
+		if (unbind_contexts.size() == 1 && unbind_contexts[0] == "everywhere") {
+			unbind_contexts.clear();
+			for (const auto& context : contexts) {
+				unbind_contexts.push_back(context.first);
+			}
+		}
+		const auto key_sequence = KeyCombination::from_bind(std::string(unbind.key_sequence));
+		LOG(Level::DEBUG, "Unbind with key sequence:");
+		for (const auto& key : key_sequence) {
+			LOG(Level::DEBUG, "- %s (%s)", key.to_bind_string(), key.get_key());
+		}
+		for (const auto& context : unbind_contexts) {
+			if (contexts.count(context) == 0) {
+				throw ConfigHandlerException(strprintf::fmt(_("unknown context: %s"), context));
+			}
+			remove_bind(context_keymaps[context], key_sequence);
+		}
 	} else if (action == "macro") {
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
@@ -1250,6 +1275,27 @@ void KeyMap::apply_bind(Mapping& target, const std::vector<KeyCombination>& key_
 			cmds,
 			description,
 			type);
+	}
+}
+
+void KeyMap::remove_bind(Mapping& target, const std::vector<KeyCombination>& key_sequence)
+{
+	if (key_sequence.empty()) {
+		return;
+	}
+
+	const auto key_combination = key_sequence.front();
+	const auto it = target.continuations.find(key_combination);
+	if (it == target.continuations.end()) {
+		return;
+	}
+
+	if (key_sequence.size() == 1) {
+		target.continuations.erase(it);
+	} else {
+		const auto remainder_key_sequence = std::vector<KeyCombination>(std::next(
+					key_sequence.begin()), key_sequence.end());
+		remove_bind(it->second, remainder_key_sequence);
 	}
 }
 
