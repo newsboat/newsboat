@@ -1,6 +1,9 @@
 use std::collections::BTreeMap;
 
-use crate::utils;
+/// Quote a string for use with stfl by replacing all occurences of "<" with "<>"
+fn quote_for_stfl(string: &str) -> String {
+    string.replace('<', "<>")
+}
 
 #[derive(Clone)]
 pub struct StflRichText {
@@ -10,7 +13,7 @@ pub struct StflRichText {
 
 impl StflRichText {
     pub fn from_plaintext(text: &str) -> Self {
-        let quoted_text = utils::quote_for_stfl(text);
+        let quoted_text = quote_for_stfl(text);
         Self::from_quoted(&quoted_text)
     }
 
@@ -144,16 +147,22 @@ impl StflRichText {
 mod tests {
     use std::collections::BTreeMap;
 
-    use crate::utils;
-
     use super::StflRichText;
+    use super::quote_for_stfl;
+
+    #[test]
+    fn t_quote_for_stfl() {
+        assert_eq!(&quote_for_stfl("<"), "<>");
+        assert_eq!(&quote_for_stfl("<<><><><"), "<><>><>><>><>");
+        assert_eq!(&quote_for_stfl("test"), "test");
+    }
 
     #[test]
     fn t_left_angle_bracket_immediately_before_a_tag() {
         // Regression test for https://github.com/newsboat/newsboat/issues/3007
 
         let plain = "<";
-        let quoted = format!("<hl>{}</>", utils::quote_for_stfl(plain));
+        let quoted = format!("<hl>{}</>", quote_for_stfl(plain));
         let tags = BTreeMap::from_iter([(0, "<hl>".to_string()), (1, "</>".to_string())]);
 
         let actual = StflRichText::from_quoted(&quoted);

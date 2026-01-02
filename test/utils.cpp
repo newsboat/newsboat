@@ -931,12 +931,6 @@ TEST_CASE("absolute_url() strips ASCII whitespace", "[utils]")
 			"   \t\feverything_at_once\n\r") == "https://example.com/misc/everything_at_once");
 }
 
-TEST_CASE("quote_for_stfl() adds a \'>\' after every \'<\'", "[utils]")
-{
-	REQUIRE(utils::quote_for_stfl("<<><><><") == "<><>><>><>><>");
-	REQUIRE(utils::quote_for_stfl("test") == "test");
-}
-
 TEST_CASE("quote()", "[utils]")
 {
 	REQUIRE(utils::quote("") == "\"\"");

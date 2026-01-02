@@ -62,7 +62,6 @@ mod bridged {
         fn consolidate_whitespace(input: String) -> String;
         fn absolute_url(base_url: &str, link: &str) -> String;
         fn censor_url(url: &str) -> String;
-        fn quote_for_stfl(string: &str) -> String;
         fn trim(rs_str: String) -> String;
         fn trim_end(rs_str: String) -> String;
         fn quote(input: String) -> String;

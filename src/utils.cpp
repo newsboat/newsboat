@@ -531,11 +531,6 @@ std::string utils::censor_url(const std::string& url)
 	return std::string(utils::bridged::censor_url(url));
 }
 
-std::string utils::quote_for_stfl(std::string str)
-{
-	return std::string(utils::bridged::quote_for_stfl(str));
-}
-
 void utils::trim(std::string& str)
 {
 	str = std::string(utils::bridged::trim(str));

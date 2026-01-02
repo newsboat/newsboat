@@ -10,6 +10,7 @@
 #include "confighandlerexception.h"
 #include "configparser.h"
 #include "logger.h"
+#include "stflrichtext.h"
 #include "strprintf.h"
 #include "utils.h"
 
@@ -1352,12 +1353,13 @@ std::string KeyMap::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hint
 
 		std::vector<std::string> key_stfl_strings;
 		if (bound_keys.empty()) {
-			std::string key_string = utils::quote_for_stfl("<none>");
+			std::string key_string = StflRichText::from_plaintext("<none>").stfl_quoted();
 			key_string = strprintf::fmt("<key>%s</>", key_string);
 			key_stfl_strings = {key_string};
 		} else {
 			for (const auto& key : bound_keys) {
-				std::string key_string = utils::quote_for_stfl(key.to_bindkey_string());
+				std::string key_string = StflRichText::from_plaintext(
+						key.to_bindkey_string()).stfl_quoted();
 				key_string = strprintf::fmt("<key>%s</>", key_string);
 				key_stfl_strings.push_back(key_string);
 			}
@@ -1365,7 +1367,8 @@ std::string KeyMap::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hint
 
 		keymap_hint.append(utils::join(key_stfl_strings, "<comma>,</>"));
 		keymap_hint.append("<colon>:</>");
-		keymap_hint.append(strprintf::fmt("<desc>%s</>", utils::quote_for_stfl(hint.text)));
+		keymap_hint.append(strprintf::fmt("<desc>%s</>",
+				StflRichText::from_plaintext(hint.text).stfl_quoted()));
 		keymap_hint.append(" ");
 	}
 	return keymap_hint;

@@ -10,6 +10,7 @@
 
 #include "config.h"
 #include "logger.h"
+#include "stflrichtext.h"
 #include "strprintf.h"
 #include "tagsouppullparser.h"
 #include "utils.h"
@@ -918,7 +919,7 @@ void HtmlRenderer::render(std::istream& input,
 
 			auto text = xpp.get_text();
 			if (!raw_) {
-				text = utils::quote_for_stfl(text);
+				text = StflRichText::from_plaintext(text).stfl_quoted();
 			}
 
 			if (itunes_hack) {
