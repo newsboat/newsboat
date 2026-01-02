@@ -1177,11 +1177,9 @@ StflRichText ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	fmt.register_fmt('L', item.first->length());
 
 	const auto formattedLine = fmt.do_format(itemlist_format, width);
-	auto stflFormattedLine = StflRichText::from_plaintext(formattedLine);
-
-	if (item.first->unread()) {
-		stflFormattedLine.apply_style_tag("<unread>", 0, formattedLine.length());
-	}
+	auto stflFormattedLine = item.first->unread() > 0
+		? StflRichText::from_plaintext_with_style(formattedLine, "<unread>")
+		: StflRichText::from_plaintext(formattedLine);
 
 	const int id = rxman.article_matches(item.first.get());
 	if (id != -1) {
