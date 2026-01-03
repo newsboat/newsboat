@@ -1068,7 +1068,7 @@ void FeedListFormAction::set_pos()
 	}
 }
 
-std::string FeedListFormAction::get_title(std::shared_ptr<RssFeed> feed)
+std::string FeedListFormAction::get_title(std::shared_ptr<RssFeed> feed) const
 {
 	std::string title = feed->title();
 	utils::remove_soft_hyphens(title);
@@ -1084,7 +1084,7 @@ std::string FeedListFormAction::get_title(std::shared_ptr<RssFeed> feed)
 StflRichText FeedListFormAction::format_line(const std::string& feedlist_format,
 	std::shared_ptr<RssFeed> feed,
 	unsigned int pos,
-	unsigned int width)
+	unsigned int width) const
 {
 	FmtStrFormatter fmt;
 	unsigned int unread_count = feed->unread_item_count();

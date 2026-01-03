@@ -82,12 +82,12 @@ private:
 	void handle_goto(const std::string& param);
 	void set_pos();
 
-	std::string get_title(std::shared_ptr<RssFeed> feed);
+	std::string get_title(std::shared_ptr<RssFeed> feed) const;
 
 	StflRichText format_line(const std::string& feedlist_format,
 		std::shared_ptr<RssFeed> feed,
 		unsigned int pos,
-		unsigned int width);
+		unsigned int width) const;
 
 	bool zero_feedpos;
 	std::vector<FeedPtrPosPair> visible_feeds;

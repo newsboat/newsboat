@@ -129,14 +129,14 @@ private:
 
 	void handle_cmdline_num(unsigned int idx);
 
-	std::string gen_flags(std::shared_ptr<RssItem> item);
+	std::string gen_flags(std::shared_ptr<RssItem> item) const;
 
 	void prepare_set_filterpos();
 
 	StflRichText item2formatted_line(const ItemPtrPosPair& item,
 		const unsigned int width,
 		const std::string& itemlist_format,
-		const std::string& datetime_format);
+		const std::string& datetime_format) const;
 
 	void goto_item(const std::string& title);
 
