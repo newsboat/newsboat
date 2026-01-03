@@ -1352,32 +1352,36 @@ unsigned short KeyMap::get_flag_from_context(Dialog context)
 }
 
 
-std::string KeyMap::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
+StflRichText KeyMap::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
 	Dialog context)
 {
-	std::string keymap_hint;
+	auto keymap_hint = StflRichText::from_plaintext("");
+	bool first_hint = true;
 	for (const auto& hint : hints) {
-		const std::vector<KeyCombination> bound_keys = get_keys(hint.op, context);
+		if (!first_hint) {
+			keymap_hint.append(StflRichText::from_plaintext(" "));
+		}
+		first_hint = false;
 
-		std::vector<std::string> key_stfl_strings;
+		const std::vector<KeyCombination> bound_keys = get_keys(hint.op, context);
+		const auto comma = StflRichText::from_plaintext_with_style(",", "<comma>");
+
 		if (bound_keys.empty()) {
-			std::string key_string = StflRichText::from_plaintext("<none>").stfl_quoted();
-			key_string = strprintf::fmt("<key>%s</>", key_string);
-			key_stfl_strings = {key_string};
+			keymap_hint.append(StflRichText::from_plaintext_with_style("<none>", "<key>"));
 		} else {
+			bool first_key = true;
 			for (const auto& key : bound_keys) {
-				std::string key_string = StflRichText::from_plaintext(
-						key.to_bindkey_string()).stfl_quoted();
-				key_string = strprintf::fmt("<key>%s</>", key_string);
-				key_stfl_strings.push_back(key_string);
+				if (!first_key) {
+					keymap_hint.append(comma);
+				}
+				first_key = false;
+				keymap_hint.append(StflRichText::from_plaintext_with_style(key.to_bindkey_string(),
+						"<key>"));
 			}
 		}
 
-		keymap_hint.append(utils::join(key_stfl_strings, "<comma>,</>"));
-		keymap_hint.append("<colon>:</>");
-		keymap_hint.append(strprintf::fmt("<desc>%s</>",
-				StflRichText::from_plaintext(hint.text).stfl_quoted()));
-		keymap_hint.append(" ");
+		keymap_hint.append(StflRichText::from_plaintext_with_style(":", "<colon>"));
+		keymap_hint.append(StflRichText::from_plaintext_with_style(hint.text, "<desc>"));
 	}
 	return keymap_hint;
 }

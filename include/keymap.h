@@ -11,6 +11,7 @@
 #include "configactionhandler.h"
 #include "dialog.h"
 #include "keycombination.h"
+#include "stflrichtext.h"
 
 enum class BindingType {
 	BindKey,
@@ -245,7 +246,8 @@ public:
 		const std::string& command_name, bool allow_description = true);
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
-	std::string prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints, Dialog context);
+	StflRichText prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
+		Dialog context);
 
 private:
 	std::vector<HelpBindInfo> get_help_info_bindings(std::set<Operation>& unused_actions,

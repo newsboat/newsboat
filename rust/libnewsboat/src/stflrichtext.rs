@@ -17,6 +17,15 @@ impl StflRichText {
         Self::from_quoted(&quoted_text)
     }
 
+    pub fn from_plaintext_with_style(text: &str, style_tag: &str) -> Self {
+        let quoted_text = quote_for_stfl(text);
+        let mut richtext = Self::from_quoted(&quoted_text);
+        if !text.is_empty() {
+            richtext.apply_style_tag(style_tag, 0, text.len());
+        }
+        richtext
+    }
+
     pub fn from_quoted(text: &str) -> Self {
         let (text, style_tags) = Self::extract_style_tags(text);
         Self { text, style_tags }
@@ -45,6 +54,14 @@ impl StflRichText {
             for found in re.find_iter(&text) {
                 self.apply_style_tag("<hl>", found.start(), found.end());
             }
+        }
+    }
+
+    pub fn append(&mut self, other: &Self) {
+        let offset = self.text.len();
+        self.text += &other.text;
+        for (&pos, tag) in &other.style_tags {
+            self.style_tags.insert(offset + pos, tag.to_owned());
         }
     }
 
@@ -158,6 +175,26 @@ mod tests {
     }
 
     #[test]
+    fn t_from_plaintext_with_style() {
+        assert_eq!(
+            StflRichText::from_plaintext_with_style("", "<abc>").quoted(),
+            ""
+        );
+        assert_eq!(
+            StflRichText::from_plaintext_with_style(" ", "<space>").quoted(),
+            "<space> </>"
+        );
+        assert_eq!(
+            StflRichText::from_plaintext_with_style("ENTER", "<key>").quoted(),
+            "<key>ENTER</>"
+        );
+        assert_eq!(
+            StflRichText::from_plaintext_with_style("<", "<bracket>").quoted(),
+            "<bracket><></>"
+        );
+    }
+
+    #[test]
     fn t_left_angle_bracket_immediately_before_a_tag() {
         // Regression test for https://github.com/newsboat/newsboat/issues/3007
 
@@ -170,6 +207,31 @@ mod tests {
         assert_eq!(actual.style_tags, tags);
         assert_eq!(actual.plaintext(), plain);
         assert_eq!(actual.quoted(), quoted);
+    }
+
+    #[test]
+    fn t_append_plaintext() {
+        let mut text = StflRichText::from_plaintext("hello");
+        text.append(&StflRichText::from_plaintext(" world"));
+        assert_eq!(text.quoted(), "hello world");
+
+        let mut text_with_angle_brackets = StflRichText::from_plaintext("abc<");
+        text_with_angle_brackets.append(&StflRichText::from_plaintext("def"));
+        assert_eq!(text_with_angle_brackets.quoted(), "abc<>def");
+    }
+
+    #[test]
+    fn t_append_plaintext_to_richtext() {
+        let mut text = StflRichText::from_quoted("<abc>hello</>");
+        text.append(&StflRichText::from_plaintext(" world"));
+        assert_eq!(text.quoted(), "<abc>hello</> world");
+    }
+
+    #[test]
+    fn t_append_richtext() {
+        let mut text = StflRichText::from_quoted("<abc>first</>");
+        text.append(&StflRichText::from_quoted("<def>second</>"));
+        assert_eq!(text.quoted(), "<abc>first<def>second</>");
     }
 
     proptest::proptest! {

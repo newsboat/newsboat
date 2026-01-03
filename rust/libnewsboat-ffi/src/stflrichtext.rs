@@ -11,8 +11,10 @@ mod ffi {
         type StflRichText;
 
         fn from_plaintext(text: &CxxString) -> Box<StflRichText>;
+        fn from_plaintext_with_style(text: &CxxString, style_tag: &str) -> Box<StflRichText>;
         fn from_quoted(text: &CxxString) -> Box<StflRichText>;
         fn copy(richtext: &StflRichText) -> Box<StflRichText>;
+        fn append(richtext: &mut StflRichText, other: &StflRichText);
 
         fn highlight_searchphrase(
             richtext: &mut StflRichText,
@@ -31,6 +33,12 @@ fn from_plaintext(text: &CxxString) -> Box<StflRichText> {
     Box::new(StflRichText(richtext))
 }
 
+fn from_plaintext_with_style(text: &CxxString, style_tag: &str) -> Box<StflRichText> {
+    let text = text.to_string_lossy();
+    let richtext = stflrichtext::StflRichText::from_plaintext_with_style(&text, style_tag);
+    Box::new(StflRichText(richtext))
+}
+
 fn from_quoted(text: &CxxString) -> Box<StflRichText> {
     let text = text.to_string_lossy();
     let richtext = stflrichtext::StflRichText::from_quoted(&text);
@@ -39,6 +47,10 @@ fn from_quoted(text: &CxxString) -> Box<StflRichText> {
 
 fn copy(richtext: &StflRichText) -> Box<StflRichText> {
     Box::new(StflRichText(richtext.0.clone()))
+}
+
+fn append(richtext: &mut StflRichText, other: &StflRichText) {
+    richtext.0.append(&other.0);
 }
 
 fn highlight_searchphrase(richtext: &mut StflRichText, search: &str, case_insensitive: bool) {
