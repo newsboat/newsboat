@@ -9,7 +9,7 @@ strprintf = { path="../strprintf" }
 regex-rs = { path="../regex-rs" }
 
 fastrand = "2.3.0"
-url = "2.5.7"
+url = "2.5.8"
 percent-encoding = "2.3.2"
 xdg = "3.0.0"
 backtrace = "= 0.3"
