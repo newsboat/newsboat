@@ -62,7 +62,7 @@ void FormAction::report_unhandled_operation(Operation op)
 void FormAction::set_keymap_hints()
 {
 	set_value("help", v.get_keymap()->prepare_keymap_hint(this->get_keymap_hint(),
-			this->id()));
+			this->id()).stfl_quoted());
 }
 
 std::string FormAction::get_value(const std::string& name)

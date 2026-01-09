@@ -419,7 +419,7 @@ void PbView::set_help_keymap_hint()
 {
 	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")}};
 	const auto keymap_hint = keys.prepare_keymap_hint(hints, Dialog::Podboat);
-	help_form.set("help", keymap_hint);
+	help_form.set("help", keymap_hint.stfl_quoted());
 }
 
 void PbView::set_dllist_keymap_hint()
@@ -436,7 +436,7 @@ void PbView::set_dllist_keymap_hint()
 	};
 
 	const auto keymap_hint = keys.prepare_keymap_hint(hints, Dialog::Podboat);
-	dllist_form.set("help", keymap_hint);
+	dllist_form.set("help", keymap_hint.stfl_quoted());
 }
 
 StflRichText PbView::format_line(const std::string& podlist_format,

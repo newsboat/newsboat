@@ -1,4 +1,5 @@
 #include "stflrichtext.h"
+#include "libnewsboat-ffi/src/stflrichtext.rs.h"
 
 namespace newsboat {
 
@@ -18,18 +19,31 @@ StflRichText& StflRichText::operator=(const StflRichText& other)
 	return *this;
 }
 
-StflRichText StflRichText::from_plaintext(std::string text)
+StflRichText StflRichText::from_plaintext(const std::string& text)
 {
 	auto rs_object = stflrichtext::bridged::from_plaintext(text);
 
 	return StflRichText(std::move(rs_object));
 }
 
-StflRichText StflRichText::from_quoted(std::string text)
+StflRichText StflRichText::from_plaintext_with_style(const std::string& text,
+	const std::string& style_tag)
+{
+	auto rs_object = stflrichtext::bridged::from_plaintext_with_style(text, style_tag);
+
+	return StflRichText(std::move(rs_object));
+}
+
+StflRichText StflRichText::from_quoted(const std::string& text)
 {
 	auto rs_object = stflrichtext::bridged::from_quoted(text);
 
 	return StflRichText(std::move(rs_object));
+}
+
+void StflRichText::append(const StflRichText& other)
+{
+	stflrichtext::bridged::append(*rs_object, *other.rs_object);
 }
 
 void StflRichText::highlight_searchphrase(const std::string& search, bool case_insensitive)

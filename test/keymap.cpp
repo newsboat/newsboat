@@ -767,12 +767,12 @@ TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given
 		{OP_SEARCH, "Go find me"}
 	};
 
-	REQUIRE(k.prepare_keymap_hint(hints, Dialog::FeedList) ==
-		"<key>q</><colon>:</><desc>Get out of <>this> dialog</> "
-		"<key>?</><comma>,</><key>w</><colon>:</><desc>HALP</> "
-		"<key>ENTER</><comma>,</><key><></><comma>,</><key>x</><colon>:</><desc>Open</> "
-		"<key>O</><colon>:</><desc>Reload current entry</> "
-		"<key><>none></><colon>:</><desc>Go find me</> ");
+	REQUIRE(k.prepare_keymap_hint(hints, Dialog::FeedList).stfl_quoted() ==
+		"<key>q<colon>:<desc>Get out of <>this> dialog</> "
+		"<key>?<comma>,<key>w<colon>:<desc>HALP</> "
+		"<key>ENTER<comma>,<key><><comma>,<key>x<colon>:<desc>Open</> "
+		"<key>O<colon>:<desc>Reload current entry</> "
+		"<key><>none><colon>:<desc>Go find me</>");
 }
 
 TEST_CASE("get_help_info() returns info about macros, bindings, and unbound actions",

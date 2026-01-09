@@ -1105,11 +1105,9 @@ StflRichText FeedListFormAction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('d', utils::utf8_to_locale(feed->description()));
 
 	const auto formattedLine = fmt.do_format(feedlist_format, width);
-	auto stflFormattedLine = StflRichText::from_plaintext(formattedLine);
-
-	if (unread_count > 0) {
-		stflFormattedLine.apply_style_tag("<unread>", 0, formattedLine.length());
-	}
+	auto stflFormattedLine = unread_count > 0
+		? StflRichText::from_plaintext_with_style(formattedLine, "<unread>")
+		: StflRichText::from_plaintext(formattedLine);
 
 	const int id = rxman.feed_matches(feed.get());
 	if (id != -1) {

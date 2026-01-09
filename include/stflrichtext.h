@@ -9,8 +9,10 @@ namespace newsboat {
 
 class StflRichText {
 public:
-	static StflRichText from_plaintext(std::string);
-	static StflRichText from_quoted(std::string);
+	static StflRichText from_plaintext(const std::string& text);
+	static StflRichText from_plaintext_with_style(const std::string& text,
+		const std::string& style_tag);
+	static StflRichText from_quoted(const std::string& text);
 
 	StflRichText(const StflRichText&);
 	StflRichText(StflRichText&&) = default;
@@ -18,7 +20,7 @@ public:
 	StflRichText& operator=(StflRichText&&) = default;
 	~StflRichText() = default;
 
-
+	void append(const StflRichText& other);
 	void highlight_searchphrase(const std::string& search, bool case_insensitive = true);
 	void apply_style_tag(const std::string& tag, size_t start, size_t end);
 
