@@ -32,11 +32,10 @@ enum class LineType {
 
 class TextFormatter {
 public:
-	TextFormatter() = default;
+	TextFormatter(
+		const std::vector<std::pair<LineType, std::string>>& text);
 	~TextFormatter() = default;
-	void add_line(LineType type, std::string line);
-	void add_lines(
-		const std::vector<std::pair<LineType, std::string>>& lines);
+
 	std::pair<std::string, std::size_t> format_text_to_list(
 		RegexManager* r = nullptr,
 		std::optional<Dialog> location = {},
@@ -44,11 +43,6 @@ public:
 		const size_t total_width = 0);
 	std::string format_text_plain(const size_t width = 80,
 		const size_t total_width = 0);
-
-	void clear()
-	{
-		lines.clear();
-	}
 
 private:
 	std::vector<std::pair<LineType, std::string>> lines;

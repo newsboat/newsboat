@@ -253,8 +253,7 @@ std::string item_renderer::to_plain_text(
 
 	render_links_summary(lines, links);
 
-	TextFormatter txtfmt;
-	txtfmt.add_lines(lines);
+	TextFormatter txtfmt(lines);
 
 	unsigned int width = cfg.get_configvalue_as_int("text-width");
 	if (width == 0) {
@@ -290,8 +289,7 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 
 	render_links_summary(lines, links);
 
-	TextFormatter txtfmt;
-	txtfmt.add_lines(lines);
+	TextFormatter txtfmt(lines);
 
 	return txtfmt.format_text_to_list(rxman, location, text_width, window_width);
 }
@@ -332,8 +330,7 @@ std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
 	render_source(lines, StflRichText::from_plaintext(utils::utf8_to_locale(
 				item.description().text)).stfl_quoted());
 
-	TextFormatter txtfmt;
-	txtfmt.add_lines(lines);
+	TextFormatter txtfmt(lines);
 
 	return txtfmt.format_text_to_list(rxman, location, text_width, window_width);
 }
