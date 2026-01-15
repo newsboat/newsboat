@@ -9,9 +9,7 @@ using namespace newsboat;
 TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 	"[TextFormatter]")
 {
-	TextFormatter fmt;
-
-	fmt.add_lines({std::make_pair(LineType::wrappable,
+	TextFormatter fmt({std::make_pair(LineType::wrappable,
 				"this one is going to be wrapped"),
 			std::make_pair(LineType::softwrappable,
 				"this one is going to be wrapped at the window "
@@ -58,9 +56,7 @@ TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 
 TEST_CASE("line wrapping works for non-space-separated text", "[TextFormatter]")
 {
-	TextFormatter fmt;
-
-	fmt.add_lines({std::make_pair(LineType::wrappable,
+	TextFormatter fmt({std::make_pair(LineType::wrappable,
 				"    つれづれなるままに、ひぐらしすずりにむかいて、")});
 
 	SECTION("preserve indent and doesn't return broken UTF-8") {
@@ -89,9 +85,7 @@ TEST_CASE("line wrapping works for non-space-separated text", "[TextFormatter]")
 TEST_CASE("regex manager is used by format_text_to_list if one is passed",
 	"[TextFormatter]")
 {
-	TextFormatter fmt;
-
-	fmt.add_line(LineType::wrappable, "Highlight me please!");
+	TextFormatter fmt({{LineType::wrappable, "Highlight me please!"}});
 
 	RegexManager rxmgr;
 	// the choice of green text on red background does not reflect my
@@ -114,9 +108,7 @@ TEST_CASE("regex manager is used by format_text_to_list if one is passed",
 TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
 	"[TextFormatter]")
 {
-	TextFormatter fmt;
-
-	fmt.add_line(LineType::hr, "");
+	TextFormatter fmt({{LineType::hr, ""}});
 
 	SECTION("width = 3") {
 		const std::string expected =
@@ -150,10 +142,9 @@ TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
 TEST_CASE("wrappable sequences longer then format width are forced-wrapped",
 	"[TextFormatter]")
 {
-	TextFormatter fmt;
-	fmt.add_line(LineType::wrappable, "0123456789101112");
-	fmt.add_line(LineType::softwrappable, "0123456789101112");
-	fmt.add_line(LineType::nonwrappable, "0123456789101112");
+	TextFormatter fmt({{LineType::wrappable, "0123456789101112"},
+		{LineType::softwrappable, "0123456789101112"},
+		{LineType::nonwrappable, "0123456789101112"}});
 
 	const std::string expected =
 		"01234\n"
@@ -169,10 +160,9 @@ TEST_CASE("wrappable sequences longer then format width are forced-wrapped",
 TEST_CASE("Lines marked as non-wrappable are always returned verbatim",
 	"[TextFormatter]")
 {
-	TextFormatter fmt;
-	fmt.add_line(LineType::wrappable, " 0123456789101112");
-	fmt.add_line(LineType::softwrappable, " 0123456789101112");
-	fmt.add_line(LineType::nonwrappable, " 0123456789101112");
+	TextFormatter fmt({{LineType::wrappable, " 0123456789101112"},
+		{LineType::softwrappable, " 0123456789101112"},
+		{LineType::nonwrappable, " 0123456789101112"}});
 
 	const std::string expected =
 		" \n"
@@ -198,8 +188,7 @@ TEST_CASE("Lines marked as non-wrappable are always returned verbatim",
 TEST_CASE("Ignore whitespace that's going to be wrapped onto the next line",
 	"[TextFormatter]")
 {
-	TextFormatter fmt;
-	fmt.add_line(LineType::wrappable, "just a test");
+	TextFormatter fmt({{LineType::wrappable, "just a test"}});
 
 	const std::string expected =
 		"just\n"
@@ -213,8 +202,7 @@ TEST_CASE(
 	"total_width != 0",
 	"[TextFormatter]")
 {
-	TextFormatter fmt;
-	fmt.add_line(LineType::softwrappable, "just a test");
+	TextFormatter fmt({{LineType::softwrappable, "just a test"}});
 	const size_t wrap_width = 100;
 	RegexManager* rxman = nullptr;
 
@@ -258,13 +246,12 @@ TEST_CASE("Lines consisting entirely of spaces are replaced "
 	// Limit for softwrapable lines
 	const size_t total_width = 4;
 
-	TextFormatter fmt;
 	// All of these lines are longer than the wrap limits. If these lines were
 	// wrapped, the result would have more than 4 lines.
-	fmt.add_line(LineType::wrappable, "    ");
-	fmt.add_line(LineType::wrappable, "          ");
-	fmt.add_line(LineType::softwrappable, "      ");
-	fmt.add_line(LineType::softwrappable, "  ");
+	TextFormatter fmt({{LineType::wrappable, "    "},
+		{LineType::wrappable, "          "},
+		{LineType::softwrappable, "      "},
+		{LineType::softwrappable, "  "}});
 
 	const std::string expected_text =
 		"{list"

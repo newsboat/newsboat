@@ -13,24 +13,14 @@
 
 namespace newsboat {
 
-void TextFormatter::add_line(LineType type, std::string line)
+TextFormatter::TextFormatter(
+	const std::vector<std::pair<LineType, std::string>>& text)
 {
-	LOG(Level::DEBUG,
-		"TextFormatter::add_line: `%s' (line type %u)",
-		line,
-		static_cast<unsigned int>(type));
-
-	auto clean_line = utils::wstr2str(
-			utils::clean_nonprintable_characters(utils::str2wstr(line)));
-	lines.push_back(std::make_pair(type, clean_line));
-}
-
-void TextFormatter::add_lines(
-	const std::vector<std::pair<LineType, std::string>>& lines)
-{
-	for (const auto& line : lines) {
-		add_line(line.first,
-			utils::replace_all(line.second, "\t", "        "));
+	for (const auto& [type, line] : text) {
+		const auto tabs_replaced_line = utils::replace_all(line, "\t", "        ");
+		const auto clean_line = utils::wstr2str(
+				utils::clean_nonprintable_characters(utils::str2wstr(tabs_replaced_line)));
+		lines.push_back(std::make_pair(type, clean_line));
 	}
 }
 
