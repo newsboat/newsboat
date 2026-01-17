@@ -19,6 +19,80 @@
 #include "utils.h"
 
 namespace newsboat {
+namespace {
+
+struct FeedMap {
+	std::unordered_map<std::string, std::shared_ptr<RssFeed>> feeds;
+	Cache* cache_ptr;
+};
+
+int populate_feeds_callback(void* context, int argc, char** argv, char** /* colNames */)
+{
+	auto* feed_map = static_cast<FeedMap*>(context);
+	// argv: 0=rssurl, 1=url, 2=title, 3=is_rtl
+	if (argc < 4) {
+		return 0;
+	}
+
+	std::string rssurl = argv[0] ? argv[0] : "";
+	auto feed = std::make_shared<RssFeed>(feed_map->cache_ptr, rssurl);
+
+	feed->set_link(argv[1] ? argv[1] : "");
+	feed->set_title(argv[2] ? argv[2] : "");
+	feed->set_rtl(argv[3] && strcmp(argv[3], "1") == 0);
+
+	feed_map->feeds[rssurl] = feed;
+	return 0;
+}
+
+int populate_items_callback(void* context, int argc, char** argv, char** /* colNames */)
+{
+	auto* feed_map = static_cast<FeedMap*>(context);
+	// Same column order as the query in internalize_rssfeed
+	// 0=guid, 1=title, 2=author, 3=url, 4=pubDate, 5=length(content), 6=unread,
+	// 7=feedurl, ...
+
+	if (argc < 15) {
+		return 0;
+	}
+
+	std::string feedurl = argv[7] ? argv[7] : "";
+
+	auto it = feed_map->feeds.find(feedurl);
+	if (it == feed_map->feeds.end()) {
+		return 0;
+	}
+
+	auto item = std::make_shared<RssItem>(feed_map->cache_ptr);
+	item->set_guid(argv[0]);
+	item->set_title(argv[1]);
+	item->set_author(argv[2]);
+	item->set_link(argv[3]);
+
+	std::istringstream is(argv[4]);
+	time_t t;
+	is >> t;
+	item->set_pubDate(t);
+
+	item->set_size(utils::to_u(argv[5]));
+	item->set_unread(std::string("1") == argv[6]);
+	item->set_feedurl(feedurl);
+
+	item->set_enclosure_url(argv[8] ? argv[8] : "");
+	item->set_enclosure_type(argv[9] ? argv[9] : "");
+	item->set_enclosure_description(argv[10] ? argv[10] : "");
+	item->set_enclosure_description_mime_type(argv[11] ? argv[11] : "");
+	item->set_enqueued(std::string("1") == (argv[12] ? argv[12] : ""));
+	item->set_flags(argv[13] ? argv[13] : "");
+	item->set_base(argv[14] ? argv[14] : "");
+
+	auto feed = it->second;
+	item->set_feedptr(feed);
+	feed->add_item(item);
+
+	return 0;
+}
+}
 
 inline void Cache::run_sql_impl(const std::string& query,
 	int (*callback)(void*, int, char**, char**),
@@ -675,6 +749,80 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 	}
 	feed->sort_unlocked(cfg.get_article_sort_strategy());
 	return feed;
+}
+
+std::vector<std::shared_ptr<RssFeed>> Cache::internalize_all_feeds(
+		const std::vector<std::string>& urls,
+		RssIgnores* ign)
+{
+	ScopeMeasure m1("Cache::internalize_all_feeds");
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+
+	FeedMap feed_map;
+	feed_map.cache_ptr = this;
+
+	std::string feed_query = "SELECT rssurl, url, title, is_rtl FROM rss_feed";
+	run_sql(feed_query, populate_feeds_callback, &feed_map);
+
+	std::string item_query =
+		"SELECT guid, title, author, url, pubDate, length(content), unread, "
+		"feedurl, enclosure_url, enclosure_type, enclosure_description, "
+		"enclosure_description_mime_type, enqueued, flags, base "
+		"FROM rss_item WHERE deleted = 0 "
+		"ORDER BY feedurl, pubDate DESC, id DESC";
+
+	run_sql(item_query, populate_items_callback, &feed_map);
+
+	const unsigned int max_items = cfg.get_configvalue_as_int("max-items");
+	const auto sort_strategy = cfg.get_article_sort_strategy();
+
+	std::vector<std::shared_ptr<RssFeed>> result_feeds;
+	result_feeds.reserve(urls.size());
+
+	for (const auto& url : urls) {
+		if (utils::is_query_url(url)) {
+			result_feeds.push_back(std::make_shared<RssFeed>(this, url));
+			continue;
+		}
+
+		std::shared_ptr<RssFeed> feed;
+		auto it = feed_map.feeds.find(url);
+
+		if (it != feed_map.feeds.end()) {
+			feed = it->second;
+
+			if (ign != nullptr) {
+				auto& items = feed->items();
+				items.erase(std::remove_if(items.begin(), items.end(),
+				[&](std::shared_ptr<RssItem> item) -> bool {
+					try
+					{
+						return ign->matches(item.get());
+					} catch (const MatcherException& ex)
+					{
+						LOG(Level::DEBUG,
+							"oops, Matcher exception: %s",
+							ex.what());
+						return false;
+					}
+				}), items.end());
+			}
+
+			if (max_items > 0 && feed->total_item_count() > max_items) {
+				if (feed->items().size() > max_items) {
+					feed->erase_items(feed->items().begin() + max_items, feed->items().end());
+				}
+			}
+
+			feed->sort_unlocked(sort_strategy);
+		} else {
+			feed = std::make_shared<RssFeed>(this, url);
+		}
+
+		result_feeds.push_back(feed);
+	}
+
+	return result_feeds;
 }
 
 std::vector<std::shared_ptr<RssItem>> Cache::search_for_items(
