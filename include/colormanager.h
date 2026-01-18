@@ -34,10 +34,6 @@ public:
 		stfl_value_setter) const;
 
 private:
-	void emit_fallback_from_to(const std::string& from_element, const std::string& to_element,
-		const std::function<void(const std::string&, const std::string&)>& stfl_value_setter)
-	const;
-
 	std::map<std::string, TextStyle> element_styles;
 };
 

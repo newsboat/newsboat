@@ -157,20 +157,6 @@ std::string format_style(const TextStyle& style)
 	return result;
 }
 
-void ColorManager::emit_fallback_from_to(const std::string& from_element,
-	const std::string& to_element,
-	const std::function<void(const std::string&, const std::string&)>& stfl_value_setter) const
-{
-	const auto from_style = element_styles.find(from_element);
-	const auto to_style = element_styles.find(to_element);
-	if (from_style == element_styles.cend() && to_style != element_styles.cend()) {
-		const auto style = format_style(to_style->second);
-		LOG(Level::DEBUG, "ColorManager::apply_colors: %s inherited from %s %s", from_element,
-			to_element, style);
-		stfl_value_setter(from_element, style);
-	}
-}
-
 void ColorManager::apply_colors(
 	std::function<void(const std::string&, const std::string&)> stfl_value_setter)
 const
