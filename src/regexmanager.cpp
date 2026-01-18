@@ -3,21 +3,13 @@
 #include "config.h"
 #include "confighandlerexception.h"
 #include "configparser.h"
+#include "dialog.h"
 #include "logger.h"
 #include "stflrichtext.h"
 #include "strprintf.h"
 #include "utils.h"
 
 namespace newsboat {
-
-RegexManager::RegexManager()
-{
-	// this creates the entries in the map. we need them there to have the
-	// "all" location work.
-	locations[Dialog::Article];
-	locations[Dialog::ArticleList];
-	locations[Dialog::FeedList];
-}
 
 void RegexManager::dump_config(std::vector<std::string>& config_output) const
 {
@@ -129,9 +121,11 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 
 	std::vector<Dialog> applicable_locations;
 	if (location_str == "all") {
-		for (const auto& l : locations) {
-			applicable_locations.push_back(l.first);
-		}
+		applicable_locations = {
+			Dialog::Article,
+			Dialog::ArticleList,
+			Dialog::FeedList,
+		};
 	} else {
 		const auto location = dialog_from_name(location_str);
 		if (location.has_value() &&
