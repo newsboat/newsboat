@@ -3,6 +3,7 @@
 
 #include <map>
 #include <memory>
+#include <optional>
 #include <regex.h>
 #include <string>
 #include <sys/types.h>
@@ -19,7 +20,6 @@ namespace newsboat {
 
 class RegexManager : public ConfigActionHandler {
 public:
-	RegexManager();
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
@@ -39,6 +39,8 @@ private:
 	void handle_highlight_action(const std::vector<std::string>& params);
 	void handle_highlight_item_action(const std::string& action,
 		const std::vector<std::string>& params);
+	std::string create_stfl_style(const std::string& fgcolor,
+		const std::optional<std::string>& bgcolor, const std::vector<std::string>& attributes);
 };
 
 } // namespace newsboat

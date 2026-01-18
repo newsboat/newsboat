@@ -37,6 +37,12 @@ TEST_CASE("RegexManager throws on invalid `highlight' definition",
 			ConfigHandlerException);
 	}
 
+	SECTION("on unsupported location") {
+		params = {"urlview", "foo", "blue", "red"};
+		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
+			ConfigHandlerException);
+	}
+
 	SECTION("on invalid regex") {
 		params = {"feedlist", "*", "blue", "red"};
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),

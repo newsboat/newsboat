@@ -3,21 +3,13 @@
 #include "config.h"
 #include "confighandlerexception.h"
 #include "configparser.h"
+#include "dialog.h"
 #include "logger.h"
 #include "stflrichtext.h"
 #include "strprintf.h"
 #include "utils.h"
 
 namespace newsboat {
-
-RegexManager::RegexManager()
-{
-	// this creates the entries in the map. we need them there to have the
-	// "all" location work.
-	locations[Dialog::Article];
-	locations[Dialog::ArticleList];
-	locations[Dialog::FeedList];
-}
 
 void RegexManager::dump_config(std::vector<std::string>& config_output) const
 {
@@ -129,9 +121,11 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 
 	std::vector<Dialog> applicable_locations;
 	if (location_str == "all") {
-		for (const auto& l : locations) {
-			applicable_locations.push_back(l.first);
-		}
+		applicable_locations = {
+			Dialog::Article,
+			Dialog::ArticleList,
+			Dialog::FeedList,
+		};
 	} else {
 		const auto location = dialog_from_name(location_str);
 		if (location.has_value() &&
@@ -152,58 +146,27 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 				params[1],
 				errorMessage));
 	}
-	std::string colorstr;
-	if (params[2] != "default") {
-		colorstr.append("fg=");
-		if (!utils::is_valid_color(params[2])) {
-			throw ConfigHandlerException(strprintf::fmt(
-					_("`%s' is not a valid color"),
-					params[2]));
-		}
-		colorstr.append(params[2]);
-	}
-	if (params.size() > 3) {
-		if (params[3] != "default") {
-			if (colorstr.length() > 0) {
-				colorstr.append(",");
-			}
-			colorstr.append("bg=");
-			if (!utils::is_valid_color(params[3])) {
-				throw ConfigHandlerException(
-					strprintf::fmt(
-						_("`%s' is not a valid "
-							"color"),
-						params[3]));
-			}
-			colorstr.append(params[3]);
-		}
-		for (unsigned int i = 4; i < params.size(); ++i) {
-			if (params[i] != "default") {
-				if (!colorstr.empty()) {
-					colorstr.append(",");
-				}
-				colorstr.append("attr=");
-				if (!utils::is_valid_attribute(
-						params[i])) {
-					throw ConfigHandlerException(
-						strprintf::fmt(
-							_("`%s' is not "
-								"a valid "
-								"attribute"),
-							params[i]));
-				}
-				colorstr.append(params[i]);
-			}
-		}
-	}
+
+	const std::string fgcolor = params[2];
+	const std::optional<std::string> bgcolor =
+		params.size() >= 4
+		? std::make_optional(params[3])
+		: std::nullopt;
+	const std::vector<std::string> attributes =
+		params.size() >= 5
+		? std::vector<std::string>(params.begin() + 4, params.end())
+		: std::vector<std::string>();
+
+	const std::string stfl_style = create_stfl_style(fgcolor, bgcolor, attributes);
+
 	std::shared_ptr<Regex> sharedRegex(std::move(regex));
 	for (auto& l : applicable_locations) {
 		LOG(Level::DEBUG,
-			"RegexManager::handle_action: adding rx = %s colorstr = %s to location %s",
+			"RegexManager::handle_action: adding rx = %s stfl_style = %s to location %s",
 			params[1],
-			colorstr,
+			stfl_style,
 			dialog_name(l));
-		locations[l].push_back({sharedRegex, colorstr});
+		locations[l].push_back({sharedRegex, stfl_style});
 	}
 }
 
@@ -214,49 +177,12 @@ void RegexManager::handle_highlight_item_action(const std::string& action,
 		throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 	}
 
-	std::string expr = params[0];
-	std::string fgcolor = params[1];
-	std::string bgcolor = params[2];
+	const std::string expr = params[0];
+	const std::string fgcolor = params[1];
+	const std::string bgcolor = params[2];
+	const std::vector<std::string> attributes(params.begin() + 3, params.end());
 
-	std::string colorstr;
-	if (fgcolor != "default") {
-		colorstr.append("fg=");
-		if (!utils::is_valid_color(fgcolor)) {
-			throw ConfigHandlerException(strprintf::fmt(
-					_("`%s' is not a valid color"),
-					fgcolor));
-		}
-		colorstr.append(fgcolor);
-	}
-	if (bgcolor != "default") {
-		if (!colorstr.empty()) {
-			colorstr.append(",");
-		}
-		colorstr.append("bg=");
-		if (!utils::is_valid_color(bgcolor)) {
-			throw ConfigHandlerException(strprintf::fmt(
-					_("`%s' is not a valid color"),
-					bgcolor));
-		}
-		colorstr.append(bgcolor);
-	}
-
-	for (unsigned int i = 3; i < params.size(); i++) {
-		if (params[i] != "default") {
-			if (!colorstr.empty()) {
-				colorstr.append(",");
-			}
-			colorstr.append("attr=");
-			if (!utils::is_valid_attribute(params[i])) {
-				throw ConfigHandlerException(
-					strprintf::fmt(
-						_("`%s' is not a valid "
-							"attribute"),
-						params[i]));
-			}
-			colorstr.append(params[i]);
-		}
-	}
+	const std::string stfl_style = create_stfl_style(fgcolor, bgcolor, attributes);
 
 	std::shared_ptr<Matcher> m(new Matcher());
 	if (!m->parse(params[0])) {
@@ -268,18 +194,62 @@ void RegexManager::handle_highlight_item_action(const std::string& action,
 
 	if (action == "highlight-article") {
 		int pos = locations[Dialog::ArticleList].size();
-		locations[Dialog::ArticleList].push_back({nullptr, colorstr});
+		locations[Dialog::ArticleList].push_back({nullptr, stfl_style});
 		matchers_article.push_back(
 			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
 	} else if (action == "highlight-feed") {
 		int pos = locations[Dialog::FeedList].size();
-		locations[Dialog::FeedList].push_back({nullptr, colorstr});
+		locations[Dialog::FeedList].push_back({nullptr, stfl_style});
 		matchers_feed.push_back(
 			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
 	} else {
 		throw ConfigHandlerException(
 			ActionHandlerStatus::INVALID_COMMAND);
 	}
+}
+
+std::string RegexManager::create_stfl_style(const std::string& fgcolor,
+	const std::optional<std::string>& bgcolor, const std::vector<std::string>& attributes)
+{
+	std::string stfl_style;
+	if (fgcolor != "default") {
+		stfl_style.append("fg=");
+		if (!utils::is_valid_color(fgcolor)) {
+			throw ConfigHandlerException(strprintf::fmt(
+					_("`%s' is not a valid color"),
+					fgcolor));
+		}
+		stfl_style.append(fgcolor);
+	}
+	if (bgcolor.has_value() && *bgcolor != "default") {
+		if (!stfl_style.empty()) {
+			stfl_style.append(",");
+		}
+		stfl_style.append("bg=");
+		if (!utils::is_valid_color(*bgcolor)) {
+			throw ConfigHandlerException(strprintf::fmt(
+					_("`%s' is not a valid color"),
+					*bgcolor));
+		}
+		stfl_style.append(*bgcolor);
+	}
+
+	for (const auto& attribute : attributes) {
+		if (attribute != "default") {
+			if (!stfl_style.empty()) {
+				stfl_style.append(",");
+			}
+			stfl_style.append("attr=");
+			if (!utils::is_valid_attribute(attribute)) {
+				throw ConfigHandlerException(
+					strprintf::fmt(
+						_("`%s' is not a valid attribute"),
+						attribute));
+			}
+			stfl_style.append(attribute);
+		}
+	}
+	return stfl_style;
 }
 
 std::string RegexManager::get_attrs_stfl_string(Dialog location,
