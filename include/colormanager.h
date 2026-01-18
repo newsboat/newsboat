@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "configactionhandler.h"
+#include "textstyle.h"
 
 namespace podboat {
 class PbView;
@@ -16,12 +17,6 @@ class View;
 namespace newsboat {
 
 class ConfigParser;
-
-struct TextStyle {
-	std::string fg_color;
-	std::string bg_color;
-	std::vector<std::string> attributes;
-};
 
 class ColorManager : public ConfigActionHandler {
 public:
