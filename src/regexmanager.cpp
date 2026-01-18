@@ -157,11 +157,11 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 		? std::vector<std::string>(params.begin() + 4, params.end())
 		: std::vector<std::string>();
 
-	StflStyle stfl_style(fgcolor, bgcolor, attributes);
+	TextStyle text_style(fgcolor, bgcolor, attributes);
 
 	std::shared_ptr<Regex> sharedRegex(std::move(regex));
 	for (auto& l : applicable_locations) {
-		locations[l].push_back({sharedRegex, stfl_style});
+		locations[l].push_back({sharedRegex, text_style});
 	}
 }
 
@@ -177,7 +177,7 @@ void RegexManager::handle_highlight_item_action(const std::string& action,
 	const std::string bgcolor = params[2];
 	const std::vector<std::string> attributes(params.begin() + 3, params.end());
 
-	StflStyle stfl_style(fgcolor, bgcolor, attributes);
+	TextStyle text_style(fgcolor, bgcolor, attributes);
 
 	std::shared_ptr<Matcher> m(new Matcher());
 	if (!m->parse(params[0])) {
@@ -189,12 +189,12 @@ void RegexManager::handle_highlight_item_action(const std::string& action,
 
 	if (action == "highlight-article") {
 		int pos = locations[Dialog::ArticleList].size();
-		locations[Dialog::ArticleList].push_back({nullptr, stfl_style});
+		locations[Dialog::ArticleList].push_back({nullptr, text_style});
 		matchers_article.push_back(
 			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
 	} else if (action == "highlight-feed") {
 		int pos = locations[Dialog::FeedList].size();
-		locations[Dialog::FeedList].push_back({nullptr, stfl_style});
+		locations[Dialog::FeedList].push_back({nullptr, text_style});
 		matchers_feed.push_back(
 			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
 	} else {
@@ -214,68 +214,15 @@ std::string RegexManager::get_attrs_stfl_string(Dialog location,
 	const auto& text_styles = location_regexes->second;
 	std::string attrstr;
 	for (unsigned int i = 0; i < text_styles.size(); ++i) {
-		const StflStyle& stfl_style = text_styles[i].second;
-		const std::string stfl_style_string = stfl_style.get_stfl_style_string();
-		attrstr.append(strprintf::fmt("@style_%u_normal:%s ", i, stfl_style_string));
+		const std::string text_style = text_styles[i].second.get_stfl_style_string();
+		attrstr.append(strprintf::fmt("@style_%u_normal:%s ", i, text_style));
 		if (hasFocus) {
-			attrstr.append(strprintf::fmt("@style_%u_focus:%s ", i, stfl_style_string));
+			attrstr.append(strprintf::fmt("@style_%u_focus:%s ", i, text_style));
 		}
 	}
 	LOG(Level::DEBUG, "RegexManager::get_attrs_stfl_string(%s, %s): %s", dialog_name(location),
 		hasFocus ? "true" : "false", attrstr);
 	return attrstr;
-}
-
-RegexManager::StflStyle::StflStyle(const std::string& fgcolor, const std::string& bgcolor,
-	const std::vector<std::string>& attributes)
-	: fgcolor(fgcolor)
-	, bgcolor(bgcolor)
-	, attributes(attributes)
-{
-	if (!utils::is_valid_color(fgcolor)) {
-		throw ConfigHandlerException(strprintf::fmt(
-				_("`%s' is not a valid color"),
-				fgcolor));
-	}
-	if (!utils::is_valid_color(bgcolor)) {
-		throw ConfigHandlerException(strprintf::fmt(
-				_("`%s' is not a valid color"),
-				bgcolor));
-	}
-
-	for (const auto& attribute : attributes) {
-		if (!utils::is_valid_attribute(attribute)) {
-			throw ConfigHandlerException(
-				strprintf::fmt(
-					_("`%s' is not a valid attribute"),
-					attribute));
-		}
-	}
-}
-
-std::string RegexManager::StflStyle::get_stfl_style_string() const
-{
-	std::string stfl_style;
-	if (fgcolor != "default") {
-		stfl_style.append("fg=" + fgcolor);
-	}
-
-	if (bgcolor != "default") {
-		if (!stfl_style.empty()) {
-			stfl_style.append(",");
-		}
-		stfl_style.append("bg=" + bgcolor);
-	}
-
-	for (const auto& attribute : attributes) {
-		if (attribute != "default") {
-			if (!stfl_style.empty()) {
-				stfl_style.append(",");
-			}
-			stfl_style.append("attr=" + attribute);
-		}
-	}
-	return stfl_style;
 }
 
 } // namespace newsboat
