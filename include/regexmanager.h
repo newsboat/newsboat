@@ -3,7 +3,6 @@
 
 #include <map>
 #include <memory>
-#include <optional>
 #include <regex.h>
 #include <string>
 #include <sys/types.h>
@@ -15,6 +14,7 @@
 #include "matcher.h"
 #include "regexowner.h"
 #include "stflrichtext.h"
+#include "textstyle.h"
 
 namespace newsboat {
 
@@ -30,7 +30,7 @@ public:
 	std::string get_attrs_stfl_string(Dialog location, bool hasFocus) const;
 
 private:
-	using RegexStyleVector = std::vector<std::pair<std::shared_ptr<Regex>, std::string>>;
+	using RegexStyleVector = std::vector<std::pair<std::shared_ptr<Regex>, TextStyle>>;
 	std::map<Dialog, RegexStyleVector> locations;
 	std::vector<std::string> cheat_store_for_dump_config;
 	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers_article;
@@ -39,8 +39,6 @@ private:
 	void handle_highlight_action(const std::vector<std::string>& params);
 	void handle_highlight_item_action(const std::string& action,
 		const std::vector<std::string>& params);
-	std::string create_stfl_style(const std::string& fgcolor,
-		const std::optional<std::string>& bgcolor, const std::vector<std::string>& attributes);
 };
 
 } // namespace newsboat

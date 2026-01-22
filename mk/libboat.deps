@@ -18,4 +18,5 @@ src/ruststring.cpp
 src/scopemeasure.cpp
 src/stflpp.cpp
 src/strprintf.cpp
+src/textstyle.cpp
 src/utils.cpp

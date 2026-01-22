@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "configactionhandler.h"
+#include "textstyle.h"
 
 namespace podboat {
 class PbView;
@@ -16,12 +17,6 @@ class View;
 namespace newsboat {
 
 class ConfigParser;
-
-struct TextStyle {
-	std::string fg_color;
-	std::string bg_color;
-	std::vector<std::string> attributes;
-};
 
 class ColorManager : public ConfigActionHandler {
 public:
@@ -34,10 +29,6 @@ public:
 		stfl_value_setter) const;
 
 private:
-	void emit_fallback_from_to(const std::string& from_element, const std::string& to_element,
-		const std::function<void(const std::string&, const std::string&)>& stfl_value_setter)
-	const;
-
 	std::map<std::string, TextStyle> element_styles;
 };
 
