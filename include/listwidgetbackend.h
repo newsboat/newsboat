@@ -5,6 +5,7 @@
 #include <functional>
 #include <map>
 #include <string>
+#include <mutex>
 
 #include "dialog.h"
 #include "listformatter.h"
@@ -44,6 +45,7 @@ private:
 	std::uint32_t scroll_offset;
 	std::map<std::uint32_t, StflRichText> line_cache;
 	std::function<StflRichText(std::uint32_t, std::uint32_t)> get_formatted_line;
+	std::mutex mutex;
 };
 
 } // namespace newsboat
