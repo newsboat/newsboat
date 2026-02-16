@@ -3,14 +3,14 @@ updates:
   - package-ecosystem: "cargo"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
-      cxx:
+      # Submit a single PR with all the updates for the week
+      everything:
         patterns:
-          - "cxx"
-          - "cxx-build"
+          - "*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
