@@ -1,0 +1,80 @@
+name: macOS Sonoma
+
+on:
+  push:
+    paths-ignore: &ignored_paths
+      - contrib/*
+      - contrib/**/*
+      - doc/*
+      - doc/**/*
+      - docker/*
+      - docker/**/*
+      - .github/**/*
+      - po/*
+      - po/**/*
+      - snap/*
+      - snap/**/*
+  pull_request:
+    paths_ignore: *ignored_paths
+
+jobs:
+  build_and_test_macos:
+    name: macOS Sonoma
+    runs-on: macos-14
+    env:
+      # Disable progress bar in Cargo. This cuts down on output, avoiding log length limits.
+      TERM: dumb
+      TARGET: aarch64-apple-darwin
+      JOBS: 3
+      HOMEBREW_PREFIX: /opt/homebrew
+      PKG_CONFIG_PATH: /opt/homebrew/opt/libxml2/lib/pkgconfig:/opt/homebrew/lib/pkgconfig
+      DYLD_LIBRARY_PATH: /opt/homebrew/lib
+      LDFLAGS: -L/opt/homebrew/opt/gettext/lib -L/opt/homebrew/lib
+      CFLAGS: -I/opt/homebrew/opt/gettext/include -I/opt/homebrew/include
+      CXXFLAGS: -I/opt/homebrew/opt/gettext/include -I/opt/homebrew/include
+      RUSTFLAGS: '-D warnings'
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v4
+        with:
+          key: ${{ hashFiles('Cargo.lock') }}
+          path: |
+            ~/.cargo/registry/
+            ~/.cargo/git
+
+      - name: Install dependencies
+        run: |
+          brew install make rust sqlite libxml2 curl json-c ncurses openssl gettext asciidoctor pkg-config
+          sudo ln -sf /opt/homebrew/opt/ncurses/bin/ncurses6-config /usr/local/bin/ncurses5.4-config
+          echo "GETTEXT_DIR=/opt/homebrew/opt/gettext" >> $GITHUB_ENV
+          echo "PATH=/opt/homebrew/opt/make/libexec/gnubin:/opt/homebrew/opt/gettext/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Compile and install STFL
+        run: |
+          git clone https://github.com/newsboat/stfl.git /tmp/stfl
+          cd /tmp/stfl
+          sed -i '' 's/ncursesw/ncurses/g' Makefile stfl_internals.h
+          sed -i '' 's|<ncurses/ncurses.h>|<ncurses.h>|g' stfl_internals.h
+          sed -i '' 's/-Wl,-soname,$(SONAME)/-Wl/g' Makefile
+          CFLAGS="-I/opt/homebrew/opt/ncurses/include -D_XOPEN_SOURCE_EXTENDED=1" LDFLAGS="-L/opt/homebrew/opt/ncurses/lib" LDLIBS="-lncurses -liconv" make
+          sudo make prefix=/opt/homebrew install
+
+      - name: Build
+        run: make -j${JOBS} --keep-going all test
+
+      - name: Test
+        run: RUST_TEST_THREADS=${JOBS} RUST_BACKTRACE=1 make -j${JOBS} NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
+
+      - name: Fake install
+        run: |
+          mkdir fakeroot
+          make DESTDIR=fakeroot install
+          make DESTDIR=fakeroot uninstall
+          test $(find fakeroot -type f -print | wc -l) -eq 0
+
+      - name: Run Clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings -A unknown-lints
