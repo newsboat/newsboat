@@ -167,46 +167,6 @@ task:
                 cxx_package: g++-7
                 cc: gcc-7
                 cxx: g++-7
-        - name: Rust stable, GCC 8 (Ubuntu 18.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-8
-                cc: gcc-8
-                cxx: g++-8
-        - name: Rust stable, GCC 9 (Ubuntu 20.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-9
-                cc: gcc-9
-                cxx: g++-9
-        - name: Rust stable, GCC 10 (Ubuntu 20.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-10
-                cc: gcc-10
-                cxx: g++-10
-        - name: Rust stable, GCC 11 (Ubuntu 22.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-11
-                cc: gcc-11
-                cxx: g++-11
-        - name: Rust stable, GCC 12 (Ubuntu 22.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-12
-                cc: gcc-12
-                cxx: g++-12
         - name: Rust stable, GCC 13 (Ubuntu 24.04)
           container:
             greedy: true
@@ -239,86 +199,6 @@ task:
                 cxx_package: clang-5.0
                 cc: clang-5.0
                 cxx: clang++-5.0
-        - name: Rust stable, Clang 6.0 (Ubuntu 18.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-6.0
-                cc: clang-6.0
-                cxx: clang++-6.0
-        - name: Rust stable, Clang 7 (Ubuntu 18.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-7
-                cc: clang-7
-                cxx: clang++-7
-        - name: Rust stable, Clang 8 (Ubuntu 18.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-8
-                cc: clang-8
-                cxx: clang++-8
-        - name: Rust stable, Clang 9 (Ubuntu 18.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-9
-                cc: clang-9
-                cxx: clang++-9
-        - name: Rust stable, Clang 10 (Ubuntu 20.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-10
-                cc: clang-10
-                cxx: clang++-10
-        - name: Rust stable, Clang 11 (Ubuntu 22.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-11
-                cc: clang-11
-                cxx: clang++-11
-        - name: Rust stable, Clang 12 (Ubuntu 22.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-12
-                cc: clang-12
-                cxx: clang++-12
-        - name: Rust stable, Clang 13 (Ubuntu 22.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-13
-                cc: clang-13
-                cxx: clang++-13
-        - name: Rust stable, Clang 14 (Ubuntu 22.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-14
-                cc: clang-14
-                cxx: clang++-14
-        - name: Rust stable, Clang 15 (Ubuntu 24.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-15
-                cc: clang-15
-                cxx: clang++-15
         - name: Rust stable, Clang 16 (Ubuntu 24.04)
           container:
             greedy: true
@@ -381,42 +261,6 @@ task:
     build_script: make -j${JOBS} test
     test_script: cd test && ./test --order=rand --rng-seed=time
     before_cache_script: *before_cache_script
-
-task:
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/*', 'docker/**/*', '.github/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
-    name: macOS Sonoma
-    macos_instance:
-        image: ghcr.io/cirruslabs/macos-runner:sonoma
-    cargo_cache: *cargo_cache
-    env:
-        HOMEBREW_PREFIX: /opt/homebrew
-        PATH: /opt/homebrew/opt/make/libexec/gnubin:/opt/homebrew/opt/gettext/bin:$PATH
-        PKG_CONFIG_PATH: /opt/homebrew/opt/libxml2/lib/pkgconfig:/opt/homebrew/lib/pkgconfig
-        DYLD_LIBRARY_PATH: /opt/homebrew/lib
-        LDFLAGS: -L/opt/homebrew/opt/gettext/lib -L/opt/homebrew/lib
-        CFLAGS: -I/opt/homebrew/opt/gettext/include -I/opt/homebrew/include
-        CXXFLAGS: -I/opt/homebrew/opt/gettext/include -I/opt/homebrew/include
-        GETTEXT_DIR: /opt/homebrew/opt/gettext
-        RUSTFLAGS: '-D warnings'
-        JOBS: 5
-    after_cache_script: *after_cache_script
-    install_deps_script:
-        - brew install make rust sqlite libxml2 curl json-c ncurses openssl gettext asciidoctor pkg-config
-        - sudo ln -sf /opt/homebrew/opt/ncurses/bin/ncurses6-config /usr/local/bin/ncurses5.4-config
-    install_stfl_script: |
-        git clone https://github.com/newsboat/stfl.git /tmp/stfl
-        cd /tmp/stfl
-        sed -i '' 's/ncursesw/ncurses/g' Makefile stfl_internals.h
-        sed -i '' 's|<ncurses/ncurses.h>|<ncurses.h>|g' stfl_internals.h
-        sed -i '' 's/-Wl,-soname,$(SONAME)/-Wl/g' Makefile
-        CFLAGS="-I/opt/homebrew/opt/ncurses/include -D_XOPEN_SOURCE_EXTENDED=1" LDFLAGS="-L/opt/homebrew/opt/ncurses/lib" LDLIBS="-lncurses -liconv" make
-        sudo make prefix=/opt/homebrew install
-    build_script: *build_script
-    test_script: *test_script
-    fake_install_script: *fake_install_script
-    clippy_script: *clippy_script
-    before_cache_script: *before_cache_script
-
 
 task:
     name: UB Sanitizer (Clang 18, Ubuntu 24.04)
