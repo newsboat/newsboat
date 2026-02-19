@@ -1,7 +1,6 @@
 use crate::filepath::PathBuf;
-use libc::{c_char, c_ulong};
+use libc::c_ulong;
 use libnewsboat::utils::{self, *};
-use std::ffi::{CStr, CString};
 use std::pin::Pin;
 
 #[cxx::bridge(namespace = "newsboat::utils")]
@@ -251,11 +250,4 @@ fn string_from_utf8_lossy(text: &[u8]) -> String {
 
 fn parse_rss_author_email(text: &[u8], name: &mut String, email: &mut String) {
     (*name, *email) = utils::parse_rss_author_email(text);
-}
-
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn rs_get_string(line: *const c_char) -> *mut c_char {
-    let line = unsafe { CStr::from_ptr(line) };
-    let result = CString::from(line);
-    result.into_raw()
 }

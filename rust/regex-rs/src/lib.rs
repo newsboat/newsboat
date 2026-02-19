@@ -151,7 +151,7 @@ impl Regex {
 
         unsafe {
             let mut regex: regex_t = mem::zeroed();
-            let errcode = regcomp(&mut regex, pattern.into_raw(), flags.bits());
+            let errcode = regcomp(&mut regex, pattern.as_ptr(), flags.bits());
 
             if errcode == 0 {
                 Ok(Regex { regex })
@@ -201,7 +201,7 @@ impl Regex {
 
             regexec(
                 &self.regex,
-                input.into_raw(),
+                input.as_ptr(),
                 max_matches as libc::size_t,
                 pmatch.as_mut_ptr(),
                 flags.bits(),
