@@ -14,6 +14,7 @@
 #include "fmtstrformatter.h"
 #include "listformatter.h"
 #include "logger.h"
+#include "matcherexception.h"
 #include "reloader.h"
 #include "rssfeed.h"
 #include "scopemeasure.h"
@@ -634,8 +635,6 @@ void FeedListFormAction::set_feedlist(
 
 	ListFormatter listfmt(&rxman, Dialog::FeedList);
 
-	update_visible_feeds(feeds);
-
 	auto render_line = [this, feedlist_format](std::uint32_t line,
 	std::uint32_t width) -> StflRichText {
 		if (line >= visible_feeds.size())
@@ -645,6 +644,14 @@ void FeedListFormAction::set_feedlist(
 		auto& feed = visible_feeds[line];
 		return format_line(feedlist_format, feed.first, feed.second, width);
 	};
+
+	try {
+		update_visible_feeds(feeds);
+	} catch (...) {
+		list.invalidate_list_content(visible_feeds.size(), render_line);
+		throw;
+	}
+
 	list.invalidate_list_content(visible_feeds.size(), render_line);
 
 	update_form_title(width);
@@ -1127,6 +1134,7 @@ std::string FeedListFormAction::title()
 
 void FeedListFormAction::apply_filter(const std::string& filtertext)
 {
+	v.get_statusline().show_message("");
 	if (filtertext.empty()) {
 		return;
 	}
@@ -1138,9 +1146,23 @@ void FeedListFormAction::apply_filter(const std::string& filtertext)
 				filtertext,
 				matcher.get_parse_error()));
 	} else {
-		save_filterpos();
-		filter_active = true;
-		do_redraw = true;
+		try {
+			const auto feeds = v.get_ctrl()->get_feedcontainer()->get_all_feeds();
+			if (!feeds.empty()) {
+				// Execute a trial run to check for uses of non-existent attributes.
+				// Might miss some issues due to short-circuit evaluation.
+				matcher.matches(feeds.front().get());
+			}
+
+			save_filterpos();
+			filter_active = true;
+			do_redraw = true;
+		} catch (MatcherException& ex) {
+			v.get_statusline().show_error(strprintf::fmt(
+					_("Error: couldn't apply filter expression `%s': %s"),
+					filtertext,
+					ex.what()));
+		}
 	}
 }
 
