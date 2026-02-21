@@ -13,6 +13,12 @@ mod ffi {
         description: String,
     }
 
+    #[derive(Default)]
+    struct Unbind {
+        key_sequence: String,
+        contexts: Vec<String>,
+    }
+
     extern "Rust" {
         // `tokenize_operation_sequence()` returns `Option<Vec<Vec<String>>>`, but cxx doesn't
         // support `Option` and doesn't allow `Vec<Vec<_>>`. Here's how we work around that:
@@ -30,6 +36,7 @@ mod ffi {
         ) -> Vec<Operation>;
 
         fn tokenize_binding(input: &str, parsing_failed: &mut bool) -> Binding;
+        fn tokenize_unbind(input: &str, parsing_failed: &mut bool) -> Unbind;
     }
 }
 
@@ -73,6 +80,19 @@ fn tokenize_binding(input: &str, parsing_failed: &mut bool) -> ffi::Binding {
         None => {
             *parsing_failed = true;
             ffi::Binding::default()
+        }
+    }
+}
+
+fn tokenize_unbind(input: &str, parsing_failed: &mut bool) -> ffi::Unbind {
+    match libnewsboat::keymap::tokenize_unbind(input) {
+        Some(unbind) => ffi::Unbind {
+            key_sequence: unbind.key_sequence,
+            contexts: unbind.contexts,
+        },
+        None => {
+            *parsing_failed = true;
+            ffi::Unbind::default()
         }
     }
 }
