@@ -800,6 +800,12 @@ std::string utils::string_from_utf8_lossy(const std::vector<std::uint8_t>& text)
 	return std::string(result);
 }
 
+std::string utils::sanitize_utf8(const std::string& text)
+{
+	const std::vector<std::uint8_t> vec(text.begin(), text.end());
+	return string_from_utf8_lossy(vec);
+}
+
 void utils::parse_rss_author_email(const std::vector<std::uint8_t>& text,
 	std::string& name, std::string& email)
 {
