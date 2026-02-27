@@ -17,7 +17,7 @@ TEST_CASE("Can be constructed from Rust error returned over FFI",
 	SECTION("Attribute unavailable") {
 		const auto e = MatcherException::from_rust_error(
 				rs_get_test_attr_unavail_error());
-		REQUIRE(e.type() == MatcherException::Type::ATTRIB_UNAVAIL);
+		REQUIRE(e.type() == MatcherException::Type::AttributeUnavailable);
 		REQUIRE(e.info() == "test_attribute");
 		REQUIRE(e.info2().empty());
 		REQUIRE_FALSE(strlen(e.what()) == 0);
@@ -26,7 +26,7 @@ TEST_CASE("Can be constructed from Rust error returned over FFI",
 	SECTION("Invalid regex") {
 		const auto e = MatcherException::from_rust_error(
 				rs_get_test_invalid_regex_error());
-		REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+		REQUIRE(e.type() == MatcherException::Type::InvalidRegex);
 		REQUIRE(e.info() == "?!");
 		REQUIRE(e.info2() == "inconceivable happened!");
 		REQUIRE_FALSE(strlen(e.what()) == 0);

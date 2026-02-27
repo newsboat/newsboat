@@ -80,7 +80,7 @@ std::string get_attr_or_throw(Matchable* item, const std::string& attr_name)
 		LOG(Level::WARN,
 			"Matcher::matches: attribute %s is not available",
 			attr_name);
-		throw MatcherException(MatcherException::Type::ATTRIB_UNAVAIL, attr_name);
+		throw MatcherException(MatcherException::Type::AttributeUnavailable, attr_name);
 	}
 
 	return attr.value();
@@ -140,7 +140,7 @@ bool Matcher::matchop_rxeq(expression* e, Matchable* item)
 			char buf[1024];
 			regerror(err, e->regex, buf, sizeof(buf));
 			throw MatcherException(
-				MatcherException::Type::INVALID_REGEX,
+				MatcherException::Type::InvalidRegex,
 				e->literal,
 				buf);
 		}

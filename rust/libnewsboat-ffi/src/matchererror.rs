@@ -4,9 +4,14 @@ use libnewsboat::matchererror::MatcherError;
 use std::ffi::CString;
 use std::ptr;
 
-// These constants MUST match numbers in `enum MatcherException::Type`, see include/matcherexception.h
-const ATTRIB_UNAVAIL: u8 = 0;
-const INVALID_REGEX: u8 = 1;
+#[cxx::bridge(namespace = "newsboat::matchererror::bridged")]
+mod bridged {
+    #[repr(u8)]
+    enum Type {
+        AttributeUnavailable = 0,
+        InvalidRegex = 1,
+    }
+}
 
 #[repr(C)]
 pub struct MatcherErrorFfi {
@@ -24,7 +29,7 @@ pub fn matcher_error_to_ffi(error: MatcherError) -> MatcherErrorFfi {
                 // safe and unwrap() here won't ever be triggered.
                 let info = CString::new(attr).unwrap().into_raw();
                 MatcherErrorFfi {
-                    err_type: ATTRIB_UNAVAIL,
+                    err_type: bridged::Type::AttributeUnavailable.repr,
                     info,
                     info2: ptr::null_mut(),
                 }
@@ -39,7 +44,7 @@ pub fn matcher_error_to_ffi(error: MatcherError) -> MatcherErrorFfi {
                 // won't ever be triggered.
                 let info2 = CString::new(errmsg).unwrap().into_raw();
                 MatcherErrorFfi {
-                    err_type: INVALID_REGEX,
+                    err_type: bridged::Type::InvalidRegex.repr,
                     info,
                     info2,
                 }

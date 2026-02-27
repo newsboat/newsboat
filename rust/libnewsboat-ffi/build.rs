@@ -21,6 +21,7 @@ fn main() {
     add_cxxbridge("keycombination");
     add_cxxbridge("keymap");
     add_cxxbridge("logger");
+    add_cxxbridge("matchererror");
     add_cxxbridge("scopemeasure");
     add_cxxbridge("stflrichtext");
     add_cxxbridge("utils");

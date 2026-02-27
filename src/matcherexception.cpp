@@ -10,11 +10,11 @@ const char* MatcherException::what() const throw()
 {
 	static std::string errmsg;
 	switch (type_) {
-	case Type::ATTRIB_UNAVAIL:
+	case Type::AttributeUnavailable:
 		errmsg = strprintf::fmt(
 				_("attribute `%s' is not available."), addinfo);
 		break;
-	case Type::INVALID_REGEX:
+	case Type::InvalidRegex:
 		errmsg = strprintf::fmt(
 				_("regular expression '%s' is invalid: %s"),
 				addinfo,
