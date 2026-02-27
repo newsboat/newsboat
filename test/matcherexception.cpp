@@ -1,22 +1,18 @@
 #include "matcherexception.h"
 
 #include "3rd-party/catch.hpp"
+#include "libnewsboat-ffi/src/matchererror.rs.h"
 
 #include <cstring>
 
 using namespace newsboat;
-
-extern "C" {
-	MatcherErrorFfi rs_get_test_attr_unavail_error();
-	MatcherErrorFfi rs_get_test_invalid_regex_error();
-}
 
 TEST_CASE("Can be constructed from Rust error returned over FFI",
 	"[MatcherException]")
 {
 	SECTION("Attribute unavailable") {
 		const auto e = MatcherException::from_rust_error(
-				rs_get_test_attr_unavail_error());
+				*matchererror::bridged::get_test_attr_unavail_error());
 		REQUIRE(e.type() == MatcherException::Type::AttributeUnavailable);
 		REQUIRE(e.info() == "test_attribute");
 		REQUIRE(e.info2().empty());
@@ -25,7 +21,7 @@ TEST_CASE("Can be constructed from Rust error returned over FFI",
 
 	SECTION("Invalid regex") {
 		const auto e = MatcherException::from_rust_error(
-				rs_get_test_invalid_regex_error());
+				*matchererror::bridged::get_test_invalid_regex_error());
 		REQUIRE(e.type() == MatcherException::Type::InvalidRegex);
 		REQUIRE(e.info() == "?!");
 		REQUIRE(e.info2() == "inconceivable happened!");

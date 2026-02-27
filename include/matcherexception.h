@@ -25,7 +25,7 @@ public:
 	~MatcherException() throw() override {}
 	const char* what() const throw() override;
 
-	static MatcherException from_rust_error(MatcherErrorFfi error);
+	static MatcherException from_rust_error(const matchererror::bridged::MatcherError& error);
 
 	// Getters for testing purposes. Ugly, but alas.
 	Type type() const

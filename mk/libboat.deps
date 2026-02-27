@@ -14,7 +14,6 @@ src/keycombination.cpp
 src/keymap.cpp
 src/matcher.cpp
 src/matcherexception.cpp
-src/ruststring.cpp
 src/scopemeasure.cpp
 src/stflpp.cpp
 src/strprintf.cpp
