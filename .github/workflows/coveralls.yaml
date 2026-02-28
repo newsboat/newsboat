@@ -74,4 +74,3 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: coverage.lcov
-          fail-on-error: false # temporarily ignore upload failures while https://status.coveralls.io/incidents/pdbt7vdzlvpj is being resolved
