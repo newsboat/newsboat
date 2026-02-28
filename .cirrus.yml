@@ -153,14 +153,14 @@ task:
                 cxx: g++-15
           env: &extra_warnings_and_checks_env
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
-        - name: Clang 18, more warnings and checks (Ubuntu 24.04)
+        - name: Clang 21, more warnings and checks (Ubuntu 25.10)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
             docker_arguments:
-                cxx_package: clang-18
-                cc: clang-18
-                cxx: clang++-18
+                cxx_package: clang-21
+                cc: clang-21
+                cxx: clang++-21
           env: *extra_warnings_and_checks_env
 
         - name: Rust stable, GCC 7 (Ubuntu 18.04)
@@ -203,30 +203,30 @@ task:
                 cxx_package: clang-5.0
                 cc: clang-5.0
                 cxx: clang++-5.0
-        - name: Rust stable, Clang 16 (Ubuntu 24.04)
+        - name: Rust stable, Clang 19 (Ubuntu 24.04)
           container:
             greedy: true
             dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: clang-16
-                cc: clang-16
-                cxx: clang++-16
-        - name: Rust stable, Clang 17 (Ubuntu 24.04)
+                cxx_package: clang-19
+                cc: clang-19
+                cxx: clang++-19
+        - name: Rust stable, Clang 20 (Ubuntu 24.04)
           container:
             greedy: true
             dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: clang-17
-                cc: clang-17
-                cxx: clang++-17
-        - name: Rust stable, Clang 18 (Ubuntu 24.04)
+                cxx_package: clang-20
+                cc: clang-20
+                cxx: clang++-20
+        - name: Rust stable, Clang 21 (Ubuntu 25.10)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
             docker_arguments:
-                cxx_package: clang-18
-                cc: clang-18
-                cxx: clang++-18
+                cxx_package: clang-21
+                cc: clang-21
+                cxx: clang++-21
 
     cargo_cache: *cargo_cache
 
@@ -238,18 +238,18 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    name: AddressSanitizer (Clang 18, Ubuntu 24.04)
+    name: AddressSanitizer (Clang 21, Ubuntu 25.10)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
-      dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+      dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
       docker_arguments:
-          # We need llvm-symbolizer from llvm-18-tools to demangle symbols in
+          # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
           # sanitizer's reports. ASAN library is in libclang-rt-dev
-          cxx_package: "clang-18 llvm-18 libclang-rt-18-dev"
-          cc: clang-18
-          cxx: clang++-18
+          cxx_package: "clang-21 llvm-21 libclang-rt-21-dev"
+          cc: clang-21
+          cxx: clang++-21
 
     env:
       CXXFLAGS: "-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g"
@@ -267,18 +267,18 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    name: UB Sanitizer (Clang 18, Ubuntu 24.04)
+    name: UB Sanitizer (Clang 21, Ubuntu 25.10)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
-      dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+      dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
       docker_arguments:
-          # We need llvm-symbolizer from llvm-18-tools to demangle symbols in
+          # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
           # sanitizer's reports. UB sanitizer library is in libclang-rt-dev
-          cxx_package: "clang-18 llvm-18 libclang-rt-18-dev"
-          cc: clang-18
-          cxx: clang++-18
+          cxx_package: "clang-21 llvm-21 libclang-rt-21-dev"
+          cc: clang-21
+          cxx: clang++-21
 
     env:
       CXXFLAGS: "-fsanitize=undefined -g -fno-omit-frame-pointer"
@@ -348,19 +348,19 @@ task:
       - ( ! grep -Ern '\<dbg!' * )
 
 task:
-    name: clang-tidy (Clang 18, Ubuntu 24.04)
+    name: clang-tidy (Clang 21, Ubuntu 25.10)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
-      dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+      dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
       docker_arguments:
-          cxx_package: "clang-tidy-18"
-          cc: clang-18
-          cxx: clang++-18
+          cxx_package: "clang-tidy-21"
+          cc: clang-21
+          cxx: clang++-21
 
     env:
-      CLANG_TIDY: "clang-tidy-18"
+      CLANG_TIDY: "clang-tidy-21"
       JOBS: 2
 
     cargo_cache: *cargo_cache
