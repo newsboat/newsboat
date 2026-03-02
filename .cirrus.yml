@@ -39,8 +39,37 @@ task:
         # Make sure we use the same package repository for all images. Snapshots
         # (like 11.3-STABLE) default to latest, while releases default to quarterly.
         - mkdir -p /usr/local/etc/pkg/repos
+        # The below line differs from the one provided in the FreeBSD
+        # Handbook[1]: instead of pkg+http://... URL we have a plain http://
+        # URL and specify a "mirror type". This is because pkg+http:// is an
+        # "SRV mirror", meaning it looks up SRV records in pkg.FreeBSD.org's
+        # DNS and uses them to decide what mirror to contact. Unfortunately,
+        # this logic fails in Cirrus CI with FreeBSD 15 (but not 13.5 or 14.3):
+        #
+        #     Updating FreeBSD repository catalogue...
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/meta.conf -- pkg+:// implies SRV mirror type
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/meta.txz -- pkg+:// implies SRV mirror type
+        #     repository FreeBSD has no meta file, using default settings
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/data.pkg -- pkg+:// implies SRV mirror type
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/data.tzst -- pkg+:// implies SRV mirror type
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/packagesite.pkg -- pkg+:// implies SRV mirror type
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/packagesite.tzst -- pkg+:// implies SRV mirror type
+        #     Unable to update repository FreeBSD
+        #     Error updating repositories!
+        #
+        # According to [2], the probable cause is broken DNS.
+        #
+        # Switching to plain http:// URL doesn't mean we are using a suboptimal
+        # mirror though. At the time of writing (March 2nd, 2026),
+        # pkg.freebsd.org is a CNAME to pkgmir.geo.freebsd.org, which is the
+        # same domain that _http._tcp.pkg.freebsd.org SRV record points to. In
+        # other words, pkg+http:// and http:// work the same at the moment.
+        #
+        # 1. https://docs.freebsd.org/en/books/handbook/ports/#quarterly-latest-branch
+        # 2. https://forums.freebsd.org/threads/pkg-no-srv-record-found-for-the-repo-freebsd.90716/
+        #
         # This command is wrapped in double quotes to avoid YAML parser getting confused by the colons and curly braces
-        - "echo 'FreeBSD: { url: \"pkg+http://pkg.FreeBSD.org/${ABI}/latest\" }' > /usr/local/etc/pkg/repos/FreeBSD.conf"
+        - "echo 'FreeBSD: { url: \"http://pkg.FreeBSD.org/${ABI}/latest\", mirror_type: \"none\" }' > /usr/local/etc/pkg/repos/FreeBSD.conf"
         - pkg update -f
         - pkg upgrade -y
         - pkg install -y rust gmake rubygem-asciidoctor pkgconf stfl curl json-c ncurses openssl ca_root_nss sqlite3 gettext-tools libxml2
