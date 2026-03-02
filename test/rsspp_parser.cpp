@@ -459,7 +459,7 @@ TEST_CASE("parse_url() extracts etag and lastmodified data", "[rsspp::Parser]")
 
 	rsspp::Parser parser;
 	CurlHandle easyhandle;
-	parser.parse_url(url, easyhandle);
+	REQUIRE(parser.parse_url(url, easyhandle).has_value());
 
 	REQUIRE(parser.get_etag() == "returned-etag");
 	REQUIRE(parser.get_last_modified() == 1445412480);
@@ -502,7 +502,7 @@ TEST_CASE("parse_url() converts data if specified in xml encoding attribute",
 
 	rsspp::Parser parser;
 	CurlHandle easyhandle;
-	auto parsed_feed = parser.parse_url(url, easyhandle);
+	auto parsed_feed = parser.parse_url(url, easyhandle).value();
 
 	REQUIRE(parsed_feed.items.size() == 1);
 	REQUIRE(parsed_feed.title == title_utf8);
@@ -530,7 +530,7 @@ TEST_CASE("parse_url() only converts once even when encoding specified twice (xm
 
 	rsspp::Parser parser;
 	CurlHandle easyhandle;
-	auto parsed_feed = parser.parse_url(url, easyhandle);
+	auto parsed_feed = parser.parse_url(url, easyhandle).value();
 
 	REQUIRE(parsed_feed.items.size() == 1);
 	REQUIRE(parsed_feed.title == title_utf8);
@@ -558,7 +558,7 @@ TEST_CASE("parse_url() uses xml encoding if specified encodings conflict (xml en
 
 	rsspp::Parser parser;
 	CurlHandle easyhandle;
-	auto parsed_feed = parser.parse_url(url, easyhandle);
+	auto parsed_feed = parser.parse_url(url, easyhandle).value();
 
 	REQUIRE(parsed_feed.items.size() == 1);
 	REQUIRE(parsed_feed.title == title_utf8);
@@ -601,7 +601,7 @@ TEST_CASE("parse_url() applies encoding specified in http header if no xml encod
 
 	rsspp::Parser parser;
 	CurlHandle easyhandle;
-	auto parsed_feed = parser.parse_url(url, easyhandle);
+	auto parsed_feed = parser.parse_url(url, easyhandle).value();
 
 	REQUIRE(parsed_feed.items.size() == 1);
 	REQUIRE(parsed_feed.title == title_utf8);
@@ -628,7 +628,7 @@ TEST_CASE("parse_url() assumes utf-8 if no encoding specified and replaces inval
 
 	rsspp::Parser parser;
 	CurlHandle easyhandle;
-	auto parsed_feed = parser.parse_url(url, easyhandle);
+	auto parsed_feed = parser.parse_url(url, easyhandle).value();
 
 	REQUIRE(parsed_feed.items.size() == 1);
 	REQUIRE(parsed_feed.title == expected_title);
@@ -654,7 +654,7 @@ TEST_CASE("parse_url() with unsupported encoding falls back to libxml auto-detec
 
 	rsspp::Parser parser;
 	CurlHandle easyhandle;
-	auto parsed_feed = parser.parse_url(url, easyhandle);
+	auto parsed_feed = parser.parse_url(url, easyhandle).value();
 
 	REQUIRE(parsed_feed.items.size() == 1);
 	REQUIRE(parsed_feed.title == title_utf8);

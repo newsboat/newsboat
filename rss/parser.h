@@ -6,6 +6,8 @@
 #include <optional>
 #include <string>
 
+#include "3rd-party/expected.hpp"
+
 #include "filepath.h"
 #include "remoteapi.h"
 #include "feed.h"
@@ -20,6 +22,15 @@ namespace rsspp {
 
 class Parser {
 public:
+	enum class ErrorType {
+		NotModified,
+	};
+
+	struct Error {
+		ErrorType type;
+		std::string message;
+	};
+
 	Parser(unsigned int timeout = 30,
 		const std::string& user_agent = "",
 		const std::string& proxy = "",
@@ -27,7 +38,7 @@ public:
 		long int proxy_type = CURLPROXY_HTTP,
 		const bool ssl_verify = true);
 	~Parser();
-	Feed parse_url(const std::string& url,
+	nonstd::expected<Feed, Error> parse_url(const std::string& url,
 		newsboat::CurlHandle& easyhandle,
 		time_t lastmodified = 0,
 		const std::string& etag = "",

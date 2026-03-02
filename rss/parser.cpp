@@ -7,6 +7,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+#include "3rd-party/expected.hpp"
 #include "charencoding.h"
 #include "config.h"
 #include "curldatareceiver.h"
@@ -49,7 +50,7 @@ Parser::~Parser()
 	}
 }
 
-Feed Parser::parse_url(const std::string& url,
+nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 	newsboat::CurlHandle& easyhandle,
 	time_t lastmodified,
 	const std::string& etag,
@@ -203,7 +204,7 @@ Feed Parser::parse_url(const std::string& url,
 		throw Exception(msg);
 	}
 	if (infoOk == CURLE_OK && status == 304) {
-		throw NotModifiedException();
+		return nonstd::make_unexpected(Error{ErrorType::NotModified, ""});
 	}
 
 	std::string buf = curlDataReceiver->get_data();

@@ -13,6 +13,7 @@
 #include "newsblurapi.h"
 #include "ocnewsapi.h"
 #include "remoteapi.h"
+#include "rss/exception.h"
 #include "rss/parser.h"
 #include "rssignores.h"
 #include "strprintf.h"
@@ -198,45 +199,58 @@ rsspp::Feed FeedRetriever::download_http(const std::string& uri)
 		if (!ign || !ign->matches_lastmodified(uri)) {
 			ch.fetch_lastmodified(uri, lm, etag);
 		}
-		f = p.parse_url(
+		const auto result = p.parse_url(
 				uri,
 				easyhandle,
 				lm,
 				etag,
 				api,
 				cfg.get_configvalue_as_filepath("cookie-cache").to_locale_string());
-		LOG(Level::DEBUG,
-			"FeedRetriever::download_http: lm = %" PRId64 " etag = %s",
-			// On GCC, `time_t` is `long int`, which is at least 32 bits
-			// long according to the spec. On x86_64, it's actually 64
-			// bits. Thus, casting to int64_t is either a no-op, or an
-			// up-cast which are always safe.
-			static_cast<int64_t>(p.get_last_modified()),
-			p.get_etag());
-		if (p.get_last_modified() != 0 ||
-			p.get_etag().length() > 0) {
+
+		auto store_lm_etag = [&]() {
 			LOG(Level::DEBUG,
-				"FeedRetriever::download_http: "
-				"lastmodified "
-				"old: %" PRId64 " new: %" PRId64,
-				// On GCC, `time_t` is `long int`, which is at least 32
-				// bits long according to the spec. On x86_64, it's
-				// actually 64 bits. Thus, casting to int64_t is either
-				// a no-op, or an up-cast which are always safe.
-				static_cast<int64_t>(lm),
-				static_cast<int64_t>(p.get_last_modified()));
-			LOG(Level::DEBUG,
-				"FeedRetriever::download_http: etag old: "
-				"%s "
-				"new %s",
-				etag,
+				"FeedRetriever::download_http: lm = %" PRId64 " etag = %s",
+				// On GCC, `time_t` is `long int`, which is at least 32 bits
+				// long according to the spec. On x86_64, it's actually 64
+				// bits. Thus, casting to int64_t is either a no-op, or an
+				// up-cast which are always safe.
+				static_cast<int64_t>(p.get_last_modified()),
 				p.get_etag());
-			ch.update_lastmodified(uri,
-				(p.get_last_modified() != lm)
-				? p.get_last_modified()
-				: 0,
-				(etag != p.get_etag()) ? p.get_etag()
-				: "");
+			if (p.get_last_modified() != 0 ||
+				p.get_etag().length() > 0) {
+				LOG(Level::DEBUG,
+					"FeedRetriever::download_http: "
+					"lastmodified "
+					"old: %" PRId64 " new: %" PRId64,
+					// On GCC, `time_t` is `long int`, which is at least 32
+					// bits long according to the spec. On x86_64, it's
+					// actually 64 bits. Thus, casting to int64_t is either
+					// a no-op, or an up-cast which are always safe.
+					static_cast<int64_t>(lm),
+					static_cast<int64_t>(p.get_last_modified()));
+				LOG(Level::DEBUG,
+					"FeedRetriever::download_http: etag old: "
+					"%s "
+					"new %s",
+					etag,
+					p.get_etag());
+				ch.update_lastmodified(uri,
+					(p.get_last_modified() != lm) ? p.get_last_modified() : 0,
+					(etag != p.get_etag()) ? p.get_etag() : "");
+			}
+		};
+
+		if (result.has_value()) {
+			f = result.value();
+			store_lm_etag();
+		} else {
+			auto error = result.error();
+			switch (error.type) {
+			case rsspp::Parser::ErrorType::NotModified:
+				store_lm_etag();
+				throw rsspp::NotModifiedException();
+				break;
+			}
 		}
 	}
 	LOG(Level::DEBUG,

@@ -55,11 +55,47 @@ TEST_CASE("Feed retriever adds header with etag info if available", "[FeedRetrie
 	auto mockRegistration = testServer.add_endpoint("/feed", {
 		{"If-None-Match", "some-random-etag"},
 	}, 304, {
-		{"content-type", "text/xml"},
 	}, {});
 
 	REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::NotModifiedException);
 	REQUIRE(testServer.num_hits(mockRegistration) == 1);
+}
+
+TEST_CASE("Feed retriever takes over changed etag, even on http 304 Not Modified",
+	"[FeedRetriever]")
+{
+	ConfigContainer cfg;
+	auto rsscache = Cache::in_memory(cfg);
+	CurlHandle easyHandle;
+	FeedRetriever feedRetriever(cfg, *rsscache, easyHandle);
+
+	auto& testServer = test_helpers::HttpTestServer::get_instance();
+	const auto address = testServer.get_address();
+	const auto url = strprintf::fmt("http://%s/feed", address);
+
+
+	GIVEN("a feed with stored etag") {
+		RssFeed feed_with_etag(rsscache.get(), url);
+		rsscache->externalize_rssfeed(feed_with_etag, false);
+		rsscache->update_lastmodified(url, {}, "some-random-etag");
+
+		WHEN("a request comes back with a different etag") {
+			auto mockRegistration = testServer.add_endpoint("/feed", {
+				{"If-None-Match", "some-random-etag"},
+			}, 304, {
+				{"ETag", "some-updated-etag"},
+			}, {});
+
+			REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::NotModifiedException);
+
+			THEN("the etag is stored") {
+				time_t t{};
+				std::string etag;
+				rsscache->fetch_lastmodified(url, t, etag);
+				REQUIRE(etag == "some-updated-etag");
+			}
+		}
+	}
 }
 
 TEST_CASE("Feed retriever retries download if no data is received",
