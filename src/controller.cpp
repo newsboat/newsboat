@@ -155,6 +155,7 @@ int Controller::run(const CliArgsParser& args)
 
 	KeyMap keys(KM_NEWSBOAT);
 	cfgparser.register_handler("bind", keys);
+	cfgparser.register_handler("unbind", keys);
 	cfgparser.register_handler("bind-key", keys);
 	cfgparser.register_handler("unbind-key", keys);
 	cfgparser.register_handler("macro", keys);

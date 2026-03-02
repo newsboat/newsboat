@@ -1163,8 +1163,8 @@ operation that is not supported by the current dialog, it will be ignored.
 The macro prefix can be changed from the default kbd:[,] to another key, e.g. kbd:[+]
 (if you don't unbind the default kbd:[,] you're left with two macro prefixes):
 
-  bind-key + macro-prefix
-  unbind-key ,
+  bind + everywhere macro-prefix
+  unbind , everywhere
 
 === Open Links with External Commands
 
