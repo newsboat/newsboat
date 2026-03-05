@@ -95,6 +95,8 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 USER builder
+# Set `HOME` for processes launched by `docker run`; see e2bdf1ca62bdedefc3c910d1e2574647dfcf5319.
+ENV HOME /home/builder
 WORKDIR /home/builder/src
 
 ARG rust_version=1.93.1
@@ -105,8 +107,6 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
         --default-host x86_64-unknown-linux-gnu \
         --default-toolchain $rust_version \
     && chmod a+w $HOME/.cargo
-
-ENV HOME /home/builder
 
 ARG cc=gcc-8
 ARG cxx=g++-8

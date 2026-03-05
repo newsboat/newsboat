@@ -13,6 +13,10 @@ task:
           freebsd_instance:
             image: freebsd-14-3-release-amd64-ufs
             <<: *freebsd_resource_settings
+        - name: FreeBSD 15.0
+          freebsd_instance:
+            image: freebsd-15-0-release-amd64-ufs
+            <<: *freebsd_resource_settings
 
     cargo_cache: &cargo_cache
         # This works in conjunction with after_cache_script and
@@ -35,8 +39,37 @@ task:
         # Make sure we use the same package repository for all images. Snapshots
         # (like 11.3-STABLE) default to latest, while releases default to quarterly.
         - mkdir -p /usr/local/etc/pkg/repos
+        # The below line differs from the one provided in the FreeBSD
+        # Handbook[1]: instead of pkg+http://... URL we have a plain http://
+        # URL and specify a "mirror type". This is because pkg+http:// is an
+        # "SRV mirror", meaning it looks up SRV records in pkg.FreeBSD.org's
+        # DNS and uses them to decide what mirror to contact. Unfortunately,
+        # this logic fails in Cirrus CI with FreeBSD 15 (but not 13.5 or 14.3):
+        #
+        #     Updating FreeBSD repository catalogue...
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/meta.conf -- pkg+:// implies SRV mirror type
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/meta.txz -- pkg+:// implies SRV mirror type
+        #     repository FreeBSD has no meta file, using default settings
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/data.pkg -- pkg+:// implies SRV mirror type
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/data.tzst -- pkg+:// implies SRV mirror type
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/packagesite.pkg -- pkg+:// implies SRV mirror type
+        #     pkg: packagesite URL error for pkg+http://pkg.FreeBSD.org/FreeBSD:15:amd64/latest/packagesite.tzst -- pkg+:// implies SRV mirror type
+        #     Unable to update repository FreeBSD
+        #     Error updating repositories!
+        #
+        # According to [2], the probable cause is broken DNS.
+        #
+        # Switching to plain http:// URL doesn't mean we are using a suboptimal
+        # mirror though. At the time of writing (March 2nd, 2026),
+        # pkg.freebsd.org is a CNAME to pkgmir.geo.freebsd.org, which is the
+        # same domain that _http._tcp.pkg.freebsd.org SRV record points to. In
+        # other words, pkg+http:// and http:// work the same at the moment.
+        #
+        # 1. https://docs.freebsd.org/en/books/handbook/ports/#quarterly-latest-branch
+        # 2. https://forums.freebsd.org/threads/pkg-no-srv-record-found-for-the-repo-freebsd.90716/
+        #
         # This command is wrapped in double quotes to avoid YAML parser getting confused by the colons and curly braces
-        - "echo 'FreeBSD: { url: \"pkg+http://pkg.FreeBSD.org/${ABI}/latest\" }' > /usr/local/etc/pkg/repos/FreeBSD.conf"
+        - "echo 'FreeBSD: { url: \"http://pkg.FreeBSD.org/${ABI}/latest\", mirror_type: \"none\" }' > /usr/local/etc/pkg/repos/FreeBSD.conf"
         - pkg update -f
         - pkg upgrade -y
         - pkg install -y rust gmake rubygem-asciidoctor pkgconf stfl curl json-c ncurses openssl ca_root_nss sqlite3 gettext-tools libxml2
@@ -149,14 +182,14 @@ task:
                 cxx: g++-15
           env: &extra_warnings_and_checks_env
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
-        - name: Clang 18, more warnings and checks (Ubuntu 24.04)
+        - name: Clang 21, more warnings and checks (Ubuntu 25.10)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
             docker_arguments:
-                cxx_package: clang-18
-                cc: clang-18
-                cxx: clang++-18
+                cxx_package: clang-21
+                cc: clang-21
+                cxx: clang++-21
           env: *extra_warnings_and_checks_env
 
         - name: Rust stable, GCC 7 (Ubuntu 18.04)
@@ -199,30 +232,30 @@ task:
                 cxx_package: clang-5.0
                 cc: clang-5.0
                 cxx: clang++-5.0
-        - name: Rust stable, Clang 16 (Ubuntu 24.04)
+        - name: Rust stable, Clang 19 (Ubuntu 24.04)
           container:
             greedy: true
             dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: clang-16
-                cc: clang-16
-                cxx: clang++-16
-        - name: Rust stable, Clang 17 (Ubuntu 24.04)
+                cxx_package: clang-19
+                cc: clang-19
+                cxx: clang++-19
+        - name: Rust stable, Clang 20 (Ubuntu 24.04)
           container:
             greedy: true
             dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: clang-17
-                cc: clang-17
-                cxx: clang++-17
-        - name: Rust stable, Clang 18 (Ubuntu 24.04)
+                cxx_package: clang-20
+                cc: clang-20
+                cxx: clang++-20
+        - name: Rust stable, Clang 21 (Ubuntu 25.10)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
             docker_arguments:
-                cxx_package: clang-18
-                cc: clang-18
-                cxx: clang++-18
+                cxx_package: clang-21
+                cc: clang-21
+                cxx: clang++-21
 
     cargo_cache: *cargo_cache
 
@@ -234,18 +267,18 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    name: AddressSanitizer (Clang 18, Ubuntu 24.04)
+    name: AddressSanitizer (Clang 21, Ubuntu 25.10)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
-      dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+      dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
       docker_arguments:
-          # We need llvm-symbolizer from llvm-18-tools to demangle symbols in
+          # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
           # sanitizer's reports. ASAN library is in libclang-rt-dev
-          cxx_package: "clang-18 llvm-18 libclang-rt-18-dev"
-          cc: clang-18
-          cxx: clang++-18
+          cxx_package: "clang-21 llvm-21 libclang-rt-21-dev"
+          cc: clang-21
+          cxx: clang++-21
 
     env:
       CXXFLAGS: "-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g"
@@ -263,18 +296,18 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    name: UB Sanitizer (Clang 18, Ubuntu 24.04)
+    name: UB Sanitizer (Clang 21, Ubuntu 25.10)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
-      dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+      dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
       docker_arguments:
-          # We need llvm-symbolizer from llvm-18-tools to demangle symbols in
+          # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
           # sanitizer's reports. UB sanitizer library is in libclang-rt-dev
-          cxx_package: "clang-18 llvm-18 libclang-rt-18-dev"
-          cc: clang-18
-          cxx: clang++-18
+          cxx_package: "clang-21 llvm-21 libclang-rt-21-dev"
+          cc: clang-21
+          cxx: clang++-21
 
     env:
       CXXFLAGS: "-fsanitize=undefined -g -fno-omit-frame-pointer"
@@ -344,19 +377,19 @@ task:
       - ( ! grep -Ern '\<dbg!' * )
 
 task:
-    name: clang-tidy (Clang 18, Ubuntu 24.04)
+    name: clang-tidy (Clang 21, Ubuntu 25.10)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
-      dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+      dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
       docker_arguments:
-          cxx_package: "clang-tidy-18"
-          cc: clang-18
-          cxx: clang++-18
+          cxx_package: "clang-tidy-21"
+          cc: clang-21
+          cxx: clang++-21
 
     env:
-      CLANG_TIDY: "clang-tidy-18"
+      CLANG_TIDY: "clang-tidy-21"
       JOBS: 2
 
     cargo_cache: *cargo_cache

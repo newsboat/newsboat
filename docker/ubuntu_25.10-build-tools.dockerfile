@@ -1,14 +1,14 @@
 # All the programs and libraries necessary to build Newsboat with newer
-# compilers. Contains GCC 9 and Rust 1.93.1 by default.
+# compilers. Contains GCC 15 and Rust 1.93.1 by default.
 #
 # Configurable via build-args:
 #
-# - cxx_package -- additional Ubuntu packages to install. Default: g++-9
+# - cxx_package -- additional Ubuntu packages to install. Default: g++-15
 # - rust_version -- Rust version to install. Default: 1.93.1
 # - cc -- C compiler to use. This gets copied into CC environment variable.
-#       Default: gcc-9
+#       Default: gcc-15
 # - cxx -- C++ compiler to use. This gets copied into CXX environment variable.
-#       Default: g++-9
+#       Default: g++-15
 #
 # Build with defaults:
 #
@@ -16,7 +16,7 @@
 #       --build-arg UID=$(id -u) \
 #       --build-arg GID=$(id -g) \
 #       --tag=newsboat-build-tools \
-#       --file=docker/ubuntu_20.04-build-tools.dockerfile \
+#       --file=docker/ubuntu_25.10-build-tools.dockerfile \
 #       docker
 #
 # Build with non-default compiler and Rust version:
@@ -25,11 +25,11 @@
 #       --build-arg UID=$(id -u) \
 #       --build-arg GID=$(id -g) \
 #       --tag=newsboat-build-tools \
-#       --file=docker/ubuntu_20.04-build-tools.dockerfile \
-#       --build-arg cxx_package=clang-10 \
-#       --build-arg cc=clang-10 \
-#       --build-arg cxx=clang++-10 \
-#       --build-arg rust_version=1.40.0 \
+#       --file=docker/ubuntu_25.10-build-tools.dockerfile \
+#       --build-arg cxx_package=clang-21 \
+#       --build-arg cc=clang-21 \
+#       --build-arg cxx=clang++-21 \
+#       --build-arg rust_version=1.76.0 \
 #       docker
 #
 # Before building in a container, run this to remove any binaries that you
@@ -45,7 +45,7 @@
 #       newsboat-build-tools \
 #       make
 #
-# To save on bandwidth, and speed up the build slightly, share the host's Cargo
+# To save bandwidth, and speed up the build slightly, share the host's Cargo
 # cache with the container:
 #
 #   mkdir -p ~/.cargo/registry
@@ -58,29 +58,31 @@
 #
 #   make distclean
 
-FROM ubuntu:20.04
+FROM ubuntu:25.10
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV PATH /home/builder/.cargo/bin:$PATH
 
 RUN apt-get update \
-    && apt-get upgrade --assume-yes
+    && apt-get upgrade --assume-yes \
+    && apt install --assume-yes --no-install-recommends ca-certificates wget gnupg2
 
-ARG cxx_package=g++-9
+ARG cxx_package=g++-15
 
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
         build-essential $cxx_package libsqlite3-dev libcurl4-openssl-dev libssl-dev \
         libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev gettext git \
-        pkg-config zlib1g-dev asciidoctor wget \
+        pkg-config zlib1g-dev asciidoctor \
     && apt-get autoremove \
     && apt-get clean
 
 ARG UID=1000
 ARG GID=1000
 
-RUN addgroup --gid $GID builder \
-    && adduser --home /home/builder --uid $UID --ingroup builder \
+RUN deluser ubuntu \
+    && addgroup --gid $GID builder \
+    && adduser --uid $UID --home /home/builder --ingroup builder \
         --disabled-password --shell /bin/bash builder \
     && mkdir -p /home/builder/src \
     && chown -R builder:builder /home/builder
@@ -108,8 +110,8 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
         --default-toolchain $rust_version \
     && chmod a+w $HOME/.cargo
 
-ARG cc=gcc-9
-ARG cxx=g++-9
+ARG cc=gcc-15
+ARG cxx=g++-15
 
 ENV CC=$cc
 ENV CXX=$cxx
