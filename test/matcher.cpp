@@ -710,7 +710,7 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 			const auto result = m.matches(&mock);
 			REQUIRE_FALSE(result);
 		} catch (const MatcherException& e) {
-			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+			REQUIRE(e.type() == MatcherException::Type::InvalidRegex);
 		}
 
 		REQUIRE(m.parse(R"#(attr !~ "\Q*]+\E")#"));
@@ -718,7 +718,7 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 			const auto result = m.matches(&mock);
 			REQUIRE(result);
 		} catch (const MatcherException& e) {
-			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+			REQUIRE(e.type() == MatcherException::Type::InvalidRegex);
 		}
 	}
 
@@ -730,7 +730,7 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 			const auto result = m.matches(&mock);
 			REQUIRE_FALSE(result);
 		} catch (const MatcherException& e) {
-			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+			REQUIRE(e.type() == MatcherException::Type::InvalidRegex);
 		}
 
 		REQUIRE(m.parse(R"#(attr !~ "^va\x6Cue")#"));
@@ -738,7 +738,7 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 			const auto result = m.matches(&mock);
 			REQUIRE(result);
 		} catch (const MatcherException& e) {
-			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+			REQUIRE(e.type() == MatcherException::Type::InvalidRegex);
 		}
 	}
 
@@ -750,7 +750,7 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 			const auto result = m.matches(&mock);
 			REQUIRE_FALSE(result);
 		} catch (const MatcherException& e) {
-			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+			REQUIRE(e.type() == MatcherException::Type::InvalidRegex);
 		}
 
 		REQUIRE(m.parse(R"#(attr !~ "\a")#"));
@@ -758,7 +758,7 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 			const auto result = m.matches(&mock);
 			REQUIRE(result);
 		} catch (const MatcherException& e) {
-			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+			REQUIRE(e.type() == MatcherException::Type::InvalidRegex);
 		}
 	}
 
@@ -770,7 +770,7 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 			const auto result = m.matches(&mock);
 			REQUIRE_FALSE(result);
 		} catch (const MatcherException& e) {
-			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+			REQUIRE(e.type() == MatcherException::Type::InvalidRegex);
 		}
 
 		REQUIRE(m.parse(R"#(attr !~ "\b")#"));
@@ -778,7 +778,7 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 			const auto result = m.matches(&mock);
 			REQUIRE(result);
 		} catch (const MatcherException& e) {
-			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+			REQUIRE(e.type() == MatcherException::Type::InvalidRegex);
 		}
 	}
 
