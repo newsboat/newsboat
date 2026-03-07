@@ -18,7 +18,7 @@ namespace newsboat {
 
 const std::string RssIgnores::REGEX_PREFIX = "regex:";
 
-void RssIgnores::handle_action(const std::string& action,
+void RssIgnores::handle_action(std::string_view action,
 	const std::vector<std::string>& params)
 {
 	if (action == "ignore-article") {

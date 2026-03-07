@@ -6,6 +6,7 @@
 #include <libxml/parser.h>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -39,8 +40,8 @@ std::vector<std::string> tokenize_spaced(const std::string& str,
 	std::string delimiters = " \r\n\t");
 std::vector<std::string> tokenize_nl(const std::string& str,
 	std::string delimiters = "\r\n");
-std::vector<std::string> tokenize_quoted(const std::string& str,
-	std::string delimiters = " \r\n\t");
+std::vector<std::string> tokenize_quoted(std::string_view str,
+	std::string_view delimiters = " \r\n\t");
 std::optional<std::string> extract_token_quoted(std::string& str,
 	std::string delimiters = " \r\n\t");
 

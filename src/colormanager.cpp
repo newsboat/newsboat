@@ -57,7 +57,7 @@ void ColorManager::register_commands(ConfigParser& cfgparser)
 	cfgparser.register_handler("color", *this);
 }
 
-void ColorManager::handle_action(const std::string& action,
+void ColorManager::handle_action(std::string_view action,
 	const std::vector<std::string>& params)
 {
 	LOG(Level::DEBUG,

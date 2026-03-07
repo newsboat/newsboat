@@ -18,7 +18,7 @@ void RegexManager::dump_config(std::vector<std::string>& config_output) const
 	}
 }
 
-void RegexManager::handle_action(const std::string& action,
+void RegexManager::handle_action(std::string_view action,
 	const std::vector<std::string>& params)
 {
 	if (action == "highlight") {
@@ -29,7 +29,7 @@ void RegexManager::handle_action(const std::string& action,
 		throw ConfigHandlerException(
 			ActionHandlerStatus::INVALID_COMMAND);
 	}
-	std::string line = action;
+	std::string line{action};
 	for (const auto& param : params) {
 		line.append(" ");
 		line.append(utils::quote(param));
@@ -165,7 +165,7 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 	}
 }
 
-void RegexManager::handle_highlight_item_action(const std::string& action,
+void RegexManager::handle_highlight_item_action(std::string_view action,
 	const std::vector<std::string>& params)
 {
 	if (params.size() < 3) {

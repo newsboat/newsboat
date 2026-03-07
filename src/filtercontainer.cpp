@@ -13,7 +13,7 @@ namespace newsboat {
 
 FilterContainer::~FilterContainer() {}
 
-void FilterContainer::handle_action(const std::string& action,
+void FilterContainer::handle_action(std::string_view action,
 	const std::vector<std::string>& params)
 {
 	/*

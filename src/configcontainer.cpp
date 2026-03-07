@@ -373,11 +373,11 @@ void ConfigContainer::register_commands(ConfigParser& cfgparser)
 	}
 }
 
-void ConfigContainer::handle_action(const std::string& action,
+void ConfigContainer::handle_action(std::string_view action,
 	const std::vector<std::string>& params)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	auto entry = config_data.find(action);
+	auto entry = config_data.find(std::string(action));
 
 	if (entry == config_data.end()) {
 		LOG(Level::WARN,

@@ -14,42 +14,42 @@ namespace newsboat {
 namespace strprintf {
 namespace detail {
 template<typename T, typename... Args>
-std::string fmt_impl(const std::string& format, const T& argument,
+std::string fmt_impl(std::string_view format, const T& argument,
 	Args&& ... args);
 }
 
 std::pair<std::string, std::string> split_format(
-	const std::string& printf_format);
+	std::string_view printf_format);
 
-std::string fmt(const std::string& format);
+std::string fmt(std::string_view format);
 
 template<typename... Args>
-std::string fmt(const std::string& format, const char* argument, Args&& ... args)
+std::string fmt(std::string_view format, const char* argument, Args&& ... args)
 {
 	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format, const int32_t argument, Args&& ... args)
+std::string fmt(std::string_view format, const int32_t argument, Args&& ... args)
 {
 	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format, const std::uint32_t argument,
+std::string fmt(std::string_view format, const std::uint32_t argument,
 	Args&& ... args)
 {
 	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format, const int64_t argument, Args&& ... args)
+std::string fmt(std::string_view format, const int64_t argument, Args&& ... args)
 {
 	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format, const uint64_t argument,
+std::string fmt(std::string_view format, const uint64_t argument,
 	Args&& ... args)
 {
 	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
@@ -57,7 +57,7 @@ std::string fmt(const std::string& format, const uint64_t argument,
 
 #ifdef __APPLE__
 template<typename... Args>
-std::string fmt(const std::string& format, const std::size_t argument,
+std::string fmt(std::string_view format, const std::size_t argument,
 	Args&& ... args)
 {
 	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
@@ -65,20 +65,20 @@ std::string fmt(const std::string& format, const std::size_t argument,
 #endif
 
 template<typename... Args>
-std::string fmt(const std::string& format, const void* argument, Args&& ... args)
+std::string fmt(std::string_view format, const void* argument, Args&& ... args)
 {
 	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format, const std::nullptr_t argument,
+std::string fmt(std::string_view format, const std::nullptr_t argument,
 	Args&& ... args)
 {
 	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format, const float argument, Args&& ... args)
+std::string fmt(std::string_view format, const float argument, Args&& ... args)
 {
 	// Variadic functions (like snprintf) do not accept `float`, so let's
 	// convert that.
@@ -87,13 +87,13 @@ std::string fmt(const std::string& format, const float argument, Args&& ... args
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format, const double argument, Args&& ... args)
+std::string fmt(std::string_view format, const double argument, Args&& ... args)
 {
 	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format,
+std::string fmt(std::string_view format,
 	const std::string& argument,
 	Args&& ... args)
 {
@@ -101,7 +101,15 @@ std::string fmt(const std::string& format,
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format,
+std::string fmt(std::string_view format,
+	std::string_view argument,
+	Args&& ... args)
+{
+	return fmt(format, argument.data(), std::forward<Args>(args)...);
+}
+
+template<typename... Args>
+std::string fmt(std::string_view format,
 	const std::string* argument,
 	Args&& ... args)
 {
@@ -109,7 +117,7 @@ std::string fmt(const std::string& format,
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format,
+std::string fmt(std::string_view format,
 	const Filepath& argument,
 	Args&& ... args)
 {
@@ -118,7 +126,7 @@ std::string fmt(const std::string& format,
 
 namespace detail {
 template<typename T, typename... Args>
-std::string fmt_impl(const std::string& format, const T& argument, Args&& ... args)
+std::string fmt_impl(std::string_view format, const T& argument, Args&& ... args)
 {
 	std::string local_format, remaining_format;
 	std::tie(local_format, remaining_format) = split_format(format);

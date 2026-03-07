@@ -53,10 +53,12 @@ std::string utils::strip_comments(const std::string& line)
 	return std::string(utils::bridged::strip_comments(line));
 }
 
-std::vector<std::string> utils::tokenize_quoted(const std::string& str,
-	std::string delimiters)
+std::vector<std::string> utils::tokenize_quoted(std::string_view str,
+	std::string_view delimiters)
 {
-	const auto tokens = utils::bridged::tokenize_quoted(str, delimiters);
+	const auto tokens = utils::bridged::tokenize_quoted(
+			rust::Str(str.data(), str.size()),
+			rust::Str(delimiters.data(), delimiters.size()));
 
 	std::vector<std::string> result;
 	for (const auto& token : tokens) {

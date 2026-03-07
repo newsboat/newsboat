@@ -64,7 +64,7 @@ public:
 	ConfigContainer();
 	~ConfigContainer() override;
 	void register_commands(ConfigParser& cfgparser);
-	void handle_action(const std::string& action,
+	void handle_action(std::string_view action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
 

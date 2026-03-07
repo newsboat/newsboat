@@ -236,14 +236,14 @@ public:
 	std::vector<MacroCmd> get_macro(const KeyCombination& key_combination);
 	char get_key(const std::string& keycode);
 	std::vector<KeyCombination> get_keys(Operation op, Dialog context);
-	void handle_action(const std::string& action,
-		const std::string& params) override;
+	void handle_action(std::string_view action,
+		std::string_view params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
 	HelpInfo get_help_info(Dialog context);
 	std::vector<KeyMapDesc> get_keymap_descriptions(Dialog context);
 
-	ParsedOperations parse_operation_sequence(const std::string& line,
-		const std::string& command_name, bool allow_description = true);
+	ParsedOperations parse_operation_sequence(std::string_view line,
+		std::string_view command_name, bool allow_description = true);
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
 	StflRichText prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,

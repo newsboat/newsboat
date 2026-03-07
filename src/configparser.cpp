@@ -21,7 +21,7 @@ ConfigParser::ConfigParser()
 
 ConfigParser::~ConfigParser() {}
 
-void ConfigParser::handle_action(const std::string& action,
+void ConfigParser::handle_action(std::string_view action,
 	const std::vector<std::string>& params)
 {
 	/*
