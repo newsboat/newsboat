@@ -20,7 +20,7 @@ namespace newsboat {
 
 class RegexManager : public ConfigActionHandler {
 public:
-	void handle_action(const std::string& action,
+	void handle_action(std::string_view action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
 	void quote_and_highlight(StflRichText& stflString, Dialog location) const;
@@ -37,7 +37,7 @@ private:
 	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers_feed;
 
 	void handle_highlight_action(const std::vector<std::string>& params);
-	void handle_highlight_item_action(const std::string& action,
+	void handle_highlight_item_action(std::string_view action,
 		const std::vector<std::string>& params);
 };
 

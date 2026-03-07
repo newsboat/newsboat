@@ -2,7 +2,7 @@
 
 using namespace newsboat;
 
-std::string strprintf::fmt(const std::string& format)
+std::string strprintf::fmt(std::string_view format)
 {
 	char buffer[1024];
 	std::string result;
@@ -17,12 +17,12 @@ std::string strprintf::fmt(const std::string& format)
 	// percent signs, if any. So we don't need additional
 	// parameters.
 	unsigned int len = 1 +
-		snprintf(buffer, sizeof(buffer), format.c_str(), "");
+		snprintf(buffer, sizeof(buffer), format.data(), "");
 	if (len <= sizeof(buffer)) {
 		result = buffer;
 	} else {
 		std::vector<char> buf(len);
-		snprintf(buf.data(), len, format.c_str(), "");
+		snprintf(buf.data(), len, format.data(), "");
 		result = buf.data();
 	}
 	return result;
@@ -37,7 +37,7 @@ std::string strprintf::fmt(const std::string& format)
  * "a 100%% rel%iable e%xamp%le"  =>  { "a 100%% rel%iable e", "%xamp%le" }
  */
 std::pair<std::string, std::string> strprintf::split_format(
-	const std::string& printf_format)
+	std::string_view printf_format)
 {
 	std::string first_format, rest;
 

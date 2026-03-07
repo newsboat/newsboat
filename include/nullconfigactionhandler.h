@@ -9,7 +9,7 @@ class NullConfigActionHandler : public ConfigActionHandler {
 public:
 	NullConfigActionHandler() {}
 	~NullConfigActionHandler() override {}
-	void handle_action(const std::string&,
+	void handle_action(std::string_view,
 		const std::vector<std::string>&) override
 	{
 	}

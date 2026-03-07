@@ -23,7 +23,7 @@ public:
 	~ConfigParser() override;
 	void register_handler(const std::string& cmd,
 		ConfigActionHandler& handler);
-	void handle_action(const std::string& action,
+	void handle_action(std::string_view action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>&) const override
 	{

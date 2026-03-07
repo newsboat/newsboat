@@ -22,7 +22,7 @@ class ColorManager : public ConfigActionHandler {
 public:
 	~ColorManager() override = default;
 	void register_commands(ConfigParser& cfgparser);
-	void handle_action(const std::string& action,
+	void handle_action(std::string_view action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
 	void apply_colors(std::function<void(const std::string&, const std::string&)>

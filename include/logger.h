@@ -2,7 +2,7 @@
 #define NEWSBOAT_LOGGER_H_
 
 #include <cstdint>
-#include <string>
+#include <string_view>
 #include <utility>
 
 #include "strprintf.h"
@@ -16,7 +16,7 @@ using Level = logger::Level;
 namespace logger {
 
 template<typename... Args>
-void log(Level l, const std::string& format, Args&& ... args)
+void log(Level l, std::string_view format, Args&& ... args)
 {
 	if (l == Level::USERERROR || static_cast<int64_t>(l) <= get_loglevel()) {
 		log_internal(l, strprintf::fmt(format, std::forward<Args>(args)...));

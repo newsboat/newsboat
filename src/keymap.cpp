@@ -1119,7 +1119,7 @@ std::string KeyMap::getopname(Operation op) const
 	return "<none>";
 }
 
-void KeyMap::handle_action(const std::string& action, const std::string& params)
+void KeyMap::handle_action(std::string_view action, std::string_view params)
 {
 	/*
 	 * The keymap acts as ConfigActionHandler so that all the key-related
@@ -1176,7 +1176,9 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		}
 	} else if (action == "bind") {
 		bool parsing_failed = false;
-		const auto binding = keymap::bridged::tokenize_binding(params, parsing_failed);
+		const auto binding = keymap::bridged::tokenize_binding(
+				rust::Str(params.data(), params.size()),
+				parsing_failed);
 		if (parsing_failed) {
 			throw ConfigHandlerException(strprintf::fmt(_("failed to parse binding")));
 		}
@@ -1212,7 +1214,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 			apply_bind(context_keymaps[context], key_sequence, cmds, description, BindingType::Bind);
 		}
 	} else if (action == "macro") {
-		std::string remaining_params = params;
+		std::string remaining_params{params};
 		const auto token = utils::extract_token_quoted(remaining_params);
 		const auto parsed = parse_operation_sequence(remaining_params, action);
 		const std::vector<MacroCmd> cmds = parsed.operations;
@@ -1268,13 +1270,16 @@ void KeyMap::apply_bindkey(Mapping& target, const KeyCombination& key_combinatio
 	BindingType::BindKey);
 }
 
-ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
-	const std::string& command_name, bool allow_description)
+ParsedOperations KeyMap::parse_operation_sequence(std::string_view line,
+	std::string_view command_name, bool allow_description)
 {
 	rust::String description;
 	bool parsing_failed = false;
-	const auto operations = keymap::bridged::tokenize_operation_sequence(line, description,
-			allow_description, parsing_failed);
+	const auto operations = keymap::bridged::tokenize_operation_sequence(
+			rust::Str(line.data(), line.size()),
+			description,
+			allow_description,
+			parsing_failed);
 	if (parsing_failed) {
 		throw ConfigHandlerException(strprintf::fmt(_("failed to parse operation sequence for %s"),
 				command_name));

@@ -18,7 +18,7 @@ namespace {
 
 class ConfigHandlerHistoryDummy : public ConfigActionHandler {
 public:
-	void handle_action(const std::string& action,
+	void handle_action(std::string_view action,
 		const std::vector<std::string>& params) override
 	{
 		history.emplace_back(action, params);
