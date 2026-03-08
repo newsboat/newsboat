@@ -1360,32 +1360,34 @@ unsigned short KeyMap::get_flag_from_context(Dialog context)
 StflRichText KeyMap::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
 	Dialog context)
 {
+	const auto comma = StflRichText::from_plaintext_with_style(",", "<comma>");
+	const auto colon = StflRichText::from_plaintext_with_style(":", "<colon>");
+
 	auto keymap_hint = StflRichText::from_plaintext("");
 	bool first_hint = true;
 	for (const auto& hint : hints) {
+		const std::vector<KeyCombination> bound_keys = get_keys(hint.op, context);
+		if (bound_keys.empty()) {
+			continue;
+		}
+
 		if (!first_hint) {
 			keymap_hint.append(StflRichText::from_plaintext(" "));
 		}
 		first_hint = false;
 
-		const std::vector<KeyCombination> bound_keys = get_keys(hint.op, context);
-		const auto comma = StflRichText::from_plaintext_with_style(",", "<comma>");
 
-		if (bound_keys.empty()) {
-			keymap_hint.append(StflRichText::from_plaintext_with_style("<none>", "<key>"));
-		} else {
-			bool first_key = true;
-			for (const auto& key : bound_keys) {
-				if (!first_key) {
-					keymap_hint.append(comma);
-				}
-				first_key = false;
-				keymap_hint.append(StflRichText::from_plaintext_with_style(key.to_bindkey_string(),
-						"<key>"));
+		bool first_key = true;
+		for (const auto& key : bound_keys) {
+			if (!first_key) {
+				keymap_hint.append(comma);
 			}
+			first_key = false;
+			keymap_hint.append(StflRichText::from_plaintext_with_style(key.to_bindkey_string(),
+					"<key>"));
 		}
 
-		keymap_hint.append(StflRichText::from_plaintext_with_style(":", "<colon>"));
+		keymap_hint.append(colon);
 		keymap_hint.append(StflRichText::from_plaintext_with_style(hint.text, "<desc>"));
 	}
 	return keymap_hint;
