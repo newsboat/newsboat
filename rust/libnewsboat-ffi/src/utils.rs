@@ -45,7 +45,7 @@ mod bridged {
     }
 
     extern "Rust" {
-        fn to_u(input: String, default_value: u32) -> u32;
+        fn to_u(input: &str, default_value: u32) -> u32;
 
         fn run_interactively(command: &str, caller: &str, exit_code: &mut u8) -> bool;
         fn run_non_interactively(command: &str, caller: &str, exit_code: &mut u8) -> bool;
@@ -57,15 +57,15 @@ mod bridged {
             error_reason: &mut String,
         ) -> bool;
 
-        fn replace_all(input: String, from: &str, to: &str) -> String;
-        fn consolidate_whitespace(input: String) -> String;
+        fn replace_all(input: &str, from: &str, to: &str) -> String;
+        fn consolidate_whitespace(input: &str) -> String;
         fn absolute_url(base_url: &str, link: &str) -> String;
         fn censor_url(url: &str) -> String;
-        fn trim(rs_str: String) -> String;
-        fn trim_end(rs_str: String) -> String;
-        fn quote(input: String) -> String;
-        fn quote_if_necessary(input: String) -> String;
-        fn make_title(rs_str: String) -> String;
+        fn trim(rs_str: &str) -> &str;
+        fn trim_end(rs_str: &str) -> &str;
+        fn quote(input: &str) -> String;
+        fn quote_if_necessary(input: &str) -> String;
+        fn make_title(rs_str: &str) -> String;
         fn md5hash(input: &str) -> String;
         fn substr_with_width(string: &str, max_width: usize) -> String;
         fn substr_with_width_stfl(string: &str, max_width: usize) -> String;
@@ -83,7 +83,7 @@ mod bridged {
         fn getcwd(mut path: Pin<&mut PathBuf>);
         fn mkdir_parents(path: &PathBuf, mode: u32) -> isize;
 
-        fn unescape_url(url: String, success: &mut bool) -> String;
+        fn unescape_url(url: &str, success: &mut bool) -> String;
 
         fn remove_soft_hyphens(text: &mut String);
 
@@ -217,7 +217,7 @@ fn mkdir_parents(path: &PathBuf, mode: u32) -> isize {
     }
 }
 
-fn unescape_url(url: String, success: &mut bool) -> String {
+fn unescape_url(url: &str, success: &mut bool) -> String {
     match utils::unescape_url(url) {
         Some(result) => {
             *success = true;

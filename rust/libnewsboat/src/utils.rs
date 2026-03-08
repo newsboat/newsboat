@@ -17,11 +17,11 @@ use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use url::Url;
 
-pub fn replace_all(input: String, from: &str, to: &str) -> String {
+pub fn replace_all(input: &str, from: &str, to: &str) -> String {
     input.replace(from, to)
 }
 
-pub fn consolidate_whitespace(input: String) -> String {
+pub fn consolidate_whitespace(input: &str) -> String {
     let found = input.find(|c: char| !c.is_whitespace());
     let mut result = String::new();
 
@@ -45,7 +45,7 @@ pub fn consolidate_whitespace(input: String) -> String {
     result
 }
 
-pub fn to_u(rs_str: String, default_value: u32) -> u32 {
+pub fn to_u(rs_str: &str, default_value: u32) -> u32 {
     rs_str.parse::<u32>().unwrap_or(default_value)
 }
 
@@ -156,26 +156,26 @@ pub fn md5hash(input: &str) -> String {
     hash
 }
 
-pub fn trim(rs_str: String) -> String {
-    rs_str.trim().to_string()
+pub fn trim(rs_str: &str) -> &str {
+    rs_str.trim()
 }
 
-pub fn trim_end(rs_str: String) -> String {
+pub fn trim_end(rs_str: &str) -> &str {
     let x: &[_] = &['\n', '\r'];
-    rs_str.trim_end_matches(x).to_string()
+    rs_str.trim_end_matches(x)
 }
 
-pub fn quote(input: String) -> String {
+pub fn quote(input: &str) -> String {
     let mut input = input.replace('\"', "\\\"");
     input.insert(0, '"');
     input.push('"');
     input
 }
 
-pub fn quote_if_necessary(input: String) -> String {
+pub fn quote_if_necessary(input: &str) -> String {
     match input.find(' ') {
         Some(_) => quote(input),
-        None => input,
+        None => input.to_owned(),
     }
 }
 
@@ -383,7 +383,7 @@ pub fn get_auth_method(method: &str) -> c_ulong {
     }
 }
 
-pub fn unescape_url(rs_str: String) -> Option<String> {
+pub fn unescape_url(rs_str: &str) -> Option<String> {
     let decoded = percent_decode(rs_str.as_bytes()).decode_utf8();
     decoded.ok().map(|s| s.replace('\0', ""))
 }
@@ -510,7 +510,7 @@ pub fn run_program(cmd_with_args: &[&str], input: String) -> String {
         .unwrap_or_else(|_| String::new())
 }
 
-pub fn make_title(rs_str: String) -> String {
+pub fn make_title(rs_str: &str) -> String {
     /* Sometimes it is possible to construct the title from the URL
      * This attempts to do just that. eg:
      * http://domain.com/story/yy/mm/dd/title-with-dashes?a=b
@@ -548,7 +548,7 @@ pub fn make_title(rs_str: String) -> String {
 
     // Un-escape any percent-encoding, e.g. "It%27s%202017%21" -> "It's
     // 2017!"
-    let result = unescape_url(result).unwrap_or_default();
+    let result = unescape_url(&result).unwrap_or_default();
 
     // If it contains only digits, assume it's an id, not a proper title
     if result.chars().all(|c| c.is_ascii_digit()) {
@@ -1066,60 +1066,42 @@ mod tests {
 
     #[test]
     fn t_replace_all() {
-        assert_eq!(
-            replace_all(String::from("aaa"), "a", "b"),
-            String::from("bbb")
-        );
-        assert_eq!(
-            replace_all(String::from("aaa"), "aa", "ba"),
-            String::from("baa")
-        );
-        assert_eq!(
-            replace_all(String::from("aaaaaa"), "aa", "ba"),
-            String::from("bababa")
-        );
-        assert_eq!(replace_all(String::new(), "a", "b"), String::new());
+        assert_eq!(replace_all("aaa", "a", "b"), "bbb");
+        assert_eq!(replace_all("aaa", "aa", "ba"), "baa");
+        assert_eq!(replace_all("aaaaaa", "aa", "ba"), "bababa");
+        assert_eq!(replace_all("", "a", "b"), "");
 
-        let input = String::from("aaaa");
-        assert_eq!(replace_all(input.clone(), "b", "c"), input);
+        let input = "aaaa";
+        assert_eq!(replace_all(input, "b", "c"), input);
 
         assert_eq!(
-            replace_all(String::from("this is a normal test text"), " t", " T"),
-            String::from("this is a normal Test Text")
+            replace_all("this is a normal test text", " t", " T"),
+            "this is a normal Test Text"
         );
 
-        assert_eq!(
-            replace_all(String::from("o o o"), "o", "<o>"),
-            String::from("<o> <o> <o>")
-        );
+        assert_eq!(replace_all("o o o", "o", "<o>"), "<o> <o> <o>");
     }
 
     #[test]
     fn t_consolidate_whitespace() {
+        assert_eq!(consolidate_whitespace("LoremIpsum"), "LoremIpsum");
+        assert_eq!(consolidate_whitespace("Lorem Ipsum"), "Lorem Ipsum");
         assert_eq!(
-            consolidate_whitespace(String::from("LoremIpsum")),
-            String::from("LoremIpsum")
+            consolidate_whitespace(" Lorem \t\tIpsum \t "),
+            " Lorem Ipsum "
         );
         assert_eq!(
-            consolidate_whitespace(String::from("Lorem Ipsum")),
-            String::from("Lorem Ipsum")
+            consolidate_whitespace(" Lorem \r\n\r\n\tIpsum"),
+            " Lorem Ipsum"
+        );
+        assert_eq!(consolidate_whitespace(""), "");
+        assert_eq!(
+            consolidate_whitespace("    Lorem \t\tIpsum \t "),
+            "    Lorem Ipsum "
         );
         assert_eq!(
-            consolidate_whitespace(String::from(" Lorem \t\tIpsum \t ")),
-            String::from(" Lorem Ipsum ")
-        );
-        assert_eq!(
-            consolidate_whitespace(String::from(" Lorem \r\n\r\n\tIpsum")),
-            String::from(" Lorem Ipsum")
-        );
-        assert_eq!(consolidate_whitespace(String::new()), String::new());
-        assert_eq!(
-            consolidate_whitespace(String::from("    Lorem \t\tIpsum \t ")),
-            String::from("    Lorem Ipsum ")
-        );
-        assert_eq!(
-            consolidate_whitespace(String::from("   Lorem \r\n\r\n\tIpsum")),
-            String::from("   Lorem Ipsum")
+            consolidate_whitespace("   Lorem \r\n\r\n\tIpsum"),
+            "   Lorem Ipsum"
         );
     }
 
@@ -1310,10 +1292,10 @@ mod tests {
 
     #[test]
     fn t_to_u() {
-        assert_eq!(to_u(String::from("0"), 10), 0);
-        assert_eq!(to_u(String::from("23"), 1), 23);
-        assert_eq!(to_u(String::from(""), 0), 0);
-        assert_eq!(to_u(String::from("zero"), 1), 1);
+        assert_eq!(to_u("0", 10), 0);
+        assert_eq!(to_u("23", 1), 23);
+        assert_eq!(to_u("", 0), 0);
+        assert_eq!(to_u("zero", 1), 1);
     }
 
     #[test]
@@ -1375,34 +1357,28 @@ mod tests {
 
     #[test]
     fn t_trim() {
-        assert_eq!(trim(String::from("  xxx\r\n")), "xxx");
-        assert_eq!(trim(String::from("\n\n abc  foobar\n")), "abc  foobar");
-        assert_eq!(trim(String::from("")), "");
-        assert_eq!(trim(String::from("     \n")), "");
+        assert_eq!(trim("  xxx\r\n"), "xxx");
+        assert_eq!(trim("\n\n abc  foobar\n"), "abc  foobar");
+        assert_eq!(trim(""), "");
+        assert_eq!(trim("     \n"), "");
     }
 
     #[test]
     fn t_trim_end() {
-        assert_eq!(trim_end(String::from("quux\n")), "quux");
+        assert_eq!(trim_end("quux\n"), "quux");
     }
 
     #[test]
     fn t_quote() {
-        assert_eq!(quote("".to_string()), "\"\"");
-        assert_eq!(quote("Hello World!".to_string()), "\"Hello World!\"");
-        assert_eq!(
-            quote("\"Hello World!\"".to_string()),
-            "\"\\\"Hello World!\\\"\""
-        );
+        assert_eq!(quote(""), "\"\"");
+        assert_eq!(quote("Hello World!"), "\"Hello World!\"");
+        assert_eq!(quote("\"Hello World!\""), "\"\\\"Hello World!\\\"\"");
     }
 
     #[test]
     fn t_quote_if_necessary() {
-        assert_eq!(quote_if_necessary("".to_string()), "");
-        assert_eq!(
-            quote_if_necessary("Hello World!".to_string()),
-            "\"Hello World!\""
-        );
+        assert_eq!(quote_if_necessary(""), "");
+        assert_eq!(quote_if_necessary("Hello World!"), "\"Hello World!\"");
     }
 
     #[test]
@@ -1654,12 +1630,9 @@ mod tests {
 
     #[test]
     fn t_unescape_url() {
-        assert!(unescape_url(String::from("foo%20bar")).unwrap() == "foo bar");
+        assert!(unescape_url("foo%20bar").unwrap() == "foo bar");
         assert!(
-            unescape_url(String::from(
-                "%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D"
-            ))
-            .unwrap()
+            unescape_url("%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D").unwrap()
                 == "!#$&'()*+,/:;=?@[]"
         );
     }
@@ -1734,58 +1707,58 @@ mod tests {
 
     #[test]
     fn t_make_title() {
-        let mut input = String::from("http://example.com/Item");
-        assert_eq!(make_title(input), String::from("Item"));
+        let mut input = "http://example.com/Item";
+        assert_eq!(make_title(input), "Item");
 
-        input = String::from("http://example.com/This-is-the-title");
-        assert_eq!(make_title(input), String::from("This is the title"));
+        input = "http://example.com/This-is-the-title";
+        assert_eq!(make_title(input), "This is the title");
 
-        input = String::from("http://example.com/This_is_the_title");
-        assert_eq!(make_title(input), String::from("This is the title"));
+        input = "http://example.com/This_is_the_title";
+        assert_eq!(make_title(input), "This is the title");
 
-        input = String::from("http://example.com/This_is-the_title");
-        assert_eq!(make_title(input), String::from("This is the title"));
+        input = "http://example.com/This_is-the_title";
+        assert_eq!(make_title(input), "This is the title");
 
-        input = String::from("http://example.com/This_is-the_title.php");
-        assert_eq!(make_title(input), String::from("This is the title"));
+        input = "http://example.com/This_is-the_title.php";
+        assert_eq!(make_title(input), "This is the title");
 
-        input = String::from("http://example.com/This_is-the_title.html");
-        assert_eq!(make_title(input), String::from("This is the title"));
+        input = "http://example.com/This_is-the_title.html";
+        assert_eq!(make_title(input), "This is the title");
 
-        input = String::from("http://example.com/This_is-the_title.htm");
-        assert_eq!(make_title(input), String::from("This is the title"));
+        input = "http://example.com/This_is-the_title.htm";
+        assert_eq!(make_title(input), "This is the title");
 
-        input = String::from("http://example.com/This_is-the_title.aspx");
-        assert_eq!(make_title(input), String::from("This is the title"));
+        input = "http://example.com/This_is-the_title.aspx";
+        assert_eq!(make_title(input), "This is the title");
 
-        input = String::from("http://example.com/this-is-the-title");
-        assert_eq!(make_title(input), String::from("This is the title"));
+        input = "http://example.com/this-is-the-title";
+        assert_eq!(make_title(input), "This is the title");
 
-        input = String::from("http://example.com/items/misc/this-is-the-title");
-        assert_eq!(make_title(input), String::from("This is the title"));
+        input = "http://example.com/items/misc/this-is-the-title";
+        assert_eq!(make_title(input), "This is the title");
 
-        input = String::from("http://example.com/item/");
-        assert_eq!(make_title(input), String::from("Item"));
+        input = "http://example.com/item/";
+        assert_eq!(make_title(input), "Item");
 
-        input = String::from("http://example.com/item/////////////");
-        assert_eq!(make_title(input), String::from("Item"));
+        input = "http://example.com/item/////////////";
+        assert_eq!(make_title(input), "Item");
 
-        input = String::from("blahscheme://example.com/this-is-the-title");
-        assert_eq!(make_title(input), String::from("This is the title"));
+        input = "blahscheme://example.com/this-is-the-title";
+        assert_eq!(make_title(input), "This is the title");
 
-        input = String::from("http://example.com/story/aug/title-with-dashes?a=b");
-        assert_eq!(make_title(input), String::from("Title with dashes"));
+        input = "http://example.com/story/aug/title-with-dashes?a=b";
+        assert_eq!(make_title(input), "Title with dashes");
 
-        input = String::from("http://example.com/title-with-dashes?a=b&x=y&utf8=✓");
-        assert_eq!(make_title(input), String::from("Title with dashes"));
+        input = "http://example.com/title-with-dashes?a=b&x=y&utf8=✓";
+        assert_eq!(make_title(input), "Title with dashes");
 
-        input = String::from("https://example.com/It%27s%202017%21");
-        assert_eq!(make_title(input), String::from("It's 2017!"));
+        input = "https://example.com/It%27s%202017%21";
+        assert_eq!(make_title(input), "It's 2017!");
 
-        input = String::from("https://example.com/?format=rss");
-        assert_eq!(make_title(input), String::from(""));
+        input = "https://example.com/?format=rss";
+        assert_eq!(make_title(input), "");
 
-        assert_eq!(make_title(String::from("")), String::from(""));
+        assert_eq!(make_title(""), "");
     }
 
     #[test]
