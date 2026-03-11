@@ -756,8 +756,6 @@ TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given
 	k.handle_action("bind-key", "< open");
 	k.handle_action("unbind-key", "r");
 	k.handle_action("bind-key", "O reload");
-	// This frees up OP_SEARCH
-	k.handle_action("unbind-key", "/");
 
 	const std::vector<KeyMapHintEntry> hints {
 		{OP_QUIT, "Get out of <this> dialog"},
@@ -772,7 +770,16 @@ TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given
 		"<key>?<comma>,<key>w<colon>:<desc>HALP</> "
 		"<key>ENTER<comma>,<key><><comma>,<key>x<colon>:<desc>Open</> "
 		"<key>O<colon>:<desc>Reload current entry</> "
-		"<key><>none><colon>:<desc>Go find me</>");
+		"<key>/<colon>:<desc>Go find me</>");
+
+	// This makes OP_SEARCH unbound and thus hides it in the keymap hints
+	k.handle_action("unbind-key", "/");
+
+	REQUIRE(k.prepare_keymap_hint(hints, Dialog::FeedList).stfl_quoted() ==
+		"<key>q<colon>:<desc>Get out of <>this> dialog</> "
+		"<key>?<comma>,<key>w<colon>:<desc>HALP</> "
+		"<key>ENTER<comma>,<key><><comma>,<key>x<colon>:<desc>Open</> "
+		"<key>O<colon>:<desc>Reload current entry</>");
 }
 
 TEST_CASE("get_help_info() returns info about macros, bindings, and unbound actions",
