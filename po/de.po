@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-03-11 23:03+0300\n"
-"PO-Revision-Date: 2025-12-21 09:00+0100\n"
+"PO-Revision-Date: 2026-03-12 17:30+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -959,9 +959,9 @@ msgid "couldn't parse filter expression `%s': %s"
 msgstr "Fehler: Konnte Filterausdruck „%s“ nicht parsen: %s"
 
 #: src/formaction.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid "Operation \"%s\" not handled in dialog \"%s\""
-msgstr "Operation %s in %s nicht verarbeitet"
+msgstr "Operation „%s“ in „%s“ nicht verarbeitet"
 
 #: src/formaction.cpp:135
 msgid "usage: set <config-option> <value>"
