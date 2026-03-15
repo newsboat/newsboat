@@ -1,9 +1,6 @@
 use crate::links;
 use crate::logger::{self, Level};
-use libc::{
-    E2BIG, EILSEQ, EINVAL, c_char, c_int, c_ulong, c_void, close, execvp, exit, fork, size_t,
-    waitpid,
-};
+use libc::{E2BIG, EILSEQ, EINVAL, c_char, c_int, c_ulong, c_void, size_t};
 use md5;
 use percent_encoding::*;
 use std::ffi::CString;
@@ -12,7 +9,6 @@ use std::io::{self, Write};
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
-use std::ptr;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use url::Url;
@@ -405,61 +401,31 @@ pub fn get_command_output(cmd: &str) -> String {
 
 // This function assumes that the user is not interested in the command's output (not even errors
 // on stderr!), so it will close the spawned command's fds.
-// This used to be a simple std::process::Command::Spawn(), but this caused child processes to not
-// be reaped, hence the addition of double forking to this function.
-// Spawn() was replaced with a direct call to fork+execvp because it interacted badly with the
-// fork() call.
 pub fn run_command(cmd: &str, param: &str) {
-    unsafe {
-        let forked_pid = fork();
-
-        match forked_pid {
-            -1 => {
-                // Parent process, fork failed.
-                log!(
-                    Level::Debug,
-                    "utils::run_command: failed to fork. Aborting run_command."
-                );
-                return;
-            }
-            0 => {
-                // Child process, continue and spawn the command.
-            }
-            _ => {
-                // Parent process, fork succeeded: reap child and return.
-                let mut status = 0;
-                if waitpid(forked_pid, &mut status, 0) == -1 {
-                    log!(Level::Debug, "utils::run_command: waitpid failed.");
-                }
-                return;
-            }
+    let mut process = match std::process::Command::new(cmd)
+        .arg(param)
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn()
+    {
+        Ok(process) => process,
+        Err(e) => {
+            log!(
+                Level::Warn,
+                "utils::run_command: failed to execute command {} {}: {:?}",
+                cmd,
+                param,
+                e
+            );
+            return;
         }
+    };
 
-        if fork() == 0 {
-            // Grand-child
-            match (CString::new(cmd), CString::new(param)) {
-                (Ok(c_cmd), Ok(c_param)) => {
-                    // close our fds to avoid clobbering the screen and exec the command
-                    close(0);
-                    close(1);
-                    close(2);
-                    let c_arg = [c_cmd.as_ptr(), c_param.as_ptr(), ptr::null()];
-                    execvp(c_cmd.as_ptr(), c_arg.as_ptr());
-                }
-                _ => {
-                    log!(
-                        Level::UserError,
-                        "Conversion of \"{}\" and/or \"{}\" to CString failed.",
-                        cmd,
-                        param
-                    );
-                }
-            }
-        }
-
-        // Child process or grand child in case of failure to execvp, in both cases nothing to do.
-        exit(0);
-    }
+    std::thread::spawn(move || {
+        // Wait for process to avoid zombie process
+        let _ = process.wait();
+    });
 }
 
 pub fn run_program(cmd_with_args: &[&str], input: String) -> String {
