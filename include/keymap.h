@@ -260,6 +260,7 @@ private:
 		BindingType& type);
 	void apply_bind(Mapping& target, const std::vector<KeyCombination>& key_sequence,
 		const std::vector<MacroCmd>& cmds, const std::string& description, BindingType type);
+	void remove_bind(Mapping& target, const std::vector<KeyCombination>& key_sequence);
 	void apply_bindkey(Mapping& target, const KeyCombination& key_combination, Operation op);
 	unsigned short get_flag_from_context(Dialog context);
 	Mapping get_internal_operations() const;
