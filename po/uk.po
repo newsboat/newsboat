@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-03-11 23:03+0300\n"
-"PO-Revision-Date: 2026-03-11 23:06+0300\n"
+"PO-Revision-Date: 2026-03-15 13:09+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -960,7 +960,7 @@ msgstr "неможливо парсувати вираз фільра `%s': %s"
 #: src/formaction.cpp:58
 #, c-format
 msgid "Operation \"%s\" not handled in dialog \"%s\""
-msgstr "Операцію \"%s\" не оброблено в \"%s\""
+msgstr "Операцію \"%s\" не оброблено в діалозі \"%s\""
 
 #: src/formaction.cpp:135
 msgid "usage: set <config-option> <value>"
@@ -1566,19 +1566,19 @@ msgstr "Редагувати підписані URLs"
 
 #: src/keymap.cpp:485
 msgid "Close currently selected dialog"
-msgstr "Закрити вибране меню"
+msgstr "Закрити вибраний діалог"
 
 #: src/keymap.cpp:492
 msgid "View list of open dialogs"
-msgstr "Дивитись список відкритих меню"
+msgstr "Дивитись список відкритих діалогів"
 
 #: src/keymap.cpp:499
 msgid "Go to next dialog"
-msgstr "Перейти до наступного меню"
+msgstr "Перейти до наступного діалогу"
 
 #: src/keymap.cpp:506
 msgid "Go to previous dialog"
-msgstr "Повернутись до попереднього меню"
+msgstr "Повернутись до попереднього діалогу"
 
 #: src/keymap.cpp:513
 msgid "Pipe article to command"
