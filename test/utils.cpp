@@ -1626,16 +1626,20 @@ TEST_CASE(
 	"on defined values and undefined values",
 	"[utils]")
 {
-	REQUIRE(utils::get_auth_method("any") == CURLAUTH_ANY);
+	// Starting with Curl 3.19, the curlauth "any" and "anysafe" values are masked to 32 bits
+	// (via https://github.com/curl/curl/pull/20416)
+	// To avoid mismatches between the curl version bundled on the rust side (curl-sys) and the
+	// system curl version, apply manual casting to uint32_t.
+	REQUIRE(utils::get_auth_method("any") == static_cast<std::uint32_t>(CURLAUTH_ANY));
 	REQUIRE(utils::get_auth_method("ntlm") == CURLAUTH_NTLM);
 	REQUIRE(utils::get_auth_method("basic") == CURLAUTH_BASIC);
 	REQUIRE(utils::get_auth_method("digest") == CURLAUTH_DIGEST);
 	REQUIRE(utils::get_auth_method("digest_ie") == CURLAUTH_DIGEST_IE);
 	REQUIRE(utils::get_auth_method("gssnegotiate") == CURLAUTH_GSSNEGOTIATE);
-	REQUIRE(utils::get_auth_method("anysafe") == CURLAUTH_ANYSAFE);
+	REQUIRE(utils::get_auth_method("anysafe") == static_cast<std::uint32_t>(CURLAUTH_ANYSAFE));
 
-	REQUIRE(utils::get_auth_method("") == CURLAUTH_ANY);
-	REQUIRE(utils::get_auth_method("test") == CURLAUTH_ANY);
+	REQUIRE(utils::get_auth_method("") == static_cast<std::uint32_t>(CURLAUTH_ANY));
+	REQUIRE(utils::get_auth_method("test") == static_cast<std::uint32_t>(CURLAUTH_ANY));
 }
 
 TEST_CASE(
