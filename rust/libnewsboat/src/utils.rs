@@ -424,6 +424,11 @@ pub fn run_command(cmd: &str, param: &str) {
             }
             0 => {
                 // Child process, continue and spawn the command.
+
+                // close our fds to avoid clobbering the screen
+                close(0);
+                close(1);
+                close(2);
             }
             _ => {
                 // Parent process, fork succeeded: reap child and return.
