@@ -1,19 +1,28 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2026-03-21
-
-Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes: TK
+## 2.43 - 2026-03-22
 
 ### Added
+
+- `miniflux-flag-save`. Setting this flag on an article makes Miniflux save the
+    article into the external service (as configured in the Miniflux instance)
+    (Wiktor Zykubek)
+
 ### Changed
 
 - Bumped minimum supported Rust version to 1.90.0
+- Updated translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Italian (Mauro Scomparin), Russian and Ukrainian (Alexander
+    Batischev), Swedish (Dennis Öberg), Turkish (Emir SARI)
+- Don't show unbound actions in the help line (Dennis van der Schagt)
 
-### Deprecated
-### Removed
 ### Fixed
-### Security
+
+- Two memory leaks in `regex-rs`, our upcoming replacement for a part of the C++
+    code. These leaks weren't affecting Newsboat because the code is not used in
+    Newsboat yet (#3266) (Dennis van der Schagt)
+- ETags not being stored to the database if the HTTP response code was 304 Not
+    Modified (Dennis van der Schagt)
 
 
 
