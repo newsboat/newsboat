@@ -1,5 +1,22 @@
 # Changes for Newsboat
 
+## Unreleased - expected 2026-06-21
+
+Lists below only mention user-visible changes, but the full list of contributors
+for this release also includes: TK
+
+### Added
+### Changed
+
+- Bumped minimum supported Rust version to 1.92.0
+
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+
 ## 2.43 - 2026-03-22
 
 ### Added
