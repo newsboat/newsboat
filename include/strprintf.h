@@ -55,7 +55,7 @@ std::string fmt(std::string_view format, const uint64_t argument,
 	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
 }
 
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(__OpenBSD__)
 template<typename... Args>
 std::string fmt(std::string_view format, const std::size_t argument,
 	Args&& ... args)
