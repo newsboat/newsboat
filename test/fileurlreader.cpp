@@ -89,6 +89,30 @@ TEST_CASE("URL reader writes files that it can understand later",
 	}
 }
 
+TEST_CASE("write_config quotes exec: and filter: urls", "[FileUrlReader]")
+{
+	test_helpers::TempFile urlsFile;
+	FileUrlReader u(urlsFile.get_path());
+
+	GIVEN("a url reader with an exec: and filter: feed") {
+		u.add_url(R"(exec:cat header body footer)", {"tag1", "tag 2"});
+		u.add_url(R"(filter:sed "s/foo/bar":https://example.com/feed.xml)", {"tag1", "tag 2"});
+
+		WHEN("the urls are saved to disk") {
+			u.write_config();
+
+			THEN("the exec: and filter: feeds are properly quoted") {
+				const auto content = test_helpers::file_contents(urlsFile.get_path());
+				// Looks like there is an extra newline at the end so allowing more than 2 lines
+				REQUIRE(content.size() >= 2);
+				REQUIRE(content[0] == R"("exec:cat header body footer" "tag1" "tag 2")");
+				REQUIRE(content[1] ==
+					R"("filter:sed \"s/foo/bar\":https://example.com/feed.xml" "tag1" "tag 2")");
+			}
+		}
+	}
+}
+
 TEST_CASE("Preserves URLs as-is", "[FileUrlReader][issue926]")
 {
 	const auto testDataPath = "data/926-urls"_path;

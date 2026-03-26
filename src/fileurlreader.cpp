@@ -72,7 +72,7 @@ std::optional<std::string> FileUrlReader::write_config()
 	}
 
 	for (const auto& url : urls) {
-		f << url;
+		f << utils::quote_if_necessary(url);
 		if (tags[url].size() > 0) {
 			for (const auto& tag : tags[url]) {
 				f << " \"" << tag << "\"";
