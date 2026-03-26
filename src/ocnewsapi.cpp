@@ -17,7 +17,7 @@
 
 namespace newsboat {
 
-typedef std::unique_ptr<json_object, decltype(*json_object_put)> JsonUptr;
+typedef std::unique_ptr<json_object, decltype(&json_object_put)> JsonUptr;
 
 OcNewsApi::OcNewsApi(ConfigContainer& c)
 	: RemoteApi(c)
