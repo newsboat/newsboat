@@ -119,7 +119,7 @@ check_pkg "libxml-2.0" || check_custom "libxml2" "xml2-config" || fail "libxml2"
 check_pkg "stfl" || fail "stfl"
 check_cmd "asciidoctor" || echo "Install asciidoctor if you plan to build the documentation"
 check_cmd "cargo" || fail "cargo"
-( check_pkg "json" "" 0.11 || check_pkg "json-c" "" 0.11 ) || fail "json-c"
+( check_pkg "json" "" 0.11 || check_pkg "json-c" "" 0.11 ) || fail_custom "json and json-c not found. Newsboat requires at least one of those to be available."
 
 if [ `uname -s` = "Darwin" ]; then
 	check_custom "ncurses5.4" "ncurses5.4-config" || fail "ncurses5.4"
