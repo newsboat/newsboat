@@ -270,6 +270,7 @@ doc/xhtml/newsboat.html: doc/chapter-files.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-password.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-environment-variables.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-format-strings.asciidoc
+doc/xhtml/newsboat.html: doc/chapter-dialog-titles.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-killfiles.asciidoc
 doc/xhtml/newsboat.html: doc/configcommands-linked.asciidoc
 doc/xhtml/newsboat.html: doc/availableoperations-linked.asciidoc
@@ -291,7 +292,8 @@ doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc
 		doc/chapter-cmdline.asciidoc doc/chapter-configuration.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
 		doc/chapter-files.asciidoc doc/chapter-format-strings.asciidoc \
-		doc/chapter-killfiles.asciidoc doc/chapter-podcasts.asciidoc doc/man.rb
+		doc/chapter-dialog-titles.asciidoc doc/chapter-killfiles.asciidoc \
+		doc/chapter-podcasts.asciidoc doc/man.rb
 	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-newsboat.asciidoc
 
 doc/podboat-cfgcmds.asciidoc: doc/podboat-cmds.dsv
