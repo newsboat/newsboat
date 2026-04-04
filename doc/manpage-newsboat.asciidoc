@@ -117,6 +117,10 @@ include::newsboat-keycmds.asciidoc[]
 
 include::chapter-format-strings.asciidoc[]
 
+== DIALOG TITLES
+
+include::chapter-dialog-titles.asciidoc[]
+
 == TAGGING
 
 include::chapter-tagging.asciidoc[]
