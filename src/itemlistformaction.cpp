@@ -37,8 +37,6 @@ ItemListFormAction::ItemListFormAction(View& vv,
 	, old_itempos(-1)
 	, filter_active(false)
 	, pos(0)
-	, set_filterpos(false)
-	, filterpos(0)
 	, rxman(r)
 	, old_width(0)
 	, invalidation_mode(InvalidationMode::NONE)
@@ -131,6 +129,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	break;
 	case OP_PURGE_DELETED: {
 		ScopeMeasure m1("OP_PURGE_DELETED");
+		store_selection();
 		feed->purge_deleted_items();
 		invalidate_list();
 	}
@@ -603,7 +602,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		} else {
 			cfg->set_configvalue("show-read-articles", "yes");
 		}
-		save_filterpos();
+		store_selection();
 		invalidate_list();
 		break;
 	case OP_PIPE_TO:
@@ -744,9 +743,9 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_CLEARFILTER:
+		store_selection();
 		filter_active = false;
 		invalidate_list();
-		save_filterpos();
 		break;
 	case OP_SORT: {
 		// i18n: This string is related to the letters in parentheses in the
@@ -1131,7 +1130,7 @@ void ItemListFormAction::prepare()
 		feed->total_item_count(),
 		feed->rssurl());
 
-	prepare_set_filterpos();
+	restore_selection();
 }
 
 StflRichText ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
@@ -1498,12 +1497,11 @@ void ItemListFormAction::handle_save(const std::vector<std::string>& cmd_args)
 	save_article(filename, visible_items[itempos].first);
 }
 
-void ItemListFormAction::save_filterpos()
+void ItemListFormAction::store_selection()
 {
 	const unsigned int i = list.get_position();
 	if (i < visible_items.size()) {
-		filterpos = visible_items[i].second;
-		set_filterpos = true;
+		restore_selection_guid = visible_items[i].first->guid();
 	}
 }
 
@@ -1536,13 +1534,14 @@ std::string ItemListFormAction::gen_flags(std::shared_ptr<RssItem> item) const
 	return flags;
 }
 
-void ItemListFormAction::prepare_set_filterpos()
+void ItemListFormAction::restore_selection()
 {
-	if (set_filterpos) {
-		set_filterpos = false;
+	if (restore_selection_guid.has_value()) {
+		const auto guid = restore_selection_guid.value();
+		restore_selection_guid.reset();
 		unsigned int i = 0;
 		for (const auto& item : visible_items) {
-			if (item.second == filterpos) {
+			if (item.first->guid() == guid) {
 				list.set_position(i);
 				return;
 			}
@@ -1683,7 +1682,7 @@ void ItemListFormAction::apply_filter(const std::string& filtertext)
 				filtertext,
 				matcher.get_parse_error()));
 	} else {
-		save_filterpos();
+		store_selection();
 		filter_active = true;
 		invalidate_list();
 	}

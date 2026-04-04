@@ -121,7 +121,8 @@ private:
 
 	void handle_save(const std::vector<std::string>& cmd_args);
 
-	void save_filterpos();
+	void store_selection();
+	void restore_selection();
 
 	void qna_end_setfilter();
 	void qna_end_editflags();
@@ -130,8 +131,6 @@ private:
 	void handle_cmdline_num(unsigned int idx);
 
 	std::string gen_flags(std::shared_ptr<RssItem> item) const;
-
-	void prepare_set_filterpos();
 
 	StflRichText item2formatted_line(const ItemPtrPosPair& item,
 		const unsigned int width,
@@ -148,8 +147,7 @@ private:
 
 	std::mutex redraw_mtx;
 
-	bool set_filterpos;
-	unsigned int filterpos;
+	std::optional<std::string> restore_selection_guid;
 
 	RegexManager& rxman;
 
