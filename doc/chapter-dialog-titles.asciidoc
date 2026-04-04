@@ -83,8 +83,8 @@ Identifier:Meaning
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-[[articleview-title-format-T]]<<articleview-title-format-T,+T+>>:Article title
-[[articleview-title-format-F]]<<articleview-title-format-F,+F+>>:Feed title
-[[articleview-title-format-u]]<<articleview-title-format-u,+u+>>:Number of unread articles
-[[articleview-title-format-t]]<<articleview-title-format-t,+t+>>:Number of total articles
+[[itemview-title-format-T]]<<itemview-title-format-T,+T+>>:Article title
+[[itemview-title-format-F]]<<itemview-title-format-F,+F+>>:Feed title
+[[itemview-title-format-u]]<<itemview-title-format-u,+u+>>:Number of unread articles
+[[itemview-title-format-t]]<<itemview-title-format-t,+t+>>:Number of total articles
 |======================================================================
