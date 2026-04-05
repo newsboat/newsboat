@@ -114,7 +114,22 @@ bool FormAction::process_op(Operation op,
 		Stfl::reset();
 		break;
 	case OP_CMDLINE:
-		start_cmdline();
+		switch (args.size()) {
+		case 0:
+			start_cmdline();
+			break;
+		case 1:
+			start_cmdline(args[0]);
+			break;
+		default:
+			std::vector<std::string> quoted_args;
+			for (const auto& arg : args) {
+				quoted_args.push_back(utils::quote(arg));
+			}
+			const std::string args_str = utils::join(quoted_args, " ");
+			v.get_statusline().show_error(strprintf::fmt(_
+					(R"(Too many arguments to "cmdline" command: %s)"), args_str));
+		}
 		break;
 	case OP_SET:
 		switch (bindingType) {

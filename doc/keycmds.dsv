@@ -50,7 +50,7 @@ enqueue||kbd:[E]||Add the podcast download URL of the current article (if any is
 edit-urls||kbd:[Shift+E]||Edit the list of subscribed URLs. Newsboat will start the editor configured through the <<VISUAL,`VISUAL`>> environment variable (if unset, <<EDITOR,`EDITOR`>> is used; fallback: `vi`). When editing is finished, Newsboat will reload the URLs file.
 reload-urls||kbd:[Ctrl+R]||Reload the URLs configuration file.
 redraw||kbd:[Ctrl+L]||Redraw the screen.
-cmdline||kbd:[:]||Open the command line.
+cmdline||kbd:[:]||Open the command line with optional string already filled in. Example configuration: `bind c everywhere cmdline "source ~/.newsboat/config"`
 set-filter||kbd:[Shift+F]||Set a filter.
 select-filter||kbd:[F]||Select a predefined filter.
 clear-filter||kbd:[Ctrl+F]||Clear currently set filter.
