@@ -267,7 +267,7 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    name: AddressSanitizer (Clang 21, Ubuntu 25.10)
+    name: AddressSanitizer C++ (Clang 21, Ubuntu 25.10)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
@@ -293,6 +293,33 @@ task:
     after_cache_script: *after_cache_script
     build_script: make -j${JOBS} test
     test_script: cd test && ./test --order=rand --rng-seed=time
+    before_cache_script: *before_cache_script
+
+task:
+    name: AddressSanitizer Rust (Clang 21, Ubuntu 25.10)
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
+
+    container:
+      greedy: true
+      dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
+      docker_arguments:
+          # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
+          # sanitizer's reports. ASAN library is in libclang-rt-dev
+          cxx_package: "clang-21 llvm-21 libclang-rt-21-dev"
+          cc: clang-21
+          cxx: clang++-21
+
+    env:
+      RUSTFLAGS: "-Zsanitizer=address"
+      RUSTDOCFLAGS: "-Zsanitizer=address"
+      LSAN_OPTIONS: "report_objects=1"
+      JOBS: 8
+
+    cargo_cache: *cargo_cache
+
+    after_cache_script: *after_cache_script
+    setup_llvm_symbolizer_script: "ln -s $(which llvm-symbolizer-18) /home/builder/.cargo/bin/llvm-symbolizer"
+    cargo_test_with_asan: "cargo +nightly test --target x86_64-unknown-linux-gnu"
     before_cache_script: *before_cache_script
 
 task:
