@@ -1,6 +1,9 @@
 #ifndef NEWSBOAT_MATCHER_H_
 #define NEWSBOAT_MATCHER_H_
 
+#include <set>
+#include <string>
+
 #include "FilterParser.h"
 
 namespace newsboat {
@@ -13,8 +16,9 @@ public:
 	explicit Matcher(const std::string& expr);
 	bool parse(const std::string& expr);
 	bool matches(Matchable* item);
-	std::string get_parse_error();
-	std::string get_expression();
+	std::string get_parse_error() const;
+	std::string get_expression() const;
+	std::set<std::string> get_referenced_attributes();
 
 	/// Convert numerical prefix of the string to an `int`.
 	///

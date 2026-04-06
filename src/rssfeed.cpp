@@ -160,6 +160,22 @@ std::shared_ptr<RssItem> RssFeed::get_item_by_guid_unlocked(
 	return std::shared_ptr<RssItem>(new RssItem(ch));
 }
 
+std::set<std::string> RssFeed::get_valid_attributes()
+{
+	return {
+		"feedtitle",
+		"description",
+		"feedlink",
+		"feeddate",
+		"rssurl",
+		"unread_count",
+		"total_count",
+		"tags",
+		"feedindex",
+		"latest_article_age",
+	};
+}
+
 std::optional<std::string> RssFeed::attribute_value(const std::string&
 	attribname) const
 {

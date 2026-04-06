@@ -126,6 +126,7 @@ public:
 	void update_flags();
 	void sort_flags();
 
+	static std::set<std::string> get_valid_attributes();
 	std::optional<std::string> attribute_value(const std::string& attr) const
 	override;
 

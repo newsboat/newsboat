@@ -120,8 +120,8 @@ public:
 	std::vector<std::string> get_tags() const;
 	std::string get_firsttag();
 
-	std::optional<std::string> attribute_value(const std::string& attr) const
-	override;
+	static std::set<std::string> get_valid_attributes();
+	std::optional<std::string> attribute_value(const std::string& attr) const override;
 
 	void update_items(std::vector<std::shared_ptr<RssFeed>> feeds);
 

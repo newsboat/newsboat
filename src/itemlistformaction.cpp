@@ -1676,15 +1676,32 @@ void ItemListFormAction::apply_filter(const std::string& filtertext)
 	}
 
 	filterhistory.add_line(filtertext);
-	if (!matcher.parse(filtertext)) {
+
+	Matcher new_matcher;
+	if (!new_matcher.parse(filtertext)) {
 		v.get_statusline().show_error(strprintf::fmt(
 				_("Error: couldn't parse filter expression `%s': %s"),
 				filtertext,
 				matcher.get_parse_error()));
 	} else {
-		store_selection();
-		filter_active = true;
-		invalidate_list();
+		const auto referenced_attributes = new_matcher.get_referenced_attributes();
+		const auto available_attributes = RssItem::get_valid_attributes();
+
+		std::vector<std::string> unavailable_attributes;
+		std::set_difference(referenced_attributes.begin(), referenced_attributes.end(),
+			available_attributes.begin(), available_attributes.end(),
+			std::back_inserter(unavailable_attributes));
+
+		if (unavailable_attributes.empty()) {
+			matcher = new_matcher;
+			store_selection();
+			filter_active = true;
+			invalidate_list();
+		} else {
+			v.get_statusline().show_error(strprintf::fmt(
+					_("Error: Some filter attributes not availabe in itemlist: %s"),
+					utils::join(unavailable_attributes, ",")));
+		}
 	}
 }
 

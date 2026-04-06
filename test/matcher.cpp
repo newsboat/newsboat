@@ -874,3 +874,57 @@ TEST_CASE("string_to_num() returns 0 if there is no numeric prefix",
 	REQUIRE(Matcher::string_to_num("hello") == 0);
 	REQUIRE(Matcher::string_to_num("") == 0);
 }
+
+TEST_CASE("get_referenced_attributes() includes all referenced attributes",
+	"[Matcher]")
+{
+	Matcher m;
+
+	SECTION("empty matcher does not reference attributes") {
+		REQUIRE(m.get_referenced_attributes() == std::set<std::string> {});
+	}
+
+	SECTION("single equality check returns single attribute used") {
+		m.parse("foo = \"bar\"");
+		REQUIRE(m.get_referenced_attributes() == std::set<std::string> {"foo"});
+	}
+
+	SECTION("attributes from both sides of 'and' are included") {
+		m.parse("foo = 1 and bar = 2");
+		REQUIRE(m.get_referenced_attributes() == std::set<std::string> {"foo", "bar"});
+	}
+
+	SECTION("attributes from both sides of 'or' are included") {
+		m.parse("foo = 1 or bar = 2");
+		REQUIRE(m.get_referenced_attributes() == std::set<std::string> {"foo", "bar"});
+	}
+
+	SECTION("attributes from nested 'and' and 'or' are included") {
+		m.parse("foo = 1 and (bar = 2 or baz = 3)");
+		REQUIRE(m.get_referenced_attributes() == std::set<std::string> {"foo", "bar", "baz"});
+	}
+
+	SECTION("duplicate attribute names included only once") {
+		m.parse("foo = 1 or foo = 2");
+		REQUIRE(m.get_referenced_attributes() == std::set<std::string> {"foo"});
+	}
+
+	SECTION("attributes are included from all supported comparison operators") {
+		m.parse(R"(eq = 1 or eqeq == 2 or neq != 3 or regex =~ "abc" or notregex !~ "abc" or lt < 4 or gt > 5)"
+			R"(or le <= 6 or ge >= 7 or bt between 8:9 or contains # "abc" or notcontains !# "abc")");
+		REQUIRE(m.get_referenced_attributes() == std::set<std::string> {
+			"eq",
+			"eqeq",
+			"neq",
+			"regex",
+			"notregex",
+			"lt",
+			"gt",
+			"le",
+			"ge",
+			"bt",
+			"contains",
+			"notcontains",
+		});
+	}
+}

@@ -10,9 +10,7 @@ class Matchable {
 public:
 	Matchable() = default;
 	virtual ~Matchable() = default;
-	virtual std::optional<std::string> attribute_value(const std::string& attr)
-	const =
-		0;
+	virtual std::optional<std::string> attribute_value(const std::string& attr) const = 0;
 };
 
 } // namespace newsboat
