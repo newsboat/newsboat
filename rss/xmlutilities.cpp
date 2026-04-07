@@ -2,6 +2,8 @@
 
 #include <cstring>
 
+#include "utils.h"
+
 namespace rsspp {
 
 std::string get_content(const xmlNode* node)
@@ -14,7 +16,7 @@ std::string get_content(const xmlNode* node)
 			xmlFree(content);
 		}
 	}
-	return retval;
+	return newsboat::utils::sanitize_utf8(retval);
 }
 
 std::string get_xml_content(xmlNode* node, xmlDocPtr doc)
@@ -40,7 +42,7 @@ std::string get_xml_content(xmlNode* node, xmlDocPtr doc)
 	}
 	xmlBufferFree(buf);
 
-	return result;
+	return newsboat::utils::sanitize_utf8(result);
 }
 
 void cleanup_namespaces(xmlNodePtr node)
@@ -70,7 +72,7 @@ std::string get_prop(xmlNode* node, const std::string& prop,
 			xmlFree(value);
 		}
 	}
-	return retval;
+	return newsboat::utils::sanitize_utf8(retval);
 }
 
 bool has_namespace(const xmlNode* node, const char* ns_uri)

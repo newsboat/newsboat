@@ -670,3 +670,96 @@ TEST_CASE("Throws if no \"channel\" element is found",
 		rsspp::Exception,
 		ExceptionWithMsg<rsspp::Exception>("no RSS channel found"));
 }
+
+// U+FFFD replacement character in UTF-8
+constexpr char utf8_replacement[] = "\xEF\xBF\xBD";
+
+TEST_CASE("Feed parsers replace invalid UTF-8 codepoints with U+FFFD in Atom feed",
+	"[rsspp::Parser][issue2328]")
+{
+	// Minimal Atom feed with invalid UTF-8 byte (0xFF) in title
+	std::string atom_invalid = R"(<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<title type="text">Good)";
+	atom_invalid += static_cast<char>(0xFF); // invalid UTF-8
+	atom_invalid += R"(title</title>
+<id>tag:example.com</id>
+<updated>2008-12-30T18:26:15Z</updated>
+<entry>
+<id>tag:example.com,1</id>
+<title>Item</title>
+<updated>2008-12-30T18:26:15Z</updated>
+</entry>
+</feed>)";
+
+	rsspp::Parser p;
+	rsspp::Feed f;
+	REQUIRE_NOTHROW(f = p.parse_buffer(atom_invalid));
+
+	REQUIRE(f.rss_version == rsspp::Feed::ATOM_1_0);
+	REQUIRE(f.title == std::string("Good") + utf8_replacement + "title");
+	REQUIRE(f.items.size() == 1u);
+	REQUIRE(f.items[0].title == "Item");
+}
+
+TEST_CASE("Feed parsers replace invalid UTF-8 codepoints with U+FFFD in RSS 2.0 feed",
+	"[rsspp::Parser][issue2328]")
+{
+	// RSS 2.0 with invalid UTF-8 in description
+	std::string rss_invalid = R"(<?xml version="1.0"?>
+<rss version="2.0">
+<channel>
+<title>Channel</title>
+<link>http://example.com/</link>
+<description>Desc)";
+	rss_invalid += static_cast<char>(0x80); // invalid standalone UTF-8
+	rss_invalid += R"(here</description>
+<item>
+<title>Item title</title>
+<link>http://example.com/1</link>
+</item>
+</channel>
+</rss>)";
+
+	rsspp::Parser p;
+	rsspp::Feed f;
+	REQUIRE_NOTHROW(f = p.parse_buffer(rss_invalid));
+
+	REQUIRE(f.title == "Channel");
+	REQUIRE(f.description == std::string("Desc") + utf8_replacement + "here");
+	REQUIRE(f.items.size() == 1u);
+	REQUIRE(f.items[0].title == "Item title");
+	REQUIRE(f.items[0].link == "http://example.com/1");
+}
+
+TEST_CASE("Feed parsers replace invalid UTF-8 in RDF/RSS 1.0 feed",
+	"[rsspp::Parser][issue2328]")
+{
+	std::string rdf_invalid = R"(<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
+<channel rdf:about="http://example.com">
+<title>RDF)";
+	rdf_invalid += static_cast<char>(0xFE);
+	rdf_invalid += static_cast<char>(0xFF); // invalid sequence
+	rdf_invalid += R"(</title>
+<link>http://example.com</link>
+<description>RDF feed</description>
+<items><rdf:Seq><rdf:li rdf:resource="http://example.com/1"/></rdf:Seq></items>
+</channel>
+<item rdf:about="http://example.com/1">
+<title>First</title>
+<link>http://example.com/1</link>
+<description>Content</description>
+</item>
+</rdf:RDF>)";
+
+	rsspp::Parser p;
+	rsspp::Feed f;
+	REQUIRE_NOTHROW(f = p.parse_buffer(rdf_invalid));
+
+	REQUIRE(f.rss_version == rsspp::Feed::RSS_1_0);
+	REQUIRE(f.title == std::string("RDF") + utf8_replacement + utf8_replacement);
+	REQUIRE(f.items.size() == 1u);
+	REQUIRE(f.items[0].title == "First");
+	REQUIRE(f.items[0].description == "Content");
+}

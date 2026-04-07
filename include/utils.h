@@ -167,6 +167,10 @@ std::optional<LinkType> podcast_mime_to_link_type(const std::string&
 
 std::string string_from_utf8_lossy(const std::vector<std::uint8_t>& text);
 
+/// Replaces invalid UTF-8 code units in the string with U+FFFD (replacement
+/// character). Returns a valid UTF-8 string.
+std::string sanitize_utf8(const std::string& text);
+
 void parse_rss_author_email(const std::vector<std::uint8_t>& text, std::string& name,
 	std::string& email);
 
