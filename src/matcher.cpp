@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 
+#include "FilterParser.h"
 #include "logger.h"
 #include "matchable.h"
 #include "matcherexception.h"
@@ -20,7 +21,7 @@ Matcher::Matcher(const std::string& expr)
 	parse(expr);
 }
 
-std::string Matcher::get_expression()
+std::string Matcher::get_expression() const
 {
 	return exp;
 }
@@ -231,7 +232,7 @@ bool Matcher::matches_r(expression* e, Matchable* item)
 	}
 }
 
-std::string Matcher::get_parse_error()
+std::string Matcher::get_parse_error() const
 {
 	return errmsg;
 }
@@ -241,6 +242,44 @@ int Matcher::string_to_num(const std::string& number)
 	int result = 0;
 	std::istringstream(number) >> result;
 	return result;
+}
+
+std::set<std::string> Matcher::get_referenced_attributes()
+{
+	std::vector<expression*> to_visit;
+	to_visit.push_back(p.get_root());
+
+	std::set<std::string> attributes;
+	while (!to_visit.empty()) {
+		auto expr = to_visit.back();
+		to_visit.pop_back();
+		if (expr == nullptr) {
+			continue;
+		}
+
+		switch (expr->op) {
+		case LOGOP_AND:
+		case LOGOP_OR:
+			to_visit.push_back(expr->l);
+			to_visit.push_back(expr->r);
+			break;
+		case MATCHOP_EQ:
+		case MATCHOP_NE:
+		case MATCHOP_RXEQ:
+		case MATCHOP_RXNE:
+		case MATCHOP_LT:
+		case MATCHOP_GT:
+		case MATCHOP_LE:
+		case MATCHOP_GE:
+		case MATCHOP_CONTAINS:
+		case MATCHOP_CONTAINSNOT:
+		case MATCHOP_BETWEEN:
+			attributes.insert(expr->name);
+			break;
+		}
+	}
+
+	return attributes;
 }
 
 } // namespace newsboat

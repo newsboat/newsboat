@@ -170,6 +170,26 @@ void RssItem::set_enclosure_description_mime_type(const std::string& type)
 	enclosure_description_mime_type_ = type;
 }
 
+std::set<std::string> RssItem::get_valid_attributes()
+{
+	std::set<std::string> attributes{
+		"title",
+		"link",
+		"author",
+		"content",
+		"date",
+		"guid",
+		"unread",
+		"enclosure_url",
+		"enclosure_type",
+		"flags",
+		"age",
+		"articleindex",
+	};
+	attributes.merge(RssFeed::get_valid_attributes());
+	return attributes;
+}
+
 std::optional<std::string> RssItem::attribute_value(const std::string&
 	attribname) const
 {
