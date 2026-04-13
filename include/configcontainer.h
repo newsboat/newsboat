@@ -25,17 +25,40 @@ enum class FeedSortMethod {
 	LATEST_UNREAD
 };
 
-enum class ArtSortMethod { TITLE, FLAGS, AUTHOR, LINK, GUID, DATE, RANDOM };
+enum class ArtSortMethod {
+	TITLE,
+	FLAGS,
+	AUTHOR,
+	LINK,
+	GUID,
+	DATE,
+	UNREAD,
+	RANDOM
+};
 
 enum class SortDirection { ASC, DESC };
 
-struct FeedSortStrategy {
+struct FeedSortKey {
 	FeedSortMethod sm = FeedSortMethod::NONE;
 	SortDirection sd = SortDirection::DESC;
 
-	bool operator==(const FeedSortStrategy& other) const
+	bool operator==(const FeedSortKey& other) const
 	{
 		return sm == other.sm && sd == other.sd;
+	}
+
+	bool operator!=(const FeedSortKey& other) const
+	{
+		return !(*this == other);
+	}
+};
+
+struct FeedSortStrategy {
+	std::vector<FeedSortKey> keys{{FeedSortMethod::NONE, SortDirection::DESC}};
+
+	bool operator==(const FeedSortStrategy& other) const
+	{
+		return keys == other.keys;
 	}
 
 	bool operator!=(const FeedSortStrategy& other) const
@@ -44,13 +67,27 @@ struct FeedSortStrategy {
 	}
 };
 
-struct ArticleSortStrategy {
+struct ArticleSortKey {
 	ArtSortMethod sm = ArtSortMethod::DATE;
 	SortDirection sd = SortDirection::ASC;
 
-	bool operator==(const ArticleSortStrategy& other) const
+	bool operator==(const ArticleSortKey& other) const
 	{
 		return sm == other.sm && sd == other.sd;
+	}
+
+	bool operator!=(const ArticleSortKey& other) const
+	{
+		return !(*this == other);
+	}
+};
+
+struct ArticleSortStrategy {
+	std::vector<ArticleSortKey> keys{{ArtSortMethod::DATE, SortDirection::ASC}};
+
+	bool operator==(const ArticleSortStrategy& other) const
+	{
+		return keys == other.keys;
 	}
 
 	bool operator!=(const ArticleSortStrategy& other) const

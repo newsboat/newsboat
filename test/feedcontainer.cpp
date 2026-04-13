@@ -24,6 +24,14 @@ std::vector<std::shared_ptr<RssFeed>> get_five_empty_feeds(Cache* rsscache)
 	return feeds;
 }
 
+FeedSortStrategy single_feed_sort(FeedSortMethod method,
+	SortDirection direction)
+{
+	FeedSortStrategy strategy;
+	strategy.keys = {{method, direction}};
+	return strategy;
+}
+
 } // anonymous namespace
 
 TEST_CASE("get_feed() returns feed by its position number", "[FeedContainer]")
@@ -405,10 +413,9 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by unread articles"
 	FeedContainer feedcontainer;
 	feedcontainer.set_feeds(feeds);
 
-	FeedSortStrategy strategy;
-	strategy.sm = FeedSortMethod::UNREAD_ARTICLE_COUNT;
+	auto strategy = single_feed_sort(FeedSortMethod::UNREAD_ARTICLE_COUNT,
+		SortDirection::ASC);
 	SECTION("acsending order") {
-		strategy.sd = SortDirection::ASC;
 		feedcontainer.sort_feeds(strategy);
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 
@@ -423,7 +430,7 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by unread articles"
 	}
 
 	SECTION("descending order") {
-		strategy.sd = SortDirection::DESC;
+		strategy.keys[0].sd = SortDirection::DESC;
 		feedcontainer.sort_feeds(strategy);
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 
@@ -436,6 +443,62 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by unread articles"
 		const std::vector<std::string> expected = {"c", "d", "e", "b", "a"};
 		REQUIRE(expected == actual);
 	}
+}
+
+TEST_CASE("sort_feeds() supports multiple sort keys", "[FeedContainer]")
+{
+	ConfigContainer cfg;
+	auto rsscache = Cache::in_memory(cfg);
+
+	std::vector<std::shared_ptr<RssFeed>> feeds;
+	{
+		const auto feed = std::make_shared<RssFeed>(rsscache.get(), "");
+		feed->set_title("a");
+		for (int i = 0; i < 1; ++i) {
+			feed->add_item(std::make_shared<RssItem>(rsscache.get()));
+		}
+		feeds.push_back(feed);
+	}
+	{
+		const auto feed = std::make_shared<RssFeed>(rsscache.get(), "");
+		feed->set_title("b");
+		for (int i = 0; i < 1; ++i) {
+			feed->add_item(std::make_shared<RssItem>(rsscache.get()));
+		}
+		feeds.push_back(feed);
+	}
+	{
+		const auto feed = std::make_shared<RssFeed>(rsscache.get(), "");
+		feed->set_title("c");
+		for (int i = 0; i < 2; ++i) {
+			feed->add_item(std::make_shared<RssItem>(rsscache.get()));
+		}
+		feeds.push_back(feed);
+	}
+	{
+		const auto feed = std::make_shared<RssFeed>(rsscache.get(), "");
+		feed->set_title("d");
+		for (int i = 0; i < 2; ++i) {
+			feed->add_item(std::make_shared<RssItem>(rsscache.get()));
+		}
+		feeds.push_back(feed);
+	}
+
+	FeedContainer feedcontainer;
+	feedcontainer.set_feeds(feeds);
+
+	FeedSortStrategy strategy;
+	strategy.keys = {
+		{FeedSortMethod::UNREAD_ARTICLE_COUNT, SortDirection::ASC},
+		{FeedSortMethod::TITLE, SortDirection::DESC},
+	};
+	feedcontainer.sort_feeds(strategy);
+	const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+	REQUIRE(sorted_feeds[0]->title() == "a");
+	REQUIRE(sorted_feeds[1]->title() == "b");
+	REQUIRE(sorted_feeds[2]->title() == "c");
+	REQUIRE(sorted_feeds[3]->title() == "d");
 }
 
 TEST_CASE("sort_feeds() and keep in-group order when sorting by order", "[FeedContainer]")
@@ -457,10 +520,9 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by order", "[FeedCo
 	FeedContainer feedcontainer;
 	feedcontainer.set_feeds(feeds);
 
-	FeedSortStrategy strategy;
-	strategy.sm = FeedSortMethod::NONE;
+	auto strategy = single_feed_sort(FeedSortMethod::NONE,
+		SortDirection::DESC);
 	SECTION("descending order") {
-		strategy.sd = SortDirection::DESC;
 		feedcontainer.sort_feeds(strategy);
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 
@@ -475,7 +537,7 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by order", "[FeedCo
 	}
 
 	SECTION("acsending order") {
-		strategy.sd = SortDirection::ASC;
+		strategy.keys[0].sd = SortDirection::ASC;
 		feedcontainer.sort_feeds(strategy);
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 
@@ -512,10 +574,9 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by articles",
 	FeedContainer feedcontainer;
 	feedcontainer.set_feeds(feeds);
 
-	FeedSortStrategy strategy;
-	strategy.sm = FeedSortMethod::ARTICLE_COUNT;
+	auto strategy = single_feed_sort(FeedSortMethod::ARTICLE_COUNT,
+		SortDirection::DESC);
 	SECTION("descending order") {
-		strategy.sd = SortDirection::DESC;
 		feedcontainer.sort_feeds(strategy);
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 
@@ -530,7 +591,7 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by articles",
 	}
 
 	SECTION("acsending order") {
-		strategy.sd = SortDirection::ASC;
+		strategy.keys[0].sd = SortDirection::ASC;
 		feedcontainer.sort_feeds(strategy);
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 
@@ -567,10 +628,9 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by last updated ite
 	FeedContainer feedcontainer;
 	feedcontainer.set_feeds(feeds);
 
-	FeedSortStrategy strategy;
-	strategy.sm = FeedSortMethod::LAST_UPDATED;
+	auto strategy = single_feed_sort(FeedSortMethod::LAST_UPDATED,
+		SortDirection::DESC);
 	SECTION("descending order") {
-		strategy.sd = SortDirection::DESC;
 		feedcontainer.sort_feeds(strategy);
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 
@@ -585,7 +645,7 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by last updated ite
 	}
 
 	SECTION("acsending order") {
-		strategy.sd = SortDirection::ASC;
+		strategy.keys[0].sd = SortDirection::ASC;
 		feedcontainer.sort_feeds(strategy);
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 
@@ -619,10 +679,9 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by title",
 	FeedContainer feedcontainer;
 	feedcontainer.set_feeds(feeds);
 
-	FeedSortStrategy strategy;
-	strategy.sm = FeedSortMethod::TITLE;
+	auto strategy = single_feed_sort(FeedSortMethod::TITLE,
+		SortDirection::DESC);
 	SECTION("descending order") {
-		strategy.sd = SortDirection::DESC;
 		feedcontainer.sort_feeds(strategy);
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 
@@ -637,7 +696,7 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by title",
 	}
 
 	SECTION("acsending order") {
-		strategy.sd = SortDirection::ASC;
+		strategy.keys[0].sd = SortDirection::ASC;
 		feedcontainer.sort_feeds(strategy);
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 

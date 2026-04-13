@@ -10,6 +10,28 @@
 
 using namespace newsboat;
 
+namespace {
+
+void require_single_key(const FeedSortStrategy& strategy,
+	FeedSortMethod method,
+	SortDirection direction)
+{
+	REQUIRE(strategy.keys.size() == 1);
+	REQUIRE(strategy.keys[0].sm == method);
+	REQUIRE(strategy.keys[0].sd == direction);
+}
+
+void require_single_key(const ArticleSortStrategy& strategy,
+	ArtSortMethod method,
+	SortDirection direction)
+{
+	REQUIRE(strategy.keys.size() == 1);
+	REQUIRE(strategy.keys[0].sm == method);
+	REQUIRE(strategy.keys[0].sd == direction);
+}
+
+} // namespace
+
 TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 {
 	ConfigContainer cfg;
@@ -399,109 +421,120 @@ TEST_CASE(
 	SECTION("none") {
 		cfg.set_configvalue("feed-sort-order", "none");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::NONE);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::NONE,
+			SortDirection::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "none-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::NONE);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::NONE,
+			SortDirection::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "none-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::NONE);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, FeedSortMethod::NONE,
+			SortDirection::ASC);
 	}
 
 	SECTION("firsttag") {
 		cfg.set_configvalue("feed-sort-order", "firsttag");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::FIRST_TAG);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::FIRST_TAG,
+			SortDirection::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "firsttag-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::FIRST_TAG);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::FIRST_TAG,
+			SortDirection::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "firsttag-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::FIRST_TAG);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, FeedSortMethod::FIRST_TAG,
+			SortDirection::ASC);
 	}
 
 	SECTION("title") {
 		cfg.set_configvalue("feed-sort-order", "title");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::TITLE);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::TITLE,
+			SortDirection::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "title-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::TITLE);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::TITLE,
+			SortDirection::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "title-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::TITLE);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, FeedSortMethod::TITLE,
+			SortDirection::ASC);
 	}
 
 	SECTION("articlecount") {
 		cfg.set_configvalue("feed-sort-order", "articlecount");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::ARTICLE_COUNT);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::ARTICLE_COUNT,
+			SortDirection::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "articlecount-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::ARTICLE_COUNT);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::ARTICLE_COUNT,
+			SortDirection::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "articlecount-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::ARTICLE_COUNT);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, FeedSortMethod::ARTICLE_COUNT,
+			SortDirection::ASC);
 	}
 
 	SECTION("unreadarticlecount") {
 		cfg.set_configvalue("feed-sort-order", "unreadarticlecount");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm ==
-			FeedSortMethod::UNREAD_ARTICLE_COUNT);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::UNREAD_ARTICLE_COUNT,
+			SortDirection::DESC);
 
 		cfg.set_configvalue(
 			"feed-sort-order", "unreadarticlecount-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm ==
-			FeedSortMethod::UNREAD_ARTICLE_COUNT);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::UNREAD_ARTICLE_COUNT,
+			SortDirection::DESC);
 
 		cfg.set_configvalue(
 			"feed-sort-order", "unreadarticlecount-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm ==
-			FeedSortMethod::UNREAD_ARTICLE_COUNT);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, FeedSortMethod::UNREAD_ARTICLE_COUNT,
+			SortDirection::ASC);
 	}
 
 	SECTION("lastupdated") {
 		cfg.set_configvalue("feed-sort-order", "lastupdated");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::LAST_UPDATED);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::LAST_UPDATED,
+			SortDirection::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "lastupdated-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::LAST_UPDATED);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, FeedSortMethod::LAST_UPDATED,
+			SortDirection::DESC);
 
 		cfg.set_configvalue("feed-sort-order", "lastupdated-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
-		REQUIRE(sort_strategy.sm == FeedSortMethod::LAST_UPDATED);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, FeedSortMethod::LAST_UPDATED,
+			SortDirection::ASC);
 	}
+}
+
+TEST_CASE("get_feed_sort_strategy() parses multiple sort keys",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+	cfg.set_configvalue("feed-sort-order", "title,unreadarticlecount-asc");
+	const auto strategy = cfg.get_feed_sort_strategy();
+
+	REQUIRE(strategy.keys.size() == 2);
+	REQUIRE(strategy.keys[0].sm == FeedSortMethod::TITLE);
+	REQUIRE(strategy.keys[0].sd == SortDirection::DESC);
+	REQUIRE(strategy.keys[1].sm == FeedSortMethod::UNREAD_ARTICLE_COUNT);
+	REQUIRE(strategy.keys[1].sd == SortDirection::ASC);
 }
 
 TEST_CASE("get_feed_sort_strategy() returns \"none\" method if it can't parse it",
@@ -511,8 +544,7 @@ TEST_CASE("get_feed_sort_strategy() returns \"none\" method if it can't parse it
 
 	const auto check = [&cfg]() {
 		const auto s = cfg.get_feed_sort_strategy();
-		REQUIRE(s.sm == FeedSortMethod::NONE);
-		REQUIRE(s.sd == SortDirection::DESC);
+		require_single_key(s, FeedSortMethod::NONE, SortDirection::DESC);
 	};
 
 	SECTION("empty value") {
@@ -534,8 +566,7 @@ TEST_CASE("get_feed_sort_strategy() returns \"none\" method if it can't parse it
 		SECTION("with a valid direction") {
 			cfg.set_configvalue("feed-sort-order", "funniness-asc");
 			const auto s = cfg.get_feed_sort_strategy();
-			REQUIRE(s.sm == FeedSortMethod::NONE);
-			REQUIRE(s.sd == SortDirection::ASC);
+			require_single_key(s, FeedSortMethod::NONE, SortDirection::ASC);
 		}
 	}
 }
@@ -548,12 +579,14 @@ TEST_CASE("get_feed_sort_strategy() returns descending direction "
 
 	SECTION("no direction specified") {
 		cfg.set_configvalue("feed-sort-order", "title");
-		REQUIRE(cfg.get_feed_sort_strategy().sd == SortDirection::DESC);
+		require_single_key(cfg.get_feed_sort_strategy(), FeedSortMethod::TITLE,
+			SortDirection::DESC);
 	}
 
 	SECTION("unknown direction") {
 		cfg.set_configvalue("feed-sort-order", "title-increasing");
-		REQUIRE(cfg.get_feed_sort_strategy().sd == SortDirection::DESC);
+		require_single_key(cfg.get_feed_sort_strategy(), FeedSortMethod::TITLE,
+			SortDirection::DESC);
 	}
 }
 
@@ -568,121 +601,152 @@ TEST_CASE(
 	SECTION("title") {
 		cfg.set_configvalue("article-sort-order", "title");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::TITLE);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::TITLE,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "title-asc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::TITLE);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::TITLE,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "title-desc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::TITLE);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, ArtSortMethod::TITLE,
+			SortDirection::DESC);
 	}
 
 	SECTION("flags") {
 		cfg.set_configvalue("article-sort-order", "flags");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::FLAGS);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::FLAGS,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "flags-asc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::FLAGS);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::FLAGS,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "flags-desc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::FLAGS);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, ArtSortMethod::FLAGS,
+			SortDirection::DESC);
 	}
 
 	SECTION("author") {
 		cfg.set_configvalue("article-sort-order", "author");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::AUTHOR);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::AUTHOR,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "author-asc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::AUTHOR);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::AUTHOR,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "author-desc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::AUTHOR);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, ArtSortMethod::AUTHOR,
+			SortDirection::DESC);
 	}
 
 	SECTION("link") {
 		cfg.set_configvalue("article-sort-order", "link");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::LINK);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::LINK,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "link-asc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::LINK);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::LINK,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "link-desc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::LINK);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, ArtSortMethod::LINK,
+			SortDirection::DESC);
 	}
 
 	SECTION("guid") {
 		cfg.set_configvalue("article-sort-order", "guid");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::GUID);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::GUID,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "guid-asc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::GUID);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::GUID,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "guid-desc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::GUID);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, ArtSortMethod::GUID,
+			SortDirection::DESC);
 	}
 
 	SECTION("date") {
 		cfg.set_configvalue("article-sort-order", "date");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::DATE);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, ArtSortMethod::DATE,
+			SortDirection::DESC);
 
 		cfg.set_configvalue("article-sort-order", "date-asc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::DATE);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::DATE,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "date-desc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::DATE);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, ArtSortMethod::DATE,
+			SortDirection::DESC);
+	}
+
+	SECTION("unread") {
+		cfg.set_configvalue("article-sort-order", "unread");
+		sort_strategy = cfg.get_article_sort_strategy();
+		require_single_key(sort_strategy, ArtSortMethod::UNREAD,
+			SortDirection::DESC);
+
+		cfg.set_configvalue("article-sort-order", "unread-asc");
+		sort_strategy = cfg.get_article_sort_strategy();
+		require_single_key(sort_strategy, ArtSortMethod::UNREAD,
+			SortDirection::ASC);
+
+		cfg.set_configvalue("article-sort-order", "unread-desc");
+		sort_strategy = cfg.get_article_sort_strategy();
+		require_single_key(sort_strategy, ArtSortMethod::UNREAD,
+			SortDirection::DESC);
 	}
 
 	SECTION("random") {
 		cfg.set_configvalue("article-sort-order", "random");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::RANDOM);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::RANDOM,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "random-asc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::RANDOM);
-		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+		require_single_key(sort_strategy, ArtSortMethod::RANDOM,
+			SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "random-desc");
 		sort_strategy = cfg.get_article_sort_strategy();
-		REQUIRE(sort_strategy.sm == ArtSortMethod::RANDOM);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		require_single_key(sort_strategy, ArtSortMethod::RANDOM,
+			SortDirection::DESC);
 	}
+}
+
+TEST_CASE("get_article_sort_strategy() parses multiple sort keys",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+	cfg.set_configvalue("article-sort-order", "date-asc,unread");
+	const auto strategy = cfg.get_article_sort_strategy();
+
+	REQUIRE(strategy.keys.size() == 2);
+	REQUIRE(strategy.keys[0].sm == ArtSortMethod::DATE);
+	REQUIRE(strategy.keys[0].sd == SortDirection::ASC);
+	REQUIRE(strategy.keys[1].sm == ArtSortMethod::UNREAD);
+	REQUIRE(strategy.keys[1].sd == SortDirection::DESC);
 }
 
 TEST_CASE("get_article_sort_strategy() returns \"date\" method "
@@ -693,8 +757,7 @@ TEST_CASE("get_article_sort_strategy() returns \"date\" method "
 
 	const auto check = [&cfg]() {
 		const auto s = cfg.get_article_sort_strategy();
-		REQUIRE(s.sm == ArtSortMethod::DATE);
-		REQUIRE(s.sd == SortDirection::ASC);
+		require_single_key(s, ArtSortMethod::DATE, SortDirection::ASC);
 	};
 
 	SECTION("empty value") {
@@ -716,8 +779,7 @@ TEST_CASE("get_article_sort_strategy() returns \"date\" method "
 		SECTION("with a valid direction") {
 			cfg.set_configvalue("article-sort-order", "funniness-desc");
 			const auto s = cfg.get_article_sort_strategy();
-			REQUIRE(s.sm == ArtSortMethod::DATE);
-			REQUIRE(s.sd == SortDirection::DESC);
+			require_single_key(s, ArtSortMethod::DATE, SortDirection::DESC);
 		}
 	}
 }
@@ -730,11 +792,13 @@ TEST_CASE("get_article_sort_strategy() returns ascending direction "
 
 	SECTION("no direction specified and method is not \"date\"") {
 		cfg.set_configvalue("article-sort-order", "author");
-		REQUIRE(cfg.get_article_sort_strategy().sd == SortDirection::ASC);
+		require_single_key(cfg.get_article_sort_strategy(),
+			ArtSortMethod::AUTHOR, SortDirection::ASC);
 	}
 
 	SECTION("unknown direction") {
 		cfg.set_configvalue("article-sort-order", "author-increasing");
-		REQUIRE(cfg.get_article_sort_strategy().sd == SortDirection::ASC);
+		require_single_key(cfg.get_article_sort_strategy(),
+			ArtSortMethod::AUTHOR, SortDirection::ASC);
 	}
 }
