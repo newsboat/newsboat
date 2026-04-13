@@ -1155,7 +1155,7 @@ void FeedListFormAction::apply_filter(const std::string& filtertext)
 			do_redraw = true;
 		} else {
 			v.get_statusline().show_error(strprintf::fmt(
-					_("Error: Some filter attributes are not availabe in feedlist: %s"),
+					_("Error: Some filter attributes are not available in feedlist: %s"),
 					utils::join(unavailable_attributes, ", ")));
 		}
 	}

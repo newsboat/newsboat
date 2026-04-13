@@ -1699,7 +1699,7 @@ void ItemListFormAction::apply_filter(const std::string& filtertext)
 			invalidate_list();
 		} else {
 			v.get_statusline().show_error(strprintf::fmt(
-					_("Error: Some filter attributes are not availabe in itemlist: %s"),
+					_("Error: Some filter attributes are not available in itemlist: %s"),
 					utils::join(unavailable_attributes, ", ")));
 		}
 	}

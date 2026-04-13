@@ -858,7 +858,7 @@ static unsigned long openssl_mth_id_function(void)
 #endif
 
 /*
- * GnuTLS 2.11.0+ uses the system availabe locking procedures and discourages
+ * GnuTLS 2.11.0+ uses the system available locking procedures and discourages
  * setting thread locks manually. See the changelog:
  * https://gitlab.com/gnutls/gnutls/-/blob/master/NEWS?ref_type=heads#L4521
  * Mind the "<=" typo in the suggestion.
