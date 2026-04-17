@@ -264,86 +264,106 @@ void RssFeed::sort(const ArticleSortStrategy& sort_strategy)
 
 void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 {
-	switch (sort_strategy.sm) {
-	case ArtSortMethod::TITLE:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			const auto left = utils::utf8_to_locale(a->title());
-			const auto right = utils::utf8_to_locale(b->title());
-			const auto cmp = utils::strnaturalcmp(left, right);
-			return sort_strategy.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
-		});
-		break;
-	case ArtSortMethod::FLAGS:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			return sort_strategy.sd ==
-				SortDirection::DESC
-				? (strcmp(a->flags().c_str(),
-						b->flags().c_str()) > 0)
-				: (strcmp(a->flags().c_str(),
-						b->flags().c_str()) < 0);
-		});
-		break;
-	case ArtSortMethod::AUTHOR:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			const auto author_a = utils::utf8_to_locale(a->author());
-			const auto author_b = utils::utf8_to_locale(b->author());
-			const auto cmp = strcmp(author_a.c_str(), author_b.c_str());
-			return sort_strategy.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
-		});
-		break;
-	case ArtSortMethod::LINK:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			return sort_strategy.sd ==
-				SortDirection::DESC
-				? (strcmp(a->link().c_str(),
-						b->link().c_str()) > 0)
-				: (strcmp(a->link().c_str(),
-						b->link().c_str()) < 0);
-		});
-		break;
-	case ArtSortMethod::GUID:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			return sort_strategy.sd ==
-				SortDirection::DESC
-				? (strcmp(a->guid().c_str(),
-						b->guid().c_str()) > 0)
-				: (strcmp(a->guid().c_str(),
-						b->guid().c_str()) < 0);
-		});
-		break;
-	case ArtSortMethod::DATE:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			// date is descending by default
-			return sort_strategy.sd == SortDirection::ASC
-				? (a->pubDate_timestamp() >
-					b->pubDate_timestamp())
-				: (a->pubDate_timestamp() <
-					b->pubDate_timestamp());
-		});
-		break;
-	case ArtSortMethod::RANDOM:
-		std::random_device rd;
-		std::default_random_engine rng(rd());
-		std::shuffle(items_.begin(), items_.end(), rng);
-		break;
+	const auto apply_sort = [&](const ArticleSortKey& key) {
+		switch (key.sm) {
+		case ArtSortMethod::TITLE:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				const auto left = utils::utf8_to_locale(a->title());
+				const auto right = utils::utf8_to_locale(b->title());
+				const auto cmp = utils::strnaturalcmp(left, right);
+				return key.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
+			});
+			break;
+		case ArtSortMethod::FLAGS:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				return key.sd ==
+					SortDirection::DESC
+					? (strcmp(a->flags().c_str(),
+							b->flags().c_str()) > 0)
+					: (strcmp(a->flags().c_str(),
+							b->flags().c_str()) < 0);
+			});
+			break;
+		case ArtSortMethod::AUTHOR:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				const auto author_a = utils::utf8_to_locale(a->author());
+				const auto author_b = utils::utf8_to_locale(b->author());
+				const auto cmp = strcmp(author_a.c_str(), author_b.c_str());
+				return key.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
+			});
+			break;
+		case ArtSortMethod::LINK:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				return key.sd ==
+					SortDirection::DESC
+					? (strcmp(a->link().c_str(),
+							b->link().c_str()) > 0)
+					: (strcmp(a->link().c_str(),
+							b->link().c_str()) < 0);
+			});
+			break;
+		case ArtSortMethod::GUID:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				return key.sd ==
+					SortDirection::DESC
+					? (strcmp(a->guid().c_str(),
+							b->guid().c_str()) > 0)
+					: (strcmp(a->guid().c_str(),
+							b->guid().c_str()) < 0);
+			});
+			break;
+		case ArtSortMethod::DATE:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				// date is descending by default
+				return key.sd == SortDirection::ASC
+					? (a->pubDate_timestamp() >
+						b->pubDate_timestamp())
+					: (a->pubDate_timestamp() <
+						b->pubDate_timestamp());
+			});
+			break;
+		case ArtSortMethod::UNREAD:
+			std::stable_sort(items_.begin(),
+				items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				const auto a_unread = a->unread();
+				const auto b_unread = b->unread();
+				return key.sd == SortDirection::DESC
+					? (a_unread > b_unread)
+					: (a_unread < b_unread);
+			});
+			break;
+		case ArtSortMethod::RANDOM:
+			std::random_device rd;
+			std::default_random_engine rng(rd());
+			std::shuffle(items_.begin(), items_.end(), rng);
+			break;
+		}
+	};
+
+	for (auto it = sort_strategy.keys.rbegin();
+		it != sort_strategy.keys.rend();
+		++it) {
+		apply_sort(*it);
 	}
 }
 
