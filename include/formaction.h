@@ -76,7 +76,7 @@ public:
 	void set_status(const std::string& text);
 
 	void draw_form();
-	std::string draw_form_wait_for_event(unsigned int timeout);
+	std::string wait_for_event();
 	void recalculate_widget_dimensions();
 
 	virtual void handle_cmdline(const std::string& cmd);
@@ -168,6 +168,8 @@ protected:
 	std::vector<std::string> valid_cmds;
 
 private:
+	std::string key_to_string(wint_t wch);
+	std::string function_key_to_string(wint_t wch);
 	void start_next_question();
 	bool handle_single_argument_set(std::string argument);
 	void handle_set(const std::vector<std::string>& args);

@@ -173,11 +173,9 @@ int View::run()
 		// first, we take the current formaction.
 		std::shared_ptr<FormAction> fa = get_current_formaction();
 
-		// we signal "oh, you will receive an operation soon"
 		fa->prepare();
-
-		// we then receive the event and ignore timeouts.
-		const std::string event = fa->draw_form_wait_for_event(INT_MAX);
+		fa->draw_form();
+		const std::string event = fa->wait_for_event();
 
 		if (ctrl_c_hit) {
 			ctrl_c_hit = false;
@@ -267,7 +265,8 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 
 		fa->prepare();
 
-		const std::string event = fa->draw_form_wait_for_event(INT_MAX);
+		fa->draw_form();
+		const std::string event = fa->wait_for_event();
 		LOG(Level::DEBUG, "View::run: event = %s", event);
 		if (event.empty() || event == "TIMEOUT") {
 			continue;
@@ -711,9 +710,10 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	char result = 0;
 
 	do {
-		const std::string event = f->draw_form_wait_for_event(0);
+		f->draw_form();
+		const std::string event =f->wait_for_event();
 		LOG(Level::DEBUG, "View::confirm: event = %s", event);
-		if (event.empty()) {
+		if (event.empty() || event == "TIMEOUT") {
 			continue;
 		}
 		if (event == "ESC" || event == "ENTER") {

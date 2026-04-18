@@ -123,9 +123,60 @@ void FormAction::draw_form()
 	f.run(-1);
 }
 
-std::string FormAction::draw_form_wait_for_event(unsigned int timeout)
+std::string FormAction::key_to_string(wint_t wch)
 {
-	return f.run(timeout);
+	switch (wch) {
+	case '\r':
+	case '\n':
+		return "ENTER";
+	case ' ':
+		return "SPACE";
+	case '\t':
+		return "TAB";
+	case 27:
+		return "ESC";
+	case 127:
+		return "BACKSPACE";
+	}
+	if (wch < 32) {
+		return keyname(wch);
+	} else {
+		std::wstring key{static_cast<wchar_t>(wch)};
+		return f.convert(key);
+	}
+}
+
+std::string FormAction::function_key_to_string(wint_t wch)
+{
+	if (wch >= KEY_F(0) && wch <= KEY_F(63)) {
+		return strprintf::fmt("F%u", wch - KEY_F0);
+	}
+	const std::string name = keyname(wch);
+	if (name.substr(0, 4) == "KEY_") {
+		// Drop "KEY_" prefix from name
+		return name.substr(4);
+	} else {
+		return name;
+	}
+}
+
+std::string FormAction::wait_for_event()
+{
+	wtimeout(stdscr, INT_MAX);
+
+	wint_t wch{};
+	const auto rc = wget_wch(stdscr, &wch);
+	LOG(Level::USERERROR, "wait_for_event: wget_wch: rc: %d, wch: %u", rc, wch);
+	std::string event;
+	if (rc == ERR) {
+		event = "TIMEOUT";
+	} else if (rc == KEY_CODE_YES) {
+		event = function_key_to_string(wch);
+	} else {
+		event = key_to_string(wch);
+	}
+	LOG(Level::USERERROR, "wait_for_event: event: %s", event);
+	return event;
 }
 
 void FormAction::recalculate_widget_dimensions()
