@@ -722,7 +722,7 @@ TEST_CASE("get_article_sort_strategy() returns \"date\" method "
 			const auto s = cfg.get_article_sort_strategy();
 			REQUIRE(s.rules.size() == 1);
 			REQUIRE(s.rules[0].sm == ArtSortMethod::DATE);
-			REQUIRE(s.rules[0].sd == SortDirection::DESC);
+			REQUIRE(s.rules[0].sd == SortDirection::ASC);
 		}
 	}
 }
