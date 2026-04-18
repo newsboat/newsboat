@@ -123,9 +123,9 @@ void FormAction::draw_form()
 	f.draw_form();
 }
 
-std::string FormAction::draw_form_wait_for_event(unsigned int timeout)
+Event FormAction::wait_for_event()
 {
-	return f.run(timeout);
+	return f.wait_for_event(INT_MAX);
 }
 
 void FormAction::recalculate_widget_dimensions()

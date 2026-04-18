@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "event.h"
 #include "history.h"
 #include "keymap.h"
 #include "lineedit.h"
@@ -76,7 +77,7 @@ public:
 	void set_status(const std::string& text);
 
 	void draw_form();
-	std::string draw_form_wait_for_event(unsigned int timeout);
+	Event wait_for_event();
 	void recalculate_widget_dimensions();
 
 	virtual void handle_cmdline(const std::string& cmd);
