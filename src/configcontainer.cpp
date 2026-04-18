@@ -25,7 +25,7 @@ ConfigContainer::ConfigContainer()
 		ConfigData("false", ConfigDataType::BOOL)},
 	{
 		"article-sort-order",
-		ConfigData("date-asc", ConfigDataType::STR)},
+		ConfigData("unread-desc,date-asc", ConfigDataType::STR)},
 	{
 		"articlelist-format",
 		ConfigData("%4i %f %D %6L  %?T?|%-17T|  &?%t",

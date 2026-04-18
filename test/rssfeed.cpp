@@ -231,19 +231,20 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		articles[4]->set_pubDate(7);
 		articles[4]->set_unread_nowrite(false);
 
-		auto ss = make_article_sort_strategy(
-			{{ArtSortMethod::DATE, SortDirection::ASC},
-				{ArtSortMethod::UNREAD, SortDirection::DESC}});
+		auto ss = make_article_sort_strategy({
+			{ArtSortMethod::DATE, SortDirection::ASC},
+			{ArtSortMethod::UNREAD, SortDirection::DESC},
+		});
 		f.sort(ss);
 		articles = f.items();
-		REQUIRE(articles[0]->unread());
-		REQUIRE(articles[0]->pubDate_timestamp() == 42);
-		REQUIRE(articles[1]->unread());
-		REQUIRE(articles[1]->pubDate_timestamp() == 23);
-		REQUIRE_FALSE(articles[2]->unread());
-		REQUIRE(articles[2]->pubDate_timestamp() == 93);
-		REQUIRE_FALSE(articles[3]->unread());
-		REQUIRE(articles[3]->pubDate_timestamp() == 69);
+		REQUIRE_FALSE(articles[0]->unread());
+		REQUIRE(articles[0]->pubDate_timestamp() == 93);
+		REQUIRE_FALSE(articles[1]->unread());
+		REQUIRE(articles[1]->pubDate_timestamp() == 69);
+		REQUIRE(articles[2]->unread());
+		REQUIRE(articles[2]->pubDate_timestamp() == 42);
+		REQUIRE(articles[3]->unread());
+		REQUIRE(articles[3]->pubDate_timestamp() == 23);
 		REQUIRE_FALSE(articles[4]->unread());
 		REQUIRE(articles[4]->pubDate_timestamp() == 7);
 	}
@@ -261,21 +262,53 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		articles[4]->set_pubDate(7);
 		articles[4]->set_unread_nowrite(false);
 
-		auto ss = make_article_sort_strategy(
-			{{ArtSortMethod::DATE, SortDirection::DESC},
-				{ArtSortMethod::UNREAD, SortDirection::DESC}});
+		auto ss = make_article_sort_strategy({
+			{ArtSortMethod::DATE, SortDirection::DESC},
+			{ArtSortMethod::UNREAD, SortDirection::DESC},
+		});
 		f.sort(ss);
 		articles = f.items();
-		REQUIRE(articles[0]->unread());
-		REQUIRE(articles[0]->pubDate_timestamp() == 23);
+		REQUIRE_FALSE(articles[0]->unread());
+		REQUIRE(articles[0]->pubDate_timestamp() == 7);
 		REQUIRE(articles[1]->unread());
-		REQUIRE(articles[1]->pubDate_timestamp() == 42);
-		REQUIRE_FALSE(articles[2]->unread());
-		REQUIRE(articles[2]->pubDate_timestamp() == 7);
+		REQUIRE(articles[1]->pubDate_timestamp() == 23);
+		REQUIRE(articles[2]->unread());
+		REQUIRE(articles[2]->pubDate_timestamp() == 42);
 		REQUIRE_FALSE(articles[3]->unread());
 		REQUIRE(articles[3]->pubDate_timestamp() == 69);
 		REQUIRE_FALSE(articles[4]->unread());
 		REQUIRE(articles[4]->pubDate_timestamp() == 93);
+	}
+
+	SECTION("unread-desc,date-asc") {
+		auto articles = f.items();
+		articles[0]->set_pubDate(93);
+		articles[0]->set_unread_nowrite(false);
+		articles[1]->set_pubDate(42);
+		articles[1]->set_unread_nowrite(true);
+		articles[2]->set_pubDate(69);
+		articles[2]->set_unread_nowrite(false);
+		articles[3]->set_pubDate(23);
+		articles[3]->set_unread_nowrite(true);
+		articles[4]->set_pubDate(7);
+		articles[4]->set_unread_nowrite(false);
+
+		auto ss = make_article_sort_strategy({
+			{ArtSortMethod::UNREAD, SortDirection::DESC},
+			{ArtSortMethod::DATE, SortDirection::ASC},
+		});
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->unread());
+		REQUIRE(articles[0]->pubDate_timestamp() == 42);
+		REQUIRE(articles[1]->unread());
+		REQUIRE(articles[1]->pubDate_timestamp() == 23);
+		REQUIRE_FALSE(articles[2]->unread());
+		REQUIRE(articles[2]->pubDate_timestamp() == 93);
+		REQUIRE_FALSE(articles[3]->unread());
+		REQUIRE(articles[3]->pubDate_timestamp() == 69);
+		REQUIRE_FALSE(articles[4]->unread());
+		REQUIRE(articles[4]->pubDate_timestamp() == 7);
 	}
 }
 

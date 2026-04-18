@@ -26,7 +26,7 @@ TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 	}
 
 	SECTION("string value") {
-		REQUIRE(cfg.get_configvalue("article-sort-order") == "date-asc");
+		REQUIRE(cfg.get_configvalue("article-sort-order") == "unread-desc,date-asc");
 	}
 
 	SECTION("integer value") {
@@ -54,7 +54,7 @@ TEST_CASE(
 		cfgparser.parse_file("data/test-config-without-newline-at-the-end.txt"_path));
 
 	SECTION("first line") {
-		REQUIRE(cfg.get_configvalue("article-sort-order") == "date-asc");
+		REQUIRE(cfg.get_configvalue("article-sort-order") == "unread-desc,date-asc");
 	}
 
 	SECTION("last line") {

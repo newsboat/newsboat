@@ -272,7 +272,10 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			: (a->pubDate_timestamp() < b->pubDate_timestamp());
 	};
 
-	for (const auto& rule : sort_strategy.rules) {
+	for (auto it = sort_strategy.rules.rbegin();
+		it != sort_strategy.rules.rend();
+		++it) {
+		const auto& rule = *it;
 		switch (rule.sm) {
 		case ArtSortMethod::TITLE:
 			std::stable_sort(items_.begin(),
