@@ -26,6 +26,7 @@ public:
 		Form& operator=(Form&&) = delete;
 
 		std::string run(int timeout);
+		std::string convert(std::wstring input);
 
 		std::string get(const std::string& name);
 		void set(const std::string& name, const std::string& value);
