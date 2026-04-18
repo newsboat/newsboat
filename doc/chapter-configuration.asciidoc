@@ -380,15 +380,15 @@ Currently, the following elements are supported:
 
 The default color configuration of Newsboat looks like this:
 
-	color background          white   black
-	color listnormal          white   black
-	color listfocus           yellow  blue   bold
-	color listnormal_unread   white   black  bold
-	color listfocus_unread    yellow  blue   bold
-	color title               yellow  blue   bold
-	color info                yellow  blue   bold
-	color hint-key            yellow  blue   bold
-	color hint-keys-delimiter white   blue
-	color hint-separator      white   blue   bold
-	color hint-description    white   blue
-	color article             white   black
+	color background          default   default
+	color listnormal          default   default
+	color listfocus           yellow    blue     bold
+	color listnormal_unread   default   default  bold
+	color listfocus_unread    yellow    blue     bold
+	color title               yellow    blue     bold
+	color info                yellow    blue     bold
+	color hint-key            yellow    blue     bold
+	color hint-keys-delimiter white     blue
+	color hint-separator      white     blue     bold
+	color hint-description    white     blue
+	color article             default   default
