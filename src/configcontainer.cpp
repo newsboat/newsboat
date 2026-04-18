@@ -25,7 +25,7 @@ ConfigContainer::ConfigContainer()
 		ConfigData("false", ConfigDataType::BOOL)},
 	{
 		"article-sort-order",
-		ConfigData("unread-desc,date-asc", ConfigDataType::STR)},
+		ConfigData("date-asc", ConfigDataType::STR)},
 	{
 		"articlelist-format",
 		ConfigData("%4i %f %D %6L  %?T?|%-17T|  &?%t",
@@ -611,59 +611,37 @@ FeedSortStrategy ConfigContainer::get_feed_sort_strategy() const
 ArticleSortStrategy ConfigContainer::get_article_sort_strategy() const
 {
 	ArticleSortStrategy ss;
-	ss.rules.clear();
+	const auto methods =
+		utils::tokenize(get_configvalue("article-sort-order"), "-");
 
-	const auto settings =
-		utils::tokenize(get_configvalue("article-sort-order"), ",");
-	for (const auto& setting : settings) {
-		const auto methods = utils::tokenize(setting, "-");
-		if (methods.empty()) {
-			continue;
+	if (!methods.empty() &&
+		methods[0] == "date") { // date is descending by default
+		ss.sm = ArtSortMethod::DATE;
+		ss.sd = SortDirection::DESC;
+		if (methods.size() > 1 && methods[1] == "asc") {
+			ss.sd = SortDirection::ASC;
 		}
-
-		ArticleSortRule rule;
-		bool known_method = true;
-		if (methods[0] == "title") {
-			rule.sm = ArtSortMethod::TITLE;
-		} else if (methods[0] == "flags") {
-			rule.sm = ArtSortMethod::FLAGS;
-		} else if (methods[0] == "author") {
-			rule.sm = ArtSortMethod::AUTHOR;
-		} else if (methods[0] == "link") {
-			rule.sm = ArtSortMethod::LINK;
-		} else if (methods[0] == "guid") {
-			rule.sm = ArtSortMethod::GUID;
-		} else if (methods[0] == "date") {
-			rule.sm = ArtSortMethod::DATE;
-		} else if (methods[0] == "unread") {
-			rule.sm = ArtSortMethod::UNREAD;
-		} else if (methods[0] == "random") {
-			rule.sm = ArtSortMethod::RANDOM;
-		} else {
-			known_method = false;
+	} else { // all other sort methods are ascending by default
+		ss.sd = SortDirection::ASC;
+		if (methods.size() > 1 && methods[1] == "desc") {
+			ss.sd = SortDirection::DESC;
 		}
-
-		if (!known_method) {
-			continue;
-		}
-
-		if (rule.sm == ArtSortMethod::DATE || rule.sm == ArtSortMethod::UNREAD) {
-			rule.sd = SortDirection::DESC;
-			if (methods.size() > 1 && methods[1] == "asc") {
-				rule.sd = SortDirection::ASC;
-			}
-		} else {
-			rule.sd = SortDirection::ASC;
-			if (methods.size() > 1 && methods[1] == "desc") {
-				rule.sd = SortDirection::DESC;
-			}
-		}
-
-		ss.rules.push_back(rule);
 	}
 
-	if (ss.rules.empty()) {
-		ss.rules.push_back(ArticleSortRule{});
+	if (!methods.empty()) {
+		if (methods[0] == "title") {
+			ss.sm = ArtSortMethod::TITLE;
+		} else if (methods[0] == "flags") {
+			ss.sm = ArtSortMethod::FLAGS;
+		} else if (methods[0] == "author") {
+			ss.sm = ArtSortMethod::AUTHOR;
+		} else if (methods[0] == "link") {
+			ss.sm = ArtSortMethod::LINK;
+		} else if (methods[0] == "guid") {
+			ss.sm = ArtSortMethod::GUID;
+		} else if (methods[0] == "random") {
+			ss.sm = ArtSortMethod::RANDOM;
+		}
 	}
 
 	return ss;
