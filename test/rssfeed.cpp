@@ -12,6 +12,14 @@
 
 using namespace newsboat;
 
+static ArticleSortStrategy make_article_sort_strategy(
+	std::initializer_list<ArticleSortRule> rules)
+{
+	ArticleSortStrategy ss;
+	ss.rules = rules;
+	return ss;
+}
+
 TEST_CASE("RssFeed constructor checks if query feed has a valid query",
 	"[RssFeed]")
 {
@@ -51,9 +59,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		articles[3]->set_title("Article 10: Another great article");
 		articles[4]->set_title("Article 2: Article you must read");
 
-		ArticleSortStrategy ss;
-		ss.sm = ArtSortMethod::TITLE;
-		ss.sd = SortDirection::ASC;
+		auto ss = make_article_sort_strategy(
+			{{ArtSortMethod::TITLE, SortDirection::ASC}});
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->title() == "Article 1: A boring article");
@@ -62,7 +69,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[3]->title() == "Read me");
 		REQUIRE(articles[4]->title() == "Wow tests are great");
 
-		ss.sd = SortDirection::DESC;
+		ss = make_article_sort_strategy(
+			{{ArtSortMethod::TITLE, SortDirection::DESC}});
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->title() == "Wow tests are great");
@@ -80,9 +88,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		articles[3]->set_flags("Efgpu");
 		articles[4]->set_flags("Ceimu");
 
-		ArticleSortStrategy ss;
-		ss.sm = ArtSortMethod::FLAGS;
-		ss.sd = SortDirection::ASC;
+		auto ss = make_article_sort_strategy(
+			{{ArtSortMethod::FLAGS, SortDirection::ASC}});
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->flags() == "Aabde");
@@ -91,7 +98,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[3]->flags() == "Ksuy");
 		REQUIRE(articles[4]->flags() == "Zadel");
 
-		ss.sd = SortDirection::DESC;
+		ss = make_article_sort_strategy(
+			{{ArtSortMethod::FLAGS, SortDirection::DESC}});
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->flags() == "Zadel");
@@ -109,9 +117,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		articles[3]->set_author("Spinoza");
 		articles[4]->set_author("Sartre");
 
-		ArticleSortStrategy ss;
-		ss.sm = ArtSortMethod::AUTHOR;
-		ss.sd = SortDirection::ASC;
+		auto ss = make_article_sort_strategy(
+			{{ArtSortMethod::AUTHOR, SortDirection::ASC}});
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->author() == "Anonymous");
@@ -120,7 +127,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[3]->author() == "Socrates");
 		REQUIRE(articles[4]->author() == "Spinoza");
 
-		ss.sd = SortDirection::DESC;
+		ss = make_article_sort_strategy(
+			{{ArtSortMethod::AUTHOR, SortDirection::DESC}});
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->author() == "Spinoza");
@@ -138,9 +146,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		articles[3]->set_link("www.test.org");
 		articles[4]->set_link("withoutwww.org");
 
-		ArticleSortStrategy ss;
-		ss.sm = ArtSortMethod::LINK;
-		ss.sd = SortDirection::ASC;
+		auto ss = make_article_sort_strategy(
+			{{ArtSortMethod::LINK, SortDirection::ASC}});
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->link() == "withoutwww.org");
@@ -149,7 +156,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[3]->link() == "www.example.org");
 		REQUIRE(articles[4]->link() == "www.test.org");
 
-		ss.sd = SortDirection::DESC;
+		ss = make_article_sort_strategy(
+			{{ArtSortMethod::LINK, SortDirection::DESC}});
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->link() == "www.test.org");
@@ -160,9 +168,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 	}
 
 	SECTION("guid") {
-		ArticleSortStrategy ss;
-		ss.sm = ArtSortMethod::GUID;
-		ss.sd = SortDirection::ASC;
+		auto ss = make_article_sort_strategy(
+			{{ArtSortMethod::GUID, SortDirection::ASC}});
 		f.sort(ss);
 		auto articles = f.items();
 		REQUIRE(articles[0]->guid() == "0");
@@ -171,7 +178,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[3]->guid() == "3");
 		REQUIRE(articles[4]->guid() == "4");
 
-		ss.sd = SortDirection::DESC;
+		ss = make_article_sort_strategy(
+			{{ArtSortMethod::GUID, SortDirection::DESC}});
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->guid() == "4");
@@ -189,9 +197,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		articles[3]->set_pubDate(23);
 		articles[4]->set_pubDate(7);
 
-		ArticleSortStrategy ss;
-		ss.sm = ArtSortMethod::DATE;
-		ss.sd = SortDirection::DESC;
+		auto ss = make_article_sort_strategy(
+			{{ArtSortMethod::DATE, SortDirection::DESC}});
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->pubDate_timestamp() == 7);
@@ -200,7 +207,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[3]->pubDate_timestamp() == 69);
 		REQUIRE(articles[4]->pubDate_timestamp() == 93);
 
-		ss.sd = SortDirection::ASC;
+		ss = make_article_sort_strategy(
+			{{ArtSortMethod::DATE, SortDirection::ASC}});
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->pubDate_timestamp() == 93);
@@ -208,6 +216,66 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[2]->pubDate_timestamp() == 42);
 		REQUIRE(articles[3]->pubDate_timestamp() == 23);
 		REQUIRE(articles[4]->pubDate_timestamp() == 7);
+	}
+
+	SECTION("date-asc,unread") {
+		auto articles = f.items();
+		articles[0]->set_pubDate(93);
+		articles[0]->set_unread_nowrite(false);
+		articles[1]->set_pubDate(42);
+		articles[1]->set_unread_nowrite(true);
+		articles[2]->set_pubDate(69);
+		articles[2]->set_unread_nowrite(false);
+		articles[3]->set_pubDate(23);
+		articles[3]->set_unread_nowrite(true);
+		articles[4]->set_pubDate(7);
+		articles[4]->set_unread_nowrite(false);
+
+		auto ss = make_article_sort_strategy(
+			{{ArtSortMethod::DATE, SortDirection::ASC},
+				{ArtSortMethod::UNREAD, SortDirection::DESC}});
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->unread());
+		REQUIRE(articles[0]->pubDate_timestamp() == 42);
+		REQUIRE(articles[1]->unread());
+		REQUIRE(articles[1]->pubDate_timestamp() == 23);
+		REQUIRE_FALSE(articles[2]->unread());
+		REQUIRE(articles[2]->pubDate_timestamp() == 93);
+		REQUIRE_FALSE(articles[3]->unread());
+		REQUIRE(articles[3]->pubDate_timestamp() == 69);
+		REQUIRE_FALSE(articles[4]->unread());
+		REQUIRE(articles[4]->pubDate_timestamp() == 7);
+	}
+
+	SECTION("date-desc,unread") {
+		auto articles = f.items();
+		articles[0]->set_pubDate(93);
+		articles[0]->set_unread_nowrite(false);
+		articles[1]->set_pubDate(42);
+		articles[1]->set_unread_nowrite(true);
+		articles[2]->set_pubDate(69);
+		articles[2]->set_unread_nowrite(false);
+		articles[3]->set_pubDate(23);
+		articles[3]->set_unread_nowrite(true);
+		articles[4]->set_pubDate(7);
+		articles[4]->set_unread_nowrite(false);
+
+		auto ss = make_article_sort_strategy(
+			{{ArtSortMethod::DATE, SortDirection::DESC},
+				{ArtSortMethod::UNREAD, SortDirection::DESC}});
+		f.sort(ss);
+		articles = f.items();
+		REQUIRE(articles[0]->unread());
+		REQUIRE(articles[0]->pubDate_timestamp() == 23);
+		REQUIRE(articles[1]->unread());
+		REQUIRE(articles[1]->pubDate_timestamp() == 42);
+		REQUIRE_FALSE(articles[2]->unread());
+		REQUIRE(articles[2]->pubDate_timestamp() == 7);
+		REQUIRE_FALSE(articles[3]->unread());
+		REQUIRE(articles[3]->pubDate_timestamp() == 69);
+		REQUIRE_FALSE(articles[4]->unread());
+		REQUIRE(articles[4]->pubDate_timestamp() == 93);
 	}
 }
 
