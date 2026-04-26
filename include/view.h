@@ -146,7 +146,7 @@ protected:
 
 	void apply_colors(std::shared_ptr<FormAction> fa);
 
-	bool handle_qna_event(const std::string& event, std::shared_ptr<FormAction> fa);
+	bool handle_qna_event(const Event& event, std::shared_ptr<FormAction> fa);
 	void handle_resize();
 
 	Controller& ctrl;

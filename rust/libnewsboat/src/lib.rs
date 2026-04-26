@@ -19,6 +19,7 @@ pub mod fslock;
 pub mod history;
 pub mod keycombination;
 pub mod keymap;
+pub mod lineedit;
 pub mod links;
 pub mod matchable;
 pub mod matcher;
