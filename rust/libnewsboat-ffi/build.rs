@@ -20,6 +20,7 @@ fn main() {
     add_cxxbridge("history");
     add_cxxbridge("keycombination");
     add_cxxbridge("keymap");
+    add_cxxbridge("lineedit");
     add_cxxbridge("logger");
     add_cxxbridge("matchererror");
     add_cxxbridge("scopemeasure");
