@@ -198,7 +198,7 @@ int View::run()
 			continue;
 		}
 
-		if (handle_qna_event(event.name, fa)) {
+		if (handle_qna_event(event, fa)) {
 			continue;
 		}
 
@@ -275,7 +275,7 @@ void View::run_modal(std::shared_ptr<FormAction> f)
 			continue;
 		}
 
-		if (handle_qna_event(event.name, fa)) {
+		if (handle_qna_event(event, fa)) {
 			continue;
 		}
 
@@ -1172,7 +1172,7 @@ void View::inside_cmdline(bool f)
 	is_inside_cmdline = f;
 }
 
-bool View::handle_qna_event(const std::string& event,
+bool View::handle_qna_event(const Event& event,
 	std::shared_ptr<FormAction> fa)
 {
 	if (is_inside_qna) {

@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cinttypes>
+#include <cwctype>
 #include <ncurses.h>
 
 #include "config.h"
@@ -625,26 +626,28 @@ void FormAction::handle_cmdline_completion()
 	last_fragment = suggestion;
 }
 
-void FormAction::handle_qna_event(std::string event, bool inside_cmd)
+void FormAction::handle_qna_event(const Event& event, bool inside_cmd)
 {
-	if (event == "ESC") {
+	if (event.name == "ESC") {
 		cancel_qna();
-	} else if (inside_cmd && event == "TAB") {
+	} else if (inside_cmd && event.name == "TAB") {
 		handle_cmdline_completion();
-	} else if (event == "UP") {
+	} else if (event.name == "UP") {
 		qna_previous_history();
-	} else if (event == "DOWN") {
+	} else if (event.name == "DOWN") {
 		qna_next_history();
-	} else if (event == "ENTER") {
+	} else if (event.name == "ENTER") {
 		finish_qna_question();
-	} else if (event == "^U") {
+	} else if (event.name == "^U") {
 		clear_line();
-	} else if (event == "^K") {
+	} else if (event.name == "^K") {
 		clear_eol();
-	} else if (event == "^G") {
+	} else if (event.name == "^G") {
 		cancel_qna();
-	} else if (event == "^W") {
+	} else if (event.name == "^W") {
 		delete_word();
+	} else {
+		qna_input.handle_event(event);
 	}
 }
 
