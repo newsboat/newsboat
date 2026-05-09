@@ -690,7 +690,11 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_EDIT_URLS:
-		v.get_ctrl().edit_urls_file();
+		if (visible_items.empty()) {
+			edit_urls(args, feed);
+		} else {
+			edit_urls(args, visible_items[itempos].first->get_feedptr());
+		}
 		break;
 	case OP_SELECTFILTER:
 		if (filter_container.size() > 0) {

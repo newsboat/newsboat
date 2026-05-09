@@ -25,7 +25,7 @@ std::optional<utils::ReadTextFileError> RemoteApiUrlReader::reload()
 
 	for (const auto& url : feedurls) {
 		LOG(Level::INFO, "added %s to URL list", url.first);
-		urls.push_back(url.first);
+		urls.push_back({url.first, FeedOrigin{}});
 		tags[url.first] = url.second;
 		for (const auto& tag : url.second) {
 			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);

@@ -135,6 +135,8 @@ protected:
 	void report_unhandled_operation(Operation op);
 	void set_keymap_hints();
 
+	void edit_urls(const std::vector<std::string>& args, std::shared_ptr<RssFeed> feed);
+
 	/// The name of the "main" STFL widget, i.e. the one that should be focused
 	/// by default.
 	virtual std::string main_widget() const = 0;

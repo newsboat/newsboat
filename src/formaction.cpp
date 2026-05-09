@@ -7,7 +7,9 @@
 #include "config.h"
 #include "configexception.h"
 #include "controller.h"
+#include "fmtstrformatter.h"
 #include "logger.h"
+#include "rssfeed.h"
 #include "strprintf.h"
 #include "textviewwidget.h"
 #include "utils.h"
@@ -64,6 +66,41 @@ void FormAction::set_keymap_hints()
 {
 	set_value("help", v.get_keymap()->prepare_keymap_hint(this->get_keymap_hint(),
 			this->id()).stfl_quoted());
+}
+
+void FormAction::edit_urls(const std::vector<std::string>& args,
+	std::shared_ptr<RssFeed> feed)
+{
+	switch (args.size()) {
+	case 0:
+		v.get_ctrl().edit_urls_file();
+		break;
+	case 1: {
+		std::size_t line_number = 0;
+		if (feed) {
+			const auto file_origin = feed->get_origin().file_origin;
+			if (file_origin.has_value()) {
+				line_number = file_origin->line_number;
+			}
+		}
+		Filepath file = v.get_ctrl().get_urls_file();
+		std::string quoted_file_arg = strprintf::fmt(R"("%s")",
+				utils::replace_all(file.to_locale_string(), "\"", "\\\""));
+
+		FmtStrFormatter fmt;
+		fmt.register_fmt('f', quoted_file_arg);
+		fmt.register_fmt('L', std::to_string(line_number));
+		const auto cmdline = fmt.do_format(args[0]);
+
+		LOG(Level::DEBUG, "edit urls command: %s", cmdline);
+		v.get_ctrl().edit_urls_file(cmdline);
+		break;
+	}
+	default:
+		v.get_statusline().show_error(strprintf::fmt(_("Too many arguments for %s"),
+				KeyMap::get_op_name(OP_EDIT_URLS)));
+		break;
+	}
 }
 
 std::string FormAction::get_value(const std::string& name)

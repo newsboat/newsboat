@@ -57,6 +57,8 @@ public:
 
 	void reload_urls_file();
 	void edit_urls_file();
+	void edit_urls_file(const std::string& cmdline);
+	Filepath get_urls_file();
 
 	FeedContainer* get_feedcontainer()
 	{

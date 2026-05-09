@@ -27,7 +27,7 @@ std::optional<utils::ReadTextFileError> MinifluxUrlReader::reload()
 	if (cfg->get_configvalue_as_bool("miniflux-show-special-feeds")) {
 		std::vector<std::string> tmptags;
 		const std::string star_url = "starred";
-		urls.push_back(star_url);
+		urls.push_back({star_url, FeedOrigin{}});
 		std::string star_tag = std::string("~") + _("Starred items");
 		tmptags.push_back(star_tag);
 		tags[star_url] = tmptags;
@@ -39,7 +39,7 @@ std::optional<utils::ReadTextFileError> MinifluxUrlReader::reload()
 
 	for (const auto& url : feedurls) {
 		LOG(Level::INFO, "added %s to URL list", url.first);
-		urls.push_back(url.first);
+		urls.push_back({url.first, FeedOrigin{}});
 		tags[url.first] = url.second;
 		for (const auto& tag : url.second) {
 			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
