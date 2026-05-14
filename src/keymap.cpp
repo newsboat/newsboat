@@ -479,6 +479,13 @@ static const std::vector<OpDesc> opdescs = {
 		KM_FEEDLIST | KM_ARTICLELIST | KM_SEARCHRESULTSLIST
 	},
 	{
+		OP_EDIT_URLS_CURRENT_FEED,
+		"edit-urls-current-feed",
+		{},
+		translatable("Edit URLs at current feed"),
+		KM_FEEDLIST
+	},
+	{
 		OP_CLOSEDIALOG,
 		"close-dialog",
 		KeyCombination("x", ShiftState::NoShift, ControlState::Control),

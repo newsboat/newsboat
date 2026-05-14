@@ -12,6 +12,7 @@
 #include "dbexception.h"
 #include "feedcontainer.h"
 #include "fmtstrformatter.h"
+#include "keymap.h"
 #include "listformatter.h"
 #include "logger.h"
 #include "reloader.h"
@@ -500,6 +501,38 @@ REDO:
 		break;
 	case OP_EDIT_URLS:
 		v.get_ctrl().edit_urls_file();
+		break;
+	case OP_EDIT_URLS_CURRENT_FEED:
+		if (args.size() == 1) {
+			std::optional<FileOrigin> file_origin;
+			std::shared_ptr<RssFeed> feed = v.get_ctrl().get_feedcontainer()->get_feed(pos);
+			if (feed) {
+				auto feed_origin = feed->get_origin();
+				if (feed_origin.has_value()) {
+					file_origin = feed_origin->file_origin;
+				}
+			}
+			Filepath file = v.get_ctrl().get_urls_file();
+			std::size_t line_number = 0;
+			if (file_origin.has_value()) {
+				file = file_origin->urls_file;
+				line_number = file_origin->line_number;
+			}
+
+			FmtStrFormatter fmt;
+			fmt.register_fmt('f', file.to_locale_string());
+			fmt.register_fmt('L', std::to_string(line_number));
+			const auto cmdline = fmt.do_format(args[0]);
+
+			LOG(Level::DEBUG, "edit urls command: %s", cmdline);
+			v.get_ctrl().edit_urls_file(cmdline);
+		} else if (args.empty()) {
+			v.get_statusline().show_error(strprintf::fmt(_("Not enough arguments for %s"),
+					KeyMap::get_op_name(OP_EDIT_URLS_CURRENT_FEED)));
+		} else if (args.size() > 1) {
+			v.get_statusline().show_error(strprintf::fmt(_("Too many arguments for %s"),
+					KeyMap::get_op_name(OP_EDIT_URLS_CURRENT_FEED)));
+		}
 		break;
 	case OP_QUIT:
 		if (tag != "") {

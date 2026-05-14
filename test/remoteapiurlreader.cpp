@@ -95,9 +95,13 @@ TEST_CASE("RemoteApiUrlReader reload includes query urls and urls from the Remot
 				REQUIRE(loaded_urls.size() == 3);
 
 				const std::string query_feed = R"(query:Unread Articles:unread = "yes")";
-				REQUIRE(loaded_urls[0] == query_feed);
-				REQUIRE(loaded_urls[1] == feed1);
-				REQUIRE(loaded_urls[2] == feed2);
+				REQUIRE(loaded_urls[0].first == query_feed);
+				REQUIRE(loaded_urls[0].second.file_origin->urls_file == urls.get_path());
+				REQUIRE(loaded_urls[0].second.file_origin->line_number == 2);
+				REQUIRE(loaded_urls[1].first == feed1);
+				REQUIRE(loaded_urls[1].second.file_origin == std::nullopt);
+				REQUIRE(loaded_urls[2].first == feed2);
+				REQUIRE(loaded_urls[2].second.file_origin == std::nullopt);
 
 				REQUIRE(url_reader.get_tags(query_feed).size() == 2);
 				REQUIRE(url_reader.get_tags(feed1).size() == 2);

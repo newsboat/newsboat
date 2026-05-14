@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "config.h"
+#include "feedorigin.h"
 #include "matchable.h"
 #include "rssitem.h"
 #include "utils.h"
@@ -20,8 +21,20 @@ class Cache;
 
 class RssFeed : public Matchable {
 public:
+
 	explicit RssFeed(Cache* c, const std::string& rssurl);
 	~RssFeed() override = default;
+
+	void set_origin(const FeedOrigin& origin)
+	{
+		origin_ = origin;
+	}
+
+	const std::optional<FeedOrigin>& get_origin()
+	{
+		return origin_;
+	}
+
 	const std::string& title_raw() const
 	{
 		return title_;
@@ -192,6 +205,7 @@ public:
 	mutable std::mutex item_mutex;
 
 private:
+	std::optional<FeedOrigin> origin_;
 	std::string title_;
 	std::string description_;
 	std::string link_;

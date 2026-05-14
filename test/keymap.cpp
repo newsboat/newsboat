@@ -127,7 +127,8 @@ TEST_CASE(
 				i == OP_OPENALLUNREADINBROWSER_AND_MARK ||
 				i == OP_SAVEALL ||
 				i == OP_GOTO_TITLE ||
-				i == OP_OPENINBROWSER_NONINTERACTIVE) {
+				i == OP_OPENINBROWSER_NONINTERACTIVE ||
+				i == OP_EDIT_URLS_CURRENT_FEED) {
 				continue;
 			}
 			bool used_in_some_context = false;

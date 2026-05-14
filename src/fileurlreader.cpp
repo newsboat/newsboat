@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include "config.h"
+#include "feedorigin.h"
 #include "strprintf.h"
 #include "utils.h"
 
@@ -22,7 +23,7 @@ std::string FileUrlReader::get_source() const
 void FileUrlReader::add_url(const std::string& url,
 	const std::vector<std::string>& url_tags)
 {
-	urls.push_back(url);
+	urls.push_back({url, FeedOrigin{}});
 	tags[url] = url_tags;
 }
 
@@ -37,7 +38,10 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 	}
 	std::vector<std::string> lines = result.value();
 
+	std::size_t line_number = 0;
 	for (const std::string& line : lines) {
+		line_number++;
+
 		// skip empty lines and comments
 		if (line.empty() || line[0] == '#') {
 			continue;
@@ -49,7 +53,8 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 		}
 
 		std::string url = tokens[0];
-		urls.push_back(url);
+		FileOrigin file_origin{filename, line_number};
+		urls.push_back({url, FeedOrigin{file_origin}});
 
 		tokens.erase(tokens.begin());
 		if (!tokens.empty()) {
@@ -71,7 +76,9 @@ std::optional<std::string> FileUrlReader::write_config()
 				error_message);
 	}
 
-	for (const auto& url : urls) {
+	std::size_t line_number = 0;
+	for (auto& [url, origin] : urls) {
+		line_number++;
 		f << utils::quote_if_necessary(url);
 		if (tags[url].size() > 0) {
 			for (const auto& tag : tags[url]) {
@@ -79,6 +86,11 @@ std::optional<std::string> FileUrlReader::write_config()
 			}
 		}
 		f << std::endl;
+
+		// Update origin as writing to urls file might remove comments and empty lines,
+		// resulting in URLs ending up at different line numbers
+		FileOrigin file_origin{filename, line_number};
+		origin = FeedOrigin{file_origin};
 	}
 
 	return {};

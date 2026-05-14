@@ -453,7 +453,7 @@ int Controller::run(const CliArgsParser& args)
 	std::cout.flush();
 
 	unsigned int i = 0;
-	for (const auto& url : urlcfg->get_urls()) {
+	for (const auto& [url, origin] : urlcfg->get_urls()) {
 		try {
 			bool ignore_disp =
 				(cfg.get_configvalue("ignore-mode") ==
@@ -461,6 +461,7 @@ int Controller::run(const CliArgsParser& args)
 			std::shared_ptr<RssFeed> feed =
 				rsscache->internalize_rssfeed(
 					url, ignore_disp ? &ign : nullptr);
+			feed->set_origin(origin);
 			feed->set_tags(urlcfg->get_tags(url));
 			feed->set_order(i);
 			feedcontainer.add_feed(feed);
@@ -706,6 +707,10 @@ void Controller::replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int p
 	bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
 	std::shared_ptr<RssFeed> feed = rsscache->internalize_rssfeed(
 			oldfeed.rssurl(), ignore_disp ? &ign : nullptr);
+	const auto origin = oldfeed.get_origin();
+	if (origin.has_value()) {
+		feed->set_origin(origin.value());
+	}
 	LOG(Level::DEBUG,
 		"Controller::replace_feed: after internalize_rssfeed");
 
@@ -827,9 +832,10 @@ void Controller::reload_urls_file()
 	std::vector<std::shared_ptr<RssFeed>> new_feeds;
 	unsigned int i = 0;
 
-	for (const auto& url : urlcfg->get_urls()) {
+	for (const auto& [url, origin] : urlcfg->get_urls()) {
 		const auto feed = feedcontainer.get_feed_by_url(url);
 		if (feed) {
+			feed->set_origin(origin);
 			feed->set_tags(urlcfg->get_tags(url));
 			feed->set_order(i);
 			new_feeds.push_back(feed);
@@ -841,6 +847,7 @@ void Controller::reload_urls_file()
 				std::shared_ptr<RssFeed> new_feed =
 					rsscache->internalize_rssfeed(url,
 						ignore_disp ? &ign : nullptr);
+				new_feed->set_origin(origin);
 				new_feed->set_tags(urlcfg->get_tags(url));
 				new_feed->set_order(i);
 				new_feeds.push_back(new_feed);
@@ -877,7 +884,12 @@ void Controller::edit_urls_file()
 	std::string cmdline = strprintf::fmt("%s \"%s\"",
 			editor,
 			utils::replace_all(configpaths.url_file().to_locale_string(), "\"", "\\\""));
+	edit_urls_file(cmdline);
 
+}
+
+void Controller::edit_urls_file(const std::string& cmdline)
+{
 	v->push_empty_formaction();
 	Stfl::reset();
 	utils::run_interactively(cmdline, "Controller::edit_urls_file");
@@ -886,6 +898,11 @@ void Controller::edit_urls_file()
 	v->pop_current_formaction();
 
 	reload_urls_file();
+}
+
+Filepath Controller::get_urls_file()
+{
+	return configpaths.url_file();
 }
 
 int Controller::execute_commands(const std::vector<std::string>& cmds)
