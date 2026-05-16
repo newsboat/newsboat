@@ -1,0 +1,25 @@
+name: "No dbg! macros in Rust code"
+
+on:
+  push:
+    paths: &included_paths
+      - '**.rs'
+      - '.github/**'
+  pull_request:
+    paths: *included_paths
+
+jobs:
+  check_for_dbg_macros:
+    name: "No dbg! macros in Rust code"
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: "Check for dbg! macros"
+        # `!` in front of the command negates its exit code: this script will
+        # exit with 0 if no matches were found, and with 1 if there are matches.
+        # We need parentheses to prevent YAML parser from eating up the
+        # exclamation mark.
+        run: ( ! grep --extended-regexp --recursive --line-number '\<dbg!' * )
