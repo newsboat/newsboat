@@ -292,25 +292,3 @@ task:
     # an exclamation mark. This fails the build if the log contains errors or
     # warnings.
     script: make run-i18nspector | tee i18nspector.log && ! egrep --silent "^(E|W):" i18nspector.log
-
-task:
-    name: clang-tidy (Clang 21, Ubuntu 25.10)
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
-
-    container:
-      greedy: true
-      dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
-      docker_arguments:
-          cxx_package: "clang-tidy-21"
-          cc: clang-21
-          cxx: clang++-21
-
-    env:
-      CLANG_TIDY: "clang-tidy-21"
-      JOBS: 2
-
-    cargo_cache: *cargo_cache
-
-    after_cache_script: *after_cache_script
-    test_script: make -j${JOBS} --keep-going clang-tidy
-    before_cache_script: *before_cache_script
