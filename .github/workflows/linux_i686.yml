@@ -1,0 +1,122 @@
+name: Linux i686
+
+on:
+  push:
+    paths-ignore: &ignored_paths
+      - contrib/*
+      - contrib/**/*
+      - doc/*
+      - doc/**/*
+      - docker/*
+      - docker/**/*
+      - po/*
+      - po/**/*
+      - snap/*
+      - snap/**/*
+  pull_request:
+    paths_ignore: *ignored_paths
+
+jobs:
+  linux:
+    name: Linux i686 (Ubuntu 18.04)
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v4
+
+      # We need to pass UID and GID into `docker buildx build`, but the action
+      # doesn't support assigning build args from shell commands. This step is
+      # a workaround: it sets environment variables which are then referenced
+      # in the Docker build args
+      - name: Set UID and GID environment variables
+        run: |
+          echo "UID=$(id -u)" >> $GITHUB_ENV
+          echo "GID=$(id -g)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v7
+        with:
+          file: docker/ubuntu_18.04-i686.dockerfile
+          build-args: |
+            UID=${{ env.UID }}
+            GID=${{ env.GID }}
+
+          cache-from: type=gha,scope=newsboat/ci-18.04-i686
+          cache-to: type=gha,scope=newsboat/ci-18.04-i686,mode=max
+
+          push: false
+          load: true
+
+          tags: newsboat/ci-18.04-i686:latest
+
+      - name: Pre-create ~/.cargo subdirs
+        run: |
+          mkdir --parents ~/.cargo/git
+          mkdir --parents ~/.cargo/registry
+
+      - name: Cache ~/.cargo
+        uses: actions/cache@v5
+        id: cargo_cache
+        with:
+          key: cargo-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}
+          path: |
+            ~/.cargo/git
+            ~/.cargo/registry
+
+      - name: Build
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env RUSTFLAGS='-D warnings' \
+            newsboat/ci-18.04-i686:latest \
+            make -j$(nproc) --keep-going all test
+
+      - name: Test
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env RUSTFLAGS='-D warnings' \
+            --env RUST_TEST_THREADS=$(nproc) \
+            --env RUST_BACKTRACE=1 \
+            newsboat/ci-18.04-i686:latest \
+            make -j$(nproc) NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
+
+      - name: Run Clippy
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env RUSTFLAGS='-D warnings' \
+            newsboat/ci-18.04-i686:latest \
+            cargo clippy --all-targets --all-features -- -D warnings -A unknown-lints
+
+      - name: Fake install
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env RUSTFLAGS='-D warnings' \
+            newsboat/ci-18.04-i686:latest \
+            sh -c \
+              'mkdir fakeroot && \
+              make DESTDIR=fakeroot install && \
+              make DESTDIR=fakeroot uninstall && \
+              test $(find fakeroot -type f -print | wc -l) -eq 0'
