@@ -1,50 +1,4 @@
 task:
-    name: Linux i686 (Ubuntu 18.04)
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
-    container:
-        greedy: true
-        dockerfile: docker/ubuntu_18.04-i686.dockerfile
-    cargo_cache: &cargo_cache
-        # This works in conjunction with after_cache_script and
-        # before_cache_script defined below.
-        folder: $HOME/cargo-cache
-        fingerprint_script:
-          # We include the cache name in the fingerprint to avoid re-using old
-          # caches that contained ~/.cargo
-          - echo cargo-cache
-          - cat Cargo.lock
-    env:
-        RUSTFLAGS: '-D warnings'
-        JOBS: 8
-    after_cache_script: &after_cache_script
-      - mkdir $HOME/.cargo || true
-      - mv $HOME/cargo-cache/registry/ $HOME/cargo-cache/git/ $HOME/.cargo/ || true
-    build_script: &build_script
-        - make -j${JOBS} --keep-going all test
-    test_script: &test_script
-        - RUST_TEST_THREADS=${JOBS} RUST_BACKTRACE=1 make -j${JOBS} NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
-    # For explanation of what this script does, please see the FreeBSD job
-    # above.
-    fake_install_script: &fake_install_script
-        - mkdir fakeroot
-        - make DESTDIR=fakeroot install
-        - make DESTDIR=fakeroot uninstall
-        - test $(find fakeroot -type f -print | wc -l) -eq 0
-    clippy_script: &clippy_script
-        - cargo clippy --all-targets --all-features -- -D warnings -A unknown-lints
-    before_cache_script: &before_cache_script
-        # Cirrus CI sometimes fails to unpack the cache. In that case, it
-        # removes the "cache folder" and tries again.
-        #
-        # We used to use ~/.cargo as a "cache folder", but Cirrus then
-        # sometimes removed ~/.cargo/bin and broke the build. To work around
-        # that, we're storing the cacheble stuff in a separate directory which
-        # we move in/out of ~/.cargo before/after the build.
-        - mkdir -p $HOME/cargo-cache/git/
-        - mv $HOME/.cargo/registry/ $HOME/cargo-cache/ || true
-        - mv $HOME/.cargo/git/db/ $HOME/cargo-cache/git/ || true
-
-task:
     name: Code formatting
     container:
         dockerfile: docker/code-formatting-tools.dockerfile
@@ -55,128 +9,6 @@ task:
           # --exit-code forces git-diff to exit with code 1 if there were
           # changes; that'll fail the build, which is exactly what we need
         - git diff --exit-code
-
-task:
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
-    env:
-        RUSTFLAGS: '-D warnings'
-        JOBS: 8
-
-    matrix:
-        # These two jobs test our minimum supported Rust version, so only bump on
-        # Newsboat release day
-        - name: MSRV, GCC 7 (Ubuntu 18.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-7
-                cc: gcc-7
-                cxx: g++-7
-                rust_version: 1.92.0
-        - name: MSRV, GCC 14 (Ubuntu 24.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-14
-                cc: gcc-14
-                cxx: g++-14
-                rust_version: 1.92.0
-
-        - name: GCC 15, more warnings and checks (Ubuntu 25.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_25.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-15
-                cc: gcc-15
-                cxx: g++-15
-          env: &extra_warnings_and_checks_env
-            CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
-        - name: Clang 21, more warnings and checks (Ubuntu 25.10)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-21
-                cc: clang-21
-                cxx: clang++-21
-          env: *extra_warnings_and_checks_env
-
-        - name: Rust stable, GCC 7 (Ubuntu 18.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-7
-                cc: gcc-7
-                cxx: g++-7
-        - name: Rust stable, GCC 13 (Ubuntu 24.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-13
-                cc: gcc-13
-                cxx: g++-13
-        - name: Rust stable, GCC 14 (Ubuntu 24.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-14
-                cc: gcc-14
-                cxx: g++-14
-        - name: Rust stable, GCC 15 (Ubuntu 25.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_25.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-15
-                cc: gcc-15
-                cxx: g++-15
-        - name: Rust stable, Clang 5.0 (Ubuntu 18.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-5.0
-                cc: clang-5.0
-                cxx: clang++-5.0
-        - name: Rust stable, Clang 19 (Ubuntu 24.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-19
-                cc: clang-19
-                cxx: clang++-19
-        - name: Rust stable, Clang 20 (Ubuntu 24.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-20
-                cc: clang-20
-                cxx: clang++-20
-        - name: Rust stable, Clang 21 (Ubuntu 25.10)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-21
-                cc: clang-21
-                cxx: clang++-21
-
-    cargo_cache: *cargo_cache
-
-    after_cache_script: *after_cache_script
-    build_script: *build_script
-    test_script: *test_script
-    fake_install_script: *fake_install_script
-    clippy_script: *clippy_script
-    before_cache_script: *before_cache_script
 
 task:
     name: AddressSanitizer C++ (Clang 21, Ubuntu 25.10)
@@ -197,15 +29,35 @@ task:
       ASAN_OPTIONS: "check_initialization_order=1:detect_stack_use_after_return=1"
       JOBS: 8
 
-    cargo_cache: *cargo_cache
+    cargo_cache: &cargo_cache
+        # This works in conjunction with after_cache_script and
+        # before_cache_script defined below.
+        folder: $HOME/cargo-cache
+        fingerprint_script:
+          # We include the cache name in the fingerprint to avoid re-using old
+          # caches that contained ~/.cargo
+          - echo cargo-cache
+          - cat Cargo.lock
 
     # Sanitizers only apply to C++, so we only build and run C++ tests. Also,
     # we don't pass --keep-going to the build: failures can be debugged with
     # logs of other jobs.
-    after_cache_script: *after_cache_script
+    after_cache_script: &after_cache_script
+      - mkdir $HOME/.cargo || true
+      - mv $HOME/cargo-cache/registry/ $HOME/cargo-cache/git/ $HOME/.cargo/ || true
     build_script: make -j${JOBS} test
     test_script: cd test && ./test --order=rand --rng-seed=time
-    before_cache_script: *before_cache_script
+    before_cache_script: &before_cache_script
+        # Cirrus CI sometimes fails to unpack the cache. In that case, it
+        # removes the "cache folder" and tries again.
+        #
+        # We used to use ~/.cargo as a "cache folder", but Cirrus then
+        # sometimes removed ~/.cargo/bin and broke the build. To work around
+        # that, we're storing the cacheble stuff in a separate directory which
+        # we move in/out of ~/.cargo before/after the build.
+        - mkdir -p $HOME/cargo-cache/git/
+        - mv $HOME/.cargo/registry/ $HOME/cargo-cache/ || true
+        - mv $HOME/.cargo/git/db/ $HOME/cargo-cache/git/ || true
 
 task:
     name: AddressSanitizer Rust (Clang 21, Ubuntu 25.10)
