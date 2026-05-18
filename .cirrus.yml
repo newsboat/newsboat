@@ -104,20 +104,6 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    name: Asciidoctor with warnings-as-errors
-    skip: "!changesInclude('.cirrus.yml', 'doc/*', 'doc/**/*', 'docker/*', 'docker/**/*')"
-
-    container:
-      cpu: 1
-      memory: 512MB
-      dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
-
-    env:
-        ASCIIDOCTOR_OPTS: '--failure-level WARN'
-
-    script: make doc
-
-task:
     name: .po files
     skip: "!changesInclude('.cirrus.yml', 'docker/*', 'docker/**/*', 'po/*.{po,pot}')"
 

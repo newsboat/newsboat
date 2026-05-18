@@ -1,0 +1,59 @@
+name: Asciidoctor with warnings-as-errors
+
+on:
+  push:
+    paths: &included_paths
+      - '.github/workflows/*'
+      - 'doc/*'
+      - 'doc/**/*'
+      - 'docker/*'
+      - 'docker/**/*'
+  pull_request:
+    paths: *included_paths
+
+jobs:
+  code_formatting:
+    name: Asciidoctor with warnings-as-errors
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v4
+
+      # We need to pass UID and GID into `docker buildx build`, but the action
+      # doesn't support assigning build args from shell commands. This step is
+      # a workaround: it sets environment variables which are then referenced
+      # in the Docker build args
+      - name: Set UID and GID environment variables
+        run: |
+          echo "UID=$(id -u)" >> $GITHUB_ENV
+          echo "GID=$(id -g)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v7
+        with:
+          file: docker/ubuntu_20.04-build-tools.dockerfile
+          build-args: |
+            UID=${{ env.UID }}
+            GID=${{ env.GID }}
+
+          cache-from: type=gha,scope=newsboat/ci-20.04-asciidoctor
+          cache-to: type=gha,scope=newsboat/ci-20.04-asciidoctor,mode=max
+
+          push: false
+          load: true
+
+          tags: newsboat/ci-20.04-asciidoctor:latest
+
+      - name: Run Asciidoctor
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env ASCIIDOCTOR_OPTS='--failure-level WARN' \
+            newsboat/ci-20.04-asciidoctor:latest \
+            make doc
