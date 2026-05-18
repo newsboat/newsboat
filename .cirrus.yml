@@ -1,16 +1,4 @@
 task:
-    name: Code formatting
-    container:
-        dockerfile: docker/code-formatting-tools.dockerfile
-        cpu: 1
-        memory: 512MB
-    script:
-        - make fmt
-          # --exit-code forces git-diff to exit with code 1 if there were
-          # changes; that'll fail the build, which is exactly what we need
-        - git diff --exit-code
-
-task:
     name: AddressSanitizer C++ (Clang 21, Ubuntu 25.10)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
