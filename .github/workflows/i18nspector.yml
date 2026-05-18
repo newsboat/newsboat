@@ -1,0 +1,64 @@
+name: .po files
+
+on:
+  push:
+    paths: &included_paths
+      - '.github/workflows/*'
+      - 'docker/*'
+      - 'docker/**/*'
+      - 'po/*.{po,pot}'
+  pull_request:
+    paths: *included_paths
+
+jobs:
+  code_formatting:
+    name: .po files
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v4
+
+      # We need to pass UID and GID into `docker buildx build`, but the action
+      # doesn't support assigning build args from shell commands. This step is
+      # a workaround: it sets environment variables which are then referenced
+      # in the Docker build args
+      - name: Set UID and GID environment variables
+        run: |
+          echo "UID=$(id -u)" >> $GITHUB_ENV
+          echo "GID=$(id -g)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v7
+        with:
+          file: docker/i18nspector.dockerfile
+          build-args: |
+            UID=${{ env.UID }}
+            GID=${{ env.GID }}
+
+          cache-from: type=gha,scope=newsboat/ci-i18nspector
+          cache-to: type=gha,scope=newsboat/ci-i18nspector,mode=max
+
+          push: false
+          load: true
+
+          tags: newsboat/ci-i18nspector:latest
+
+      - name: Run i18nspector
+        # `tee` displays the output of `i18nspector`, but also store it in the file
+        # for later analysis. `egrep` returns exit code 0 if it finds something,
+        # and 1 otherwise. We need the opposite, so we negate the exit code using
+        # an exclamation mark. This fails the build if the log contains errors or
+        # warnings.
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env ASCIIDOCTOR_OPTS='--failure-level WARN' \
+            newsboat/ci-i18nspector:latest \
+            sh -c \
+              'make run-i18nspector | tee i18nspector.log && ! egrep --silent "^(E|W):" i18nspector.log'
