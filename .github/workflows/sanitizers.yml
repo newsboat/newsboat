@@ -44,7 +44,7 @@ jobs:
           build-args: |
             # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
             # sanitizer's reports. ASAN library is in libclang-rt-dev
-            cxx_package="clang-21 llvm-21 libclang-rt-21-dev"
+            cxx_package=clang-21 llvm-21 libclang-rt-21-dev
             cc=clang-21
             cxx=clang++-21
             UID=${{ env.UID }}
@@ -109,7 +109,7 @@ jobs:
           build-args: |
             # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
             # sanitizer's reports. ASAN library is in libclang-rt-dev
-            cxx_package="clang-21 llvm-21 libclang-rt-21-dev"
+            cxx_package=clang-21 llvm-21 libclang-rt-21-dev
             cc=clang-21
             cxx=clang++-21
             UID=${{ env.UID }}
@@ -174,7 +174,7 @@ jobs:
           build-args: |
             # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
             # sanitizer's reports. ASAN library is in libclang-rt-dev
-            cxx_package="clang-21 llvm-21 libclang-rt-21-dev"
+            cxx_package=clang-21 llvm-21 libclang-rt-21-dev
             cc=clang-21
             cxx=clang++-21
             UID=${{ env.UID }}
