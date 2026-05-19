@@ -140,11 +140,21 @@ jobs:
 
           tags: local/container:latest
 
+      - name: Cache ~/.cargo
+        uses: actions/cache@v5
+        id: cargo_cache
+        with:
+          key: cargo-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}
+          path: |
+            ~/.cargo/git
+            ~/.cargo/registry
+
       - name: Build
         run: |
           docker run \
             --rm \
             --tty \
+            --mount type=bind,source=$(pwd),target=/home/builder/.cargo \
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env RUSTFLAGS='-D warnings' \
             --env CXXFLAGS \
@@ -156,6 +166,7 @@ jobs:
           docker run \
             --rm \
             --tty \
+            --mount type=bind,source=$(pwd),target=/home/builder/.cargo \
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env RUSTFLAGS='-D warnings' \
             --env RUST_TEST_THREADS=$(nproc) \
@@ -169,6 +180,7 @@ jobs:
           docker run \
             --rm \
             --tty \
+            --mount type=bind,source=$(pwd),target=/home/builder/.cargo \
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env RUSTFLAGS='-D warnings' \
             --env CXXFLAGS \
@@ -180,6 +192,7 @@ jobs:
           docker run \
             --rm \
             --tty \
+            --mount type=bind,source=$(pwd),target=/home/builder/.cargo \
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env RUSTFLAGS='-D warnings' \
             --env CXXFLAGS \
