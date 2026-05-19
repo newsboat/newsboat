@@ -50,6 +50,9 @@ public:
 	void externalize_rssfeed(RssFeed& feed, bool reset_unread);
 	std::shared_ptr<RssFeed> internalize_rssfeed(std::string rssurl,
 		RssIgnores* ign);
+	std::vector<std::shared_ptr<RssFeed>> internalize_all_feeds(
+			const std::vector<std::string>& urls,
+			RssIgnores* ign);
 	void update_rssitem_unread_and_enqueued(RssItem& item,
 		const std::string& feedurl);
 	/// If requested, removes unreachable data stored in cache.
