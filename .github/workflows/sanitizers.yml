@@ -72,8 +72,8 @@ jobs:
           docker run \
             --rm \
             --tty \
-            --mount type=bind,source=~/.cargo/git,target=/home/builder/.cargo/git \
-            --mount type=bind,source=~/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env CXXFLAGS='-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g' \
             --env ASAN_OPTIONS='check_initialization_order=1:detect_stack_use_after_return=1' \
@@ -203,8 +203,8 @@ jobs:
           docker run \
             --rm \
             --tty \
-            --mount type=bind,source=~/.cargo/git,target=/home/builder/.cargo/git \
-            --mount type=bind,source=~/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env CXXFLAGS='-fsanitize=undefined -g -fno-omit-frame-pointer' \
             --env ASAN_OPTIONS='suppressions=.undefined-sanitizer-suppressions:print_stacktrace=1:halt_on_error=1' \
