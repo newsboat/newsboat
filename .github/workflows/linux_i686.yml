@@ -67,7 +67,8 @@ jobs:
           docker run \
             --rm \
             --tty \
-            --mount type=bind,source=$(pwd),target=/home/builder/.cargo \
+            --mount type=bind,source=~/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=~/.cargo/registry,target=/home/builder/.cargo/registry \
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env RUSTFLAGS='-D warnings' \
             local/container:latest \
@@ -78,7 +79,8 @@ jobs:
           docker run \
             --rm \
             --tty \
-            --mount type=bind,source=$(pwd),target=/home/builder/.cargo \
+            --mount type=bind,source=~/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=~/.cargo/registry,target=/home/builder/.cargo/registry \
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env RUSTFLAGS='-D warnings' \
             --env RUST_TEST_THREADS=$(nproc) \
@@ -91,7 +93,8 @@ jobs:
           docker run \
             --rm \
             --tty \
-            --mount type=bind,source=$(pwd),target=/home/builder/.cargo \
+            --mount type=bind,source=~/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=~/.cargo/registry,target=/home/builder/.cargo/registry \
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env RUSTFLAGS='-D warnings' \
             local/container:latest \
@@ -102,7 +105,8 @@ jobs:
           docker run \
             --rm \
             --tty \
-            --mount type=bind,source=$(pwd),target=/home/builder/.cargo \
+            --mount type=bind,source=~/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=~/.cargo/registry,target=/home/builder/.cargo/registry \
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env RUSTFLAGS='-D warnings' \
             local/container:latest \
