@@ -230,8 +230,8 @@ TEST_CASE("FileUrlReader handles duplicate URLs by merging tags", "[FileUrlReade
 	FileUrlReader u("data/test-duplicate-urls.txt"_path);
 	u.reload();
 
-    REQUIRE(u.get_urls().size() == 1);
-    REQUIRE(u.get_urls()[0] == "http://anotherfeed.com/");
+	REQUIRE(u.get_urls().size() == 1);
+	REQUIRE(u.get_urls()[0] == "http://anotherfeed.com/");
 
 	REQUIRE(u.get_tags("http://anotherfeed.com/")[0] == "tag1");
 	REQUIRE(u.get_tags("http://anotherfeed.com/")[1] == "tag2");
