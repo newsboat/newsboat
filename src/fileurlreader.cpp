@@ -60,13 +60,17 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 			no_dup_urls[url] = {};
 			ordered_urls.push_back(url);
 		} else {
-			std::string warn_msg = "Warning: Duplicate URL found in configuration: " + url + ". Merging tags.";
+			std::string warn_msg =
+				"Warning: Duplicate URL found in configuration: " +
+				url + ". Merging tags.";
 			LOG(Level::WARN, warn_msg.c_str());
 			std::cerr << warn_msg << std::endl;
 		}
 		tokens.erase(tokens.begin());
 		for (const std::string& tag : tokens) {
-			if (std::find(no_dup_urls[url].begin(), no_dup_urls[url].end(), tag) == no_dup_urls[url].end()) {
+			if (std::find(no_dup_urls[url].begin(),
+					no_dup_urls[url].end(),
+					tag) == no_dup_urls[url].end()) {
 				no_dup_urls[url].push_back(tag);
 			}
 		}

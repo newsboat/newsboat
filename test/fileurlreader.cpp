@@ -225,7 +225,8 @@ TEST_CASE("FileUrlReader::get_alltags() returns all unique tags across all feeds
 	REQUIRE(tags[2] == "tag3");
 }
 
-TEST_CASE("FileUrlReader handles duplicate URLs by merging tags", "[FileUrlReader]")
+TEST_CASE("FileUrlReader handles duplicate URLs by merging tags",
+	"[FileUrlReader]")
 {
 	FileUrlReader u("data/test-duplicate-urls.txt"_path);
 	u.reload();
