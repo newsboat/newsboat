@@ -224,3 +224,18 @@ TEST_CASE("FileUrlReader::get_alltags() returns all unique tags across all feeds
 	REQUIRE(tags[1] == "tag2");
 	REQUIRE(tags[2] == "tag3");
 }
+
+TEST_CASE("FileUrlReader handles duplicate URLs by merging tags",
+	"[FileUrlReader]")
+{
+	FileUrlReader u("data/test-duplicate-urls.txt"_path);
+	u.reload();
+
+	REQUIRE(u.get_urls().size() == 1);
+	REQUIRE(u.get_urls()[0] == "http://anotherfeed.com/");
+
+	REQUIRE(u.get_tags("http://anotherfeed.com/")[0] == "tag1");
+	REQUIRE(u.get_tags("http://anotherfeed.com/")[1] == "tag2");
+	REQUIRE(u.get_tags("http://anotherfeed.com/")[2] == "tag3");
+	REQUIRE(u.get_tags("http://anotherfeed.com/")[3] == "tag4");
+}

@@ -2,10 +2,15 @@
 
 #include <cstring>
 #include <fstream>
+#include <unordered_map>
+#include <set>
+#include <vector>
+#include <iostream>
 
 #include "config.h"
 #include "strprintf.h"
 #include "utils.h"
+#include "logger.h"
 
 namespace newsboat {
 
@@ -37,6 +42,8 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 	}
 	std::vector<std::string> lines = result.value();
 
+	std::unordered_map<std::string, std::vector<std::string>> no_dup_urls;
+	std::vector<std::string> ordered_urls;
 	for (const std::string& line : lines) {
 		// skip empty lines and comments
 		if (line.empty() || line[0] == '#') {
@@ -49,13 +56,30 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 		}
 
 		std::string url = tokens[0];
-		urls.push_back(url);
-
-		tokens.erase(tokens.begin());
-		if (!tokens.empty()) {
-			tags[url] = tokens;
+		if (no_dup_urls.count(url) == 0) {
+			no_dup_urls[url] = {};
+			ordered_urls.push_back(url);
+		} else {
+			std::string warn_msg =
+				"Warning: Duplicate URL found in configuration: " +
+				url + ". Merging tags.";
+			LOG(Level::WARN, warn_msg.c_str());
+			std::cerr << warn_msg << std::endl;
 		}
-	};
+		tokens.erase(tokens.begin());
+		for (const std::string& tag : tokens) {
+			if (std::find(no_dup_urls[url].begin(),
+					no_dup_urls[url].end(),
+					tag) == no_dup_urls[url].end()) {
+				no_dup_urls[url].push_back(tag);
+			}
+		}
+	}
+
+	for (const std::string& url : ordered_urls) {
+		urls.push_back(url);
+		tags[url] = no_dup_urls[url];
+	}
 
 	return {};
 }
