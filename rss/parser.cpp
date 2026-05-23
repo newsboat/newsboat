@@ -136,7 +136,7 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 	if (etag_headers.size() >= 1) {
 		std::string etag = etag_headers.back();
 		utils::trim(etag);
-		LOG(Level::DEBUG, "parse_url: got etag %s", etag);
+		LOG(Level::DEBUG, "Parser::parse_url: got etag %s", etag);
 		et = etag;
 	}
 
@@ -145,10 +145,11 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 		const std::string header_value = last_modified_headers.back();
 		time_t time = curl_getdate(header_value.c_str(), nullptr);
 		if (time == -1) {
-			LOG(Level::DEBUG, "parse_url: last-modified %s (curl_getdate FAILED)", header_value);
+			LOG(Level::DEBUG,
+				"Parser::parse_url: last-modified %s (curl_getdate FAILED)", header_value);
 		} else {
 			LOG(Level::DEBUG,
-				"parse_url: got last-modified %s (%" PRId64 ")",
+				"Parser::parse_url: got last-modified %s (%" PRId64 ")",
 				header_value,
 				// On GCC, `time_t` is `long int`, which is at least 32 bits.
 				// On x86_64, it's 64 bits. Thus, this cast is either a no-op,
@@ -163,7 +164,7 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 	if (content_type_headers.size() >= 1) {
 		std::string header_value = content_type_headers.back();
 		utils::trim(header_value);
-		LOG(Level::DEBUG, "parse_url: got content type %s", header_value);
+		LOG(Level::DEBUG, "Parser::parse_url: got content type %s", header_value);
 		const auto input = std::vector<uint8_t>(header_value.begin(), header_value.end());
 		charset_content_type = charencoding::charset_from_content_type_header(input);
 	}
@@ -174,7 +175,7 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 	}
 
 	LOG(Level::DEBUG,
-		"rsspp::Parser::parse_url: ret = %d (%s)",
+		"Parser::parse_url: ret = %d (%s)",
 		ret,
 		curl_easy_strerror(ret));
 
@@ -184,7 +185,7 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 
 	if (ret != 0) {
 		LOG(Level::ERROR,
-			"rsspp::Parser::parse_url: curl_easy_perform returned "
+			"Parser::parse_url: curl_easy_perform returned "
 			"err "
 			"%d: %s",
 			ret,

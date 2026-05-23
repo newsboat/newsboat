@@ -1144,7 +1144,7 @@ void Cache::clean_old_articles()
 		run_sql(query);
 	} else {
 		LOG(Level::DEBUG,
-			"Cache::clean_old_articles, days == 0, not cleaning up "
+			"Cache::clean_old_articles: days == 0, not cleaning up "
 			"anything");
 	}
 }
