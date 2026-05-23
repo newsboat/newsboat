@@ -131,6 +131,25 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 	}
 
 	ret = curl_easy_perform(easyhandle.ptr());
+	LOG(Level::DEBUG,
+		"Parser::parse_url: ret = %d (%s)",
+		ret,
+		curl_easy_strerror(ret));
+
+	long status;
+	CURLcode infoOk =
+		curl_easy_getinfo(easyhandle.ptr(), CURLINFO_RESPONSE_CODE, &status);
+	// Only verifying the infoOk flag is not enough. In case of some errors,
+	// such as ret == CURLE_COULDNT_RESOLVE_HOST, we obviously did not receive
+	// an HTTP response.
+	if (infoOk == CURLE_OK && status > 0) {
+		LOG(Level::DEBUG,
+			"Parser::parse_url: got HTTP %" PRIi64 " response",
+			// `status` is `long`, which is at least 32 bits, and on x86_64
+			// it's actually 64 bits. Thus casting to `int64_t` is either
+			// a no-op, or an up-cast which is always safe.
+			static_cast<int64_t>(status));
+	}
 
 	const auto etag_headers = curlHeaderHandler->get_header_lines("ETag");
 	if (etag_headers.size() >= 1) {
@@ -172,26 +191,6 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 	if (custom_headers) {
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPHEADER, 0);
 		curl_slist_free_all(custom_headers);
-	}
-
-	LOG(Level::DEBUG,
-		"Parser::parse_url: ret = %d (%s)",
-		ret,
-		curl_easy_strerror(ret));
-
-	long status;
-	CURLcode infoOk =
-		curl_easy_getinfo(easyhandle.ptr(), CURLINFO_RESPONSE_CODE, &status);
-	// Only verifying the infoOk flag is not enough. In case of some errors,
-	// such as ret == CURLE_COULDNT_RESOLVE_HOST, we obviously did not receive
-	// an HTTP response.
-	if (infoOk == CURLE_OK && status > 0) {
-		LOG(Level::DEBUG,
-			"Parser::parse_url: got HTTP %" PRIi64 " response",
-			// `status` is `long`, which is at least 32 bits, and on x86_64
-			// it's actually 64 bits. Thus casting to `int64_t` is either
-			// a no-op, or an up-cast which is always safe.
-			static_cast<int64_t>(status));
 	}
 
 	if (ret != 0) {
