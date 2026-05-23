@@ -37,11 +37,11 @@
 
 FROM ubuntu:18.04
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV PATH /home/builder/.cargo/bin:$PATH
-ENV CXXFLAGS -m32
-ENV CARGO_BUILD_TARGET i686-unknown-linux-gnu
-ENV PKG_CONFIG_ALLOW_CROSS 1
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PATH=/home/builder/.cargo/bin:$PATH
+ENV CXXFLAGS=-m32
+ENV CARGO_BUILD_TARGET=i686-unknown-linux-gnu
+ENV PKG_CONFIG_ALLOW_CROSS=1
 
 RUN dpkg --add-architecture i386 \
     && apt-get update \
@@ -75,13 +75,13 @@ RUN apt-get update \
     && echo 'ru_RU.KOI8-R KOI8-R' >> /etc/locale.gen \
     && echo 'ru_RU.CP1251 CP1251' >> /etc/locale.gen \
     && locale-gen
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
 
 USER builder
 # Set `HOME` for processes launched by `docker run`; see e2bdf1ca62bdedefc3c910d1e2574647dfcf5319.
-ENV HOME /home/builder
+ENV HOME=/home/builder
 WORKDIR /home/builder/src
 
 RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \

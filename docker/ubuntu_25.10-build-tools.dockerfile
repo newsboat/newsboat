@@ -60,8 +60,8 @@
 
 FROM ubuntu:25.10
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV PATH /home/builder/.cargo/bin:$PATH
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PATH=/home/builder/.cargo/bin:$PATH
 
 RUN apt-get update \
     && apt-get upgrade --assume-yes \
@@ -92,13 +92,13 @@ RUN apt-get install locales \
     && echo 'ru_RU.KOI8-R KOI8-R' >> /etc/locale.gen \
     && echo 'ru_RU.CP1251 CP1251' >> /etc/locale.gen \
     && locale-gen
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
 
 USER builder
 # Set `HOME` for processes launched by `docker run`; see e2bdf1ca62bdedefc3c910d1e2574647dfcf5319.
-ENV HOME /home/builder
+ENV HOME=/home/builder
 WORKDIR /home/builder/src
 
 ARG rust_version=1.95.0
