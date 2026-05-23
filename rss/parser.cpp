@@ -182,6 +182,17 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 	long status;
 	CURLcode infoOk =
 		curl_easy_getinfo(easyhandle.ptr(), CURLINFO_RESPONSE_CODE, &status);
+	// Only verifying the infoOk flag is not enough. In case of some errors,
+	// such as ret == CURLE_COULDNT_RESOLVE_HOST, we obviously did not receive
+	// an HTTP response.
+	if (infoOk == CURLE_OK && status > 0) {
+		LOG(Level::DEBUG,
+			"Parser::parse_url: got HTTP %" PRIi64 " response",
+			// `status` is `long`, which is at least 32 bits, and on x86_64
+			// it's actually 64 bits. Thus casting to `int64_t` is either
+			// a no-op, or an up-cast which is always safe.
+			static_cast<int64_t>(status));
+	}
 
 	if (ret != 0) {
 		LOG(Level::ERROR,
@@ -197,7 +208,7 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 					curl_easy_strerror(ret),
 					// `status` is `long`, which is at least 32 bits, and on x86_64
 					// it's actually 64 bits. Thus casting to `int64_t` is either
-					// a no-op, or an up-cast which are always safe.
+					// a no-op, or an up-cast which is always safe.
 					static_cast<int64_t>(status));
 		} else {
 			msg = curl_easy_strerror(ret);
