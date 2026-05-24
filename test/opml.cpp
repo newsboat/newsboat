@@ -132,7 +132,8 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 
 	REQUIRE(urlcfg.get_urls().size() == testUrls.size());
 
-	for (const auto& url : urlcfg.get_urls()) {
+	for (const auto& [url, origin] : urlcfg.get_urls()) {
+		(void)origin;
 		INFO("url = " << url);
 
 		const auto entry = testUrls.find(url);
@@ -164,7 +165,8 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 
 	REQUIRE(urlcfg.get_urls().size() == combinedUrls.size());
 
-	for (const auto& url : urlcfg.get_urls()) {
+	for (const auto& [url, origin] : urlcfg.get_urls()) {
+		(void)origin;
 		INFO("url = " << url);
 
 		const auto entry = combinedUrls.find(url);
@@ -199,7 +201,8 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 
 	REQUIRE(urlcfg.get_urls().size() == opmlUrls.size());
 
-	for (const auto& url : urlcfg.get_urls()) {
+	for (const auto& [url, origin] : urlcfg.get_urls()) {
+		(void)origin;
 		INFO("url = " << url);
 
 		const auto entry = opmlUrls.find(url);
@@ -235,7 +238,8 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 
 	REQUIRE(urlcfg.get_urls().size() == opmlUrls.size());
 
-	for (const auto& url : urlcfg.get_urls()) {
+	for (const auto& [url, origin] : urlcfg.get_urls()) {
+		(void)origin;
 		INFO("url = " << url);
 
 		const auto entry = opmlUrls.find(url);
@@ -268,7 +272,8 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 
 	REQUIRE(urlcfg.get_urls().size() == testUrls.size());
 
-	for (const auto& url : urlcfg.get_urls()) {
+	for (const auto& [url, origin] : urlcfg.get_urls()) {
+		(void)origin;
 		INFO("url = " << url);
 
 		const auto entry = testUrls.find(url);
@@ -294,7 +299,8 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 
 	REQUIRE(urlcfg.get_urls().size() == combinedUrls.size());
 
-	for (const auto& url : urlcfg.get_urls()) {
+	for (const auto& [url, origin] : urlcfg.get_urls()) {
+		(void)origin;
 		INFO("url = " << url);
 
 		const auto entry = combinedUrls.find(url);
@@ -317,7 +323,7 @@ TEST_CASE("import() tags from category attribute", "[Opml]")
 	const std::vector<std::string> tags{"tag one", "tag_two", "tag/three"};
 	const auto& urls = urlcfg.get_urls();
 	REQUIRE(urls.size() == 1);
-	REQUIRE(urlcfg.get_tags(urls[0]) == tags);
+	REQUIRE(urlcfg.get_tags(urls[0].first) == tags);
 }
 
 TEST_CASE("import() returns an error when the <opml> root element is missing", "[Opml]")

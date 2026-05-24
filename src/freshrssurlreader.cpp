@@ -28,7 +28,7 @@ std::optional<utils::ReadTextFileError> FreshRssUrlReader::reload()
 		std::vector<std::string> tmptags;
 		const std::string star_url = cfg->get_configvalue("freshrss-url") +
 			"/reader/api/0/stream/contents/user/-/state/com.google/starred";
-		urls.push_back(star_url);
+		urls.push_back({star_url, FeedOrigin{}});
 		tmptags.push_back(std::string("~") + _("Starred items"));
 		tags[star_url] = tmptags;
 	}
@@ -41,7 +41,7 @@ std::optional<utils::ReadTextFileError> FreshRssUrlReader::reload()
 		std::vector<std::string> url_tags = tagged.second;
 
 		LOG(Level::DEBUG, "added %s to URL list", url);
-		urls.push_back(url);
+		urls.push_back({url, FeedOrigin{}});
 		tags[tagged.first] = url_tags;
 		for (const auto& tag : url_tags) {
 			LOG(Level::DEBUG, "%s: added tag %s", url, tag);

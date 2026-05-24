@@ -32,7 +32,7 @@ InoreaderUrlReader::~InoreaderUrlReader() {}
 #define ADD_URL(url, caption)                 \
 	do {                                  \
 		tmptags.clear();              \
-		urls.push_back((url));        \
+		urls.push_back({(url), FeedOrigin{}});        \
 		tmptags.push_back((caption)); \
 		tags[(url)] = tmptags;        \
 	} while (0)
@@ -58,7 +58,7 @@ std::optional<utils::ReadTextFileError> InoreaderUrlReader::reload()
 	std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
 	for (const auto& url : feedurls) {
 		LOG(Level::DEBUG, "added %s to URL list", url.first);
-		urls.push_back(url.first);
+		urls.push_back({url.first, FeedOrigin{}});
 		tags[url.first] = url.second;
 		for (const auto& tag : url.second) {
 			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);

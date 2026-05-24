@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "feedorigin.h"
 #include "filepath.h"
 #include "utils.h"
 
@@ -30,8 +31,8 @@ public:
 	/// Tiny RSS").
 	virtual std::string get_source() const = 0;
 
-	/// \brief A list of feed URLs.
-	const std::vector<std::string>& get_urls() const;
+	/// \brief A list of feed URLs with their origin
+	const std::vector<std::pair<std::string, FeedOrigin>>& get_urls() const;
 
 	/// \brief Tags of feed that has url `url`.
 	std::vector<std::string>& get_tags(const std::string& url);
@@ -42,7 +43,7 @@ public:
 protected:
 	void load_query_urls_from_file(Filepath file);
 
-	std::vector<std::string> urls;
+	std::vector<std::pair<std::string, FeedOrigin>> urls;
 	std::map<std::string, std::vector<std::string>> tags;
 };
 

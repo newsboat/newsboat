@@ -12,6 +12,7 @@
 #include "dbexception.h"
 #include "feedcontainer.h"
 #include "fmtstrformatter.h"
+#include "keymap.h"
 #include "listformatter.h"
 #include "logger.h"
 #include "reloader.h"
@@ -499,7 +500,7 @@ REDO:
 		}
 		break;
 	case OP_EDIT_URLS:
-		v.get_ctrl().edit_urls_file();
+		edit_urls(args, v.get_ctrl().get_feedcontainer()->get_feed(pos));
 		break;
 	case OP_QUIT:
 		if (tag != "") {

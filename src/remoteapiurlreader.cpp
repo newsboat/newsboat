@@ -27,9 +27,13 @@ std::optional<utils::ReadTextFileError> RemoteApiUrlReader::reload()
 	const std::vector<TaggedFeedUrl> feedurls = api.get_subscribed_urls();
 
 	for (const auto& url : feedurls) {
-		if (std::find(urls.begin(), urls.end(), url.first) == urls.end()) {
+		auto it = std::find_if(urls.begin(), urls.end(),
+		[&url](const std::pair<std::string, FeedOrigin>& u) {
+			return u.first == url.first;
+		});
+		if (it == urls.end()) {
 			LOG(Level::INFO, "added %s to URL list", url.first);
-			urls.push_back(url.first);
+			urls.push_back({url.first, FeedOrigin{}});
 			tags[url.first] = url.second;
 			for (const auto& tag : url.second) {
 				LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);

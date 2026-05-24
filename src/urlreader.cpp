@@ -7,7 +7,7 @@
 
 namespace newsboat {
 
-const std::vector<std::string>& UrlReader::get_urls() const
+const std::vector<std::pair<std::string, FeedOrigin>>& UrlReader::get_urls() const
 {
 	return urls;
 }
@@ -42,9 +42,9 @@ void UrlReader::load_query_urls_from_file(Filepath file)
 	}
 
 	const auto& other_urls = file_url_reader.get_urls();
-	for (const auto& url : other_urls) {
+	for (const auto& [url, origin] : other_urls) {
 		if (utils::is_query_url(url)) {
-			urls.push_back(url);
+			urls.push_back({url, origin});
 			tags[url] = file_url_reader.get_tags(url);
 		}
 	}
