@@ -5,6 +5,8 @@
 #include "utils.h"
 #include "config.h"
 
+#include <iostream>
+
 namespace newsboat {
 
 RemoteApiUrlReader::RemoteApiUrlReader(const std::string& source_name,
@@ -38,6 +40,7 @@ std::optional<utils::ReadTextFileError> RemoteApiUrlReader::reload()
 					url.first);
 
 			LOG(Level::USERERROR, warn_msg.c_str());
+			std::cerr << warn_msg << std::endl;
 
 			for (const auto& tag : url.second) {
 				if (std::find(tags[url.first].begin(),

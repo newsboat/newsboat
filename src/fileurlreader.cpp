@@ -66,6 +66,7 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 					url);
 
 			LOG(Level::USERERROR, warn_msg.c_str());
+			std::cerr << warn_msg << std::endl;
 
 			tokens.erase(tokens.begin());
 			for (const std::string& tag : tokens) {
