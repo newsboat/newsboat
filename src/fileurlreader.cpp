@@ -42,8 +42,6 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 	}
 	std::vector<std::string> lines = result.value();
 
-	std::unordered_map<std::string, std::vector<std::string>> no_dup_urls;
-	std::vector<std::string> ordered_urls;
 	for (const std::string& line : lines) {
 		// skip empty lines and comments
 		if (line.empty() || line[0] == '#') {
@@ -56,31 +54,29 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 		}
 
 		std::string url = tokens[0];
-		if (no_dup_urls.count(url) == 0) {
-			no_dup_urls[url] = {};
-			ordered_urls.push_back(url);
-		} else {
-			std::string warn_msg =
-				"Warning: Duplicate URL found in configuration: " +
-				url + ". Merging tags.";
-			LOG(Level::WARN, warn_msg.c_str());
-			std::cerr << warn_msg << std::endl;
-		}
-		tokens.erase(tokens.begin());
-		for (const std::string& tag : tokens) {
-			if (std::find(no_dup_urls[url].begin(),
-					no_dup_urls[url].end(),
-					tag) == no_dup_urls[url].end()) {
-				no_dup_urls[url].push_back(tag);
+		if (std::find(urls.begin(), urls.end(), url) == urls.end()) {
+			urls.push_back(url);
+			tokens.erase(tokens.begin());
+			if (!tokens.empty()) {
+				tags[url] = tokens;
 			}
-		}
-	}
+		} else {
+			std::string warn_msg = strprintf::fmt(
+				_("Warning: Duplicate URL found: %s. Merging tags."),
+				url);
+	
+			LOG(Level::USERERROR, warn_msg.c_str());
 
-	for (const std::string& url : ordered_urls) {
-		urls.push_back(url);
-		tags[url] = no_dup_urls[url];
+			tokens.erase(tokens.begin());
+			for (const std::string& tag : tokens) {
+				if (std::find(tags[url].begin(),
+					tags[url].end(),
+					tag) == tags[url].end()) {
+					tags[url].push_back(tag);
+				}
+			}
+		}	
 	}
-
 	return {};
 }
 
