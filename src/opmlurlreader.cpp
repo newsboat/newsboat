@@ -67,7 +67,7 @@ void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)
 			(char*)xmlGetProp(node, (const xmlChar*)"xmlUrl");
 		if (rssurl && strlen(rssurl) > 0) {
 			std::string theurl(rssurl);
-			urls.push_back(theurl);
+			urls.push_back({theurl, FeedOrigin{}});
 
 			std::vector<std::string> tmptags;
 

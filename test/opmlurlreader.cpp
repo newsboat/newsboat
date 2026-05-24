@@ -52,7 +52,8 @@ TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 
 	REQUIRE(reader.get_urls().size() == expected.size());
 
-	for (const auto& url : reader.get_urls()) {
+	for (const auto& [url, origin] : reader.get_urls()) {
+		(void)origin;
 		INFO("url = " << url);
 
 		const auto e = expected.find(url);
@@ -113,7 +114,8 @@ TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
 
 	REQUIRE(reader.get_urls().size() == expected.size());
 
-	for (const auto& url : reader.get_urls()) {
+	for (const auto& [url, origin] : reader.get_urls()) {
+		(void)origin;
 		INFO("url = " << url);
 
 		const auto e = expected.find(url);
@@ -178,7 +180,8 @@ TEST_CASE("OpmlUrlReader::reload() skips things that can't be parsed",
 
 	REQUIRE(reader.get_urls().size() == expected.size());
 
-	for (const auto& url : reader.get_urls()) {
+	for (const auto& [url, origin] : reader.get_urls()) {
+		(void)origin;
 		INFO("url = " << url);
 
 		const auto e = expected.find(url);

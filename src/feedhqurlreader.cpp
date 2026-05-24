@@ -30,7 +30,7 @@ FeedHqUrlReader::~FeedHqUrlReader() {}
 #define ADD_URL(url, caption)                 \
 	do {                                  \
 		tmptags.clear();              \
-		urls.push_back((url));        \
+		urls.push_back({(url), FeedOrigin{}});        \
 		tmptags.push_back((caption)); \
 		tags[(url)] = tmptags;        \
 	} while (0)
@@ -57,7 +57,7 @@ std::optional<utils::ReadTextFileError> FeedHqUrlReader::reload()
 		std::vector<std::string> url_tags = tagged.second;
 
 		LOG(Level::DEBUG, "added %s to URL list", url);
-		urls.push_back(url);
+		urls.push_back({url, FeedOrigin{}});
 		tags[tagged.first] = url_tags;
 		for (const auto& tag : url_tags) {
 			LOG(Level::DEBUG, "%s: added tag %s", url, tag);
