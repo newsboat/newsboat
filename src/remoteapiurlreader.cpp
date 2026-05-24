@@ -34,15 +34,15 @@ std::optional<utils::ReadTextFileError> RemoteApiUrlReader::reload()
 			}
 		} else {
 			std::string warn_msg = strprintf::fmt(
-				_("Warning: Duplicate URL found: %s. Merging tags."),
-				url.first);
-	
+					_("Warning: Duplicate URL found: %s. Merging tags."),
+					url.first);
+
 			LOG(Level::USERERROR, warn_msg.c_str());
 
 			for (const auto& tag : url.second) {
 				if (std::find(tags[url.first].begin(),
-					tags[url.first].end(),
-					tag) == tags[url.first].end()) {
+						tags[url.first].end(),
+						tag) == tags[url.first].end()) {
 					LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
 					tags[url.first].push_back(tag);
 				}

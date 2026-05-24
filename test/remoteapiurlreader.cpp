@@ -122,8 +122,7 @@ TEST_CASE(
 	test_helpers::TempFile urls;
 	RemoteApiUrlReader url_reader("dummy", urls.get_path(), remote_api);
 
-	GIVEN("A remote API that returns duplicate URLs with different tags")
-	{
+	GIVEN("A remote API that returns duplicate URLs with different tags") {
 		const std::string duplicate_feed = "https://example.com/remote-feed.xml";
 
 		remote_api.set_subscribed_urls({
@@ -131,12 +130,10 @@ TEST_CASE(
 			{ duplicate_feed, {"tag3", "tag4", "tag1"} },
 		});
 
-		WHEN("URLs are reloaded")
-		{
+		WHEN("URLs are reloaded") {
 			url_reader.reload();
 
-			THEN("The URL is only stored once, and all unique tags are merged") 
-			{
+			THEN("The URL is only stored once, and all unique tags are merged") {
 				const auto& loaded_urls = url_reader.get_urls();
 				REQUIRE(loaded_urls.size() == 1);
 				REQUIRE(loaded_urls[0] == duplicate_feed);

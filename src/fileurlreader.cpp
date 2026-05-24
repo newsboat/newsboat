@@ -62,20 +62,20 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 			}
 		} else {
 			std::string warn_msg = strprintf::fmt(
-				_("Warning: Duplicate URL found: %s. Merging tags."),
-				url);
-	
+					_("Warning: Duplicate URL found: %s. Merging tags."),
+					url);
+
 			LOG(Level::USERERROR, warn_msg.c_str());
 
 			tokens.erase(tokens.begin());
 			for (const std::string& tag : tokens) {
 				if (std::find(tags[url].begin(),
-					tags[url].end(),
-					tag) == tags[url].end()) {
+						tags[url].end(),
+						tag) == tags[url].end()) {
 					tags[url].push_back(tag);
 				}
 			}
-		}	
+		}
 	}
 	return {};
 }
