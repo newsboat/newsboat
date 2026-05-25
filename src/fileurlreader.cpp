@@ -2,11 +2,16 @@
 
 #include <cstring>
 #include <fstream>
+#include <unordered_map>
+#include <set>
+#include <vector>
+#include <iostream>
 
 #include "config.h"
 #include "feedorigin.h"
 #include "strprintf.h"
 #include "utils.h"
+#include "logger.h"
 
 namespace newsboat {
 
@@ -53,13 +58,34 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 		}
 
 		std::string url = tokens[0];
-		urls.push_back({url, FeedOrigin{FileOrigin{line_number}}});
+		auto it = std::find_if(urls.begin(), urls.end(),
+		[&url](const std::pair<std::string, FeedOrigin>& u) {
+			return u.first == url;
+		});
+		if (it == urls.end()) {
+			urls.push_back({url, FeedOrigin{FileOrigin{line_number}}});
+			tokens.erase(tokens.begin());
+			if (!tokens.empty()) {
+				tags[url] = tokens;
+			}
+		} else {
+			std::string warn_msg = strprintf::fmt(
+					_("Warning: Duplicate URL found: %s. Merging tags"),
+					url);
 
-		tokens.erase(tokens.begin());
-		if (!tokens.empty()) {
-			tags[url] = tokens;
+			LOG(Level::USERERROR, warn_msg.c_str());
+			std::cerr << warn_msg << std::endl;
+
+			tokens.erase(tokens.begin());
+			for (const std::string& tag : tokens) {
+				if (std::find(tags[url].begin(),
+						tags[url].end(),
+						tag) == tags[url].end()) {
+					tags[url].push_back(tag);
+				}
+			}
 		}
-	};
+	}
 
 	return {};
 }

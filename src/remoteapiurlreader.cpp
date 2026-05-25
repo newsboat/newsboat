@@ -3,6 +3,9 @@
 #include "logger.h"
 #include "remoteapi.h"
 #include "utils.h"
+#include "config.h"
+
+#include <iostream>
 
 namespace newsboat {
 
@@ -24,11 +27,33 @@ std::optional<utils::ReadTextFileError> RemoteApiUrlReader::reload()
 	const std::vector<TaggedFeedUrl> feedurls = api.get_subscribed_urls();
 
 	for (const auto& url : feedurls) {
-		LOG(Level::INFO, "added %s to URL list", url.first);
-		urls.push_back({url.first, FeedOrigin{}});
-		tags[url.first] = url.second;
-		for (const auto& tag : url.second) {
-			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
+		auto it = std::find_if(urls.begin(), urls.end(),
+		[&url](const std::pair<std::string, FeedOrigin>& u) {
+			return u.first == url.first;
+		});
+		if (it == urls.end()) {
+			LOG(Level::INFO, "added %s to URL list", url.first);
+			urls.push_back({url.first, FeedOrigin{}});
+			tags[url.first] = url.second;
+			for (const auto& tag : url.second) {
+				LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
+			}
+		} else {
+			std::string warn_msg = strprintf::fmt(
+					_("Warning: Duplicate URL found: %s. Merging tags."),
+					url.first);
+
+			LOG(Level::USERERROR, warn_msg.c_str());
+			std::cerr << warn_msg << std::endl;
+
+			for (const auto& tag : url.second) {
+				if (std::find(tags[url.first].begin(),
+						tags[url.first].end(),
+						tag) == tags[url.first].end()) {
+					LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
+					tags[url.first].push_back(tag);
+				}
+			}
 		}
 	}
 
