@@ -142,3 +142,21 @@ always possible to represent the _urls_ file as a hierarchy.
 However, if your feeds have one tag each, you can use
 https://github.com/newsboat/newsboat/blob/master/contrib/exportOPMLWithTags.py[_contrib/exportOPMLWithTags.py_
 script] which will export in a hierarchy your feed reader should understand.
+
+== Can I make the tag view my default view?
+
+The feed list filtered by a tag is what Newsboat calls the "tag view". To start
+with a specific tag already selected, add this to your config:
+
+    run-on-startup set-tag "your-tag"
+
+Replace `your-tag` with the tag name. Newsboat keeps that filter while you browse
+feeds and articles; pressing `q` to go back returns to the same tag view until
+you clear the tag with <<clear-tag,`clear-tag`>> (kbd:[Ctrl+T]).
+
+To choose a tag interactively on each start instead:
+
+    run-on-startup select-tag
+
+See also <<run-on-startup,`run-on-startup`>> and <<set-tag,`set-tag`>> in the
+main manual.
