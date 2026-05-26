@@ -175,7 +175,13 @@ protected:
 	const ColorManager& colorman;
 
 private:
+
 	bool try_prepare_query_feed(std::shared_ptr<RssFeed> feed);
+
+public:
+	std::mutex general_state_mutex;
+private:
+	std::unique_lock<std::mutex> general_state_lock;
 };
 
 } // namespace newsboat
