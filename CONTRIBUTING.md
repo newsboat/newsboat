@@ -85,6 +85,13 @@ documentation can be found in `doc/` and related issues can be found under the
 [issue tracker](https://github.com/newsboat/newsboat/labels/docs). New features
 that are added should also be documented.
 
+Published manuals are versioned at `https://newsboat.org/releases/<version>/docs/`.
+For links that should always describe the current development tree (for example
+in tldr-pages or other external projects), use the files on `master` instead:
+
+- <https://github.com/newsboat/newsboat/blob/master/doc/newsboat.asciidoc>
+- <https://github.com/newsboat/newsboat/blob/master/doc/faq.asciidoc>
+
 
 ## Translations
 

@@ -153,9 +153,12 @@ There are numerous ways:
 Support
 -------
 
-* Check out our
-  [documentation](https://newsboat.org/releases/2.43/docs/newsboat.html) and
-  [FAQ](https://newsboat.org/releases/2.43/docs/faq.html)
+* Check out our documentation:
+  ** [Latest release (2.43)](https://newsboat.org/releases/2.43/docs/newsboat.html)
+     and [FAQ](https://newsboat.org/releases/2.43/docs/faq.html)
+  ** [Development version (tracks
+     `master`)](https://github.com/newsboat/newsboat/tree/master/doc) — use this
+     link when you need docs that always match the current repository
 * Report security vulnerabilities to security@newsboat.org. Please encrypt your emails to
   [OpenPGP key 4ED6CD61932B9EBE](https://newsboat.org/newsboat.pgp) if you can.
 * Report bugs and ask questions on
