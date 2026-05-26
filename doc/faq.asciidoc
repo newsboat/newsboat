@@ -35,20 +35,13 @@ If you're using a GUI browser like Firefox, you can do one of two things:
 1. Start your browser beforehand. This way, Newsboat will only wait a fraction
    of a second (while a new tab is being opened).
 
-2. Wrap your browser in a script and use the script as Newsboat's browser.
+2. Put the browser in the background by adding `&` to the <<browser,`browser`>>
+   command (and use `%u` where the URL should go). For example:
 +
-Put this in `~/bin/newsboat-browser.sh`:
+    browser "/usr/bin/firefox %u &"
 +
-    #/bin/sh
-    /usr/bin/firefox "$@" &
-+
-Make it executable:
-+
-    $ chmod +x ~/bin/newsboat-browser.sh
-+
-Then add the following line to your Newsboat's config:
-+
-    browser "~/bin/newsboat-browser.sh"
+Replace `/usr/bin/firefox` with the path to your browser. See
+<<_using_browser,Using Browser>> for more examples.
 
 == I can't connect to TT-RSS, Newsboat says: "Loading URLs from Tiny Tiny RSS...Authentication failed."
 
