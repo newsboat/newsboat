@@ -23,6 +23,12 @@ results. If no match is found, no suggestion will be inserted into the
 commandline. For the <<cmd-set,`set`>> command, the completion also works for configuration
 variable names.
 
+Note that `:set` only changes configuration *variables* (e.g. `reload-time`,
+`browser`). Configuration *commands* such as `color`, `bind`, and `highlight`
+are not variables and cannot be modified with `:set`; set them in the
+configuration file instead. To reload configuration from disk at runtime, use
+`:source` (similar to the `include` configuration command).
+
 In addition, some common key combination such as kbd:[Ctrl+G] (to cancel input),
 kbd:[Ctrl+K] (to delete text from the cursor position to the end of line), kbd:[Ctrl+U] (to
 clear the whole line) and kbd:[Ctrl+W] (to delete the word before the current cursor
