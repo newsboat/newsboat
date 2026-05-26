@@ -26,17 +26,15 @@ and Podboat remove these files when you quit the program, so there is no need
 to copy them anywhere — just be aware of them in case you write scripts that
 work with _cache.db_ or _queue_. By default, lock files are located as follows:
 
-|===
-||dotdir|XDG
+Newsboat::
 
-|Newsboat
-|_~/.newsboat/cache.db.lock_
-|_$XDG_DATA_HOME/newsboat/cache.db.lock_
+* dotdir: _~/.newsboat/cache.db.lock_
+* XDG: _$XDG_DATA_HOME/newsboat/cache.db.lock_
 
-|Podboat
-|_~/.newsboat/pb-lock.pid_
-|_$XDG_DATA_HOME/newsboat/.lock_
-|===
+Podboat::
+
+* dotdir: _~/.newsboat/pb-lock.pid_
+* XDG: _$XDG_DATA_HOME/newsboat/.lock_
 
 Newsboat places the lock file next to the cache file, so if you specify
 <<cache-file,cache-file>> setting or pass `--cache-file` command-line argument,
