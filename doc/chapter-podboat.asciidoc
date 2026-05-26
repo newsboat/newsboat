@@ -9,6 +9,61 @@ to a directory on the local filesystem. Podboat comes with the Newsboat
 package, and features a look and feel very close to the one of Newsboat. It
 also shares the same configuration file.
 
+=== Download States
+
+The <<podlist-format-S,`%S`>> field in <<pb-podlist-format,`podlist-format`>> shows
+the status of each queue entry. The values below match what Podboat displays and
+what is stored in the queue file (when applicable):
+
+*queued*::
+        Default when an entry is added to the queue; waiting to be downloaded.
+
+*downloading*::
+        Download in progress. Can be reached from most other states via
+        <<pb-download,`pb-download`>>.
+
+*ready*::
+        Download finished successfully; the file can be played. Stored in the
+        queue file as `downloaded`. If the target file already exists on disk
+        when the queue is loaded, Podboat may set this state instead of
+        *queued*.
+
+*played*::
+        Set after <<pb-play,`pb-play`>> runs the <<player,`player`>> command and
+        returns, regardless of whether playback completed or the player exited
+        with an error. Stored in the queue file as `played`. There is no
+        built-in way to revert to *ready* except re-downloading or editing the
+        queue file manually.
+
+*finished*::
+        Set manually with <<pb-mark-as-finished,`pb-mark-as-finished`>> (only from
+        *played*). Marks that you are done with the entry. Stored in the queue
+        file as `finished`. <<pb-purge,`pb-purge`>> removes *finished* entries from
+        the queue.
+
+*failed*::
+        Download failed, or a partial file was found on disk without a complete
+        download.
+
+*cancelled*::
+        User cancelled an in-progress download with <<pb-cancel,`pb-cancel`>>.
+
+*deleted*::
+        User marked the entry for removal with <<pb-delete,`pb-delete`>>. Removed
+        from the queue on exit or by <<pb-purge,`pb-purge`>>.
+
+*missing*::
+        The expected file is not on disk. Stored in the queue file as `missing`.
+
+*rename failed*::
+        Download completed but renaming the partial file to the final filename
+        failed.
+
+*ready* vs *played* vs *finished*::
+        *ready* means the file is on disk and can be played. *played* means the
+        player was started at least once. *finished* is an explicit mark that
+        you are done with the entry (for example after fully listening to it).
+
 Podcasts that have been downloaded but haven't been played yet remain in the
 queue but are marked as downloaded. You can remove them by purging them from
 the queue with the kbd:[Shift+P] key. After you've played a file and close Podboat, it
