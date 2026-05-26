@@ -986,7 +986,7 @@ the text. If multiple highlight matches overlap, the style of the later
 specified highlight rule will be applied. `<fgcolor>` and `<bgcolor>` specify
 the foreground color resp. the background color of the matches. You can also
 specify 0 or more attributes. You can find a list of valid colors and
-attributes in the <<_configuring_colors>>.
+attributes in the <<_colors,Colors>> section.
 
 Examples for possible highlighting configurations are:
 

@@ -21,8 +21,7 @@ line to your _urls_ file:
 
 	"query:Unread Articles:unread = \"yes\""
 
-For details, refer to the link:newsboat.html#_query_feeds[documentation on
-query feeds].
+For details, see <<_query_feeds,Query Feeds>>.
 
 == After I open a link in the browser, Newsboat stays unresponsive until the browser is closed
 
