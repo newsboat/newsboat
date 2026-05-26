@@ -51,7 +51,7 @@ msgstr "importar arxiu OPML"
 
 #: newsboat.cpp:57
 #, fuzzy
-msgid "read RSS feed URLs from <file>"
+msgid "read feed URLs from <file>"
 msgstr "llegir fonts URLs de fonts RSS desde <arxiu url>"
 
 #: newsboat.cpp:63

@@ -54,7 +54,7 @@ void print_usage(const std::string& argv0, const ConfigPaths& configpaths)
 			'u',
 			"url-file",
 			_s("<file>"),
-			_s("read RSS feed URLs from <file>")
+			_s("read feed URLs from <file>")
 		},
 		{
 			'c',

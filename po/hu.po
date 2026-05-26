@@ -52,7 +52,7 @@ msgstr "OPML fájl importálása"
 
 #: newsboat.cpp:57
 #, fuzzy
-msgid "read RSS feed URLs from <file>"
+msgid "read feed URLs from <file>"
 msgstr "RSS források URL-jeinek olvasása <urlfile>-ból"
 
 #: newsboat.cpp:63

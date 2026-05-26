@@ -11,7 +11,7 @@ usage: ./newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> .
     -e, --export-to-opml            export OPML feed to stdout
     -r, --refresh-on-start          refresh feeds on start
     -i, --import-from-opml=<file>   import OPML file
-    -u, --url-file=<urlfile>        read RSS feed URLs from <urlfile>
+    -u, --url-file=<urlfile>        read feed URLs from <urlfile>
     -c, --cache-file=<cachefile>    use <cachefile> as cache file
     -C, --config-file=<configfile>  read configuration from <configfile>
     -X, --vacuum                    compact the cache

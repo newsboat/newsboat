@@ -50,7 +50,7 @@ msgid "import OPML file"
 msgstr "OPML-Datei importieren"
 
 #: newsboat.cpp:57
-msgid "read RSS feed URLs from <file>"
+msgid "read feed URLs from <file>"
 msgstr "RSS-Feed-URLs aus <datei> lesen"
 
 #: newsboat.cpp:63

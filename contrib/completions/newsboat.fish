@@ -2,7 +2,7 @@ complete -c newsboat -s e -l export-to-opml -d "export OPML feed to stdout"
 complete -c newsboat -l export-to-opml2 -d "export OPML 2.0 feed including tags to stdout"
 complete -c newsboat -s r -l refresh-on-start -d "refresh feeds on start"
 complete -c newsboat -s i -l import-from-opml -d "import OPML file" -r
-complete -c newsboat -s u -l url-file -d "read RSS feed URLs from file" -r
+complete -c newsboat -s u -l url-file -d "read feed URLs from file" -r
 complete -c newsboat -s c -l cache-file -d "use specified file as cache file" -r
 complete -c newsboat -s C -l config-file -d "use specified file as config file" -r
 complete -c newsboat -l queue-file -d "use specified file as podcast queue file" -r
