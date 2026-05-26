@@ -336,6 +336,16 @@ std::string utils::retrieve_url(const std::string& url,
 
 std::string utils::run_program(const char* argv[], const std::string& input)
 {
+	bool spawned = false;
+	int exit_code = 0;
+	return run_program_detailed(argv, input, spawned, exit_code);
+}
+
+std::string utils::run_program_detailed(const char* argv[],
+	const std::string& input,
+	bool& spawned,
+	int& exit_code)
+{
 	std::vector<rust::Str> slices;
 	for (; *argv; ++argv) {
 		slices.emplace_back(*argv);
@@ -343,7 +353,10 @@ std::string utils::run_program(const char* argv[], const std::string& input)
 
 	const auto rs_argv = rust::Slice<const rust::Str>(slices.data(), slices.size());
 
-	return std::string(utils::bridged::run_program(rs_argv, input));
+	std::string output;
+	spawned = utils::bridged::run_program_detailed(
+			rs_argv, input, output, exit_code);
+	return output;
 }
 
 Filepath utils::resolve_tilde(const Filepath& path)

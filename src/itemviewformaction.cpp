@@ -127,6 +127,7 @@ void ItemViewFormAction::prepare()
 				}
 			}
 
+			std::string renderer_error;
 			std::tie(formatted_text, num_lines) =
 				item_renderer::to_stfl_list(
 					// cfg can't be nullptr because that's a long-lived object
@@ -137,7 +138,11 @@ void ItemViewFormAction::prepare()
 					window_width,
 					&rxman,
 					Dialog::Article,
-					links);
+					links,
+					&renderer_error);
+			if (!renderer_error.empty()) {
+				set_status(renderer_error);
+			}
 		}
 
 		textview.stfl_replace_lines(num_lines, formatted_text);

@@ -52,7 +52,8 @@ std::pair<std::string, size_t> to_stfl_list(
 	unsigned int window_width,
 	RegexManager* rxman,
 	Dialog location,
-	Links& links);
+	Links& links,
+	std::string* renderer_error = nullptr);
 
 /// \brief Returns RssItem's text source as STFL list.
 ///

@@ -90,6 +90,12 @@ mod bridged {
         fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool;
 
         fn run_program(argv: &[&str], input: String) -> String;
+        fn run_program_detailed(
+            argv: &[&str],
+            input: String,
+            output: &mut String,
+            exit_code: &mut i32,
+        ) -> bool;
 
         fn translit(tocode: &str, fromcode: &str) -> String;
         fn utf8_to_locale(text: &str) -> Vec<u8>;
@@ -239,6 +245,26 @@ fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool {
 
         None => {
             // We don't assign anything to `result` because it won't be used on the other side.
+            false
+        }
+    }
+}
+
+fn run_program_detailed(
+    argv: &[&str],
+    input: String,
+    output: &mut String,
+    exit_code: &mut i32,
+) -> bool {
+    let (stdout, status) = utils::run_program_with_status(argv, input);
+    *output = stdout;
+    match status {
+        Some(code) => {
+            *exit_code = code;
+            true
+        }
+        None => {
+            *exit_code = -1;
             false
         }
     }

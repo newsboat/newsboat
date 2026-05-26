@@ -1,8 +1,10 @@
 #include "itemrenderer.h"
 
+#include <optional>
 #include <set>
 #include <sstream>
 
+#include "config.h"
 #include "configcontainer.h"
 #include "htmlrenderer.h"
 #include "logger.h"
@@ -147,7 +149,7 @@ void prepare_enclosure(RssItem& item,
 	}
 }
 
-void render_html(
+std::optional<std::string> render_html(
 	ConfigContainer& cfg,
 	const std::string& source,
 	std::vector<std::pair<LineType, std::string>>& lines,
@@ -159,31 +161,51 @@ void render_html(
 	if (renderer == "internal"_path) {
 		HtmlRenderer rnd(raw);
 		rnd.render(source, lines, thelinks, url);
-	} else {
-		const char* argv[4];
-		argv[0] = "/bin/sh";
-		argv[1] = "-c";
-		const std::string renderer_locale_string = renderer.to_locale_string();
-		argv[2] = renderer_locale_string.c_str();
-		argv[3] = nullptr;
-		LOG(Level::DEBUG,
-			"item_renderer::render_html: source = %s",
-			source);
-		LOG(Level::DEBUG,
-			"item_renderer::render_html: html-renderer = %s",
-			argv[2]);
-
-		const std::string output = utils::run_program(argv, source);
-		std::istringstream is(output);
-		std::string line;
-		while (!is.eof()) {
-			getline(is, line);
-			if (!raw) {
-				line = StflRichText::from_plaintext(line).stfl_quoted();
-			}
-			lines.push_back(std::make_pair(LineType::softwrappable, line));
-		}
+		return std::nullopt;
 	}
+
+	const char* argv[4];
+	argv[0] = "/bin/sh";
+	argv[1] = "-c";
+	const std::string renderer_locale_string = renderer.to_locale_string();
+	argv[2] = renderer_locale_string.c_str();
+	argv[3] = nullptr;
+	LOG(Level::DEBUG,
+		"item_renderer::render_html: source = %s",
+		source);
+	LOG(Level::DEBUG,
+		"item_renderer::render_html: html-renderer = %s",
+		argv[2]);
+
+	const std::string renderer_display = cfg.get_configvalue("html-renderer");
+	bool spawned = false;
+	int exit_code = 0;
+	const std::string output = utils::run_program_detailed(
+			argv, source, spawned, exit_code);
+
+	if (!spawned) {
+		return strprintf::fmt(
+				_("Error: could not run html-renderer (%s)"),
+				renderer_display);
+	}
+
+	if (exit_code != 0) {
+		return strprintf::fmt(
+				_("Error: html-renderer failed with exit code %d"),
+				exit_code);
+	}
+
+	std::istringstream is(output);
+	std::string line;
+	while (!is.eof()) {
+		getline(is, line);
+		if (!raw) {
+			line = StflRichText::from_plaintext(line).stfl_quoted();
+		}
+		lines.push_back(std::make_pair(LineType::softwrappable, line));
+	}
+
+	return std::nullopt;
 }
 
 void item_renderer::render_plaintext(
@@ -270,7 +292,8 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	unsigned int window_width,
 	RegexManager* rxman,
 	Dialog location,
-	Links& links)
+	Links& links,
+	std::string* renderer_error)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
 	const auto item_description = item.description();
@@ -282,7 +305,10 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	const auto body = utils::utf8_to_locale(item_description.text);
 
 	if (should_render_as_html(item_description.mime)) {
-		render_html(cfg, body, lines, links, baseurl, false);
+		const auto error = render_html(cfg, body, lines, links, baseurl, false);
+		if (error.has_value() && renderer_error != nullptr) {
+			*renderer_error = error.value();
+		}
 	} else {
 		render_plaintext(body, lines, OutputFormat::StflRichText);
 	}

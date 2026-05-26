@@ -467,18 +467,22 @@ pub fn run_command(cmd: &str, param: &str) {
     }
 }
 
-pub fn run_program(cmd_with_args: &[&str], input: String) -> String {
+/// Returns captured stdout and the child exit code.
+/// `exit_code` is `None` if the process could not be spawned or its output could not be read.
+pub fn run_program_with_status(cmd_with_args: &[&str], input: String) -> (String, Option<i32>) {
     if cmd_with_args.is_empty() {
-        return String::new();
+        return (String::new(), Some(0));
     }
 
-    Command::new(cmd_with_args[0])
+    let child = match Command::new(cmd_with_args[0])
         .args(&cmd_with_args[1..])
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::null())
         .spawn()
-        .map_err(|error| {
+    {
+        Ok(child) => child,
+        Err(error) => {
             log!(
                 Level::Debug,
                 "utils::run_program: spawning a child for \"{:?}\" \
@@ -487,32 +491,41 @@ pub fn run_program(cmd_with_args: &[&str], input: String) -> String {
                 &input,
                 error
             );
-        })
-        .and_then(|mut child| {
-            if let Some(mut stdin) = child.stdin.take() {
-                std::thread::spawn(move || {
-                    if let Err(error) = stdin.write_all(input.as_bytes()) {
-                        log!(
-                            Level::Debug,
-                            "utils::run_program: failed to write to child's stdin: {}",
-                            error
-                        );
-                    }
-                });
-            }
+            return (String::new(), None);
+        }
+    };
 
-            child
-                .wait_with_output()
-                .map_err(|error| {
-                    log!(
-                        Level::Debug,
-                        "utils::run_program: failed to read child's stdout: {}",
-                        error
-                    );
-                })
-                .map(|output| String::from_utf8_lossy(&output.stdout).into_owned())
-        })
-        .unwrap_or_else(|_| String::new())
+    let mut child = child;
+    if let Some(mut stdin) = child.stdin.take() {
+        std::thread::spawn(move || {
+            if let Err(error) = stdin.write_all(input.as_bytes()) {
+                log!(
+                    Level::Debug,
+                    "utils::run_program: failed to write to child's stdin: {}",
+                    error
+                );
+            }
+        });
+    }
+
+    match child.wait_with_output() {
+        Ok(output) => (
+            String::from_utf8_lossy(&output.stdout).into_owned(),
+            output.status.code(),
+        ),
+        Err(error) => {
+            log!(
+                Level::Debug,
+                "utils::run_program: failed to read child's stdout: {}",
+                error
+            );
+            (String::new(), None)
+        }
+    }
+}
+
+pub fn run_program(cmd_with_args: &[&str], input: String) -> String {
+    run_program_with_status(cmd_with_args, input).0
 }
 
 pub fn make_title(rs_str: &str) -> String {
@@ -1702,6 +1715,13 @@ mod tests {
             run_program(&["echo", "-n", "hello world"], String::new()),
             "hello world"
         );
+    }
+
+    #[test]
+    fn t_run_program_with_status_reports_exit_code() {
+        let (output, exit_code) = run_program_with_status(&["sh", "-c", "exit 42"], String::new());
+        assert_eq!(output, "");
+        assert_eq!(exit_code, Some(42));
     }
 
     #[test]

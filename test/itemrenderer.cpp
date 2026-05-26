@@ -786,3 +786,49 @@ TEST_CASE("item_renderer::render_plaintext() splits text on newlines", "[item_re
 		}, OutputFormat::PlainText);
 	}
 }
+
+TEST_CASE("item_renderer::to_stfl_list() reports html-renderer failures",
+	"[item_renderer]")
+{
+	test_helpers::TzEnvVar tzEnv;
+	tzEnv.set("UTC");
+
+	ConfigContainer cfg;
+	RegexManager rxman;
+	cfg.set_configvalue("text-width", "80");
+
+	auto rsscache = Cache::in_memory(cfg);
+
+	std::shared_ptr<RssItem> item;
+	std::shared_ptr<RssFeed> feed;
+	std::tie(item, feed) = create_test_item(rsscache.get());
+	item->set_description("<p>Hello, world!</p>", "text/html");
+
+	SECTION("non-zero exit code") {
+		cfg.set_configvalue("html-renderer", "exit 42");
+
+		Links links;
+		std::string renderer_error;
+		item_renderer::to_stfl_list(cfg,
+			*item,
+			80,
+			80,
+			&rxman,
+			Dialog::Article,
+			links,
+			&renderer_error);
+
+		REQUIRE(renderer_error.find("exit code 42") != std::string::npos);
+	}
+
+	SECTION("spawn failure") {
+		cfg.set_configvalue("html-renderer", "exit 0");
+		const char* argv[2];
+		argv[0] = "/nonexistent-shell-for-newsboat-test";
+		argv[1] = nullptr;
+		bool spawned = false;
+		int exit_code = 0;
+		utils::run_program_detailed(argv, "", spawned, exit_code);
+		REQUIRE_FALSE(spawned);
+	}
+}

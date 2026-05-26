@@ -77,6 +77,14 @@ std::string retrieve_url(const std::string& url,
 	const HTTPMethod method = HTTPMethod::GET);
 std::string run_program(const char* argv[], const std::string& input);
 
+/// Runs a program and returns its stdout. If \a spawned is set to false, the
+/// process could not be started. Otherwise, \a exit_code contains the child's
+/// exit status.
+std::string run_program_detailed(const char* argv[],
+	const std::string& input,
+	bool& spawned,
+	int& exit_code);
+
 Filepath resolve_tilde(const Filepath&);
 Filepath resolve_relative(const Filepath&, const Filepath&);
 std::string replace_all(std::string str,
