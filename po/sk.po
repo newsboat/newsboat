@@ -1458,7 +1458,11 @@ msgstr "Zobraziť adresy URL v aktuálnom článku"
 msgid "Clear current tag"
 msgstr "Vymazať aktuálnu značku (tag)"
 
-#: src/keymap.cpp:261 src/keymap.cpp:268
+#: src/keymap.cpp:261
+msgid "Alias for select-tag"
+msgstr ""
+
+#: src/keymap.cpp:268
 msgid "Select tag"
 msgstr "Vybrať značku (tag)"
 

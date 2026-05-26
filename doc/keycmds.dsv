@@ -24,7 +24,8 @@ toggle-article-read||kbd:[Shift+N]||Toggle the read flag for the currently selec
 toggle-show-read-feeds||kbd:[L]||Toggle whether read feeds should be shown in the feed list.
 show-urls||kbd:[U]||Show all URLs in the article in a list (similar to urlview).
 clear-tag||kbd:[Ctrl+T]||Clear current tag.
-set-tag||kbd:[T]||Select tag.
+set-tag||kbd:[T]||Alias for <<select-tag,`select-tag`>>.
+select-tag||kbd:[T]||Select tag.
 open-search||kbd:[/]||Open the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
 goto-url||kbd:[#]||Open the URL dialog and then open a specified URL in the browser.
 one||kbd:[1]||Open URL 1 in the browser.

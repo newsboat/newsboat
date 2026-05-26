@@ -258,7 +258,7 @@ static const std::vector<OpDesc> opdescs = {
 		OP_SETTAG,
 		"set-tag",
 		KeyCombination("t"),
-		translatable("Select tag"),
+		translatable("Alias for select-tag"),
 		KM_FEEDLIST
 	},
 	{

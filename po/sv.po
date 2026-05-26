@@ -1439,7 +1439,11 @@ msgstr "Visa URL:er i nuvarande artikel"
 msgid "Clear current tag"
 msgstr "Nollställ nuvarande tagg"
 
-#: src/keymap.cpp:261 src/keymap.cpp:268
+#: src/keymap.cpp:261
+msgid "Alias for select-tag"
+msgstr ""
+
+#: src/keymap.cpp:268
 msgid "Select tag"
 msgstr "Välj tagg"
 
