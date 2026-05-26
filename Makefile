@@ -13,8 +13,10 @@ CPPCHECK_JOBS?=5
 # setup on the test machine.
 NEWSBOAT_RUN_IGNORED_TESTS?=0
 
-# compiler
-CXX?=c++
+# compiler: use `c++` from PATH when Make's built-in default (g++) was not overridden
+ifeq ($(origin CXX), default)
+CXX := c++
+endif
 # Compiler for building executables meant to be run on the
 # host system during cross compilation
 CXX_FOR_BUILD?=$(CXX)
