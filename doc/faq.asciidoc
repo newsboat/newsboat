@@ -142,3 +142,14 @@ always possible to represent the _urls_ file as a hierarchy.
 However, if your feeds have one tag each, you can use
 https://github.com/newsboat/newsboat/blob/master/contrib/exportOPMLWithTags.py[_contrib/exportOPMLWithTags.py_
 script] which will export in a hierarchy your feed reader should understand.
+
+== How can I open Newsboat with a specific tag already selected?
+
+Use the link:newsboat.html#run-on-startup[`run-on-startup`] configuration command
+(available since Newsboat 2.21) with the `set-tag` operation:
+
+	run-on-startup set-tag "space"
+
+Replace `"space"` with the tag you want. Newsboat will start with that tag
+applied. Press _kbd:[T]_ to choose a different tag, or _kbd:[Ctrl+T]_ to clear
+the current tag.
