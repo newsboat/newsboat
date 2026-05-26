@@ -946,6 +946,17 @@ articles via the filter language.
 If an article contains one or more flags, it is marked with an "!" in the
 article list. In the article view, all flags (if available) are listed.
 
+To apply a fixed set of flags from a <<bind,`bind`>> binding or <<macro,`macro`>>
+without opening the flag editor, pass the flags as an argument to
+<<edit-flags,`edit-flags`>>. For example, to star articles in Tiny Tiny RSS with
+<<ttrss-flag-star,`ttrss-flag-star`>> set to `"s"`:
+
+    bind s articlelist edit-flags s
+
+This replaces the article's flags with exactly `s`; it does not toggle flags on
+and off. Use the interactive editor (kbd:[Ctrl+E]) if you need to add or remove
+individual flags.
+
 === Commandline Commands
 
 Newsboat comes with a `-x` option that indicates that commands added as arguments

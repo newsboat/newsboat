@@ -55,7 +55,7 @@ set-filter||kbd:[Shift+F]||Set a filter.
 select-filter||kbd:[F]||Select a predefined filter.
 clear-filter||kbd:[Ctrl+F]||Clear currently set filter.
 bookmark||kbd:[Ctrl+B]||Bookmark currently selected article or URL.
-edit-flags||kbd:[Ctrl+E]||Edit the flags of the currently selected article.
+edit-flags||kbd:[Ctrl+E]||Edit the flags of the currently selected article. When invoked from a <<bind,`bind`>> binding or <<macro,`macro`>>, an optional argument sets the flags to that string, replacing the current flags.
 next-unread-feed||kbd:[Ctrl+N]||Go to the next feed with unread articles. This only works from the article list.
 prev-unread-feed||kbd:[Ctrl+P]||Go to the previous feed with unread articles. This only works from the article list.
 next-feed||kbd:[J]||Go to the next feed. This only works from the article list.
