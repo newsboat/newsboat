@@ -378,12 +378,13 @@ Currently, the following elements are supported:
 - `article`: the article text
 - `end-of-text-marker`: filler lines (~) below blocks of text
 
-The default color configuration of Newsboat looks like this:
+The default color configuration of Newsboat looks like this (see
+`src/colormanager.cpp` for the authoritative list):
 
-	color background          white   black
-	color listnormal          white   black
+	color background          default default
+	color listnormal          default default
 	color listfocus           yellow  blue   bold
-	color listnormal_unread   white   black  bold
+	color listnormal_unread   default default bold
 	color listfocus_unread    yellow  blue   bold
 	color title               yellow  blue   bold
 	color info                yellow  blue   bold
@@ -391,4 +392,5 @@ The default color configuration of Newsboat looks like this:
 	color hint-keys-delimiter white   blue
 	color hint-separator      white   blue   bold
 	color hint-description    white   blue
-	color article             white   black
+	color article             default default
+	color end-of-text-marker  blue    default bold
