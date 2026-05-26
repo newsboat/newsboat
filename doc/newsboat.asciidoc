@@ -1044,6 +1044,65 @@ opens the list of open dialogs. From there, the user can switch to another
 dialog by selecting the appropriate entry and pressing kbd:[Enter], or can close
 open dialogs by selecting them and pressing kbd:[Ctrl+X].
 
+=== Operation Arguments
+
+Some operations accept optional arguments. When invoked from a <<bind,`bind`>>
+binding or a <<macro,`macro`>>, arguments are appended after the operation
+name. If an argument is omitted, Newsboat usually asks interactively; in some
+cases the prompt is pre-filled with the current value (for example, the current
+flags when editing flags).
+
+Arguments that contain spaces must be quoted. Examples:
+
+  macro x toggle-article-read "read"
+  macro s edit-flags s
+
+The following operations accept arguments:
+
+toggle-article-read::
+        Optional argument `read` or `unread` sets the read flag to that state
+        instead of toggling it.
+
+edit-flags::
+        Optional argument sets the article's flags to the given string,
+        replacing the current flags. When omitted, Newsboat opens a prompt
+        pre-filled with the current flags.
+
+cmdline::
+        Optional argument pre-fills the command line.
+
+open-search::
+        Optional argument runs the search immediately instead of opening the
+        search dialog.
+
+goto-title::
+        Optional argument jumps to the first item whose title contains the
+        given string (case-insensitive).
+
+select-filter::
+        Optional argument selects the named predefined filter instead of
+        opening the filter picker.
+
+set-filter::
+        Optional argument sets the filter expression immediately instead of
+        opening a prompt.
+
+save::
+        Optional argument saves the article to the given file path instead of
+        opening the file browser.
+
+pipe-to::
+        Optional argument pipes the article to the given shell command instead
+        of opening a prompt.
+
+edit-urls::
+        Optional argument runs the given command to edit the URLs file. See
+        <<edit-urls,`edit-urls`>> for placeholder details.
+
+Arguments are only supported when the operation is invoked from a <<bind,`bind`>>
+binding or a <<macro,`macro`>>. Key bindings created with <<bind-key,`bind-key`>>
+execute the operation without arguments.
+
 === Macro Support
 
 Bindings created with <<bind-key,`bind-key`>> can only execute a single
