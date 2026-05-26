@@ -379,6 +379,16 @@ msgstr "Otwieranie pamięci podręcznej..."
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Błąd: otwarcie pliku pamięci podręcznej '%s' nieudane: %s"
 
+#: src/itemrenderer.cpp:188
+#, fuzzy, c-format
+msgid "Error: could not run html-renderer (%s)"
+msgstr "Błąd: nie udało się oznaczyć kanału jako przeczytanego: %s"
+
+#: src/itemrenderer.cpp:194
+#, c-format
+msgid "Error: html-renderer failed with exit code %d"
+msgstr ""
+
 #: src/controller.cpp:259
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr "BŁĄD: Musisz ustawić `cookie-cache` aby korzystać z NewsBlur.\n"

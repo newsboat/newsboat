@@ -391,6 +391,16 @@ msgstr "Ouverture du cache..."
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Erreur : l'ouverture du fichier de cache `%s' a échoué : %s"
 
+#: src/itemrenderer.cpp:188
+#, fuzzy, c-format
+msgid "Error: could not run html-renderer (%s)"
+msgstr "Erreur : Le fil n'a pu être marqué comme étant lu : %s"
+
+#: src/itemrenderer.cpp:194
+#, c-format
+msgid "Error: html-renderer failed with exit code %d"
+msgstr ""
+
 #: src/controller.cpp:259
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr ""

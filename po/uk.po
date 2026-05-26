@@ -381,6 +381,16 @@ msgstr "Відкриваю кеш..."
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Помилка: при відкритті файлу кеша `%s' виникла %s"
 
+#: src/itemrenderer.cpp:188
+#, fuzzy, c-format
+msgid "Error: could not run html-renderer (%s)"
+msgstr "Помилка: не можу позначити тему: %s як прочитану"
+
+#: src/itemrenderer.cpp:194
+#, c-format
+msgid "Error: html-renderer failed with exit code %d"
+msgstr ""
+
 #: src/controller.cpp:259
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr ""

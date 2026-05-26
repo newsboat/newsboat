@@ -383,6 +383,16 @@ msgstr "Открываю кэш..."
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Ошибка: попытка открыть файл кэша `%s' завершилась неудачей: %s"
 
+#: src/itemrenderer.cpp:188
+#, fuzzy, c-format
+msgid "Error: could not run html-renderer (%s)"
+msgstr "Ошибка: невозможно отметить ленту как прочитанную: %s"
+
+#: src/itemrenderer.cpp:194
+#, c-format
+msgid "Error: html-renderer failed with exit code %d"
+msgstr ""
+
 #: src/controller.cpp:259
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr "Ошибка: для пользования NewsBlur нужно задать `cookie-cache`.\n"

@@ -370,6 +370,16 @@ msgstr "打开缓存......"
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "错误：打开缓存文件`%s'失败：%s"
 
+#: src/itemrenderer.cpp:188
+#, fuzzy, c-format
+msgid "Error: could not run html-renderer (%s)"
+msgstr "错误：无法将种子标记为已读：%s"
+
+#: src/itemrenderer.cpp:194
+#, c-format
+msgid "Error: html-renderer failed with exit code %d"
+msgstr ""
+
 #: src/controller.cpp:259
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr "错误：你必须设置`cookie-cache`后才能使用 NewsBlur。\n"

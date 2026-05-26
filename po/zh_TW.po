@@ -378,6 +378,16 @@ msgstr "打開快取中..."
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "錯誤:打開快取檔案`%s' 失敗:%s"
 
+#: src/itemrenderer.cpp:188
+#, fuzzy, c-format
+msgid "Error: could not run html-renderer (%s)"
+msgstr "錯誤：無法將來源%s標記為已讀"
+
+#: src/itemrenderer.cpp:194
+#, c-format
+msgid "Error: html-renderer failed with exit code %d"
+msgstr ""
+
 #: src/controller.cpp:259
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr ""
