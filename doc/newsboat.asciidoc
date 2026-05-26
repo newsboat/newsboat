@@ -344,7 +344,12 @@ you can configure in Newsboat regarding NewsBlur.
 
 NewsBlur's folders are converted into Newsboat tags. You can select and
 filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
-NewsBlur's starring/saving feature is currently unsupported by Newsboat.
+
+Starred/saved articles (NewsBlur's "saved" items) are *not* supported by
+Newsboat: you cannot sync NewsBlur stars into Newsboat, and there is no
+`newsblur-flag-star` setting. Other services such as <<_freshrss,FreshRSS>> and
+<<_miniflux,Miniflux>> document how to map flags to starring when the feature is
+available.
 
 === FeedHQ
 
