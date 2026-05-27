@@ -250,6 +250,7 @@ int main(int argc, char* argv[])
 
 	setlocale(LC_CTYPE, "");
 	setlocale(LC_MESSAGES, "");
+	setlocale(LC_TIME, "");
 
 	textdomain(PACKAGE);
 	bindtextdomain(PACKAGE, LOCALEDIR);
