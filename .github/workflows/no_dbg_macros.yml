@@ -3,8 +3,8 @@ name: "No dbg! macros in Rust code"
 on:
   push:
     paths: &included_paths
-      - **.rs
-      - .github/**
+      - '**.rs'
+      - '.github/**'
   pull_request:
     paths: *included_paths
 
