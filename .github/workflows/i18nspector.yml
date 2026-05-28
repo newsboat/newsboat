@@ -3,10 +3,9 @@ name: .po files
 on:
   push:
     paths: &included_paths
-      - '.github/workflows/*'
-      - 'docker/*'
-      - 'docker/**/*'
-      - 'po/*.{po,pot}'
+      - .github/workflows/**
+      - docker/**
+      - po/*.{po,pot}'
   pull_request:
     paths: *included_paths
 

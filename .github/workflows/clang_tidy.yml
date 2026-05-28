@@ -3,16 +3,10 @@ name: "clang-tidy (Clang 21, Ubuntu 25.10)"
 on:
   push:
     paths-ignore: &ignored_paths
-      - contrib/*
-      - contrib/**/*
-      - doc/*
-      - doc/**/*
-      - docker/*
-      - docker/**/*
-      - po/*
-      - po/**/*
-      - snap/*
-      - snap/**/*
+      - contrib/**
+      - doc/**
+      - po/**
+      - snap/**
   pull_request:
     paths_ignore: *ignored_paths
 

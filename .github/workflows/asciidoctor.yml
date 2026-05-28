@@ -3,11 +3,9 @@ name: Asciidoctor with warnings-as-errors
 on:
   push:
     paths: &included_paths
-      - '.github/workflows/*'
-      - 'doc/*'
-      - 'doc/**/*'
-      - 'docker/*'
-      - 'docker/**/*'
+      - .github/workflows/**
+      - doc/**
+      - docker/**
   pull_request:
     paths: *included_paths
 

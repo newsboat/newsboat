@@ -3,16 +3,10 @@ name: Sanitizers
 on:
   push:
     paths-ignore: &ignored_paths
-      - contrib/*
-      - contrib/**/*
-      - doc/*
-      - doc/**/*
-      - docker/remote-testing/*
-      - docker/remote-testing/**/*
-      - po/*
-      - po/**/*
-      - snap/*
-      - snap/**/*
+      - contrib/**
+      - doc/**
+      - po/**
+      - snap/**
   pull_request:
     paths_ignore: *ignored_paths
 
