@@ -131,12 +131,31 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 	}
 
 	ret = curl_easy_perform(easyhandle.ptr());
+	LOG(Level::DEBUG,
+		"Parser::parse_url: ret = %d (%s)",
+		ret,
+		curl_easy_strerror(ret));
+
+	long status;
+	CURLcode infoOk =
+		curl_easy_getinfo(easyhandle.ptr(), CURLINFO_RESPONSE_CODE, &status);
+	// Only verifying the infoOk flag is not enough. In case of some errors,
+	// such as ret == CURLE_COULDNT_RESOLVE_HOST, we obviously did not receive
+	// an HTTP response.
+	if (infoOk == CURLE_OK && status > 0) {
+		LOG(Level::DEBUG,
+			"Parser::parse_url: got HTTP %" PRIi64 " response",
+			// `status` is `long`, which is at least 32 bits, and on x86_64
+			// it's actually 64 bits. Thus casting to `int64_t` is either
+			// a no-op, or an up-cast which is always safe.
+			static_cast<int64_t>(status));
+	}
 
 	const auto etag_headers = curlHeaderHandler->get_header_lines("ETag");
 	if (etag_headers.size() >= 1) {
 		std::string etag = etag_headers.back();
 		utils::trim(etag);
-		LOG(Level::DEBUG, "parse_url: got etag %s", etag);
+		LOG(Level::DEBUG, "Parser::parse_url: got etag %s", etag);
 		et = etag;
 	}
 
@@ -145,10 +164,11 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 		const std::string header_value = last_modified_headers.back();
 		time_t time = curl_getdate(header_value.c_str(), nullptr);
 		if (time == -1) {
-			LOG(Level::DEBUG, "parse_url: last-modified %s (curl_getdate FAILED)", header_value);
+			LOG(Level::DEBUG,
+				"Parser::parse_url: last-modified %s (curl_getdate FAILED)", header_value);
 		} else {
 			LOG(Level::DEBUG,
-				"parse_url: got last-modified %s (%" PRId64 ")",
+				"Parser::parse_url: got last-modified %s (%" PRId64 ")",
 				header_value,
 				// On GCC, `time_t` is `long int`, which is at least 32 bits.
 				// On x86_64, it's 64 bits. Thus, this cast is either a no-op,
@@ -163,7 +183,7 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 	if (content_type_headers.size() >= 1) {
 		std::string header_value = content_type_headers.back();
 		utils::trim(header_value);
-		LOG(Level::DEBUG, "parse_url: got content type %s", header_value);
+		LOG(Level::DEBUG, "Parser::parse_url: got content type %s", header_value);
 		const auto input = std::vector<uint8_t>(header_value.begin(), header_value.end());
 		charset_content_type = charencoding::charset_from_content_type_header(input);
 	}
@@ -173,18 +193,9 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 		curl_slist_free_all(custom_headers);
 	}
 
-	LOG(Level::DEBUG,
-		"rsspp::Parser::parse_url: ret = %d (%s)",
-		ret,
-		curl_easy_strerror(ret));
-
-	long status;
-	CURLcode infoOk =
-		curl_easy_getinfo(easyhandle.ptr(), CURLINFO_RESPONSE_CODE, &status);
-
 	if (ret != 0) {
 		LOG(Level::ERROR,
-			"rsspp::Parser::parse_url: curl_easy_perform returned "
+			"Parser::parse_url: curl_easy_perform returned "
 			"err "
 			"%d: %s",
 			ret,
@@ -196,7 +207,7 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 					curl_easy_strerror(ret),
 					// `status` is `long`, which is at least 32 bits, and on x86_64
 					// it's actually 64 bits. Thus casting to `int64_t` is either
-					// a no-op, or an up-cast which are always safe.
+					// a no-op, or an up-cast which is always safe.
 					static_cast<int64_t>(status));
 		} else {
 			msg = curl_easy_strerror(ret);

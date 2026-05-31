@@ -552,13 +552,13 @@ bool ItemListFormAction::process_operation(Operation op,
 
 					if (sortorder == "date-desc") {
 						LOG(Level::DEBUG,
-							"ItemListFormAction:: "
+							"ItemListFormAction: "
 							"reset itempos to last");
 						list.set_position(visible_items.size() - 1);
 					}
 					if (sortorder == "date-asc") {
 						LOG(Level::DEBUG,
-							"ItemListFormAction:: "
+							"ItemListFormAction: "
 							"reset itempos to first");
 						list.set_position(0);
 					}
