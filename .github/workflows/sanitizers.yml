@@ -1,0 +1,225 @@
+name: Sanitizers
+
+on:
+  push:
+    paths-ignore: &ignored_paths
+      - contrib/**
+      - doc/**
+      - po/**
+      - snap/**
+  pull_request:
+    paths_ignore: *ignored_paths
+
+jobs:
+  asan_cpp:
+    name: AddressSanitizer C++ (Clang 21, Ubuntu 25.10)
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v4
+
+      # We need to pass UID and GID into `docker buildx build`, but the action
+      # doesn't support assigning build args from shell commands. This step is
+      # a workaround: it sets environment variables which are then referenced
+      # in the Docker build args
+      - name: Set UID and GID environment variables
+        run: |
+          echo "UID=$(id -u)" >> $GITHUB_ENV
+          echo "GID=$(id -g)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v7
+        with:
+          file: docker/ubuntu_25.10-build-tools.dockerfile
+          build-args: |
+            # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
+            # sanitizer's reports. ASAN library is in libclang-rt-dev
+            cxx_package=clang-21 llvm-21 libclang-rt-21-dev
+            cc=clang-21
+            cxx=clang++-21
+            UID=${{ env.UID }}
+            GID=${{ env.GID }}
+
+          cache-from: type=gha,scope=newsboat/ci-25.10-clang21
+          cache-to: type=gha,scope=newsboat/ci-25.10-clang21,mode=max
+
+          push: false
+          load: true
+
+          tags: newsboat/ci-25.10-clang21:latest
+
+      - name: Pre-create ~/.cargo subdirs
+        run: |
+          mkdir --parents ~/.cargo/git
+          mkdir --parents ~/.cargo/registry
+
+      - name: Cache ~/.cargo
+        uses: actions/cache@v5
+        id: cargo_cache
+        with:
+          key: cargo-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}
+          path: |
+            ~/.cargo/git
+            ~/.cargo/registry
+
+      - name: Build and run tests with ASAN
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env CXXFLAGS='-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g' \
+            --env ASAN_OPTIONS='check_initialization_order=1:detect_stack_use_after_return=1' \
+            newsboat/ci-25.10-clang21:latest \
+            sh -c \
+              'make -j$(nproc) test && \
+              cd test && \
+              ./test --order=rand --rng-seed=time'
+
+  asan_rust:
+    name: AddressSanitizer Rust (Clang 21, Ubuntu 25.10)
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v4
+
+      # We need to pass UID and GID into `docker buildx build`, but the action
+      # doesn't support assigning build args from shell commands. This step is
+      # a workaround: it sets environment variables which are then referenced
+      # in the Docker build args
+      - name: Set UID and GID environment variables
+        run: |
+          echo "UID=$(id -u)" >> $GITHUB_ENV
+          echo "GID=$(id -g)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v7
+        with:
+          file: docker/ubuntu_25.10-build-tools.dockerfile
+          build-args: |
+            # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
+            # sanitizer's reports. ASAN library is in libclang-rt-dev
+            cxx_package=clang-21 llvm-21 libclang-rt-21-dev
+            cc=clang-21
+            cxx=clang++-21
+            UID=${{ env.UID }}
+            GID=${{ env.GID }}
+
+          cache-from: type=gha,scope=newsboat/ci-25.10-clang21
+          cache-to: type=gha,scope=newsboat/ci-25.10-clang21,mode=max
+
+          push: false
+          load: true
+
+          tags: newsboat/ci-25.10-clang21:latest
+
+      - name: Pre-create ~/.cargo subdirs
+        run: |
+          mkdir --parents ~/.cargo/git
+          mkdir --parents ~/.cargo/registry
+
+      - name: Cache ~/.cargo
+        uses: actions/cache@v5
+        id: cargo_cache
+        with:
+          key: cargo-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}
+          path: |
+            ~/.cargo/git
+            ~/.cargo/registry
+
+      - name: Build and run tests with ASAN
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env RUSTFLAGS='-Zsanitizer=address' \
+            --env RUSTDOCFLAGS='-Zsanitizer=address' \
+            --env LSAN_OPTIONS='report_objects=1' \
+            newsboat/ci-25.10-clang21:latest \
+            sh -c \
+              'ln -s $(which llvm-symbolizer-18) /home/builder/.cargo/bin/llvm-symbolizer && \
+              cargo +nightly test --target x86_64-unknown-linux-gnu'
+
+  ubsan:
+    name: UB Sanitizer (Clang 21, Ubuntu 25.10)
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v4
+
+      # We need to pass UID and GID into `docker buildx build`, but the action
+      # doesn't support assigning build args from shell commands. This step is
+      # a workaround: it sets environment variables which are then referenced
+      # in the Docker build args
+      - name: Set UID and GID environment variables
+        run: |
+          echo "UID=$(id -u)" >> $GITHUB_ENV
+          echo "GID=$(id -g)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v7
+        with:
+          file: docker/ubuntu_25.10-build-tools.dockerfile
+          build-args: |
+            # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
+            # sanitizer's reports. ASAN library is in libclang-rt-dev
+            cxx_package=clang-21 llvm-21 libclang-rt-21-dev
+            cc=clang-21
+            cxx=clang++-21
+            UID=${{ env.UID }}
+            GID=${{ env.GID }}
+
+          cache-from: type=gha,scope=newsboat/ci-25.10-clang21
+          cache-to: type=gha,scope=newsboat/ci-25.10-clang21,mode=max
+
+          push: false
+          load: true
+
+          tags: newsboat/ci-25.10-clang21:latest
+
+      - name: Pre-create ~/.cargo subdirs
+        run: |
+          mkdir --parents ~/.cargo/git
+          mkdir --parents ~/.cargo/registry
+
+      - name: Cache ~/.cargo
+        uses: actions/cache@v5
+        id: cargo_cache
+        with:
+          key: cargo-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}
+          path: |
+            ~/.cargo/git
+            ~/.cargo/registry
+
+      - name: Build and run tests with ASAN
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env CXXFLAGS='-fsanitize=undefined -g -fno-omit-frame-pointer' \
+            --env ASAN_OPTIONS='suppressions=.undefined-sanitizer-suppressions:print_stacktrace=1:halt_on_error=1' \
+            newsboat/ci-25.10-clang21:latest \
+            sh -c \
+              'make -j$(nproc) test && \
+              cd test && \
+              ./test --order=rand --rng-seed=time'

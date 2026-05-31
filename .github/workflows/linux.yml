@@ -1,0 +1,219 @@
+name: Linux
+
+on:
+  push:
+    paths-ignore: &ignored_paths
+      - contrib/**
+      - doc/**
+      - po/**
+      - snap/**
+  pull_request:
+    paths_ignore: *ignored_paths
+
+jobs:
+  linux:
+    strategy:
+      matrix:
+        include:
+          # These two jobs test our minimum supported Rust version, so only bump on
+          # Newsboat release day
+          - name: MSRV, GCC 7 (Ubuntu 18.04)
+            image: newsboat/ci-18.04-gcc7-msrv:latest
+            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
+            build_args: |
+              cxx_package=g++-7
+              cc=gcc-7
+              cxx=g++-7
+              rust_version=1.92.0
+          - name: MSRV, GCC 14 (Ubuntu 24.04)
+            image: newsboat/ci-24.04-gcc14-msrv:latest
+            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+            build_args: |
+              cxx_package=g++-14
+              cc=gcc-14
+              cxx=g++-14
+              rust_version=1.92.0
+
+          - name: GCC 15, more warnings and checks (Ubuntu 25.04)
+            image: newsboat/ci-25.04-gcc15:latest
+            dockerfile: docker/ubuntu_25.04-build-tools.dockerfile
+            build_args: |
+              cxx_package=g++-15
+              cc=gcc-15
+              cxx=g++-15
+            cxxflags: &extra_warnings_and_checks_env "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
+          - name: Clang 21, more warnings and checks (Ubuntu 25.10)
+            image: newsboat/ci-25.10-clang21:latest
+            dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
+            build_args: |
+              cxx_package=clang-21
+              cc=clang-21
+              cxx=clang++-21
+            cxxflags: *extra_warnings_and_checks_env
+
+          - name: Rust stable, GCC 7 (Ubuntu 18.04)
+            image: newsboat/ci-18.04-gcc7:latest
+            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
+            build_args: |
+              cxx_package=g++-7
+              cc=gcc-7
+              cxx=g++-7
+          - name: Rust stable, GCC 13 (Ubuntu 24.04)
+            image: newsboat/ci-24.04-gcc13:latest
+            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+            build_args: |
+              cxx_package=g++-13
+              cc=gcc-13
+              cxx=g++-13
+          - name: Rust stable, GCC 14 (Ubuntu 24.04)
+            image: newsboat/ci-24.04-gcc14:latest
+            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+            build_args: |
+              cxx_package=g++-14
+              cc=gcc-14
+              cxx=g++-14
+          - name: Rust stable, GCC 15 (Ubuntu 25.04)
+            image: newsboat/ci-25.04-gcc15:latest
+            dockerfile: docker/ubuntu_25.04-build-tools.dockerfile
+            build_args: |
+              cxx_package=g++-15
+              cc=gcc-15
+              cxx=g++-15
+          - name: Rust stable, Clang 5.0 (Ubuntu 18.04)
+            image: newsboat/ci-18.04-clang5:latest
+            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
+            build_args: |
+              cxx_package=clang-5.0
+              cc=clang-5.0
+              cxx=clang++-5.0
+          - name: Rust stable, Clang 19 (Ubuntu 24.04)
+            image: newsboat/ci-24.04-clang19:latest
+            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+            build_args: |
+              cxx_package=clang-19
+              cc=clang-19
+              cxx=clang++-19
+          - name: Rust stable, Clang 20 (Ubuntu 24.04)
+            image: newsboat/ci-24.04-clang20:latest
+            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+            build_args: |
+              cxx_package=clang-20
+              cc=clang-20
+              cxx=clang++-20
+          - name: Rust stable, Clang 21 (Ubuntu 25.10)
+            image: newsboat/ci-25.10-clang21:latest
+            dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
+            build_args: |
+              cxx_package=clang-21
+              cc=clang-21
+              cxx=clang++-21
+
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    env:
+      CXXFLAGS: ${{ matrix.cxxflags }}
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v4
+
+      # We need to pass UID and GID into `docker buildx build`, but the action
+      # doesn't support assigning build args from shell commands. This step is
+      # a workaround: it sets environment variables which are then referenced
+      # in the Docker build args
+      - name: Set UID and GID environment variables
+        run: |
+          echo "UID=$(id -u)" >> $GITHUB_ENV
+          echo "GID=$(id -g)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v7
+        with:
+          file: ${{ matrix.dockerfile }}
+          build-args: |
+            UID=${{ env.UID }}
+            GID=${{ env.GID }}
+            ${{ matrix.build_args }}
+
+          cache-from: type=gha,scope=${{ matrix.image }}
+          cache-to: type=gha,scope=${{ matrix.image }},mode=max
+
+          push: false
+          load: true
+
+          tags: ${{ matrix.image }}
+
+      - name: Pre-create ~/.cargo subdirs
+        run: |
+          mkdir --parents ~/.cargo/git
+          mkdir --parents ~/.cargo/registry
+
+      - name: Cache ~/.cargo
+        uses: actions/cache@v5
+        id: cargo_cache
+        with:
+          key: cargo-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}
+          path: |
+            ~/.cargo/git
+            ~/.cargo/registry
+
+      - name: Build
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env RUSTFLAGS='-D warnings' \
+            --env CXXFLAGS \
+            ${{ matrix.image }} \
+            make -j$(nproc) --keep-going all test
+
+      - name: Test
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env RUSTFLAGS='-D warnings' \
+            --env RUST_TEST_THREADS=$(nproc) \
+            --env RUST_BACKTRACE=1 \
+            --env CXXFLAGS \
+            ${{ matrix.image }} \
+            make -j$(nproc) NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
+
+      - name: Run Clippy
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env RUSTFLAGS='-D warnings' \
+            --env CXXFLAGS \
+            ${{ matrix.image }} \
+            cargo clippy --all-targets --all-features -- -D warnings -A unknown-lints
+
+      - name: Fake install
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env RUSTFLAGS='-D warnings' \
+            --env CXXFLAGS \
+            ${{ matrix.image }} \
+            sh -c \
+              'mkdir fakeroot && \
+              make DESTDIR=fakeroot install && \
+              make DESTDIR=fakeroot uninstall && \
+              test $(find fakeroot -type f -print | wc -l) -eq 0'
