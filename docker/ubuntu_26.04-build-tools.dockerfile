@@ -26,9 +26,9 @@
 #       --build-arg GID=$(id -g) \
 #       --tag=newsboat-build-tools \
 #       --file=docker/ubuntu_26.04-build-tools.dockerfile \
-#       --build-arg cxx_package=clang-16 \
-#       --build-arg cc=clang-16 \
-#       --build-arg cxx=clang++-16 \
+#       --build-arg cxx_package=clang-22 \
+#       --build-arg cc=clang-22 \
+#       --build-arg cxx=clang++-22 \
 #       --build-arg rust_version=1.76.0 \
 #       docker
 #
