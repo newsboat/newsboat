@@ -2,6 +2,8 @@
 
 #include <memory>
 #include <sstream>
+#include <thread>
+#include <vector>
 
 #include "3rd-party/catch.hpp"
 #include "configcontainer.h"
@@ -151,6 +153,45 @@ TEST_CASE("Last-Modified and ETag values are also stored in DB if feed was not y
 
 	REQUIRE(output_lastmodified == lastmodified);
 	REQUIRE(output_etag == etag);
+}
+
+TEST_CASE("Last-Modified and ETag values can be updated from multiple threads",
+	"[Cache]")
+{
+	ConfigContainer cfg;
+	auto rsscache = Cache::in_memory(cfg);
+
+	constexpr unsigned int thread_count = 8;
+	constexpr unsigned int update_count = 100;
+	std::vector<std::thread> threads;
+
+	for (unsigned int i = 0; i < thread_count; ++i) {
+		threads.emplace_back([&, i]() {
+			const std::string feedurl =
+				"http://example.com/feed-" + std::to_string(i) + ".xml";
+			const std::string etag = "etag-" + std::to_string(i);
+
+			for (unsigned int j = 0; j < update_count; ++j) {
+				rsscache->update_lastmodified(feedurl, j + 1, etag);
+			}
+		});
+	}
+
+	for (auto& thread : threads) {
+		thread.join();
+	}
+
+	for (unsigned int i = 0; i < thread_count; ++i) {
+		const std::string feedurl =
+			"http://example.com/feed-" + std::to_string(i) + ".xml";
+		time_t lastmodified{};
+		std::string etag;
+
+		rsscache->fetch_lastmodified(feedurl, lastmodified, etag);
+
+		REQUIRE(lastmodified == update_count);
+		REQUIRE(etag == "etag-" + std::to_string(i));
+	}
 }
 
 TEST_CASE("mark_all_read marks all items in the feed read", "[Cache]")

@@ -477,10 +477,10 @@ void Cache::update_lastmodified(const std::string& feedurl,
 		return;
 	}
 
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	run_sql(prepare_query("INSERT OR IGNORE INTO rss_feed (rssurl, url, title) VALUES ('%q', '', '')",
 			feedurl));
 
-	std::lock_guard<std::recursive_mutex> lock(mtx);
 	std::string query = "UPDATE rss_feed SET ";
 	if (t > 0) {
 		query.append(prepare_query("lastmodified = '%d'", t));
