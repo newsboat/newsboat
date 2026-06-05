@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.10.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2026-06-05 18:55+0300\n"
+"POT-Creation-Date: 2026-06-05 19:02+0300\n"
 "PO-Revision-Date: 2017-12-25 00:38+0100\n"
 "Last-Translator: František Hájik <ferko.hajik@gmail.com>\n"
 "Language-Team: \n"
@@ -948,9 +948,9 @@ msgstr "Súbor: "
 msgid "Save File - %s"
 msgstr "Uložiť súbor - %s"
 
-#: src/fileurlreader.cpp:73
+#: src/fileurlreader.cpp:73 src/remoteapiurlreader.cpp:43
 #, c-format
-msgid "Warning: Duplicate URL found: %s. Merging tags"
+msgid "Warning: Duplicate URL found: %s. Merging tags."
 msgstr ""
 
 #: src/fileurlreader.cpp:99
@@ -1939,11 +1939,6 @@ msgstr "Chyba pri načítaní %s: %s"
 #: src/reloader.cpp:152
 msgid "Error: invalid feed!"
 msgstr "Chyba: vadný kanál!"
-
-#: src/remoteapiurlreader.cpp:43
-#, c-format
-msgid "Warning: Duplicate URL found: %s. Merging tags."
-msgstr ""
 
 #: src/rssfeed.cpp:42
 msgid "too few arguments"

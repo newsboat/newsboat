@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2026-06-05 18:55+0300\n"
+"POT-Creation-Date: 2026-06-05 19:02+0300\n"
 "PO-Revision-Date: 2026-03-15 13:09+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
@@ -951,9 +951,9 @@ msgstr "Файл: "
 msgid "Save File - %s"
 msgstr "Зберегти Файл - %s"
 
-#: src/fileurlreader.cpp:73
+#: src/fileurlreader.cpp:73 src/remoteapiurlreader.cpp:43
 #, c-format
-msgid "Warning: Duplicate URL found: %s. Merging tags"
+msgid "Warning: Duplicate URL found: %s. Merging tags."
 msgstr ""
 
 #: src/fileurlreader.cpp:99
@@ -1922,11 +1922,6 @@ msgstr "Помилка при стягненні %s: %s"
 #: src/reloader.cpp:152
 msgid "Error: invalid feed!"
 msgstr "Помилка: непрацездатна тема!"
-
-#: src/remoteapiurlreader.cpp:43
-#, c-format
-msgid "Warning: Duplicate URL found: %s. Merging tags."
-msgstr ""
 
 #: src/rssfeed.cpp:42
 msgid "too few arguments"

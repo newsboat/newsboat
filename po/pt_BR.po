@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.8\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2026-06-05 18:55+0300\n"
+"POT-Creation-Date: 2026-06-05 19:02+0300\n"
 "PO-Revision-Date: 2024-03-24 20:48-0300\n"
 "Last-Translator: André L. C. Moreira <andrelcmoreira@disroot.org>\n"
 "Language-Team: \n"
@@ -972,9 +972,9 @@ msgstr "Arquivo: "
 msgid "Save File - %s"
 msgstr "Salvar Arquivo - %s"
 
-#: src/fileurlreader.cpp:73
+#: src/fileurlreader.cpp:73 src/remoteapiurlreader.cpp:43
 #, c-format
-msgid "Warning: Duplicate URL found: %s. Merging tags"
+msgid "Warning: Duplicate URL found: %s. Merging tags."
 msgstr ""
 
 #: src/fileurlreader.cpp:99
@@ -1963,11 +1963,6 @@ msgstr "Erro ao tentar obter %s: %s"
 #: src/reloader.cpp:152
 msgid "Error: invalid feed!"
 msgstr "Erro: fonte RSS inválida!"
-
-#: src/remoteapiurlreader.cpp:43
-#, c-format
-msgid "Warning: Duplicate URL found: %s. Merging tags."
-msgstr ""
 
 #: src/rssfeed.cpp:42
 msgid "too few arguments"
