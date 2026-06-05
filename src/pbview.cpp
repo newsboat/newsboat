@@ -270,6 +270,15 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			}
 		}
 		break;
+		case OP_PB_RELOAD:
+			if (ctrl.downloads_in_progress() > 0) {
+				msg_line_dllist_form.set_text(_("Error: unable to perform operation: "
+						"download(s) in progress."));
+			} else {
+				ctrl.reload_queue();
+			}
+			update_view = true;
+			break;
 		case OP_PB_PURGE:
 			if (ctrl.downloads_in_progress() > 0) {
 				msg_line_dllist_form.set_text(_("Error: unable to perform operation: "

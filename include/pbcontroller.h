@@ -34,6 +34,7 @@ public:
 
 	unsigned int downloads_in_progress();
 	void purge_queue();
+	void reload_queue();
 
 	unsigned int get_maxdownloads();
 	void start_downloads();

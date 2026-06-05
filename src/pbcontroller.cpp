@@ -415,6 +415,13 @@ unsigned int PbController::get_maxdownloads()
 	return max_dls;
 }
 
+void PbController::reload_queue()
+{
+	if (ql != nullptr) {
+		ql->reload(downloads_, false, false);
+	}
+}
+
 void PbController::purge_queue()
 {
 	if (ql != nullptr) {

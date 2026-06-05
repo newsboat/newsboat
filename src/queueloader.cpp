@@ -28,10 +28,11 @@ QueueLoader::QueueLoader(const Filepath& filepath,
 }
 
 void QueueLoader::reload(std::vector<Download>& downloads,
-	bool also_remove_finished) const
+	bool also_remove_finished, bool also_remove_deleted) const
 {
 	CategorizedDownloads categorized_downloads;
-	const auto res = categorize_downloads(downloads, also_remove_finished);
+	const auto res = categorize_downloads(downloads, also_remove_finished,
+		also_remove_deleted);
 	if (!res.has_value()) {
 		return;
 	}
@@ -47,7 +48,8 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 
 std::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_downloads(
 	const std::vector<Download>& downloads,
-	bool also_remove_finished)
+	bool also_remove_finished,
+	bool also_remove_deleted)
 {
 	CategorizedDownloads result;
 
@@ -82,9 +84,13 @@ std::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_downloa
 			}
 			break;
 		case DlStatus::DELETED:
-			keep_entry = false;
+			if (!also_remove_deleted) {
+				LOG(Level::DEBUG,
+					"QueueLoader::reload: storing %s to new vector",
+					dl.url());
+				keep_entry = true;
+			}
 			break;
-
 		case DlStatus::DOWNLOADING:
 			assert(!"Can't be reached because of the `if` above");
 			break;
