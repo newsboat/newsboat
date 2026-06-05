@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-06-05 19:02+0300\n"
-"PO-Revision-Date: 2026-03-15 13:09+0300\n"
+"PO-Revision-Date: 2026-06-05 19:16+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -926,7 +926,7 @@ msgstr "Помилка: неможливо розібрати вираз філ�
 #: src/feedlistformaction.cpp:1159
 #, c-format
 msgid "Error: Some filter attributes are not available in feedlist: %s"
-msgstr ""
+msgstr "Помилка: деякі атрибути фільтрів недоступні у контексті списку тем: %s"
 
 #: src/feedretriever.cpp:81
 #, c-format
@@ -954,7 +954,7 @@ msgstr "Зберегти Файл - %s"
 #: src/fileurlreader.cpp:73 src/remoteapiurlreader.cpp:43
 #, c-format
 msgid "Warning: Duplicate URL found: %s. Merging tags."
-msgstr ""
+msgstr "Попередження: знайдено дублікат URL: %s. Об'єднуємо мітки."
 
 #: src/fileurlreader.cpp:99
 #, c-format
@@ -973,14 +973,14 @@ msgid "Operation \"%s\" not handled in dialog \"%s\""
 msgstr "Операцію \"%s\" не оброблено в діалозі \"%s\""
 
 #: src/formaction.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Too many arguments for %s"
-msgstr "забагато параметрів."
+msgstr "забагато параметрів до %s"
 
 #: src/formaction.cpp:168
 #, c-format
 msgid "Too many arguments to \"cmdline\" command: %s"
-msgstr ""
+msgstr "Надто багато параметрів до команди «cmdline»: %s"
 
 #: src/formaction.cpp:187
 msgid "usage: set <config-option> <value>"
@@ -1241,6 +1241,7 @@ msgstr "Перезаписати `%s' в `%s'? (y:Так n:Ні)"
 #, c-format
 msgid "Error: Some filter attributes are not available in itemlist: %s"
 msgstr ""
+"Помилка: деякі атрибути фільтрів недоступні в контексті списку статей: %s"
 
 #: src/itemrenderer.cpp:75
 msgid "Feed: "
