@@ -157,6 +157,10 @@ json TtRssApi::run_op(const std::string& op,
 		req_data = requestparam.dump();
 	}
 
+	curl_slist* headers = NULL;
+	headers = curl_slist_append(headers, "Content-Type: application/json");
+	curl_easy_setopt(cached_handle.ptr(), CURLOPT_HTTPHEADER, headers);
+
 	std::string result = utils::retrieve_url(
 			url, cached_handle, cfg, auth_info, &req_data, utils::HTTPMethod::POST);
 
