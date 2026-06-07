@@ -70,7 +70,7 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 			}
 		} else {
 			std::string warn_msg = strprintf::fmt(
-					_("Warning: Duplicate URL found: %s. Merging tags"),
+					_("Warning: Duplicate URL found: %s. Merging tags."),
 					url);
 
 			LOG(Level::USERERROR, warn_msg.c_str());
