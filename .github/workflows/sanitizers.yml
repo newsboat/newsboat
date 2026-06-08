@@ -12,7 +12,7 @@ on:
 
 jobs:
   asan_cpp:
-    name: AddressSanitizer C++ (Clang 21, Ubuntu 25.10)
+    name: AddressSanitizer C++ (Clang 22, Ubuntu 26.04)
     runs-on: ubuntu-24.04
 
     steps:
@@ -34,23 +34,23 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v7
         with:
-          file: docker/ubuntu_25.10-build-tools.dockerfile
+          file: docker/ubuntu_26.04-build-tools.dockerfile
           build-args: |
-            # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
+            # We need llvm-symbolizer from llvm-22-tools to demangle symbols in
             # sanitizer's reports. ASAN library is in libclang-rt-dev
-            cxx_package=clang-21 llvm-21 libclang-rt-21-dev
-            cc=clang-21
-            cxx=clang++-21
+            cxx_package=clang-22 llvm-22 libclang-rt-22-dev
+            cc=clang-22
+            cxx=clang++-22
             UID=${{ env.UID }}
             GID=${{ env.GID }}
 
-          cache-from: type=gha,scope=newsboat/ci-25.10-clang21
-          cache-to: type=gha,scope=newsboat/ci-25.10-clang21,mode=max
+          cache-from: type=gha,scope=newsboat/ci-26.04-clang22
+          cache-to: type=gha,scope=newsboat/ci-26.04-clang22,mode=max
 
           push: false
           load: true
 
-          tags: newsboat/ci-25.10-clang21:latest
+          tags: newsboat/ci-26.04-clang22:latest
 
       - name: Pre-create ~/.cargo subdirs
         run: |
@@ -76,14 +76,14 @@ jobs:
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env CXXFLAGS='-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g' \
             --env ASAN_OPTIONS='check_initialization_order=1:detect_stack_use_after_return=1' \
-            newsboat/ci-25.10-clang21:latest \
+            newsboat/ci-26.04-clang22:latest \
             sh -c \
               'make -j$(nproc) test && \
               cd test && \
               ./test --order=rand --rng-seed=time'
 
   asan_rust:
-    name: AddressSanitizer Rust (Clang 21, Ubuntu 25.10)
+    name: AddressSanitizer Rust (Clang 22, Ubuntu 26.04)
     runs-on: ubuntu-24.04
 
     steps:
@@ -105,23 +105,23 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v7
         with:
-          file: docker/ubuntu_25.10-build-tools.dockerfile
+          file: docker/ubuntu_26.04-build-tools.dockerfile
           build-args: |
-            # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
+            # We need llvm-symbolizer from llvm-22-tools to demangle symbols in
             # sanitizer's reports. ASAN library is in libclang-rt-dev
-            cxx_package=clang-21 llvm-21 libclang-rt-21-dev
-            cc=clang-21
-            cxx=clang++-21
+            cxx_package=clang-22 llvm-22 libclang-rt-22-dev
+            cc=clang-22
+            cxx=clang++-22
             UID=${{ env.UID }}
             GID=${{ env.GID }}
 
-          cache-from: type=gha,scope=newsboat/ci-25.10-clang21
-          cache-to: type=gha,scope=newsboat/ci-25.10-clang21,mode=max
+          cache-from: type=gha,scope=newsboat/ci-26.04-clang22
+          cache-to: type=gha,scope=newsboat/ci-26.04-clang22,mode=max
 
           push: false
           load: true
 
-          tags: newsboat/ci-25.10-clang21:latest
+          tags: newsboat/ci-26.04-clang22:latest
 
       - name: Pre-create ~/.cargo subdirs
         run: |
@@ -148,13 +148,13 @@ jobs:
             --env RUSTFLAGS='-Zsanitizer=address' \
             --env RUSTDOCFLAGS='-Zsanitizer=address' \
             --env LSAN_OPTIONS='report_objects=1' \
-            newsboat/ci-25.10-clang21:latest \
+            newsboat/ci-26.04-clang22:latest \
             sh -c \
-              'ln -s $(which llvm-symbolizer-18) /home/builder/.cargo/bin/llvm-symbolizer && \
+              'ln -s $(which llvm-symbolizer-22) /home/builder/.cargo/bin/llvm-symbolizer && \
               cargo +nightly test --target x86_64-unknown-linux-gnu'
 
   ubsan:
-    name: UB Sanitizer (Clang 21, Ubuntu 25.10)
+    name: UB Sanitizer (Clang 22, Ubuntu 26.04)
     runs-on: ubuntu-24.04
 
     steps:
@@ -176,23 +176,23 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v7
         with:
-          file: docker/ubuntu_25.10-build-tools.dockerfile
+          file: docker/ubuntu_26.04-build-tools.dockerfile
           build-args: |
-            # We need llvm-symbolizer from llvm-21-tools to demangle symbols in
+            # We need llvm-symbolizer from llvm-22-tools to demangle symbols in
             # sanitizer's reports. ASAN library is in libclang-rt-dev
-            cxx_package=clang-21 llvm-21 libclang-rt-21-dev
-            cc=clang-21
-            cxx=clang++-21
+            cxx_package=clang-22 llvm-22 libclang-rt-22-dev
+            cc=clang-22
+            cxx=clang++-22
             UID=${{ env.UID }}
             GID=${{ env.GID }}
 
-          cache-from: type=gha,scope=newsboat/ci-25.10-clang21
-          cache-to: type=gha,scope=newsboat/ci-25.10-clang21,mode=max
+          cache-from: type=gha,scope=newsboat/ci-26.04-clang22
+          cache-to: type=gha,scope=newsboat/ci-26.04-clang22,mode=max
 
           push: false
           load: true
 
-          tags: newsboat/ci-25.10-clang21:latest
+          tags: newsboat/ci-26.04-clang22:latest
 
       - name: Pre-create ~/.cargo subdirs
         run: |
@@ -218,7 +218,7 @@ jobs:
             --mount type=bind,source=$(pwd),target=/home/builder/src \
             --env CXXFLAGS='-fsanitize=undefined -g -fno-omit-frame-pointer' \
             --env ASAN_OPTIONS='suppressions=.undefined-sanitizer-suppressions:print_stacktrace=1:halt_on_error=1' \
-            newsboat/ci-25.10-clang21:latest \
+            newsboat/ci-26.04-clang22:latest \
             sh -c \
               'make -j$(nproc) test && \
               cd test && \

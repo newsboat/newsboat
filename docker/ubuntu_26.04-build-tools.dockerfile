@@ -1,14 +1,14 @@
 # All the programs and libraries necessary to build Newsboat with newer
-# compilers. Contains GCC 12 and Rust 1.95.0 by default.
+# compilers. Contains GCC 16 and Rust 1.96.0 by default.
 #
 # Configurable via build-args:
 #
-# - cxx_package -- additional Ubuntu packages to install. Default: g++-12
-# - rust_version -- Rust version to install. Default: 1.95.0
+# - cxx_package -- additional Ubuntu packages to install. Default: g++-16
+# - rust_version -- Rust version to install. Default: 1.96.0
 # - cc -- C compiler to use. This gets copied into CC environment variable.
-#       Default: gcc-12
+#       Default: gcc-16
 # - cxx -- C++ compiler to use. This gets copied into CXX environment variable.
-#       Default: g++-12
+#       Default: g++-16
 #
 # Build with defaults:
 #
@@ -16,7 +16,7 @@
 #       --build-arg UID=$(id -u) \
 #       --build-arg GID=$(id -g) \
 #       --tag=newsboat-build-tools \
-#       --file=docker/ubuntu_22.04-build-tools.dockerfile \
+#       --file=docker/ubuntu_26.04-build-tools.dockerfile \
 #       docker
 #
 # Build with non-default compiler and Rust version:
@@ -25,11 +25,11 @@
 #       --build-arg UID=$(id -u) \
 #       --build-arg GID=$(id -g) \
 #       --tag=newsboat-build-tools \
-#       --file=docker/ubuntu_22.04-build-tools.dockerfile \
-#       --build-arg cxx_package=clang-13 \
-#       --build-arg cc=clang-13 \
-#       --build-arg cxx=clang++-13 \
-#       --build-arg rust_version=1.40.0 \
+#       --file=docker/ubuntu_26.04-build-tools.dockerfile \
+#       --build-arg cxx_package=clang-22 \
+#       --build-arg cc=clang-22 \
+#       --build-arg cxx=clang++-22 \
+#       --build-arg rust_version=1.76.0 \
 #       docker
 #
 # Before building in a container, run this to remove any binaries that you
@@ -45,7 +45,7 @@
 #       newsboat-build-tools \
 #       make
 #
-# To save on bandwidth, and speed up the build slightly, share the host's Cargo
+# To save bandwidth, and speed up the build slightly, share the host's Cargo
 # cache with the container:
 #
 #   mkdir -p ~/.cargo/registry
@@ -58,7 +58,7 @@
 #
 #   make distclean
 
-FROM ubuntu:22.04
+FROM ubuntu:26.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH=/home/builder/.cargo/bin:$PATH
@@ -67,7 +67,7 @@ RUN apt-get update \
     && apt-get upgrade --assume-yes \
     && apt install --assume-yes --no-install-recommends ca-certificates wget gnupg2
 
-ARG cxx_package=g++-12
+ARG cxx_package=g++-16
 
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
@@ -80,8 +80,9 @@ RUN apt-get update \
 ARG UID=1000
 ARG GID=1000
 
-RUN addgroup --gid $GID builder \
-    && adduser --home /home/builder --uid $UID --ingroup builder \
+RUN deluser ubuntu \
+    && addgroup --gid $GID builder \
+    && adduser --uid $UID --home /home/builder --ingroup builder \
         --disabled-password --shell /bin/bash builder \
     && mkdir -p /home/builder/src \
     && chown -R builder:builder /home/builder
@@ -100,7 +101,7 @@ USER builder
 ENV HOME=/home/builder
 WORKDIR /home/builder/src
 
-ARG rust_version=1.95.0
+ARG rust_version=1.96.0
 
 RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && chmod +x $HOME/rustup.sh \
@@ -109,8 +110,8 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
         --default-toolchain $rust_version \
     && chmod a+w $HOME/.cargo
 
-ARG cc=gcc-12
-ARG cxx=g++-12
+ARG cc=gcc-16
+ARG cxx=g++-16
 
 ENV CC=$cc
 ENV CXX=$cxx

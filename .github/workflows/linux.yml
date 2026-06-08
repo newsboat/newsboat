@@ -34,30 +34,23 @@ jobs:
               cxx=g++-14
               rust_version=1.92.0
 
-          - name: GCC 15, more warnings and checks (Ubuntu 25.04)
-            image: newsboat/ci-25.04-gcc15:latest
-            dockerfile: docker/ubuntu_25.04-build-tools.dockerfile
+          - name: GCC 16, more warnings and checks (Ubuntu 26.04)
+            image: newsboat/ci-26.04-gcc16:latest
+            dockerfile: docker/ubuntu_26.04-build-tools.dockerfile
             build_args: |
-              cxx_package=g++-15
-              cc=gcc-15
-              cxx=g++-15
+              cxx_package=g++-16
+              cc=gcc-16
+              cxx=g++-16
             cxxflags: &extra_warnings_and_checks_env "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
-          - name: Clang 21, more warnings and checks (Ubuntu 25.10)
-            image: newsboat/ci-25.10-clang21:latest
-            dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
+          - name: Clang 22, more warnings and checks (Ubuntu 26.04)
+            image: newsboat/ci-26.04-clang22:latest
+            dockerfile: docker/ubuntu_26.04-build-tools.dockerfile
             build_args: |
-              cxx_package=clang-21
-              cc=clang-21
-              cxx=clang++-21
+              cxx_package=clang-22
+              cc=clang-22
+              cxx=clang++-22
             cxxflags: *extra_warnings_and_checks_env
 
-          - name: Rust stable, GCC 7 (Ubuntu 18.04)
-            image: newsboat/ci-18.04-gcc7:latest
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
-            build_args: |
-              cxx_package=g++-7
-              cc=gcc-7
-              cxx=g++-7
           - name: Rust stable, GCC 13 (Ubuntu 24.04)
             image: newsboat/ci-24.04-gcc13:latest
             dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
@@ -79,6 +72,13 @@ jobs:
               cxx_package=g++-15
               cc=gcc-15
               cxx=g++-15
+          - name: Rust stable, GCC 16 (Ubuntu 26.04)
+            image: newsboat/ci-26.04-gcc16:latest
+            dockerfile: docker/ubuntu_26.04-build-tools.dockerfile
+            build_args: |
+              cxx_package=g++-16
+              cc=gcc-16
+              cxx=g++-16
           - name: Rust stable, Clang 5.0 (Ubuntu 18.04)
             image: newsboat/ci-18.04-clang5:latest
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -100,13 +100,13 @@ jobs:
               cxx_package=clang-20
               cc=clang-20
               cxx=clang++-20
-          - name: Rust stable, Clang 21 (Ubuntu 25.10)
-            image: newsboat/ci-25.10-clang21:latest
-            dockerfile: docker/ubuntu_25.10-build-tools.dockerfile
+          - name: Rust stable, Clang 22 (Ubuntu 26.04)
+            image: newsboat/ci-26.04-clang22:latest
+            dockerfile: docker/ubuntu_26.04-build-tools.dockerfile
             build_args: |
-              cxx_package=clang-21
-              cc=clang-21
-              cxx=clang++-21
+              cxx_package=clang-22
+              cc=clang-22
+              cxx=clang++-22
 
     name: ${{ matrix.name }}
     runs-on: ubuntu-24.04

@@ -1,4 +1,4 @@
-name: "clang-tidy (Clang 21, Ubuntu 25.10)"
+name: "clang-tidy (Clang 22, Ubuntu 26.04)"
 
 on:
   push:
@@ -34,21 +34,21 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v7
         with:
-          file: docker/ubuntu_25.10-build-tools.dockerfile
+          file: docker/ubuntu_26.04-build-tools.dockerfile
           build-args: |
-            cxx_package=clang-tidy-21
-            cc=clang-21
-            cxx=clang++-21
+            cxx_package=clang-tidy-22
+            cc=clang-22
+            cxx=clang++-22
             UID=${{ env.UID }}
             GID=${{ env.GID }}
 
-          cache-from: type=gha,scope=newsboat/ci-25.10-clangtidy21
-          cache-to: type=gha,scope=newsboat/ci-25.10-clangtidy21,mode=max
+          cache-from: type=gha,scope=newsboat/ci-26.04-clangtidy22
+          cache-to: type=gha,scope=newsboat/ci-26.04-clangtidy22,mode=max
 
           push: false
           load: true
 
-          tags: newsboat/ci-25.10-clangtidy21:latest
+          tags: newsboat/ci-26.04-clangtidy22:latest
 
       - name: Pre-create ~/.cargo subdirs
         run: |
@@ -72,6 +72,6 @@ jobs:
             --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
             --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
             --mount type=bind,source=$(pwd),target=/home/builder/src \
-            --env CLANG_TIDY=clang-tidy-21 \
-            newsboat/ci-25.10-clangtidy21:latest \
+            --env CLANG_TIDY=clang-tidy-22 \
+            newsboat/ci-26.04-clangtidy22:latest \
             make -j$(nproc) --keep-going clang-tidy
