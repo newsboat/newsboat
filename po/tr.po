@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-06-05 19:02+0300\n"
-"PO-Revision-Date: 2026-03-12 18:00+0300\n"
+"PO-Revision-Date: 2026-06-07 18:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -33,7 +33,7 @@ msgstr "stdout'a OPML beslemesi dışa aktar"
 
 #: newsboat.cpp:50
 msgid "export OPML 2.0 feed including tags to stdout"
-msgstr "etiketler içerilecek biçimde OPML 2.0 beslemesini stdout'a dışa aktar"
+msgstr "künyeler içerilecek biçimde OPML 2.0 beslemesini stdout'a dışa aktar"
 
 #: newsboat.cpp:51
 msgid "refresh feeds on start"
@@ -250,7 +250,7 @@ msgid ""
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
 "%N %V - %?F?Beslemeler&Beslemeleriniz? (%u okunmamış, %t toplam)%?F? "
-"süzgeçle eşleşen '%F'&?%?T? - etiket `%T'&?"
+"süzgeçle eşleşen '%F'&?%?T? - künye `%T'&?"
 
 #: src/configcontainer.cpp:327
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -282,7 +282,7 @@ msgstr "%N %V - Süzgeç Seç"
 
 #: src/configcontainer.cpp:350
 msgid "%N %V - Select Tag"
-msgstr "%N %V - Etiket Seç"
+msgstr "%N %V - Künye Seç"
 
 #: src/configcontainer.cpp:354
 msgid "%N %V - URLs"
@@ -727,7 +727,7 @@ msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "late(s)tunread/(n)one?"
 msgstr ""
-"Sırala: (i)lketiket/(b)aşlık/(y)azısayısı/(o)kunmamışyazısayısı/"
+"Sırala: (i)lkkünye/(b)aşlık/(y)azısayısı/(o)kunmamışyazısayısı/"
 "(s)ongüncelleme/sono(k)unmayan)/(h)içbiri?"
 
 #: src/feedlistformaction.cpp:176
@@ -735,7 +735,7 @@ msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/late(s)tunread/(n)one?"
 msgstr ""
-"Ters Sırala: (i)lketiket/(b)aşlık/(y)azısayısı/(o)kunmamışyazısayısı/"
+"Ters Sırala: (i)lkkünye/(b)aşlık/(y)azısayısı/(o)kunmamışyazısayısı/"
 "(s)ongüncelleme/sono(k)unmayan/(h)içbiri?"
 
 #: src/feedlistformaction.cpp:238 src/feedlistformaction.cpp:265
@@ -846,7 +846,7 @@ msgstr "Süzgeci temizle"
 
 #: src/feedlistformaction.cpp:661
 msgid "Clear tag"
-msgstr "Etiketi temizle"
+msgstr "Künyeyi temizle"
 
 #: src/feedlistformaction.cpp:663 src/helpformaction.cpp:162
 #: src/itemlistformaction.cpp:1394 src/itemviewformaction.cpp:577
@@ -924,6 +924,7 @@ msgstr "Hata: Süzgeç ifadesi '%s' ayrıştırılamadı: %s"
 #, c-format
 msgid "Error: Some filter attributes are not available in feedlist: %s"
 msgstr ""
+"Hata: Besleme listesinde kimi süzgeç öznitelikleri kullanılabilir değil: %s"
 
 #: src/feedretriever.cpp:81
 #, c-format
@@ -951,7 +952,7 @@ msgstr "Dosyaya Kaydet - %s"
 #: src/fileurlreader.cpp:73 src/remoteapiurlreader.cpp:43
 #, c-format
 msgid "Warning: Duplicate URL found: %s. Merging tags."
-msgstr ""
+msgstr "Uyarı: Yinelenmiş URL bulundu: %s. Künyeler birleştiriliyor."
 
 #: src/fileurlreader.cpp:99
 #, c-format
@@ -970,14 +971,13 @@ msgid "Operation \"%s\" not handled in dialog \"%s\""
 msgstr "\"%s\" işlemi \"%s\" içinde halledilmedi"
 
 #: src/formaction.cpp:100
-#, fuzzy, c-format
 msgid "Too many arguments for %s"
-msgstr "çok fazla parametre."
+msgstr "%s için pek fazla argümon"
 
 #: src/formaction.cpp:168
 #, c-format
 msgid "Too many arguments to \"cmdline\" command: %s"
-msgstr ""
+msgstr "\"cmdline\" komutu için pek fazla argüman: %s"
 
 #: src/formaction.cpp:187
 msgid "usage: set <config-option> <value>"
@@ -1235,7 +1235,7 @@ msgstr "'%s' üzerine yaz ('%s' içinde)? (e:Evet h:Hayır)"
 #: src/itemlistformaction.cpp:1706
 #, c-format
 msgid "Error: Some filter attributes are not available in itemlist: %s"
-msgstr ""
+msgstr "Hata: Öge listesinde kimi süzgeç öznitelikleri kullanılabilir değil: %s"
 
 #: src/itemrenderer.cpp:75
 msgid "Feed: "
@@ -1460,11 +1460,11 @@ msgstr "Geçerli yazıdaki URL'leri göster"
 
 #: src/keymap.cpp:254
 msgid "Clear current tag"
-msgstr "Geçerli etiketi temizle"
+msgstr "Geçerli künyeyi temizle"
 
 #: src/keymap.cpp:261 src/keymap.cpp:268
 msgid "Select tag"
-msgstr "Etiket seç"
+msgstr "Künye seç"
 
 #: src/keymap.cpp:275
 msgid "Open search dialog"
@@ -1938,7 +1938,7 @@ msgstr "Arama Sonucu - '%s'"
 
 #: src/selectformaction.cpp:251 src/selectformaction.cpp:274
 msgid "Select Tag"
-msgstr "Etiket Seç"
+msgstr "Künye Seç"
 
 #: src/selectformaction.cpp:254 src/selectformaction.cpp:276
 msgid "Select Filter"
@@ -1995,7 +1995,7 @@ msgstr "Hata: Beslemede bir şey yok!"
 
 #: src/view.cpp:676
 msgid "No tags defined."
-msgstr "Hiçbir etiket tanımlanmamış."
+msgstr "Tanımlı hiçbir künye yok."
 
 #: src/view.cpp:1012
 msgid "Updating query feed..."
