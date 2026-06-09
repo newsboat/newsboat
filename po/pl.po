@@ -1238,7 +1238,7 @@ msgstr "Nadpisać `%s' w `%s' (t:Tak n:Nie)"
 #: src/itemlistformaction.cpp:1706
 #, c-format
 msgid "Error: Some filter attributes are not available in itemlist: %s"
-msgstr "Błąd: Niektóre atrybuty filtra są niedostępne dla elementu :%s"
+msgstr "Błąd: Niektóre atrybuty filtra są niedostępne dla elementu: %s"
 
 #: src/itemrenderer.cpp:75
 msgid "Feed: "
