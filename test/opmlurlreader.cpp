@@ -28,10 +28,14 @@ TEST_CASE("OPML URL reader gets the path to input file from \"opml-url\" "
 TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 	"[OpmlUrlReader]")
 {
+	const auto cwd = utils::getcwd();
+
 	ConfigContainer cfg;
 	cfg.set_configvalue(
 		"opml-url",
-		"file://" + utils::getcwd().to_locale_string() + "/data/example.opml");
+		"file://" + cwd.to_locale_string() + "/data/example.opml"
+		+ " "
+		+ "file://" + cwd.to_locale_string() + "/data/category.opml");
 
 	OpmlUrlReader reader(cfg, Filepath());
 
@@ -48,6 +52,7 @@ TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 		{"https://blogs.example.com/~john/posts.rss", {"~John's musings", "Blogs"}},
 		{"https://fred.example.com/writing/index.php?type=rss", {"~Fred on everything", "eloquent"}},
 		{"https://blogs.example.com/~mike/.rss", {"~Notes by Mike", "Blogs/friends"}},
+		{"http://feeds.bbci.co.uk/news/business/rss.xml?edition=int", {"tag one", "tag_two", "tag/three"}},
 	};
 
 	REQUIRE(reader.get_urls().size() == expected.size());
