@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-06-05 19:02+0300\n"
-"PO-Revision-Date: 2025-12-12 21:26+0100\n"
+"PO-Revision-Date: 2026-06-08 23:08+0200\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: newsboat.cpp:34
 #, c-format
@@ -926,7 +926,7 @@ msgstr "Błąd: nie udało się przetworzyć filtra `%s': %s"
 #: src/feedlistformaction.cpp:1159
 #, c-format
 msgid "Error: Some filter attributes are not available in feedlist: %s"
-msgstr ""
+msgstr "Błąd: Niektóre atrybuty filtra nie są dostępne w liście: %s"
 
 #: src/feedretriever.cpp:81
 #, c-format
@@ -954,7 +954,7 @@ msgstr "Zapisz plik - %s"
 #: src/fileurlreader.cpp:73 src/remoteapiurlreader.cpp:43
 #, c-format
 msgid "Warning: Duplicate URL found: %s. Merging tags."
-msgstr ""
+msgstr "Ostrzeżenie: Znaleziono dupikat odnośnika: %s. Łącze tagi."
 
 #: src/fileurlreader.cpp:99
 #, c-format
@@ -968,19 +968,19 @@ msgid "couldn't parse filter expression `%s': %s"
 msgstr "błąd składniowy komendy filtra `%s': %s"
 
 #: src/formaction.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Operation \"%s\" not handled in dialog \"%s\""
-msgstr "Operacja %s nieobsługiwana przez %s"
+msgstr "Operacja \"%s\" nieobsługiwana w dialogu \"%s\""
 
 #: src/formaction.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Too many arguments for %s"
-msgstr "zbyt wiele parametrów."
+msgstr "Zbyt wiele parametrów dla %s"
 
 #: src/formaction.cpp:168
 #, c-format
 msgid "Too many arguments to \"cmdline\" command: %s"
-msgstr ""
+msgstr "Zbyt wiele parametrów dla polecenia \"cmdline\": %s"
 
 #: src/formaction.cpp:187
 msgid "usage: set <config-option> <value>"
@@ -1238,7 +1238,7 @@ msgstr "Nadpisać `%s' w `%s' (t:Tak n:Nie)"
 #: src/itemlistformaction.cpp:1706
 #, c-format
 msgid "Error: Some filter attributes are not available in itemlist: %s"
-msgstr ""
+msgstr "Błąd: Niektóre atrybuty filtra są niedostępne dla elementu :%s"
 
 #: src/itemrenderer.cpp:75
 msgid "Feed: "
