@@ -25,7 +25,8 @@ public:
 	/// status are removed. If \a also_remove_finished is `true`, `FINISHED`
 	/// downloads are removed too.
 	void reload(std::vector<Download>& downloads,
-		bool also_remove_finished = false) const;
+		bool also_remove_finished = false,
+		bool also_remove_deleted = true) const;
 
 private:
 	newsboat::Filepath get_filename(const std::string& str) const;
@@ -53,7 +54,8 @@ private:
 	/// - nullopt if one of the downloads is currently being downloaded;
 	/// - otherwise, a struct with categorized downloads.
 	static std::optional<CategorizedDownloads> categorize_downloads(
-		const std::vector<Download>& downloads, bool also_remove_finished);
+		const std::vector<Download>& downloads, bool also_remove_finished,
+		bool also_remove_deleted);
 
 	/// Adds downloads from the queue file to the "to keep" category.
 	void update_from_queue_file(CategorizedDownloads& downloads) const;
