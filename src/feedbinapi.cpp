@@ -273,8 +273,8 @@ json FeedbinApi::run_op(const std::string& path, const json& args,
 	CurlHandle& easyhandle,
 	const HTTPMethod method /* = GET */)
 {
+	curl_slist* headers = nullptr;
 	if (method == HTTPMethod::POST || method == HTTPMethod::DELETE) {
-		curl_slist* headers = NULL;
 		headers = curl_slist_append(headers, "Content-Type: application/json");
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPHEADER, headers);
 	}
@@ -295,6 +295,11 @@ json FeedbinApi::run_op(const std::string& path, const json& args,
 
 	const std::string result =
 		utils::retrieve_url(url, easyhandle, cfg, auth_info, body, method);
+
+	if (headers) {
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPHEADER, nullptr);
+		curl_slist_free_all(headers);
+	}
 
 	LOG(Level::INFO, "Feedbin::run_op(%s %s,...): body=%s reply = %s",
 		utils::http_method_str(method), path, arg_dump, result);
