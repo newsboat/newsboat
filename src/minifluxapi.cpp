@@ -318,10 +318,10 @@ json MinifluxApi::run_op(const std::string& path,
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
 
+	curl_slist* headers = nullptr;
 	if (!auth_token.empty()) {
 		std::string header = "X-Auth-Token: " + auth_token;
 
-		curl_slist* headers = NULL;
 		headers = curl_slist_append(headers, header.c_str());
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPHEADER, headers);
 	}
@@ -337,6 +337,11 @@ json MinifluxApi::run_op(const std::string& path,
 
 	const std::string result = utils::retrieve_url(
 			url, easyhandle, cfg, auth_info, body, method);
+
+	if (headers) {
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPHEADER, nullptr);
+		curl_slist_free_all(headers);
+	}
 
 	LOG(Level::DEBUG,
 		"MinifluxApi::run_op(%s %s,...): body=%s reply = %s",
