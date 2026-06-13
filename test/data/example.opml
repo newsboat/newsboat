@@ -9,7 +9,7 @@
         <outline type="rss" title="Distrowatch mirror" xmlUrl="https://example.com/mirrors/distrowatch.rss" />
         <outline xmlUrl="https://example.com/feed.atom" type="rss" title="example.com website (Atom feed)" />
         <outline title="example.com website (RSS 0.9 feed)" type="rss" xmlUrl="https://example.com/feed.rss09" />
-        <outline title="Blogs">
+        <outline text="Blogs" title="should be ignored">
             <outline xmlUrl="https://blogs.example.com/~john/posts.rss" title="John's musings" type="rss" />
             <outline title="friends">
                 <outline xmlUrl="https://blogs.example.com/~mike/.rss" title="Notes by Mike" type="rss" />
