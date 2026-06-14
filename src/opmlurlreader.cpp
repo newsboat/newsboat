@@ -1,6 +1,7 @@
 #include "opmlurlreader.h"
 
 #include <cstring>
+#include <sstream>
 
 #include "logger.h"
 #include "utils.h"
@@ -82,6 +83,19 @@ void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)
 				xmlFree(rsstext);
 			}
 
+			// Add tags
+			char* category = (char*)xmlGetProp(node, (const xmlChar*)"category");
+			if (category) {
+				std::string token;
+				std::istringstream ss = std::istringstream(category);
+				while (std::getline(ss, token, ',')) {
+					if (std::find(tmptags.begin(), tmptags.end(), token) == tmptags.end()) {
+						tmptags.push_back(token);
+					}
+				}
+				xmlFree(category);
+			}
+
 			if (tag.length() > 0) {
 				tmptags.push_back(tag);
 			}
@@ -108,8 +122,10 @@ void OpmlUrlReader::rec_find_rss_outlines(xmlNode* node, std::string tag)
 				handle_node(node, tag);
 				xmlFree(type);
 			} else {
-				char* text = (char*)xmlGetProp(
-						node, (const xmlChar*)"title");
+				char* text = (char*)xmlGetProp(node, (const xmlChar*)"text");
+				if (!text) {
+					text = (char*)xmlGetProp(node, (const xmlChar*)"title");
+				}
 				if (text) {
 					if (newtag.length() > 0) {
 						newtag.append("/");
