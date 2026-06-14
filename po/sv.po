@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat-2.12\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-06-05 19:02+0300\n"
-"PO-Revision-Date: 2026-03-21 18:30+0100\n"
+"PO-Revision-Date: 2026-06-14 18:20+0200\n"
 "Last-Translator: Dennis Öberg <contact@dennisoberg.se>\n"
 "Language-Team: Dennis Öberg <contact@dennisoberg.se>, Niklas Grahn "
 "<terra.unknown@yahoo.com>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: newsboat.cpp:34
 #, c-format
@@ -922,6 +922,7 @@ msgstr "Fel: kunde inte tolka filteruttryck `%s': %s"
 #, c-format
 msgid "Error: Some filter attributes are not available in feedlist: %s"
 msgstr ""
+"Fel: Vissa filterattribut är inte tillgängliga i listan över flöden: %s"
 
 #: src/feedretriever.cpp:81
 #, c-format
@@ -949,7 +950,7 @@ msgstr "Spara fil - %s"
 #: src/fileurlreader.cpp:73 src/remoteapiurlreader.cpp:43
 #, c-format
 msgid "Warning: Duplicate URL found: %s. Merging tags."
-msgstr ""
+msgstr "Varning: Dubblett-URL hittad: %s. Sammanfogar taggar."
 
 #: src/fileurlreader.cpp:99
 #, c-format
@@ -968,14 +969,14 @@ msgid "Operation \"%s\" not handled in dialog \"%s\""
 msgstr "Operation \"%s\" inte hanterad i dialogruta \"%s\""
 
 #: src/formaction.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Too many arguments for %s"
-msgstr "för många parametrar."
+msgstr "För många parametrar för %s"
 
 #: src/formaction.cpp:168
 #, c-format
 msgid "Too many arguments to \"cmdline\" command: %s"
-msgstr ""
+msgstr "För många argument för \"cmdline\"-kommando: %s"
 
 #: src/formaction.cpp:187
 msgid "usage: set <config-option> <value>"
@@ -1235,6 +1236,7 @@ msgstr "Skriv över `%s' i `%s'? (j:Ja n:Nej)"
 #, c-format
 msgid "Error: Some filter attributes are not available in itemlist: %s"
 msgstr ""
+"Fel: Vissa filterattribut är inte tillgängliga i listan över poster: %s"
 
 #: src/itemrenderer.cpp:75
 msgid "Feed: "
