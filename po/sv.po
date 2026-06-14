@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat-2.12\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-06-05 19:02+0300\n"
-"PO-Revision-Date: 2026-06-14 18:20+0200\n"
+"PO-Revision-Date: 2026-06-14 18:48+0200\n"
 "Last-Translator: Dennis Öberg <contact@dennisoberg.se>\n"
 "Language-Team: Dennis Öberg <contact@dennisoberg.se>, Niklas Grahn "
 "<terra.unknown@yahoo.com>\n"
@@ -971,7 +971,7 @@ msgstr "Operation \"%s\" inte hanterad i dialogruta \"%s\""
 #: src/formaction.cpp:100
 #, c-format
 msgid "Too many arguments for %s"
-msgstr "För många parametrar för %s"
+msgstr "För många argument för %s"
 
 #: src/formaction.cpp:168
 #, c-format
@@ -1923,7 +1923,7 @@ msgstr "Fel: ogiltigt webbflöde!"
 
 #: src/rssfeed.cpp:42
 msgid "too few arguments"
-msgstr "för få parametrar"
+msgstr "för få argument"
 
 #: src/rssitem.cpp:125
 msgid "%a, %d %b %Y %T %z"
