@@ -1,0 +1,1 @@
+https://news.ycombinator.com/rss
