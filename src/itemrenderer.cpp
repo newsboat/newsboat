@@ -189,9 +189,9 @@ int render_html(
 			} catch (...) {
 				exit_code = -1;
 			}
-		}
-		else if (output.empty() && !source.empty())
+		} else if (output.empty() && !source.empty()) {
 			exit_code = -1;
+		}
 
 		if (exit_code) {
 			return exit_code;

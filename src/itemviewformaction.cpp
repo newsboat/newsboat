@@ -145,16 +145,16 @@ void ItemViewFormAction::prepare()
 				const auto renderer = cfg->get_configvalue_as_filepath("html-renderer");
 				if (renderer_status == 127) {
 					v.get_statusline().show_error(strprintf::fmt(
-						_("html-renderer \"%s\" was not found."),
-						renderer.to_locale_string()));
+								_("html-renderer \"%s\" was not found."),
+								renderer.to_locale_string()));
 				} else if (renderer_status == -1) {
 					v.get_statusline().show_error(strprintf::fmt(
-						_("html-renderer \"%s\" could not be executed."),
-						renderer.to_locale_string()));
+								_("html-renderer \"%s\" could not be executed."),
+								renderer.to_locale_string()));
 				} else {
 					v.get_statusline().show_error(strprintf::fmt(
-						_("html-renderer \"%s\" exited with error code %i."),
-						renderer.to_locale_string(), renderer_status));
+								_("html-renderer \"%s\" exited with error code %i."),
+								renderer.to_locale_string(), renderer_status));
 				}
 			}
 		}
