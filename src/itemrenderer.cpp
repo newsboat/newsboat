@@ -167,7 +167,8 @@ int render_html(
 		argv[1] = "-c";
 		const std::string renderer_locale_string = renderer.to_locale_string();
 
-		const std::string wrapped_command = renderer_locale_string + " || echo \"NEWSBOAT_EXIT_CODE:$?\"";
+		const std::string wrapped_command = renderer_locale_string +
+			" || echo \"NEWSBOAT_EXIT_CODE:$?\"";
 		argv[2] = wrapped_command.c_str();
 		argv[3] = nullptr;
 		LOG(Level::DEBUG,
@@ -185,15 +186,16 @@ int render_html(
 			std::string code_str = output.substr(tag_pos + 19);
 			try {
 				exit_code = std::stoi(code_str);
-			} catch(...) {
+			} catch (...) {
 				exit_code = -1;
 			}
 		}
 		else if (output.empty() && !source.empty())
 			exit_code = -1;
 
-		if (exit_code)
+		if (exit_code) {
 			return exit_code;
+		}
 
 		std::istringstream is(output);
 		std::string line;
@@ -315,7 +317,8 @@ std::tuple<std::string, size_t, int> item_renderer::to_stfl_list(
 
 	TextFormatter txtfmt(lines);
 
-	auto [stfl_list, line_count] = txtfmt.format_text_to_list(rxman, location, text_width, window_width);
+	auto [stfl_list, line_count] = txtfmt.format_text_to_list(rxman, location, text_width,
+			window_width);
 
 	return std::make_tuple(stfl_list, line_count, renderer_status);
 }
