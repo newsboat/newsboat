@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-06-05 19:02+0300\n"
-"PO-Revision-Date: 2026-03-11 23:05+0300\n"
+"PO-Revision-Date: 2026-06-15 19:30+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -927,6 +927,7 @@ msgstr "Ошибка: не удалось разобрать выражение 
 #, c-format
 msgid "Error: Some filter attributes are not available in feedlist: %s"
 msgstr ""
+"Ошибка: некоторые атрибуты фильтров недоступны в контексте списка лент: %s"
 
 #: src/feedretriever.cpp:81
 #, c-format
@@ -954,7 +955,7 @@ msgstr "Сохранить файл - %s"
 #: src/fileurlreader.cpp:73 src/remoteapiurlreader.cpp:43
 #, c-format
 msgid "Warning: Duplicate URL found: %s. Merging tags."
-msgstr ""
+msgstr "Предупреждение: обнаружен повторяющийся URL %s. Объединяем метки."
 
 #: src/fileurlreader.cpp:99
 #, c-format
@@ -973,14 +974,14 @@ msgid "Operation \"%s\" not handled in dialog \"%s\""
 msgstr "Операция \"%s\" не обработана в диалоге \"%s\""
 
 #: src/formaction.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Too many arguments for %s"
-msgstr "слишком много параметров."
+msgstr "Слишком много аргументов к %s"
 
 #: src/formaction.cpp:168
 #, c-format
 msgid "Too many arguments to \"cmdline\" command: %s"
-msgstr ""
+msgstr "Слишком много аргументов к команде «cmdline»: %s"
 
 #: src/formaction.cpp:187
 msgid "usage: set <config-option> <value>"
@@ -1241,6 +1242,7 @@ msgstr "Перезаписать `%s' в `%s'? (y:Да n:Нет)"
 #, c-format
 msgid "Error: Some filter attributes are not available in itemlist: %s"
 msgstr ""
+"Ошибка: некоторые атрибуты фильтров недоступны в контексте списка записей: %s"
 
 #: src/itemrenderer.cpp:75
 msgid "Feed: "
@@ -1925,7 +1927,7 @@ msgstr "Ошибка: некорректная лента!"
 
 #: src/rssfeed.cpp:42
 msgid "too few arguments"
-msgstr "слишком мало параметров"
+msgstr "слишком мало аргументов"
 
 #: src/rssitem.cpp:125
 msgid "%a, %d %b %Y %T %z"
