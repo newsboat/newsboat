@@ -20,7 +20,7 @@ mod bridged {
 }
 
 fn create() -> Box<LineEdit> {
-    Box::new(LineEdit(lineedit::LineEdit::new()))
+    Box::new(LineEdit(lineedit::LineEdit::default()))
 }
 
 fn get_text(lineedit: &LineEdit) -> &str {

@@ -1,3 +1,4 @@
+#[derive(Default)]
 pub struct LineEdit {
     text: String,
     // Location in unicode codepoints
@@ -5,13 +6,6 @@ pub struct LineEdit {
 }
 
 impl LineEdit {
-    pub fn new() -> Self {
-        Self {
-            text: String::new(),
-            cursor: 0,
-        }
-    }
-
     pub fn get_text(&self) -> &str {
         &self.text
     }
@@ -91,7 +85,7 @@ mod tests {
 
     #[test]
     fn t_set_text_clamps_cursor_to_valid_location() {
-        let mut lineedit = LineEdit::new();
+        let mut lineedit = LineEdit::default();
         lineedit.set_text("many words make long sentence".to_owned());
         lineedit.set_cursor_location(10);
 
@@ -110,7 +104,7 @@ mod tests {
 
     #[test]
     fn t_set_cursor_location_clamps_to_valid_location() {
-        let mut lineedit = LineEdit::new();
+        let mut lineedit = LineEdit::default();
 
         lineedit.set_cursor_location(10);
         assert_eq!(lineedit.get_cursor_location(), 0);
@@ -126,7 +120,7 @@ mod tests {
 
     #[test]
     fn t_handle_event_left() {
-        let mut lineedit = LineEdit::new();
+        let mut lineedit = LineEdit::default();
         lineedit.set_text("abc".to_owned());
         lineedit.set_cursor_location(2);
 
@@ -142,7 +136,7 @@ mod tests {
 
     #[test]
     fn t_handle_event_right() {
-        let mut lineedit = LineEdit::new();
+        let mut lineedit = LineEdit::default();
         lineedit.set_text("大ßc".to_owned());
         lineedit.set_cursor_location(1);
 
@@ -159,7 +153,7 @@ mod tests {
     #[test]
     fn t_handle_event_home_ctrl_a() {
         for event in &["HOME", "^A"] {
-            let mut lineedit = LineEdit::new();
+            let mut lineedit = LineEdit::default();
             lineedit.set_text("abc".to_owned());
             lineedit.set_cursor_location(2);
 
@@ -171,7 +165,7 @@ mod tests {
     #[test]
     fn t_handle_event_end_ctrl_e() {
         for event in &["END", "^E"] {
-            let mut lineedit = LineEdit::new();
+            let mut lineedit = LineEdit::default();
             lineedit.set_text("大ßc".to_owned());
             lineedit.set_cursor_location(1);
 
@@ -182,7 +176,7 @@ mod tests {
 
     #[test]
     fn t_handle_event_delete() {
-        let mut lineedit = LineEdit::new();
+        let mut lineedit = LineEdit::default();
         lineedit.set_text("大ßc".to_owned());
         lineedit.set_cursor_location(1);
 
@@ -201,7 +195,7 @@ mod tests {
 
     #[test]
     fn t_handle_event_backspace() {
-        let mut lineedit = LineEdit::new();
+        let mut lineedit = LineEdit::default();
         lineedit.set_text("大ßc".to_owned());
         lineedit.set_cursor_location(2);
 
@@ -220,7 +214,7 @@ mod tests {
 
     #[test]
     fn t_insert_at_cursor() {
-        let mut lineedit = LineEdit::new();
+        let mut lineedit = LineEdit::default();
         lineedit.set_text("大c".to_owned());
         lineedit.set_cursor_location(1);
 
