@@ -28,9 +28,19 @@ FileBrowserFormAction::FileBrowserFormAction(View& vv,
 	: FormAction(vv, formstr, cfg)
 	, variant(variant)
 	, file_prompt_line(f, "fileprompt")
+	, filename_input(f, "filename")
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 	, view(vv)
 {
+}
+
+bool FileBrowserFormAction::handle_event(const Event& event)
+{
+	const std::string focus = f.get_focus();
+	if (focus == "filename") {
+		return filename_input.handle_event(event);
+	}
+	return false;
 }
 
 bool FileBrowserFormAction::process_operation(Operation op,
@@ -64,16 +74,16 @@ bool FileBrowserFormAction::process_operation(Operation op,
 
 					switch (variant) {
 					case Variant::FileSelection: {
-						const auto fnstr = Filepath::from_locale_string(f.get("filenametext")).file_name();
+						const auto fnstr = Filepath::from_locale_string(filename_input.get_value()).file_name();
 						if (fnstr) {
 							fn.push(*fnstr);
 						}
-						set_value("filenametext", fn.to_locale_string());
+						filename_input.set_value(fn.to_locale_string());
 						break;
 					}
 					case Variant::DirectorySelection: {
 						const auto fn_with_trailing_slash = fn.join(Filepath{});
-						set_value("filenametext", fn_with_trailing_slash.to_locale_string());
+						filename_input.set_value(fn_with_trailing_slash.to_locale_string());
 						break;
 					}
 					}
@@ -82,7 +92,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				break;
 				case file_system::FileType::RegularFile: {
 					const auto filename = utils::getcwd().join(selection.name);
-					set_value("filenametext", filename.to_locale_string());
+					filename_input.set_value(filename.to_locale_string());
 					f.set_focus("filename");
 				}
 				break;
@@ -93,7 +103,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 			} else {
 				bool do_pop = true;
 				if (variant == Variant::FileSelection) {
-					std::string fn = f.get("filenametext");
+					std::string fn = filename_input.get_value();
 					struct stat sbuf;
 					/*
 					 * this check is very important, as people will
@@ -151,16 +161,11 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	case OP_SK_HOME:
 		if (f.get_focus() == "files") {
 			files_list.move_to_first();
-		} else {
-			set_value("filenametext_pos", "0");
 		}
 		break;
 	case OP_SK_END:
 		if (f.get_focus() == "files") {
 			files_list.move_to_last();
-		} else {
-			const std::size_t text_length = f.get("filenametext").length();
-			set_value("filenametext_pos", std::to_string(text_length));
 		}
 		break;
 	case OP_SK_PGUP:
@@ -189,14 +194,14 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		LOG(Level::DEBUG, "view::filebrowser: quitting");
 		curs_set(0);
 		v.pop_current_formaction();
-		set_value("filenametext", "");
+		filename_input.set_value("");
 		break;
 	case OP_HARDQUIT:
 		LOG(Level::DEBUG, "view::filebrowser: hard quitting");
 		while (v.formaction_stack_size() > 0) {
 			v.pop_current_formaction();
 		}
-		set_value("filenametext", "");
+		filename_input.set_value("");
 		break;
 	default:
 		report_unhandled_operation(op);
@@ -371,14 +376,13 @@ void FileBrowserFormAction::init()
 		break;
 	}
 
-	set_value("filenametext", filenametext);
+	filename_input.set_value(filenametext);
 
 	// Set position to 0 and back to ensure that the text is visible
 	draw_form();
 	// TODO: #2326 use length by graphemes
 	// See: https://github.com/newsboat/newsboat/pull/2561#discussion_r1357376071
-	set_value("filenametext_pos",
-		std::to_string(filenametext.length()));
+	filename_input.set_position(filenametext.length());
 }
 
 std::vector<KeyMapHintEntry> FileBrowserFormAction::get_keymap_hint() const

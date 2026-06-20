@@ -7,6 +7,7 @@
 #include "configcontainer.h"
 #include "file_system.h"
 #include "formaction.h"
+#include "lineedit.h"
 #include "listwidget.h"
 #include "stflrichtext.h"
 
@@ -41,6 +42,8 @@ public:
 	}
 	std::string title() override;
 
+	bool handle_event(const Event& event) override;
+
 protected:
 	std::string main_widget() const override
 	{
@@ -69,6 +72,7 @@ private:
 	Variant variant;
 
 	LineView file_prompt_line;
+	LineEdit filename_input;
 	Filepath default_filename;
 
 	ListWidget files_list;

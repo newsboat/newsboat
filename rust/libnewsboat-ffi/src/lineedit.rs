@@ -15,7 +15,7 @@ mod bridged {
         fn get_cursor_location(lineedit: &LineEdit) -> usize;
         fn set_cursor_location(lineedit: &mut LineEdit, location: usize);
         fn insert_at_cursor(lineedit: &mut LineEdit, text: &str);
-        fn handle_event(lineedit: &mut LineEdit, event: &str);
+        fn handle_event(lineedit: &mut LineEdit, event: &str) -> bool;
     }
 }
 
@@ -43,6 +43,6 @@ fn insert_at_cursor(lineedit: &mut LineEdit, text: &str) {
     lineedit.0.insert_at_cursor(text);
 }
 
-fn handle_event(lineedit: &mut LineEdit, event: &str) {
-    lineedit.0.handle_event(event);
+fn handle_event(lineedit: &mut LineEdit, event: &str) -> bool {
+    lineedit.0.handle_event(event)
 }

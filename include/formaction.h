@@ -102,6 +102,12 @@ public:
 	void delete_word();
 	void handle_cmdline_completion();
 
+	virtual bool handle_event(const Event& /*event*/)
+	{
+		// Not handled by default but FormActions can override if necessary
+		return false;
+	};
+
 	void handle_qna_event(const Event& event, bool inside_cmd);
 
 	void set_parent_formaction(std::shared_ptr<FormAction> fa)
