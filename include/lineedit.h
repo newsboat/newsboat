@@ -23,7 +23,7 @@ public:
 	void set_position(std::uint32_t pos);
 	std::uint32_t get_position();
 
-	void handle_event(const Event& event);
+	bool handle_event(const Event& event);
 
 private:
 	void sync_to_stfl();

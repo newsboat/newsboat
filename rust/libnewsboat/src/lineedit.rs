@@ -44,36 +44,43 @@ impl LineEdit {
         self.text = before + &after;
     }
 
-    pub fn handle_event(&mut self, event: &str) {
+    // Returns true if event is handled
+    pub fn handle_event(&mut self, event: &str) -> bool {
         match event {
             "LEFT" => {
                 if self.cursor >= 1 {
                     self.cursor -= 1;
                 }
+                true
             }
             "RIGHT" => {
                 if self.cursor < self.text.chars().count() {
                     self.cursor += 1;
                 }
+                true
             }
             "HOME" | "^A" => {
                 self.cursor = 0;
+                true
             }
             "END" | "^E" => {
                 self.cursor = self.text.chars().count();
+                true
             }
             "DC" => {
                 if self.cursor < self.text.chars().count() {
                     self.remove_nth_char(self.cursor);
                 }
+                true
             }
             "BACKSPACE" => {
                 if self.cursor >= 1 {
                     self.remove_nth_char(self.cursor - 1);
                     self.cursor -= 1;
                 }
+                true
             }
-            _ => {}
+            _ => false,
         }
     }
 }

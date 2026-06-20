@@ -43,14 +43,17 @@ std::uint32_t LineEdit::get_position()
 	return lineedit::bridged::get_cursor_location(*rs_object);
 }
 
-void LineEdit::handle_event(const Event& event)
+bool LineEdit::handle_event(const Event& event)
 {
+	bool handled = false;
 	if (event.printableCharacter.has_value()) {
 		lineedit::bridged::insert_at_cursor(*rs_object, event.printableCharacter.value());
+		handled = true;
 	} else {
-		lineedit::bridged::handle_event(*rs_object, event.name);
+		handled = lineedit::bridged::handle_event(*rs_object, event.name);
 	}
 	sync_to_stfl();
+	return handled;
 }
 
 void LineEdit::sync_to_stfl()

@@ -199,7 +199,7 @@ int View::run()
 			continue;
 		}
 
-		if (handle_qna_event(event, fa)) {
+		if (handle_event(event, fa)) {
 			continue;
 		}
 
@@ -277,7 +277,7 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 			continue;
 		}
 
-		if (handle_qna_event(event, fa)) {
+		if (handle_event(event, fa)) {
 			continue;
 		}
 
@@ -649,7 +649,7 @@ std::optional<Filepath> View::run_filebrowser(const Filepath& default_filename)
 	apply_colors(filebrowser);
 	filebrowser->set_default_filename(default_filename);
 	filebrowser->set_parent_formaction(get_current_formaction());
-	const std::string res = run_modal(filebrowser, "filenametext");
+	const std::string res = run_modal(filebrowser, "filename_value");
 	if (res.empty()) {
 		return std::nullopt;
 	}
@@ -662,7 +662,7 @@ std::optional<Filepath> View::run_dirbrowser()
 			*this, filebrowser_str, cfg);
 	apply_colors(dirbrowser);
 	dirbrowser->set_parent_formaction(get_current_formaction());
-	std::string res = run_modal(dirbrowser, "filenametext");
+	std::string res = run_modal(dirbrowser, "filename_value");
 	if (res.empty()) {
 		return std::nullopt;
 	}
@@ -1187,7 +1187,7 @@ void View::inside_cmdline(bool f)
 	is_inside_cmdline = f;
 }
 
-bool View::handle_qna_event(const Event& event,
+bool View::handle_event(const Event& event,
 	std::shared_ptr<FormAction> fa)
 {
 	if (is_inside_qna) {
@@ -1195,8 +1195,9 @@ bool View::handle_qna_event(const Event& event,
 		fa->handle_qna_event(event, is_inside_cmdline);
 
 		return true;
+	} else {
+		return fa->handle_event(event);
 	}
-	return false;
 }
 
 void View::handle_resize()
