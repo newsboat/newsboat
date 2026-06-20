@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Check out the code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Build, test, fake-install, run Clippy
         uses: vmactions/freebsd-vm@v1
