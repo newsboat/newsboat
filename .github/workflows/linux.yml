@@ -98,7 +98,7 @@ jobs:
 
     steps:
       - name: Check out the code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Docker buildx
         uses: docker/setup-buildx-action@v4
@@ -227,7 +227,7 @@ jobs:
 
     steps:
       - name: Check out the code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Docker buildx
         uses: docker/setup-buildx-action@v4
