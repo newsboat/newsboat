@@ -198,7 +198,7 @@ int View::run()
 			continue;
 		}
 
-		if (handle_qna_event(event, fa)) {
+		if (handle_event(event, fa)) {
 			continue;
 		}
 
@@ -275,7 +275,7 @@ void View::run_modal(std::shared_ptr<FormAction> f)
 			continue;
 		}
 
-		if (handle_qna_event(event, fa)) {
+		if (handle_event(event, fa)) {
 			continue;
 		}
 
@@ -1172,16 +1172,17 @@ void View::inside_cmdline(bool f)
 	is_inside_cmdline = f;
 }
 
-bool View::handle_qna_event(const Event& event,
+bool View::handle_event(const Event& event,
 	std::shared_ptr<FormAction> fa)
 {
 	if (is_inside_qna) {
-		LOG(Level::DEBUG, "View::handle_qna_event: we're inside QNA input");
+		LOG(Level::DEBUG, "View::handle_event: we're inside QNA input");
 		fa->handle_qna_event(event, is_inside_cmdline);
 
 		return true;
+	} else {
+		return fa->handle_event(event);
 	}
-	return false;
 }
 
 void View::handle_resize()

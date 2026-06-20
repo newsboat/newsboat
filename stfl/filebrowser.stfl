@@ -35,8 +35,8 @@ vbox
       .expand:0
     !input[filename]
       .expand:h
-      text[filenametext]:""
-      pos[filenametext_pos]:0
+      text[filename_value]:""
+      pos[filename_value_pos]:0
   vbox
     .expand:0
     .display[showhint]:1
