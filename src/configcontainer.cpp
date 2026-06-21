@@ -149,6 +149,7 @@ ConfigContainer::ConfigContainer()
 	{"inoreader-flag-star", ConfigData("", ConfigDataType::STR)},
 	{"inoreader-min-items", ConfigData("20", ConfigDataType::INT)},
 	{"keep-articles-days", ConfigData("0", ConfigDataType::INT)},
+	{"keep-forever-if-flagged-with", ConfigData("", ConfigDataType::STR)},
 	{
 		"mark-as-read-on-hover",
 		ConfigData("false", ConfigDataType::BOOL)},

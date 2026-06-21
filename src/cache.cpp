@@ -1129,10 +1129,20 @@ void Cache::clean_old_articles()
 
 	const unsigned int days = cfg.get_configvalue_as_int("keep-articles-days");
 	if (days > 0) {
+		const std::string flags = cfg.get_configvalue("keep-forever-if-flagged-with");
+		std::istringstream stream(flags);
+		std::string flag;
+		std::string flag_exclusions;
+
+		while (stream >> flag) {
+			flag_exclusions += " AND (flags NOT LIKE '%" + flag + "%' OR flags IS NULL)";
+		}
+
 		const time_t old_date = time(nullptr) - days * 24 * 60 * 60;
 
 		const std::string query(prepare_query(
-				"DELETE FROM rss_item WHERE pubDate < %d", old_date));
+				"DELETE FROM rss_item WHERE pubDate < %d", old_date) + flag_exclusions);
+
 		LOG(Level::DEBUG,
 			"Cache::clean_old_articles: about to delete articles "
 			"with a pubDate older than %" PRId64,

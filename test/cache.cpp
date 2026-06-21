@@ -83,6 +83,47 @@ TEST_CASE("Cleaning old articles works", "[Cache]")
 	REQUIRE(feed->items().size() == 1);
 }
 
+TEST_CASE("Old articles dont't get deleted if flaged to be kept forever", "[Cache]")
+{
+	test_helpers::TempFile dbfile;
+	auto cfg = std::make_unique<ConfigContainer>();
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
+	const std::string uri = "file://data/rss.xml";
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(*cfg, *rsscache, easyHandle);
+	RssParser parser(uri, *rsscache, *cfg, nullptr);
+	auto feed = parser.parse(feed_retriever.retrieve(uri));
+
+	/* Adding "f" to the flags of the first item in the feed which should stop it from being deleted
+	* because "f" is listed in "keep-forever-if-flagged-with". */
+
+	auto flagged_item = feed->items()[0];
+
+	rsscache->externalize_rssfeed(*feed, false);
+
+	flagged_item->set_flags("f");
+	rsscache->update_rssitem_flags(flagged_item.get());
+
+	/* Simulating a restart of Newsboat. */
+
+	/* Setting "keep-forever-if-flagged-with" to "flag" "keep-articles-days" to non-zero value to trigger
+	 * Cache::clean_old_articles().
+	 *
+	 * The value of 42 days is sufficient because the items in the test feed
+	 * are dating back to 2006. */
+	cfg = std::make_unique<ConfigContainer>();
+	cfg->set_configvalue("keep-articles-days", "42");
+	cfg->set_configvalue("keep-forever-if-flagged-with", "f");
+	rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
+	feed = rsscache->internalize_rssfeed("file://data/rss.xml", nullptr);
+
+
+	/* The important part: old non flaged articles should be gone, flaged one remains. */
+	REQUIRE(feed->items().size() == 1);
+	REQUIRE(feed->items()[0]->flags() == "f");
+}
+
+
 TEST_CASE("Last-Modified and ETag values are persisted to DB", "[Cache]")
 {
 	auto cfg = std::make_unique<ConfigContainer>();
