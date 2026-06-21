@@ -1,19 +1,47 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2026-06-21
+## 2.44 - 2026-06-21
 
 Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes: TK
+for this release also includes Danny Kirkham, Ganesh Adimalupu, and Micha
+Berdichevsky.
 
 ### Added
+
+- Table with `*-title-format` specifiers in the manpage (Dennis van der Schagt)
+- List of available text attributes in the manpage (Dennis van der Schagt)
+- Ability to specify initial text for `cmdline` command. This allows one to
+    write macros or new-style `bind`s to run common command-line commands
+    (Dennis van der Schagt)
+- Ability to open urls file at the current feed, e.g.
+    `bind E feedlist,articlelist,searchresultslist edit-urls "vim +%L %f"`
+    This is **not** enabled by default. See `edit-urls` docs for details.
+    (#1262, #3338, https://github.com/akrennmair/newsbeuter/issues/258 )
+    (Dennis van der Schagt)
+- Import feed titles from OPML when using `opml-url` (Jorenar)
+
 ### Changed
 
 - Bumped minimum supported Rust version to 1.92.0
+- Updated translations: Dutch (Dennis van der Schagt),
+    German (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno),
+    Russian and Ukrainian (Alexander Batischev), Swedish (Dennis Öberg),
+    Turkish (Emir SARI)
 
-### Deprecated
-### Removed
 ### Fixed
-### Security
+
+- OPML import mangling `exec:` and `filter` lines in the urls file (#3115)
+    (Dennis van der Schagt)
+- Build failure on macOS 26 (Herby Gillot)
+- Build failure on OpenBSD (Frederic Cambus)
+- Cursor jumping to unrelated article when `purge-deleted` is called (#1445)
+    (Dennis van der Schagt)
+- Applying an incorrect filter hiding all articles. Now the filter would not be
+    applied, and an error message would be shown (#2857) (Dennis van der Schagt)
+- Missing tags if feed URL is used multiple times. Now the tags would be merged
+    (#2233) (amrSherif12)
+- Authentication error (`"error": "INCORRECT_USAGE"`) with TT-RSS (#3373)
+    (Alexander Batischev)
 
 
 
