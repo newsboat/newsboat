@@ -69,7 +69,7 @@ mod bridged {
         fn md5hash(input: &str) -> String;
         fn substr_with_width(string: &str, max_width: usize) -> String;
         fn substr_with_width_stfl(string: &str, max_width: usize) -> String;
-        fn get_command_output(cmd: &str) -> String;
+        fn get_command_output(cmd: &str) -> Vec<u8>;
         fn get_basename(input: &str) -> String;
         fn program_version() -> String;
         fn strip_comments(line: &str) -> &str;

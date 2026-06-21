@@ -263,8 +263,8 @@ TEST_CASE("Feed retriever with exec: feed", "[FeedRetriever]")
 		REQUIRE_THROWS_AS(feedRetriever.retrieve(exec_url), rsspp::Exception);
 	}
 
-	SECTION("Replaces non-utf8 data with U+FFFD") {
-		constexpr auto encoding = "utf-8";
+	SECTION("Keeps non-utf8 data as-is to allow conversion to utf-8 via libxml") {
+		constexpr auto encoding = "iso-8859-1";
 		constexpr auto title_utf8 = u8"Prøve"; // Danish for "test"
 		auto feed_xml_utf8 = strprintf::fmt(atom_feed_with_encoding, encoding, title_utf8);
 		auto feed_xml_iso8859_1 = utils::convert_text(feed_xml_utf8, "iso-8859-1", "utf-8");
@@ -278,6 +278,6 @@ TEST_CASE("Feed retriever with exec: feed", "[FeedRetriever]")
 				feed_file.get_path().to_locale_string());
 		const auto feed = feedRetriever.retrieve(exec_url);
 		REQUIRE(feed.items.size() == 1);
-		REQUIRE(feed.title == "Pr\uFFFDve");
+		REQUIRE(feed.title == title_utf8);
 	}
 }
