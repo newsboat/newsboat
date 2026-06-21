@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cinttypes>
+#include <cwctype>
 #include <ncurses.h>
 
 #include "config.h"
@@ -123,9 +124,66 @@ void FormAction::draw_form()
 	f.run(-1);
 }
 
-std::string FormAction::draw_form_wait_for_event(unsigned int timeout)
+std::string FormAction::key_to_string(wint_t wch)
 {
-	return f.run(timeout);
+	switch (wch) {
+	case '\r':
+	case '\n':
+		return "ENTER";
+	case ' ':
+		return "SPACE";
+	case '\t':
+		return "TAB";
+	case 27:
+		return "ESC";
+	case 127:
+		return "BACKSPACE";
+	}
+	if (wch < 32) {
+		return keyname(wch);
+	} else {
+		std::wstring key{static_cast<wchar_t>(wch)};
+		return f.convert(key);
+	}
+}
+
+std::string FormAction::function_key_to_string(wint_t wch)
+{
+	if (wch >= KEY_F(0) && wch <= KEY_F(63)) {
+		return strprintf::fmt("F%u", wch - KEY_F0);
+	}
+	const std::string name = keyname(wch);
+	if (name.substr(0, 4) == "KEY_") {
+		// Drop "KEY_" prefix from name
+		return name.substr(4);
+	} else {
+		return name;
+	}
+}
+
+Event FormAction::wait_for_event()
+{
+	wtimeout(stdscr, INT_MAX);
+
+	wint_t wch{};
+	const auto rc = wget_wch(stdscr, &wch);
+	LOG(Level::USERERROR, "wait_for_event: wget_wch: rc: %d, wch: %u", rc, wch);
+	Event event;
+	if (rc == ERR) {
+		event = {"TIMEOUT", std::nullopt};
+	} else if (rc == KEY_CODE_YES) {
+		event = {function_key_to_string(wch), std::nullopt};
+	} else {
+		std::optional<std::string> printableCharacter{};
+		if (iswprint(wch)) {
+			std::wstring key{static_cast<wchar_t>(wch)};
+			printableCharacter = f.convert(key);
+		}
+		event = {key_to_string(wch), printableCharacter};
+	}
+	LOG(Level::USERERROR, "wait_for_event: event: %s (printable character: %s)", event.name,
+		event.printableCharacter.has_value() ? "yes" : "no");
+	return event;
 }
 
 void FormAction::recalculate_widget_dimensions()
@@ -625,26 +683,28 @@ void FormAction::handle_cmdline_completion()
 	last_fragment = suggestion;
 }
 
-void FormAction::handle_qna_event(std::string event, bool inside_cmd)
+void FormAction::handle_qna_event(const Event& event, bool inside_cmd)
 {
-	if (event == "ESC") {
+	if (event.name == "ESC") {
 		cancel_qna();
-	} else if (inside_cmd && event == "TAB") {
+	} else if (inside_cmd && event.name == "TAB") {
 		handle_cmdline_completion();
-	} else if (event == "UP") {
+	} else if (event.name == "UP") {
 		qna_previous_history();
-	} else if (event == "DOWN") {
+	} else if (event.name == "DOWN") {
 		qna_next_history();
-	} else if (event == "ENTER") {
+	} else if (event.name == "ENTER") {
 		finish_qna_question();
-	} else if (event == "^U") {
+	} else if (event.name == "^U") {
 		clear_line();
-	} else if (event == "^K") {
+	} else if (event.name == "^K") {
 		clear_eol();
-	} else if (event == "^G") {
+	} else if (event.name == "^G") {
 		cancel_qna();
-	} else if (event == "^W") {
+	} else if (event.name == "^W") {
 		delete_word();
+	} else {
+		qna_input.handle_event(event);
 	}
 }
 

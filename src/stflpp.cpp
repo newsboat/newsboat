@@ -52,6 +52,12 @@ std::string Stfl::Form::run(int timeout)
 	}
 }
 
+std::string Stfl::Form::convert(std::wstring input)
+{
+	const auto output = stfl_ipool_fromwc(ipool, input.c_str());
+	return output == nullptr ? "" : std::string{output};
+}
+
 std::string Stfl::Form::get(const std::string& name)
 {
 	const char* text = stfl_ipool_fromwc(

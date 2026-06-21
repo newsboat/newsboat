@@ -26,6 +26,8 @@ public:
 	}
 	std::string title() override;
 
+	bool handle_event(const Event& event) override;
+
 protected:
 	std::string main_widget() const override
 	{
@@ -46,6 +48,7 @@ private:
 	std::string get_formatted_dirname(const Filepath& dirname, mode_t mode);
 
 	LineView file_prompt_line;
+	LineEdit filename_input;
 
 	ListWidget files_list;
 

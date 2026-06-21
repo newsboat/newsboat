@@ -27,9 +27,19 @@ DirBrowserFormAction::DirBrowserFormAction(View& vv,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, file_prompt_line(f, "fileprompt")
+	, filename_input(f, "filename")
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 	, view(vv)
 {
+}
+
+bool DirBrowserFormAction::handle_event(const Event& event)
+{
+	const std::string focus = f.get_focus();
+	if (focus == "filename") {
+		return filename_input.handle_event(event);
+	}
+	return false;
 }
 
 bool DirBrowserFormAction::process_operation(Operation op,
@@ -64,13 +74,13 @@ bool DirBrowserFormAction::process_operation(Operation op,
 					update_title(fn);
 
 					const auto fn_with_trailing_slash = fn.join(Filepath{});
-					set_value("filenametext", fn_with_trailing_slash.to_locale_string());
+					filename_input.set_value(fn_with_trailing_slash.to_locale_string());
 					do_redraw = true;
 				}
 				break;
 				case file_system::FileType::RegularFile: {
 					const auto filename = utils::getcwd().join(selection.name);
-					set_value("filenametext", filename.to_locale_string());
+					filename_input.set_value(filename.to_locale_string());
 					f.set_focus("filename");
 				}
 				break;
@@ -115,16 +125,11 @@ bool DirBrowserFormAction::process_operation(Operation op,
 	case OP_SK_HOME:
 		if (f.get_focus() == "files") {
 			files_list.move_to_first();
-		} else {
-			set_value("filenametext_pos", "0");
 		}
 		break;
 	case OP_SK_END:
 		if (f.get_focus() == "files") {
 			files_list.move_to_last();
-		} else {
-			const std::size_t text_length = f.get("filenametext").length();
-			set_value("filenametext_pos", std::to_string(text_length));
 		}
 		break;
 	case OP_SK_PGUP:
@@ -153,14 +158,14 @@ bool DirBrowserFormAction::process_operation(Operation op,
 		LOG(Level::DEBUG, "view::dirbrowser: quitting");
 		curs_set(0);
 		v.pop_current_formaction();
-		set_value("filenametext", "");
+		filename_input.set_value("");
 		break;
 	case OP_HARDQUIT:
 		LOG(Level::DEBUG, "view::dirbrowser: hard quitting");
 		while (v.formaction_stack_size() > 0) {
 			v.pop_current_formaction();
 		}
-		set_value("filenametext", "");
+		filename_input.set_value("");
 		break;
 	default:
 		report_unhandled_operation(op);
@@ -274,12 +279,11 @@ void DirBrowserFormAction::init()
 	const int status = ::chdir(save_path.to_locale_string().c_str());
 	LOG(Level::DEBUG, "view::dirbrowser: chdir(%s) = %i", save_path, status);
 
-	set_value("filenametext", save_path.to_locale_string());
+	filename_input.set_value(save_path.to_locale_string());
 
 	// Set position to 0 and back to ensure that the text is visible
 	draw_form();
-	set_value("filenametext_pos",
-		std::to_string(save_path.to_locale_string().length()));
+	filename_input.set_position(save_path.to_locale_string().length());
 }
 
 std::vector<KeyMapHintEntry> DirBrowserFormAction::get_keymap_hint() const

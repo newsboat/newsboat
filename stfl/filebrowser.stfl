@@ -6,13 +6,6 @@ vbox
   @info#style_colon_normal[hint-separator]:
   @info#style_desc_normal[hint-description]:
   @title#style_normal[title]:
-  @bind_up[bind_up]:
-  @bind_down[bind_down]:
-  @bind_page_up[bind_page_up]:
-  @bind_page_down[bind_page_down]:
-  @bind_home[bind_home]:
-  @bind_end[bind_end]:
-  @on_TAB:"TAB"
   label#title[title]
     text[head]:"File Browser"
     .expand:h
@@ -32,8 +25,8 @@ vbox
       text[fileprompt]:""
     !input[filename]
       .expand:h
-      text[filenametext]:""
-      pos[filenametext_pos]:0
+      text[filename_value]:""
+      pos[filename_value_pos]:0
   vbox
     .expand:0
     .display[showhint]:1
@@ -55,8 +48,6 @@ vbox
     input[qnainput]
       modal:1
       .expand:h
-      @bind_home:**
-      @bind_end:**
       text[qna_value]:""
       pos[qna_value_pos]:0
       .display[show_qna_input]:0
