@@ -26,7 +26,6 @@ extern "C" {
 #include "dbexception.h"
 #include "dialogs.h"
 #include "dialogsformaction.h"
-#include "dirbrowserformaction.h"
 #include "emptyformaction.h"
 #include "empty.h"
 #include "feedlist.h"
@@ -646,7 +645,7 @@ void View::push_urlview(const Links& links,
 std::optional<Filepath> View::run_filebrowser(const Filepath& default_filename)
 {
 	auto filebrowser = std::make_shared<FileBrowserFormAction>(
-			*this, filebrowser_str, cfg);
+			*this, filebrowser_str, cfg, FileBrowserFormAction::Variant::FileSelection);
 	apply_colors(filebrowser);
 	filebrowser->set_default_filename(default_filename);
 	filebrowser->set_parent_formaction(get_current_formaction());
@@ -659,8 +658,8 @@ std::optional<Filepath> View::run_filebrowser(const Filepath& default_filename)
 
 std::optional<Filepath> View::run_dirbrowser()
 {
-	auto dirbrowser = std::make_shared<DirBrowserFormAction>(
-			*this, filebrowser_str, cfg);
+	auto dirbrowser = std::make_shared<FileBrowserFormAction>(
+			*this, filebrowser_str, cfg, FileBrowserFormAction::Variant::DirectorySelection);
 	apply_colors(dirbrowser);
 	dirbrowser->set_parent_formaction(get_current_formaction());
 	std::string res = run_modal(dirbrowser, "filenametext");

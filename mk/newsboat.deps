@@ -7,7 +7,6 @@ src/configpaths.cpp
 src/controller.cpp
 src/curlheadercontainer.cpp
 src/dialogsformaction.cpp
-src/dirbrowserformaction.cpp
 src/emptyformaction.cpp
 src/feedcontainer.cpp
 src/feedbinapi.cpp

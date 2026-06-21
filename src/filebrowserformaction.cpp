@@ -23,8 +23,10 @@ namespace newsboat {
 
 FileBrowserFormAction::FileBrowserFormAction(View& vv,
 	std::string formstr,
-	ConfigContainer* cfg)
+	ConfigContainer* cfg,
+	Variant variant)
 	: FormAction(vv, formstr, cfg)
+	, variant(variant)
 	, file_prompt_line(f, "fileprompt")
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 	, view(vv)
@@ -38,12 +40,10 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	switch (op) {
 	case OP_OPEN: {
 		/*
-		 * whenever "ENTER" is hit, we need to distinguish two different
-		 * cases:
-		 *   - the focus is in the list of files, then we need to set
-		 * the filename field to the currently selected entry
-		 *   - the focus is in the filename field, then the filename
-		 * needs to be returned.
+		 * whenever "ENTER" is hit, we need to distinguish two different cases:
+		 *   - focus on files list => add name of current entry to path and, in
+		 *     case of directory, enter the directory
+		 *   - focus on filename field => exit dialog and return filename
 		 */
 		LOG(Level::DEBUG, "FileBrowserFormAction: 'opening' item");
 		const std::string focus = f.get_focus();
@@ -62,11 +62,21 @@ bool FileBrowserFormAction::process_operation(Operation op,
 					auto fn = utils::getcwd();
 					update_title(fn);
 
-					const auto fnstr = Filepath::from_locale_string(f.get("filenametext")).file_name();
-					if (fnstr) {
-						fn.push(*fnstr);
+					switch (variant) {
+					case Variant::FileSelection: {
+						const auto fnstr = Filepath::from_locale_string(f.get("filenametext")).file_name();
+						if (fnstr) {
+							fn.push(*fnstr);
+						}
+						set_value("filenametext", fn.to_locale_string());
+						break;
 					}
-					set_value("filenametext", fn.to_locale_string());
+					case Variant::DirectorySelection: {
+						const auto fn_with_trailing_slash = fn.join(Filepath{});
+						set_value("filenametext", fn_with_trailing_slash.to_locale_string());
+						break;
+					}
+					}
 					do_redraw = true;
 				}
 				break;
@@ -82,24 +92,26 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				}
 			} else {
 				bool do_pop = true;
-				std::string fn = f.get("filenametext");
-				struct stat sbuf;
-				/*
-				 * this check is very important, as people will
-				 * kill us if they accidentaly overwrote their
-				 * files with no further warning...
-				 */
-				if (::stat(fn.c_str(), &sbuf) != -1) {
-					f.set_focus("files");
-					if (v.confirm(
-							strprintf::fmt(
-								_("Do you really want to overwrite `%s' "
-									"(y:Yes n:No)? "),
-								fn),
-							_("yn")) == *_("n")) {
-						do_pop = false;
+				if (variant == Variant::FileSelection) {
+					std::string fn = f.get("filenametext");
+					struct stat sbuf;
+					/*
+					 * this check is very important, as people will
+					 * kill us if they accidentaly overwrote their
+					 * files with no further warning...
+					 */
+					if (::stat(fn.c_str(), &sbuf) != -1) {
+						f.set_focus("files");
+						if (v.confirm(
+								strprintf::fmt(
+									_("Do you really want to overwrite `%s' "
+										"(y:Yes n:No)? "),
+									fn),
+								_("yn")) == *_("n")) {
+							do_pop = false;
+						}
+						f.set_focus("filenametext");
 					}
-					f.set_focus("filenametext");
 				}
 				if (do_pop) {
 					curs_set(0);
@@ -202,8 +214,16 @@ void FileBrowserFormAction::update_title(const Filepath& working_directory)
 	fmt.register_fmt('V', utils::program_version());
 	fmt.register_fmt('f', working_directory.display());
 
-	set_title(fmt.do_format(
-			cfg->get_configvalue("filebrowser-title-format"), width));
+	std::string title{};
+	switch (variant) {
+	case Variant::FileSelection:
+		title = cfg->get_configvalue("filebrowser-title-format");
+		break;
+	case Variant::DirectorySelection:
+		title = cfg->get_configvalue("dirbrowser-title-format");
+		break;
+	}
+	set_title(fmt.do_format(title, width));
 }
 
 std::vector<Filepath> get_sorted_filelist()
@@ -234,6 +254,43 @@ std::vector<Filepath> get_sorted_filelist()
 	return ret;
 }
 
+std::vector<Filepath> get_sorted_dirlist()
+{
+	std::vector<Filepath> ret;
+
+	const auto cwdtmp = utils::getcwd();
+
+	DIR* dirp = ::opendir(cwdtmp.to_locale_string().c_str());
+	if (dirp) {
+		struct dirent* de = ::readdir(dirp);
+		while (de) {
+			if (strcmp(de->d_name, ".") != 0 &&
+				strcmp(de->d_name, "..") != 0) {
+				struct stat sb;
+				auto entry = Filepath::from_locale_string(de->d_name);
+				const auto dpath = cwdtmp.join(entry);
+				if (::lstat(dpath.to_locale_string().c_str(), &sb) == 0) {
+					const auto ftype = file_system::mode_to_filetype(sb.st_mode);
+					if (ftype == file_system::FileType::Directory) {
+						ret.emplace_back(std::move(entry));
+					}
+				}
+			}
+
+			de = ::readdir(dirp);
+		}
+		::closedir(dirp);
+	}
+
+	std::sort(ret.begin(), ret.end());
+
+	if (cwdtmp != "/"_path) {
+		ret.emplace(ret.begin(), ".."_path);
+	}
+
+	return ret;
+}
+
 void FileBrowserFormAction::prepare()
 {
 	/*
@@ -246,8 +303,17 @@ void FileBrowserFormAction::prepare()
 
 		id_at_position.clear();
 		lines.clear();
-		for (auto filename : get_sorted_filelist()) {
-			add_file(id_at_position, filename);
+		switch (variant) {
+		case Variant::FileSelection:
+			for (auto filename : get_sorted_filelist()) {
+				add_file(id_at_position, filename);
+			}
+			break;
+		case Variant::DirectorySelection:
+			for (auto directory : get_sorted_dirlist()) {
+				add_file(id_at_position, directory);
+			}
+			break;
 		}
 
 		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> StflRichText {
@@ -279,7 +345,14 @@ void FileBrowserFormAction::init()
 
 	set_keymap_hints();
 
-	file_prompt_line.set_text(_("File: "));
+	switch (variant) {
+	case Variant::FileSelection:
+		file_prompt_line.set_text(_("File: "));
+		break;
+	case Variant::DirectorySelection:
+		file_prompt_line.set_text(_("Directory: "));
+		break;
+	}
 
 	const auto save_path = cfg->get_configvalue_as_filepath("save-path");
 
@@ -288,14 +361,24 @@ void FileBrowserFormAction::init()
 	const int status = ::chdir(save_path.to_locale_string().c_str());
 	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", save_path, status);
 
-	set_value("filenametext", default_filename.to_locale_string());
+	std::string filenametext{};
+	switch (variant) {
+	case Variant::FileSelection:
+		filenametext = default_filename.to_locale_string();
+		break;
+	case Variant::DirectorySelection:
+		filenametext = save_path.to_locale_string();
+		break;
+	}
+
+	set_value("filenametext", filenametext);
 
 	// Set position to 0 and back to ensure that the text is visible
 	draw_form();
 	// TODO: #2326 use length by graphemes
 	// See: https://github.com/newsboat/newsboat/pull/2561#discussion_r1357376071
 	set_value("filenametext_pos",
-		std::to_string(default_filename.to_locale_string().length()));
+		std::to_string(filenametext.length()));
 }
 
 std::vector<KeyMapHintEntry> FileBrowserFormAction::get_keymap_hint() const
@@ -351,7 +434,15 @@ std::string FileBrowserFormAction::get_formatted_filename(const Filepath& filena
 
 std::string FileBrowserFormAction::title()
 {
-	return strprintf::fmt(_("Save File - %s"), utils::getcwd());
+	switch (variant) {
+	case Variant::FileSelection:
+		return strprintf::fmt(_("Save File - %s"), utils::getcwd());
+		break;
+	case Variant::DirectorySelection:
+		return strprintf::fmt(_("Save Files - %s"), utils::getcwd());
+		break;
+	}
+	return "";
 }
 
 } // namespace newsboat
