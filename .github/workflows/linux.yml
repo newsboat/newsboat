@@ -24,7 +24,7 @@ jobs:
               cxx_package=g++-7
               cc=gcc-7
               cxx=g++-7
-              rust_version=1.92.0
+              rust_version=1.94.0
           - name: MSRV, GCC 14 (Ubuntu 24.04)
             image: newsboat/ci-24.04-gcc14-msrv:latest
             dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
@@ -32,7 +32,7 @@ jobs:
               cxx_package=g++-14
               cc=gcc-14
               cxx=g++-14
-              rust_version=1.92.0
+              rust_version=1.94.0
 
           - name: Rust stable, GCC 13 (Ubuntu 24.04)
             image: newsboat/ci-24.04-gcc13:latest
