@@ -327,7 +327,7 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_PB_RELOAD,
 		"pb-reload",
-		KeyCombination("r", ShiftState::Shift),
+		KeyCombination("r", ShiftState::NoShift, ControlState::Control),
 		translatable("Reload the queue"),
 		KM_PODBOAT
 	},
