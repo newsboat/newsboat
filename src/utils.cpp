@@ -334,7 +334,8 @@ std::string utils::retrieve_url(const std::string& url,
 	return buf;
 }
 
-nonstd::expected<std::string, int> utils::run_program(const char* argv[], const std::string& input)
+nonstd::expected<std::string, int> utils::run_program(const char* argv[],
+		const std::string& input)
 {
 	std::vector<rust::Str> slices;
 	for (; *argv; ++argv) {
@@ -347,7 +348,7 @@ nonstd::expected<std::string, int> utils::run_program(const char* argv[], const 
 	int exit_code = 0;
 	size_t tag_pos = output.find("NEWSBOAT_EXIT_CODE:");
 	if (tag_pos != std::string::npos) {
-	std::string code_str = output.substr(tag_pos + 19);
+		std::string code_str = output.substr(tag_pos + 19);
 		try {
 			exit_code = std::stoi(code_str);
 		} catch (...) {

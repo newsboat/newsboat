@@ -161,12 +161,12 @@ void ItemViewFormAction::prepare()
 								renderer.to_locale_string(), renderer_status));
 					}
 					std::tie(formatted_text, num_lines) =
-                    item_renderer::source_to_stfl_list(
-                        *item,
-                        text_width,
-                        window_width,
-                        &rxman,
-                        Dialog::Article);
+						item_renderer::source_to_stfl_list(
+								*item,
+                text_width,
+                window_width,
+                &rxman,
+                Dialog::Article);
 				}
 			}
 		}
