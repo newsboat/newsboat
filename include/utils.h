@@ -75,7 +75,7 @@ std::string retrieve_url(const std::string& url,
 	const std::string& authinfo = "",
 	const std::string* body = nullptr,
 	const HTTPMethod method = HTTPMethod::GET);
-std::string run_program(const char* argv[], const std::string& input);
+nonstd::expected<std::string, int> run_program(const char* argv[], const std::string& input);
 
 Filepath resolve_tilde(const Filepath&);
 Filepath resolve_relative(const Filepath&, const Filepath&);

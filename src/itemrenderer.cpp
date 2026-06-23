@@ -2,8 +2,8 @@
 
 #include <set>
 #include <sstream>
-#include <tuple>
 
+#include "3rd-party/expected.hpp"
 #include "configcontainer.h"
 #include "htmlrenderer.h"
 #include "logger.h"
@@ -178,33 +178,20 @@ int render_html(
 			"item_renderer::render_html: html-renderer = %s",
 			argv[2]);
 
-		const std::string output = utils::run_program(argv, source);
-		int exit_code = 0;
+		const nonstd::expected<std::string, int> output = utils::run_program(argv, source);
 
-		size_t tag_pos = output.find("NEWSBOAT_EXIT_CODE:");
-		if (tag_pos != std::string::npos) {
-			std::string code_str = output.substr(tag_pos + 19);
-			try {
-				exit_code = std::stoi(code_str);
-			} catch (...) {
-				exit_code = -1;
+		if (output) {
+			std::istringstream is(output.value());
+			std::string line;
+			while (!is.eof()) {
+				getline(is, line);
+				if (!raw) {
+					line = StflRichText::from_plaintext(line).stfl_quoted();
+				}
+				lines.push_back(std::make_pair(LineType::softwrappable, line));
 			}
-		} else if (output.empty() && !source.empty()) {
-			exit_code = -1;
-		}
-
-		if (exit_code) {
-			return exit_code;
-		}
-
-		std::istringstream is(output);
-		std::string line;
-		while (!is.eof()) {
-			getline(is, line);
-			if (!raw) {
-				line = StflRichText::from_plaintext(line).stfl_quoted();
-			}
-			lines.push_back(std::make_pair(LineType::softwrappable, line));
+		} else {
+			return output.error();
 		}
 	}
 	return 0;
@@ -287,7 +274,7 @@ std::string item_renderer::to_plain_text(
 	return txtfmt.format_text_plain(width);
 }
 
-std::tuple<std::string, size_t, int> item_renderer::to_stfl_list(
+nonstd::expected<std::pair<std::string, size_t>, int> item_renderer::to_stfl_list(
 	ConfigContainer& cfg,
 	RssItem& item,
 	unsigned int text_width,
@@ -320,7 +307,11 @@ std::tuple<std::string, size_t, int> item_renderer::to_stfl_list(
 	auto [stfl_list, line_count] = txtfmt.format_text_to_list(rxman, location, text_width,
 			window_width);
 
-	return std::make_tuple(stfl_list, line_count, renderer_status);
+	if (renderer_status != 0) {
+		return nonstd::make_unexpected(renderer_status);
+	}
+
+	return {{stfl_list, line_count}};
 }
 
 void render_source(

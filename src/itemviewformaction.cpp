@@ -2,8 +2,10 @@
 
 #include <algorithm>
 #include <cstring>
+#include <iterator>
 #include <sstream>
 
+#include "3rd-party/expected.hpp"
 #include "config.h"
 #include "confighandlerexception.h"
 #include "controller.h"
@@ -127,9 +129,7 @@ void ItemViewFormAction::prepare()
 				}
 			}
 
-			int renderer_status = 0;
-
-			std::tie(formatted_text, num_lines, renderer_status) =
+			const auto result =
 				item_renderer::to_stfl_list(
 					// cfg can't be nullptr because that's a long-lived object
 					// created at the very start of the program.
@@ -141,25 +141,38 @@ void ItemViewFormAction::prepare()
 					Dialog::Article,
 					links);
 
-			if (renderer_status != 0) {
-				const auto renderer = cfg->get_configvalue_as_filepath("html-renderer");
-				if (renderer_status == 127) {
-					v.get_statusline().show_error(strprintf::fmt(
-							_("html-renderer \"%s\" was not found."),
-							renderer.to_locale_string()));
-				} else if (renderer_status == -1) {
-					v.get_statusline().show_error(strprintf::fmt(
-							_("html-renderer \"%s\" could not be executed."),
-							renderer.to_locale_string()));
-				} else {
-					v.get_statusline().show_error(strprintf::fmt(
-							_("html-renderer \"%s\" exited with error code %i."),
-							renderer.to_locale_string(), renderer_status));
+			if (result) {
+				std::tie(formatted_text, num_lines) = result.value();
+			} else {
+				int renderer_status = result.error();
+				if (renderer_status != 0) {
+					const auto renderer = cfg->get_configvalue_as_filepath("html-renderer");
+					if (renderer_status == 127) {
+						v.get_statusline().show_error(strprintf::fmt(
+								_("html-renderer \"%s\" was not found."),
+								renderer.to_locale_string()));
+					} else if (renderer_status == -1) {
+						v.get_statusline().show_error(strprintf::fmt(
+								_("html-renderer \"%s\" could not be executed."),
+								renderer.to_locale_string()));
+					} else {
+						v.get_statusline().show_error(strprintf::fmt(
+								_("html-renderer \"%s\" exited with error code %i."),
+								renderer.to_locale_string(), renderer_status));
+					}
+					std::tie(formatted_text, num_lines) =
+                    item_renderer::source_to_stfl_list(
+                        *item,
+                        text_width,
+                        window_width,
+                        &rxman,
+                        Dialog::Article);
 				}
 			}
 		}
 
 		textview.stfl_replace_lines(num_lines, formatted_text);
+
 		update_percent();
 
 		if (in_search) {
