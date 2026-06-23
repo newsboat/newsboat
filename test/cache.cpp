@@ -83,7 +83,7 @@ TEST_CASE("Cleaning old articles works", "[Cache]")
 	REQUIRE(feed->items().size() == 1);
 }
 
-TEST_CASE("Old articles dont't get deleted if flaged to be kept forever", "[Cache]")
+TEST_CASE("Old articles dont't get deleted if flagged to be kept forever", "[Cache]")
 {
 	test_helpers::TempFile dbfile;
 	auto cfg = std::make_unique<ConfigContainer>();
