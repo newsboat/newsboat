@@ -1133,9 +1133,12 @@ void Cache::clean_old_articles()
 		std::string flag_exclusions;
 
 		for (char flag : flags) {
-			if (std::isspace(static_cast<unsigned char>(flag))) continue;
-    		std::string flag_str(1, flag);
-			flag_exclusions += " AND (flags NOT LIKE '%" + std::to_string(flag) + "%' OR flags IS NULL)";
+			if (std::isspace(static_cast<unsigned char>(flag))) {
+				continue;
+			}
+			std::string flag_str(1, flag);
+			flag_exclusions += " AND (flags NOT LIKE '%" + std::to_string(flag) +
+				"%' OR flags IS NULL)";
 		}
 
 		const time_t old_date = time(nullptr) - days * 24 * 60 * 60;
