@@ -580,8 +580,8 @@ void Cache::externalize_rssfeed(RssFeed& feed,
 			for (char item_flag : item.flags()) {
 				if (flag == item_flag) {
 					flags_excluded = true;
+					break;
 				}
-				break;
 			}
 		}
 		if (days == 0 || item.pubDate_timestamp() >= old_time || flags_excluded)
