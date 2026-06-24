@@ -578,10 +578,13 @@ void Cache::externalize_rssfeed(RssFeed& feed,
 		bool flags_excluded = false;
 		for (char flag : flags) {
 			for (char item_flag : item.flags()) {
-				flags_excluded |= flag == item_flag;
+				if (flag == item_flag) {
+					flags_excluded = true;
+				}
+				break;
 			}
 		}
-		if (days == 0 || item.pubDate_timestamp() >= old_time)
+		if (days == 0 || item.pubDate_timestamp() >= old_time || flags_excluded)
 			update_rssitem_unlocked(
 				item, feed.rssurl(), reset_unread);
 	}
