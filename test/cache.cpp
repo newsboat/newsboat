@@ -115,7 +115,7 @@ TEST_CASE("Old articles dont't get deleted if flagged to be kept forever", "[Cac
 	cfg->set_configvalue("keep-articles-days", "42");
 	cfg->set_configvalue("keep-forever-if-flagged-with", "f");
 	rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
-	feed = rsscache->internalize_rssfeed("file://data/rss.xml", nullptr);
+	feed = rsscache->internalize_rssfeed(uri, nullptr);
 
 
 	/* The important part: old non flaged articles should be gone, flaged one remains. */
