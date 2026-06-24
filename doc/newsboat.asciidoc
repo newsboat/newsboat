@@ -1416,6 +1416,7 @@ include::podboat-cmds-linked.asciidoc[]
 |[[pb-play]]<<pb-play,+pb-play+>>|kbd:[P]|Start player with currently selected download.
 |[[pb-mark-as-finished]]<<pb-mark-as-finished,+pb-mark-as-finished+>>|kbd:[M]|Mark currently selected entry as finished.
 |[[pb-delete]]<<pb-delete,+pb-delete+>>|kbd:[Shift+D]|Delete the currently selected URL from the queue.
+|[[pb-reload]]<<pb-reload,+pb-reload+>>|kbd:[Ctrl+R]|Load URLs that were newly added to the queue.
 |[[pb-purge]]<<pb-purge,+pb-purge+>>|kbd:[Shift+P]|Remove all finished and deleted downloads from the queue and load URLs that were newly added to the queue.
 |[[pb-toggle-download-all]]<<pb-toggle-download-all,+pb-toggle-download-all+>>|kbd:[A]|Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The <<podboat-max-downloads,`max-downloads`>> configuration option controls how many downloads are done in parallel.
 |[[pb-increase-max-dls]]<<pb-increase-max-dls,+pb-increase-max-dls+>>|kbd:[+]|Increase the <<podboat-max-downloads,`max-downloads`>> option by 1.
