@@ -32,9 +32,9 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 {
 	CategorizedDownloads categorized_downloads;
 	const auto res = categorize_downloads(
-		downloads,
-		also_remove_finished,
-		also_remove_deleted);
+			downloads,
+			also_remove_finished,
+			also_remove_deleted);
 	if (!res.has_value()) {
 		return;
 	}

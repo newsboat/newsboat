@@ -404,8 +404,8 @@ TEST_CASE("Generates filename if it's absent from the queue file",
 }
 
 TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "
-	  "if `delete-played-files` is set and the third parameter is not set to `true`",
-	  "[QueueLoader]")
+	"if `delete-played-files` is set and the third parameter is not set to `true`",
+	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
 	auto empty_callback = []() {};
@@ -458,8 +458,8 @@ TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "
 }
 
 TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
-	  "if passed `true` as a second parameter and `delete-played-files` is set",
-	  "[QueueLoader]")
+	"if passed `true` as a second parameter and `delete-played-files` is set",
+	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
 	auto empty_callback = []() {};
@@ -522,8 +522,8 @@ TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 }
 
 TEST_CASE("reload() removes no files "
-	  "when passed `false` as the second and third parameter",
-	  "[QueueLoader]")
+	"when passed `false` as the second and third parameter",
+	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
 	auto empty_callback = []() {};
