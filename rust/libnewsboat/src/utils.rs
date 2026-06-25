@@ -1700,7 +1700,10 @@ mod tests {
     #[test]
     fn t_run_program() {
         let input1 = "this is a multine-line\ntest string";
-        assert_eq!(run_program(&["cat"], input1.to_owned()), (input1.to_owned(), 0));
+        assert_eq!(
+            run_program(&["cat"], input1.to_owned()),
+            (input1.to_owned(), 0)
+        );
 
         assert_eq!(
             run_program(&["echo", "-n", "hello world"], String::new()),
