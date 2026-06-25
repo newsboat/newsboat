@@ -162,11 +162,11 @@ void ItemViewFormAction::prepare()
 					}
 					std::tie(formatted_text, num_lines) =
 						item_renderer::source_to_stfl_list(
-								*item,
-                text_width,
-                window_width,
-                &rxman,
-                Dialog::Article);
+							*item,
+							text_width,
+							window_width,
+							&rxman,
+							Dialog::Article);
 				}
 			}
 		}

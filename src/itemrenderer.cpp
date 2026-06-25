@@ -167,8 +167,7 @@ int render_html(
 		argv[1] = "-c";
 		const std::string renderer_locale_string = renderer.to_locale_string();
 
-		const std::string wrapped_command = renderer_locale_string +
-			" || echo \"NEWSBOAT_EXIT_CODE:$?\"";
+		const std::string wrapped_command = renderer_locale_string;
 		argv[2] = wrapped_command.c_str();
 		argv[3] = nullptr;
 		LOG(Level::DEBUG,

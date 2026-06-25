@@ -467,9 +467,9 @@ pub fn run_command(cmd: &str, param: &str) {
     }
 }
 
-pub fn run_program(cmd_with_args: &[&str], input: String) -> String {
+pub fn run_program(cmd_with_args: &[&str], input: String) -> (String, i32) {
     if cmd_with_args.is_empty() {
-        return String::new();
+        return (String::new(), -1);
     }
 
     Command::new(cmd_with_args[0])
@@ -510,9 +510,13 @@ pub fn run_program(cmd_with_args: &[&str], input: String) -> String {
                         error
                     );
                 })
-                .map(|output| String::from_utf8_lossy(&output.stdout).into_owned())
+                .map(|output| {
+                    let stdout_err = String::from_utf8_lossy(&output.stdout).into_owned();
+                    let exit_code = output.status.code().unwrap_or(-1);
+                    (stdout_err, exit_code)
+                })
         })
-        .unwrap_or_else(|_| String::new())
+        .unwrap_or_else(|_| (String::new(), -1))
 }
 
 pub fn make_title(rs_str: &str) -> String {
@@ -1696,11 +1700,11 @@ mod tests {
     #[test]
     fn t_run_program() {
         let input1 = "this is a multine-line\ntest string";
-        assert_eq!(run_program(&["cat"], input1.to_owned()), input1);
+        assert_eq!(run_program(&["cat"], input1.to_owned()), (input1.to_owned(), 0));
 
         assert_eq!(
             run_program(&["echo", "-n", "hello world"], String::new()),
-            "hello world"
+            ("hello world".to_owned(), 0)
         );
     }
 

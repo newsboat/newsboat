@@ -335,7 +335,7 @@ std::string utils::retrieve_url(const std::string& url,
 }
 
 nonstd::expected<std::string, int> utils::run_program(const char* argv[],
-		const std::string& input)
+	const std::string& input)
 {
 	std::vector<rust::Str> slices;
 	for (; *argv; ++argv) {
@@ -344,25 +344,13 @@ nonstd::expected<std::string, int> utils::run_program(const char* argv[],
 
 	const auto rs_argv = rust::Slice<const rust::Str>(slices.data(), slices.size());
 
-	std::string output = std::string(utils::bridged::run_program(rs_argv, input));
-	int exit_code = 0;
-	size_t tag_pos = output.find("NEWSBOAT_EXIT_CODE:");
-	if (tag_pos != std::string::npos) {
-		std::string code_str = output.substr(tag_pos + 19);
-		try {
-			exit_code = std::stoi(code_str);
-		} catch (...) {
-			exit_code = -1;
-		}
-	} else if (output.empty() && !input.empty()) {
-		exit_code = -1;
+	auto output = utils::bridged::run_program(rs_argv, input);
+
+	if (output.exit_code) {
+		return nonstd::make_unexpected(output.exit_code);
 	}
 
-	if (exit_code) {
-		return nonstd::make_unexpected(exit_code);
-	}
-
-	return output;
+	return std::string(output.stdout);
 }
 
 Filepath utils::resolve_tilde(const Filepath& path)

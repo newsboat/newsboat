@@ -37,6 +37,13 @@ mod ffi {
 // Functions that should be wrapped on the C++ side for ease of use.
 #[cxx::bridge(namespace = "newsboat::utils::bridged")]
 mod bridged {
+
+    //Output of the fn run_program for printing error w/ string
+    struct RunProgramResult {
+        stdout: String,
+        exit_code: i32,
+    }
+
     #[namespace = "newsboat::filepath::bridged"]
     extern "C++" {
         include!("libnewsboat-ffi/src/filepath.rs.h");
@@ -89,7 +96,7 @@ mod bridged {
 
         fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool;
 
-        fn run_program(argv: &[&str], input: String) -> String;
+        fn run_program(argv: &[&str], input: String) -> RunProgramResult;
 
         fn translit(tocode: &str, fromcode: &str) -> String;
         fn utf8_to_locale(text: &str) -> Vec<u8>;
@@ -250,4 +257,12 @@ fn string_from_utf8_lossy(text: &[u8]) -> String {
 
 fn parse_rss_author_email(text: &[u8], name: &mut String, email: &mut String) {
     (*name, *email) = utils::parse_rss_author_email(text);
+}
+
+fn run_program(argv: &[&str], input: String) -> bridged::RunProgramResult {
+    let (stdout, code) = utils::run_program(argv, input);
+    bridged::RunProgramResult {
+        stdout,
+        exit_code: code,
+    }
 }
