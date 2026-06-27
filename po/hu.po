@@ -658,7 +658,7 @@ msgid "downloading"
 msgstr "letöltés"
 
 #: src/download.cpp:62
-msgid "cancelled"
+msgid "canceled"
 msgstr "megszakítva"
 
 #: src/download.cpp:64

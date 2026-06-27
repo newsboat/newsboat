@@ -660,7 +660,7 @@ msgid "downloading"
 msgstr "indiriliyor"
 
 #: src/download.cpp:62
-msgid "cancelled"
+msgid "canceled"
 msgstr "iptal edildi"
 
 #: src/download.cpp:64

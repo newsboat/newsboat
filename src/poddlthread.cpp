@@ -126,7 +126,7 @@ void PodDlThread::run()
 			} else {
 				dl->set_status(DlStatus::RENAME_FAILED, strerror(errno));
 			}
-		} else if (dl->status() != DlStatus::CANCELLED) {
+		} else if (dl->status() != DlStatus::CANCELED) {
 			// attempt complete re-download
 			if (resumed_download) {
 				::unlink(filename.to_locale_string().c_str());
@@ -160,7 +160,7 @@ static int progress_callback(void* clientp,
 
 size_t PodDlThread::write_data(void* buffer, size_t size, size_t nmemb)
 {
-	if (dl->status() == DlStatus::CANCELLED) {
+	if (dl->status() == DlStatus::CANCELED) {
 		return 0;
 	}
 	f->write(static_cast<char*>(buffer), size * nmemb);
@@ -174,7 +174,7 @@ size_t PodDlThread::write_data(void* buffer, size_t size, size_t nmemb)
 
 int PodDlThread::progress(double dlnow, double dltotal)
 {
-	if (dl->status() == DlStatus::CANCELLED) {
+	if (dl->status() == DlStatus::CANCELED) {
 		return -1;
 	}
 	tv2 = std::chrono::steady_clock::now();

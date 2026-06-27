@@ -161,7 +161,7 @@ TEST_CASE("status_text() does not contain obvious copy-paste errors",
 	const std::vector<DlStatus> status_values {
 		DlStatus::QUEUED,
 		DlStatus::DOWNLOADING,
-		DlStatus::CANCELLED,
+		DlStatus::CANCELED,
 		DlStatus::DELETED,
 		DlStatus::FINISHED,
 		DlStatus::FAILED,

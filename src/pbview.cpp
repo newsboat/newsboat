@@ -251,7 +251,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 				if (ctrl.downloads()[idx].status() ==
 					DlStatus::DOWNLOADING) {
 					ctrl.downloads()[idx].set_status(
-						DlStatus::CANCELLED);
+						DlStatus::CANCELED);
 				}
 			}
 		}

@@ -11,7 +11,7 @@ namespace podboat {
 enum class DlStatus {
 	QUEUED = 0,
 	DOWNLOADING,
-	CANCELLED,
+	CANCELED,
 	DELETED,
 	FINISHED,
 	FAILED,

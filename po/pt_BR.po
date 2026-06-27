@@ -677,7 +677,7 @@ msgid "downloading"
 msgstr "baixando"
 
 #: src/download.cpp:62
-msgid "cancelled"
+msgid "canceled"
 msgstr "cancelado"
 
 #: src/download.cpp:64
