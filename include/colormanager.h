@@ -1,7 +1,6 @@
 #ifndef NEWSBOAT_COLORMANAGER_H_
 #define NEWSBOAT_COLORMANAGER_H_
 
-#include <functional>
 #include <map>
 #include <vector>
 
@@ -25,8 +24,7 @@ public:
 	void handle_action(std::string_view action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
-	void apply_colors(std::function<void(const std::string&, const std::string&)>
-		stfl_value_setter) const;
+	std::map<std::string, std::string> get_stfl_styles() const;
 
 private:
 	std::map<std::string, TextStyle> element_styles;

@@ -11,45 +11,11 @@
 
 using namespace newsboat;
 
-class StylesCollector {
-	std::map<std::string, std::string> styles;
-
-public:
-	StylesCollector() = default;
-
-	std::function<void(const std::string&, const std::string&)> setter()
-	{
-		return [this](const std::string& element, const std::string& style) {
-			if (this->styles.find(element) != this->styles.cend()) {
-				throw std::invalid_argument(std::string("Multiple styles for element ") + element);
-			}
-
-			this->styles[element] = style;
-		};
-	}
-
-	size_t styles_count() const
-	{
-		return styles.size();
-	}
-
-	std::string style(const std::string& element) const
-	{
-		const auto style = styles.find(element);
-		if (style != styles.cend()) {
-			return style->second;
-		} else {
-			return {};
-		}
-	}
-};
-
 TEST_CASE(
 	"apply_colors() invokes the callback for each element, supplying the element name and its style",
 	"[ColorManager]")
 {
 	ColorManager c;
-	StylesCollector collector;
 
 	SECTION("Each processed action adds corresponding entry to return value") {
 		c.handle_action("color", {"listnormal", "default", "default"});
@@ -60,30 +26,30 @@ TEST_CASE(
 		c.handle_action("color", {"hint-key", "default", "color2"});
 		c.handle_action("color", {"hint-description", "color3", "default"});
 
-		c.apply_colors(collector.setter());
+		const auto styles = c.get_stfl_styles();
 
-		REQUIRE(collector.style("listnormal") == "");
-		REQUIRE(collector.style("listfocus_unread") == "fg=cyan,attr=bold,attr=underline");
-		REQUIRE(collector.style("background") == "fg=red,bg=yellow");
-		REQUIRE(collector.style("info") == "fg=green,bg=white,attr=reverse");
-		REQUIRE(collector.style("title") == "fg=green,bg=white,attr=reverse");
-		REQUIRE(collector.style("end-of-text-marker") == "fg=color123,attr=dim,attr=protect");
-		REQUIRE(collector.style("hint-key") == "bg=color2");
-		REQUIRE(collector.style("hint-description") == "fg=color3");
+		REQUIRE(styles.at("listnormal") == "");
+		REQUIRE(styles.at("listfocus_unread") == "fg=cyan,attr=bold,attr=underline");
+		REQUIRE(styles.at("background") == "fg=red,bg=yellow");
+		REQUIRE(styles.at("info") == "fg=green,bg=white,attr=reverse");
+		REQUIRE(styles.at("title") == "fg=green,bg=white,attr=reverse");
+		REQUIRE(styles.at("end-of-text-marker") == "fg=color123,attr=dim,attr=protect");
+		REQUIRE(styles.at("hint-key") == "bg=color2");
+		REQUIRE(styles.at("hint-description") == "fg=color3");
 
 		// These two weren't set explicitly and fell back to `info`
-		REQUIRE(collector.style("hint-keys-delimiter") == "fg=green,bg=white,attr=reverse");
-		REQUIRE(collector.style("hint-separator") == "fg=green,bg=white,attr=reverse");
+		REQUIRE(styles.at("hint-keys-delimiter") == "fg=green,bg=white,attr=reverse");
+		REQUIRE(styles.at("hint-separator") == "fg=green,bg=white,attr=reverse");
 	}
 
 	SECTION("For `article` element, two additional elements are emitted") {
 		c.handle_action("color", {"article", "white", "blue", "reverse"});
 
-		c.apply_colors(collector.setter());
+		const auto styles = c.get_stfl_styles();
 
-		REQUIRE(collector.style("article") == "fg=white,bg=blue,attr=reverse");
-		REQUIRE(collector.style("color_bold") == "fg=white,bg=blue,attr=reverse,attr=bold");
-		REQUIRE(collector.style("color_underline") ==
+		REQUIRE(styles.at("article") == "fg=white,bg=blue,attr=reverse");
+		REQUIRE(styles.at("color_bold") == "fg=white,bg=blue,attr=reverse,attr=bold");
+		REQUIRE(styles.at("color_underline") ==
 			"fg=white,bg=blue,attr=reverse,attr=underline");
 	}
 }
@@ -94,15 +60,13 @@ TEST_CASE("register_commands() registers ColorManager with ConfigParser",
 	ConfigParser cfg;
 	ColorManager clr;
 
-	StylesCollector collector;
-
 	REQUIRE_NOTHROW(clr.register_commands(cfg));
 
 	cfg.parse_file("data/config-with-colors"_path);
 
-	clr.apply_colors(collector.setter());
-	REQUIRE(collector.style("background") == "fg=red,bg=green");
-	REQUIRE(collector.style("listfocus") == "fg=blue,bg=black,attr=bold");
+	const auto styles = clr.get_stfl_styles();
+	REQUIRE(styles.at("background") == "fg=red,bg=green");
+	REQUIRE(styles.at("listfocus") == "fg=blue,bg=black,attr=bold");
 }
 
 TEST_CASE(
@@ -278,15 +242,14 @@ TEST_CASE("If no colors were specified for the "
 	for (const auto& element : elements) {
 		DYNAMIC_SECTION("element: " << element) {
 			ColorManager c;
-			StylesCollector collector;
 
 			SECTION("Element's style can be changed as usual") {
 				c.handle_action("color", {element, "green", "default", "underline"});
 
-				c.apply_colors(collector.setter());
+				const auto styles = c.get_stfl_styles();
 
-				REQUIRE(collector.styles_count() >= 1);
-				REQUIRE(collector.style(element) == "fg=green,attr=underline");
+				REQUIRE(styles.size() >= 1);
+				REQUIRE(styles.at(element) == "fg=green,attr=underline");
 			}
 
 			SECTION("Element and `info` don't interfere with each other") {
@@ -300,40 +263,39 @@ TEST_CASE("If no colors were specified for the "
 					c.handle_action("color", {element, "blue", "black"});
 				}
 
-				c.apply_colors(collector.setter());
+				const auto styles = c.get_stfl_styles();
 
-				REQUIRE(collector.styles_count() >= 2);
-				REQUIRE(collector.style(element) == "fg=blue,bg=black");
-				REQUIRE(collector.style("info") == "fg=green,bg=yellow,attr=bold");
+				REQUIRE(styles.size() >= 2);
+				REQUIRE(styles.at(element) == "fg=blue,bg=black");
+				REQUIRE(styles.at("info") == "fg=green,bg=yellow,attr=bold");
 			}
 
 			SECTION("Element inherits the `info` style when available") {
 				c.handle_action("color", {"info", "red", "magenta", "reverse"});
 
-				c.apply_colors(collector.setter());
+				const auto styles = c.get_stfl_styles();
 
-				REQUIRE(collector.styles_count() >= 2);
-				REQUIRE(collector.style(element) == "fg=red,bg=magenta,attr=reverse");
-				REQUIRE(collector.style("info") == "fg=red,bg=magenta,attr=reverse");
+				REQUIRE(styles.size() >= 2);
+				REQUIRE(styles.at(element) == "fg=red,bg=magenta,attr=reverse");
+				REQUIRE(styles.at("info") == "fg=red,bg=magenta,attr=reverse");
 			}
 		}
 	}
 
 	SECTION("Element has its default style if there is no style for `info` either") {
 		ColorManager c;
-		StylesCollector collector;
 		c.handle_action("color", {"listnormal", "black", "white"});
 
-		c.apply_colors(collector.setter());
+		const auto styles = c.get_stfl_styles();
 
-		REQUIRE(collector.styles_count() >= 1);
-		REQUIRE(collector.style("listnormal") == "fg=black,bg=white");
+		REQUIRE(styles.size() >= 1);
+		REQUIRE(styles.at("listnormal") == "fg=black,bg=white");
 
-		REQUIRE(collector.style("info") == "fg=yellow,bg=blue,attr=bold");
-		REQUIRE(collector.style("title") == "fg=yellow,bg=blue,attr=bold");
-		REQUIRE(collector.style("hint-key") == "fg=yellow,bg=blue,attr=bold");
-		REQUIRE(collector.style("hint-keys-delimiter") == "fg=white,bg=blue");
-		REQUIRE(collector.style("hint-separator") == "fg=white,bg=blue,attr=bold");
-		REQUIRE(collector.style("hint-description") == "fg=white,bg=blue");
+		REQUIRE(styles.at("info") == "fg=yellow,bg=blue,attr=bold");
+		REQUIRE(styles.at("title") == "fg=yellow,bg=blue,attr=bold");
+		REQUIRE(styles.at("hint-key") == "fg=yellow,bg=blue,attr=bold");
+		REQUIRE(styles.at("hint-keys-delimiter") == "fg=white,bg=blue");
+		REQUIRE(styles.at("hint-separator") == "fg=white,bg=blue,attr=bold");
+		REQUIRE(styles.at("hint-description") == "fg=white,bg=blue");
 	}
 }

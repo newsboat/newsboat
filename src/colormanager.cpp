@@ -116,10 +116,9 @@ void ColorManager::dump_config(std::vector<std::string>& config_output) const
 	}
 }
 
-void ColorManager::apply_colors(
-	std::function<void(const std::string&, const std::string&)> stfl_value_setter)
-const
+std::map<std::string, std::string> ColorManager::get_stfl_styles() const
 {
+	std::map<std::string, std::string> stfl_styles;
 	for (const std::string& element : supported_elements) {
 		const TextStyle* style = nullptr;
 		const auto configured_style = element_styles.find(element);
@@ -148,7 +147,7 @@ const
 			element,
 			colorattr);
 
-		stfl_value_setter(element, colorattr);
+		stfl_styles.insert_or_assign(element, colorattr);
 
 		if (element == "article") {
 			std::string bold = colorattr;
@@ -164,11 +163,12 @@ const
 			// STFL will just ignore those in forms which don't have the
 			// `color_bold` and `color_underline` variables.
 			LOG(Level::DEBUG, "ColorManager::apply_colors: color_bold %s", bold);
-			stfl_value_setter("color_bold", bold);
+			stfl_styles.insert_or_assign("color_bold", bold);
 			LOG(Level::DEBUG, "ColorManager::apply_colors: color_underline %s", underline);
-			stfl_value_setter("color_underline", underline);
+			stfl_styles.insert_or_assign("color_underline", underline);
 		}
 	}
+	return stfl_styles;
 }
 
 } // namespace newsboat
