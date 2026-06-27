@@ -15,7 +15,7 @@ jobs:
   build_and_test_freebsd:
     strategy:
       matrix:
-        release: ["14.4", "15.0"]
+        release: ["14.4", "15.1"]
     name: FreeBSD ${{ matrix.release }}
     runs-on: ubuntu-latest
     env:
