@@ -844,14 +844,14 @@ Operator:Meaning
 |======================================================================
 
 .Available Attributes
-[frame="all", grid="all", format="dsv", options="header", cols="30,30,40"]
+[frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
 |=========================================================================
 Attribute:Context:Meaning
 [[attr-title]]<<attr-title,+title+>>:article:article title
 [[attr-link]]<<attr-link,+link+>>:article:article link
 [[attr-author]]<<attr-author,+author+>>:article:article author
 [[attr-content]]<<attr-content,+content+>>:article:article body
-[[attr-date]]<<attr-date,+date+>>:article:publication date of the article
+[[attr-date]]<<attr-date,+date+>>:article:publication date and time of the article typically in https\://www.man7.org/linux/man-pages/man3/strftime.3.html[`strftime(3)`] format `%a, %d %b %Y %T %z`, e.g. "Thu, 01 Jan 1970 00\:00\:01 +0000"; when using the French translations, the comma is omitted, though\: `%a %d %b %Y %T %z`; in the Spanish translation, it is `%F %T %z`, e.g. "1970-01-01 00\:00\:01 +0000"; the weekday and month name are always the English names, regardless of the current locale; since this filter attribute yields a string, a regex match using `=~` is probably most useful, keep in mind that timezone offsets are the original ones, hence they might throw off the result when filtering for specific days, etc.
 [[attr-guid]]<<attr-guid,+guid+>>:article:a unique identifier of the article
 [[attr-unread]]<<attr-unread,+unread+>>:article:indicates whether the article has been read
 [[attr-enclosure_url]]<<attr-enclosure_url,+enclosure_url+>>:article:the URL of an enclosure (e.g. podcast file), empty if there is no enclosure
@@ -862,7 +862,7 @@ Attribute:Context:Meaning
 [[attr-feedtitle]]<<attr-feedtitle,+feedtitle+>>:feed, article:title of the feed
 [[attr-description]]<<attr-description,+description+>>:feed, article:feed description
 [[attr-feedlink]]<<attr-feedlink,+feedlink+>>:feed, article:link to the feed
-[[attr-feeddate]]<<attr-feeddate,+feeddate+>>:feed, article:publication date of the feed
+[[attr-feeddate]]<<attr-feeddate,+feeddate+>>:feed, article:publication date and time of the feed, see also the <<attr-date,date>> attribute above
 [[attr-rssurl]]<<attr-rssurl,+rssurl+>>:feed, article:RSS URL of the feed
 [[attr-unread_count]]<<attr-unread_count,+unread_count+>>:feed, article:number of unread articles in the feed
 [[attr-total_count]]<<attr-total_count,+total_count+>>:feed, article:total number of articles in the feed
