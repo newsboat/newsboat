@@ -58,7 +58,7 @@ jobs:
           mkdir --parents ~/.cargo/registry
 
       - name: Cache ~/.cargo
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         id: cargo_cache
         with:
           key: cargo-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}
@@ -129,7 +129,7 @@ jobs:
           mkdir --parents ~/.cargo/registry
 
       - name: Cache ~/.cargo
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         id: cargo_cache
         with:
           key: cargo-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}
@@ -200,7 +200,7 @@ jobs:
           mkdir --parents ~/.cargo/registry
 
       - name: Cache ~/.cargo
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         id: cargo_cache
         with:
           key: cargo-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}
