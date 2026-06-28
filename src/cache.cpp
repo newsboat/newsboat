@@ -567,6 +567,7 @@ void Cache::externalize_rssfeed(RssFeed& feed,
 	}
 
 	const unsigned int days = cfg.get_configvalue_as_int("keep-articles-days");
+	const std::string flags = cfg.get_configvalue("keep-forever-if-flagged-with");
 	const time_t old_time = time(nullptr) - days * 24 * 60 * 60;
 
 	// the reverse iterator is there for the sorting foo below (think about
@@ -574,7 +575,16 @@ void Cache::externalize_rssfeed(RssFeed& feed,
 	for (auto it = feed.items().rbegin(); it != feed.items().rend();
 		++it) {
 		RssItem& item = **it;
-		if (days == 0 || item.pubDate_timestamp() >= old_time)
+		bool flags_excluded = false;
+		for (char flag : flags) {
+			for (char item_flag : item.flags()) {
+				if (flag == item_flag) {
+					flags_excluded = true;
+					break;
+				}
+			}
+		}
+		if (days == 0 || item.pubDate_timestamp() >= old_time || flags_excluded)
 			update_rssitem_unlocked(
 				item, feed.rssurl(), reset_unread);
 	}
@@ -1129,10 +1139,23 @@ void Cache::clean_old_articles()
 
 	const unsigned int days = cfg.get_configvalue_as_int("keep-articles-days");
 	if (days > 0) {
+		const std::string flags = cfg.get_configvalue("keep-forever-if-flagged-with");
+		std::string flag_exclusions;
+
+		for (char flag : flags) {
+			if (std::isspace(static_cast<unsigned char>(flag))) {
+				continue;
+			}
+			std::string flag_str(1, flag);
+			flag_exclusions += " AND (flags NOT LIKE '%" + flag_str +
+				"%' OR flags IS NULL)";
+		}
+
 		const time_t old_date = time(nullptr) - days * 24 * 60 * 60;
 
 		const std::string query(prepare_query(
-				"DELETE FROM rss_item WHERE pubDate < %d", old_date));
+				"DELETE FROM rss_item WHERE pubDate < %d", old_date) + flag_exclusions);
+
 		LOG(Level::DEBUG,
 			"Cache::clean_old_articles: about to delete articles "
 			"with a pubDate older than %" PRId64,
