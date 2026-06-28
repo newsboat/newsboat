@@ -334,7 +334,8 @@ std::string utils::retrieve_url(const std::string& url,
 	return buf;
 }
 
-std::string utils::run_program(const char* argv[], const std::string& input)
+nonstd::expected<std::string, int> utils::run_program(const char* argv[],
+	const std::string& input)
 {
 	std::vector<rust::Str> slices;
 	for (; *argv; ++argv) {
@@ -343,7 +344,13 @@ std::string utils::run_program(const char* argv[], const std::string& input)
 
 	const auto rs_argv = rust::Slice<const rust::Str>(slices.data(), slices.size());
 
-	return std::string(utils::bridged::run_program(rs_argv, input));
+	auto output = utils::bridged::run_program(rs_argv, input);
+
+	if (output.exit_code) {
+		return nonstd::make_unexpected(output.exit_code);
+	}
+
+	return std::string(output.stdout);
 }
 
 Filepath utils::resolve_tilde(const Filepath& path)

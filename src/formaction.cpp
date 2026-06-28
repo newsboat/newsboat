@@ -875,7 +875,7 @@ std::string FormAction::bookmark(const std::string& url,
 			my_argv[1] = "-c";
 			my_argv[2] = cmdline.c_str();
 			my_argv[3] = nullptr;
-			return utils::run_program(my_argv, "");
+			return utils::run_program(my_argv, "").value();
 		}
 	} else {
 		return _(

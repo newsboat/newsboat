@@ -3,6 +3,7 @@
 #include <set>
 #include <sstream>
 
+#include "3rd-party/expected.hpp"
 #include "configcontainer.h"
 #include "htmlrenderer.h"
 #include "logger.h"
@@ -147,7 +148,7 @@ void prepare_enclosure(RssItem& item,
 	}
 }
 
-void render_html(
+int render_html(
 	ConfigContainer& cfg,
 	const std::string& source,
 	std::vector<std::pair<LineType, std::string>>& lines,
@@ -159,12 +160,15 @@ void render_html(
 	if (renderer == "internal"_path) {
 		HtmlRenderer rnd(raw);
 		rnd.render(source, lines, thelinks, url);
+		return 0;
 	} else {
 		const char* argv[4];
 		argv[0] = "/bin/sh";
 		argv[1] = "-c";
 		const std::string renderer_locale_string = renderer.to_locale_string();
-		argv[2] = renderer_locale_string.c_str();
+
+		const std::string wrapped_command = renderer_locale_string;
+		argv[2] = wrapped_command.c_str();
 		argv[3] = nullptr;
 		LOG(Level::DEBUG,
 			"item_renderer::render_html: source = %s",
@@ -173,17 +177,23 @@ void render_html(
 			"item_renderer::render_html: html-renderer = %s",
 			argv[2]);
 
-		const std::string output = utils::run_program(argv, source);
-		std::istringstream is(output);
-		std::string line;
-		while (!is.eof()) {
-			getline(is, line);
-			if (!raw) {
-				line = StflRichText::from_plaintext(line).stfl_quoted();
+		const nonstd::expected<std::string, int> output = utils::run_program(argv, source);
+
+		if (output) {
+			std::istringstream is(output.value());
+			std::string line;
+			while (!is.eof()) {
+				getline(is, line);
+				if (!raw) {
+					line = StflRichText::from_plaintext(line).stfl_quoted();
+				}
+				lines.push_back(std::make_pair(LineType::softwrappable, line));
 			}
-			lines.push_back(std::make_pair(LineType::softwrappable, line));
+		} else {
+			return output.error();
 		}
 	}
+	return 0;
 }
 
 void item_renderer::render_plaintext(
@@ -263,7 +273,7 @@ std::string item_renderer::to_plain_text(
 	return txtfmt.format_text_plain(width);
 }
 
-std::pair<std::string, size_t> item_renderer::to_stfl_list(
+nonstd::expected<std::pair<std::string, size_t>, int> item_renderer::to_stfl_list(
 	ConfigContainer& cfg,
 	RssItem& item,
 	unsigned int text_width,
@@ -281,8 +291,10 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	const std::string baseurl = get_item_base_link(item);
 	const auto body = utils::utf8_to_locale(item_description.text);
 
+	int renderer_status = 0;
+
 	if (should_render_as_html(item_description.mime)) {
-		render_html(cfg, body, lines, links, baseurl, false);
+		renderer_status = render_html(cfg, body, lines, links, baseurl, false);
 	} else {
 		render_plaintext(body, lines, OutputFormat::StflRichText);
 	}
@@ -291,7 +303,14 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 
 	TextFormatter txtfmt(lines);
 
-	return txtfmt.format_text_to_list(rxman, location, text_width, window_width);
+	auto [stfl_list, line_count] = txtfmt.format_text_to_list(rxman, location, text_width,
+			window_width);
+
+	if (renderer_status != 0) {
+		return nonstd::make_unexpected(renderer_status);
+	}
+
+	return {{stfl_list, line_count}};
 }
 
 void render_source(
