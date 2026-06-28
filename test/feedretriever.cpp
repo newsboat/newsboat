@@ -10,7 +10,10 @@
 #include "test_helpers/httptestserver.h"
 #include "test_helpers/misc.h"
 #include "test_helpers/tempfile.h"
+#include "utils.h"
+
 #include <cstdint>
+#include <fstream>
 #include <vector>
 
 using namespace newsboat;
@@ -223,5 +226,58 @@ TEST_CASE("Feed retriever remembers cookie between requests if cookie-cache is s
 				REQUIRE(testServer.num_hits(mockRegistration) == 1);
 			}
 		}
+	}
+}
+
+// Placeholders:
+// %s: encoding
+// %s: feed title
+constexpr auto atom_feed_with_encoding =
+	R"(<?xml version="1.0" encoding="%s"?>)"
+	R"(<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">)"
+	R"(<id>tag:example.com</id>)"
+	R"(<title type="text">%s</title>)"
+	R"(<updated>2008-12-30T18:26:15Z</updated>)"
+	R"(<entry>)"
+	R"(<id>tag:example.com,2008-12-30:/atom_testing</id>)"
+	R"(<title>regular title</title>)"
+	R"(<updated>2008-12-30T20:04:15Z</updated>)"
+	R"(</entry>)"
+	R"(</feed>)";
+
+TEST_CASE("Feed retriever with exec: feed", "[FeedRetriever]")
+{
+	ConfigContainer cfg;
+	auto rsscache = Cache::in_memory(cfg);
+	CurlHandle easyHandle;
+	FeedRetriever feedRetriever(cfg, *rsscache, easyHandle);
+
+	SECTION("Supports reading feed data with cat") {
+		const std::string exec_url = "exec:cat data/atom10_1.xml";
+		const auto feed = feedRetriever.retrieve(exec_url);
+		REQUIRE(feed.items.size() == 3);
+	}
+
+	SECTION("Throws on empty feed data") {
+		const std::string exec_url = "exec:cat /dev/null";
+		REQUIRE_THROWS_AS(feedRetriever.retrieve(exec_url), rsspp::Exception);
+	}
+
+	SECTION("Keeps non-utf8 data as-is to allow conversion to utf-8 via libxml") {
+		constexpr auto encoding = "iso-8859-1";
+		constexpr auto title_utf8 = u8"Prøve"; // Danish for "test"
+		auto feed_xml_utf8 = strprintf::fmt(atom_feed_with_encoding, encoding, title_utf8);
+		auto feed_xml_iso8859_1 = utils::convert_text(feed_xml_utf8, "iso-8859-1", "utf-8");
+
+		test_helpers::TempFile feed_file;
+		std::ofstream file(feed_file.get_path().to_locale_string());
+		file << feed_xml_iso8859_1;
+		file.close();
+
+		const std::string exec_url = strprintf::fmt("exec:cat %s",
+				feed_file.get_path().to_locale_string());
+		const auto feed = feedRetriever.retrieve(exec_url);
+		REQUIRE(feed.items.size() == 1);
+		REQUIRE(feed.title == title_utf8);
 	}
 }

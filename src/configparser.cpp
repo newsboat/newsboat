@@ -182,7 +182,7 @@ std::string ConfigParser::evaluate_backticks(std::string token)
 	while (pos1 != std::string::npos && pos2 != std::string::npos) {
 		const std::string cmd = token.substr(pos1 + 1, pos2 - pos1 - 1);
 		token.erase(pos1, pos2 - pos1 + 1);
-		std::string result = utils::get_command_output(cmd);
+		std::string result = utils::string_from_utf8_lossy(utils::get_command_output(cmd));
 		utils::trim_end(result);
 		token.insert(pos1, result);
 
