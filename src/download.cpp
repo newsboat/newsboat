@@ -58,8 +58,8 @@ const std::string Download::status_text() const
 		return _s("queued");
 	case DlStatus::DOWNLOADING:
 		return _s("downloading");
-	case DlStatus::CANCELLED:
-		return _s("cancelled");
+	case DlStatus::CANCELED:
+		return _s("canceled");
 	case DlStatus::DELETED:
 		return _s("deleted");
 	case DlStatus::FINISHED:

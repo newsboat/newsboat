@@ -660,7 +660,7 @@ msgid "downloading"
 msgstr "hämtar"
 
 #: src/download.cpp:62
-msgid "cancelled"
+msgid "canceled"
 msgstr "avbruten"
 
 #: src/download.cpp:64

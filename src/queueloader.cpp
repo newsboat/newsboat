@@ -66,7 +66,7 @@ std::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_downloa
 		bool keep_entry = false;
 		switch (dl.status()) {
 		case DlStatus::QUEUED:
-		case DlStatus::CANCELLED:
+		case DlStatus::CANCELED:
 		case DlStatus::FAILED:
 		case DlStatus::MISSING:
 		case DlStatus::READY:
@@ -249,7 +249,7 @@ void QueueLoader::write_queue_file(const CategorizedDownloads& downloads) const
 		// The following statuses have no marks in the queue file.
 		case DlStatus::QUEUED:
 		case DlStatus::DOWNLOADING:
-		case DlStatus::CANCELLED:
+		case DlStatus::CANCELED:
 		case DlStatus::DELETED:
 		case DlStatus::FAILED:
 		case DlStatus::RENAME_FAILED:

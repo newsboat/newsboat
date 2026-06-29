@@ -662,7 +662,7 @@ msgid "downloading"
 msgstr "laster ned"
 
 #: src/download.cpp:62
-msgid "cancelled"
+msgid "canceled"
 msgstr "avbrutt"
 
 #: src/download.cpp:64

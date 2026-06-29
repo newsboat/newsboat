@@ -42,7 +42,7 @@ TEST_CASE("Passes the callback to Download objects", "[QueueLoader]")
 	sentry = false;
 	// Download calls the callback when the download's status chagnes.
 	downloads[0].set_status(DlStatus::DOWNLOADING);
-	downloads[0].set_status(DlStatus::CANCELLED);
+	downloads[0].set_status(DlStatus::CANCELED);
 	REQUIRE(sentry);
 }
 
@@ -57,7 +57,7 @@ TEST_CASE("reload() removes downloads iff they are marked as finished or deleted
 
 	const std::vector<DlStatus> possible_statuses = {
 		DlStatus::QUEUED,
-		DlStatus::CANCELLED,
+		DlStatus::CANCELED,
 		DlStatus::DELETED,
 		DlStatus::FINISHED,
 		DlStatus::FAILED,
@@ -433,7 +433,7 @@ TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "
 	// DOWNLOADING, which aborts the `reload()`.
 	const std::vector<DlStatus> other_statuses = {
 		DlStatus::QUEUED,
-		DlStatus::CANCELLED,
+		DlStatus::CANCELED,
 		DlStatus::FAILED,
 		DlStatus::MISSING,
 		DlStatus::READY,
@@ -496,7 +496,7 @@ TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 	// above, and DOWNLOADING, which aborts the `reload()`.
 	const std::vector<DlStatus> other_statuses = {
 		DlStatus::QUEUED,
-		DlStatus::CANCELLED,
+		DlStatus::CANCELED,
 		DlStatus::FAILED,
 		DlStatus::MISSING,
 		DlStatus::READY,

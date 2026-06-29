@@ -644,7 +644,7 @@ msgid "downloading"
 msgstr "下載中"
 
 #: src/download.cpp:62
-msgid "cancelled"
+msgid "canceled"
 msgstr "已取消"
 
 #: src/download.cpp:64

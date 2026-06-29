@@ -1,0 +1,23 @@
+Podboat uses multiple states to describe the current status of each podcast
+download in the queue. 
+
+The following table lists all possible states, how they are denoted in the
+queue file and their meaning:
+
+.All Available Podcast States
+[frame="all", grid="all", format="dsv", options="header", cols="30,30,70"]
+|======================================================================
+State:Queue File Text:Meaning
+[[dl-status-queued]]<<dl-status-queued,+queued+>>:"":The default state when initially added to the queue file, ready to be downloaded
+[[dl-status-downloading]]<<dl-status-downloading,+downloading+>>:"":Currently downloading this podcast to disk
+[[dl-status-ready]]<<dl-status-ready,+ready+>>:"downloaded":The downloading process was successful and is ready to be played
+[[dl-status-canceled]]<<dl-status-canceled,+canceled+>>:"":`pb-cancel` has been called while downloading and will stop that process; the default key is *c*
+[[dl-status-deleted]]<<dl-status-deleted,+deleted+>>:"":Will be removed from queue file upon exit Podboat or by calling `pb-purge`; the default key is *P*
+[[dl-status-played]]<<dl-status-played,+played+>>:"played":Set after a `pb-play` call and the player is run; the default key is *p*
+[[dl-status-finished]]<<dl-status-finished,+finished+>>:"finished":Manually marked using `pb-mark-as-finished`; the default key is *m*
+[[dl-status-missing]]<<dl-status-missing,+missing+>>:"missing":The podcast was downloaded successfully but is no longer at the expected location
+[[dl-status-failed]]<<dl-status-failed,+failed+>>:"":A failure occured after attempting to initially download or re-download a podcast
+[[dl-status-rename-failed]]<<dl-status-rename-failed,+rename failed+>>:"":The download was successful but Podboat failed to remove the temporary suffix
+|======================================================================
+
+At this time the return code of the player is not checked.

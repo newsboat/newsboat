@@ -652,7 +652,7 @@ msgid "downloading"
 msgstr "sťahovanie"
 
 #: src/download.cpp:62
-msgid "cancelled"
+msgid "canceled"
 msgstr "zrušené"
 
 #: src/download.cpp:64

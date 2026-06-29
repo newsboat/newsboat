@@ -663,7 +663,7 @@ msgid "downloading"
 msgstr "загружается"
 
 #: src/download.cpp:62
-msgid "cancelled"
+msgid "canceled"
 msgstr "отменено"
 
 #: src/download.cpp:64
