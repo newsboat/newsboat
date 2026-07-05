@@ -1,10 +1,18 @@
 name: newsboat
+title: Newsboat
+license: MIT
 version: git
 base: core26
 summary: An RSS/Atom feed reader for text terminals
 description: |
   Newsboat is an RSS/Atom feed reader for the text console. It's an actively
   maintained fork of Newsbeuter.
+website: https://newsboat.org
+contact:
+  - https://github.com/newsboat/newsboat/issues
+  - newsboat@googlegroups.com
+issues: https://github.com/newsboat/newsboat/issues
+source-code: https://github.com/newsboat/newsboat
 grade: stable
 confinement: strict
 
