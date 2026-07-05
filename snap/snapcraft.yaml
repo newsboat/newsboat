@@ -1,6 +1,6 @@
 name: newsboat
 version: git
-base: core20
+base: core26
 summary: An RSS/Atom feed reader for text terminals
 description: |
   Newsboat is an RSS/Atom feed reader for the text console. It's an actively
@@ -53,7 +53,7 @@ parts:
       - gettext
       - g++
     stage-packages:
-      - libxml2
+      - libxml2-16
       - librtmp1
       - locales-all
       - libcurl4
