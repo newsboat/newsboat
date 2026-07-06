@@ -64,7 +64,7 @@ parts:
       - libxml2-16
       - librtmp1
       - locales-all
-      - libcurl4
+      - libcurl4t64
       - libstfl0
       - kitty-terminfo
       - ncurses-base
