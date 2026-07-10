@@ -167,8 +167,7 @@ int render_html(
 		argv[1] = "-c";
 		const std::string renderer_locale_string = renderer.to_locale_string();
 
-		const std::string wrapped_command = renderer_locale_string;
-		argv[2] = wrapped_command.c_str();
+		argv[2] = renderer_locale_string.c_str();
 		argv[3] = nullptr;
 		LOG(Level::DEBUG,
 			"item_renderer::render_html: source = %s",
@@ -190,6 +189,8 @@ int render_html(
 				lines.push_back(std::make_pair(LineType::softwrappable, line));
 			}
 		} else {
+			HtmlRenderer rnd(raw);
+			rnd.render(source, lines, thelinks, url);
 			return output.error();
 		}
 	}
@@ -273,7 +274,7 @@ std::string item_renderer::to_plain_text(
 	return txtfmt.format_text_plain(width);
 }
 
-nonstd::expected<std::pair<std::string, size_t>, int> item_renderer::to_stfl_list(
+std::tuple<std::string, size_t, int> item_renderer::to_stfl_list(
 	ConfigContainer& cfg,
 	RssItem& item,
 	unsigned int text_width,
@@ -302,15 +303,10 @@ nonstd::expected<std::pair<std::string, size_t>, int> item_renderer::to_stfl_lis
 	render_links_summary(lines, links);
 
 	TextFormatter txtfmt(lines);
-
 	auto [stfl_list, line_count] = txtfmt.format_text_to_list(rxman, location, text_width,
 			window_width);
 
-	if (renderer_status != 0) {
-		return nonstd::make_unexpected(renderer_status);
-	}
-
-	return {{stfl_list, line_count}};
+	return {stfl_list, line_count, renderer_status};
 }
 
 void render_source(

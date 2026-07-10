@@ -287,6 +287,10 @@ rsspp::Feed FeedRetriever::download_filterplugin(const std::string& filter,
 	const nonstd::expected<std::string, int> result = utils::run_program(argv, buf);
 
 	if (!result) {
+		LOG(Level::USERERROR,
+			"FeedRetriever::download_filterplugin: filter `%s' failed with exit code %d",
+			filter,
+			result.error());
 		return rsspp::Feed();
 	}
 
