@@ -689,6 +689,7 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 				Dialog::Article, links);
 		REQUIRE(status == 0);
 		REQUIRE(text == expected);
+		REQUIRE(num_lines > 0);
 	}
 
 	SECTION("source_to_stfl_list()") {
