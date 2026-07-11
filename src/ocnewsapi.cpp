@@ -15,9 +15,9 @@
 
 #define OCNEWS_API "/index.php/apps/news/api/v1-2/"
 
-namespace newsboat {
+using json = nlohmann::json;
 
-typedef std::unique_ptr<json_object, decltype(&json_object_put)> JsonUptr;
+namespace newsboat {
 
 OcNewsApi::OcNewsApi(ConfigContainer& c)
 	: RemoteApi(c)
@@ -55,101 +55,81 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 	std::vector<TaggedFeedUrl> result;
 	std::map<long, std::string> folders_map;
 
-	json_object* feeds_query;
+	json feeds_query;
 	if (!query("feeds", &feeds_query)) {
 		return result;
 	}
-	JsonUptr feeds_uptr(feeds_query, json_object_put);
 
-	json_object* folders_query;
+	json folders_query;
 	if (!query("folders", &folders_query)) {
 		return result;
 	}
-	JsonUptr folders_uptr(folders_query, json_object_put);
 
-	json_object* folders;
-	json_object_object_get_ex(folders_query, "folders", &folders);
+	try {
+		json folders = folders_query.at("folders");
 
-	array_list* folders_list = json_object_get_array(folders);
-	int folders_length = folders_list->length;
+		for (json& folder : folders) {
+			const long folder_id = folder["id"];
+			const std::string name = folder["name"];
 
-	for (int i = 0; i < folders_length; i++) {
-		json_object* folder =
-			static_cast<json_object*>(folders_list->array[i]);
-		json_object* node;
-
-		json_object_object_get_ex(folder, "id", &node);
-		long folder_id = json_object_get_int(node);
-
-		json_object_object_get_ex(folder, "name", &node);
-		const auto name = json_object_get_string(node);
-
-		if (name != nullptr) {
-			folders_map[folder_id] = name;
+			if (!name.empty()) {
+				folders_map[folder_id] = name;
+			}
 		}
+
+		rsspp::Feed starred;
+		starred.title = "Starred";
+		starred.link = server;
+		starred.rss_version = rsspp::Feed::OCNEWS_JSON;
+
+		known_feeds["Starred"] = std::make_pair(starred, 0);
+		result.push_back(TaggedFeedUrl("Starred", std::vector<std::string>()));
+
+		json feeds = feeds_query.at("feeds");
+
+		for (auto& [i_str, feed] : feeds.items()) {
+			rsspp::Feed current_feed;
+
+			current_feed.rss_version = rsspp::Feed::OCNEWS_JSON;
+
+			long feed_id = feed["id"];
+
+			if (feed.contains("title") && !feed.at("title").is_null()) {
+				current_feed.title = feed.at("title");
+			} else {
+				LOG(Level::WARN, "Subscription has no title, so let's call it \"%s\"", i_str);
+				current_feed.title = std::string("~") + i_str;
+			}
+
+			if (feed.contains("url") && !feed.at("url").is_null()) {
+				current_feed.link = feed.at("url");
+			}
+
+			while (known_feeds.find(current_feed.title) != known_feeds.end()) {
+				current_feed.title += "*";
+			}
+			known_feeds[current_feed.title] = std::make_pair(current_feed, feed_id);
+
+			std::vector<std::string> tags;
+			if (feed.contains("folderId") && !feed.at("folderId").is_null()) {
+				long folder_id = feed["folderId"];
+				tags.push_back(folders_map[folder_id]);
+			}
+
+			result.push_back(TaggedFeedUrl(current_feed.title, tags));
+		}
+
+		std::sort(++begin(result),
+			end(result),
+		[](const TaggedFeedUrl& a, const TaggedFeedUrl& b) {
+			return a.first < b.first;
+		});
+	} catch (json::exception& e) {
+		LOG(Level::ERROR,
+			"OcNewsApi::get_subscribed_urls: failed to parse feed information: %s",
+			e.what());
+		return result;
 	}
-
-	rsspp::Feed starred;
-	starred.title = "Starred";
-	starred.link = server;
-	starred.rss_version = rsspp::Feed::OCNEWS_JSON;
-
-	known_feeds["Starred"] = std::make_pair(starred, 0);
-	result.push_back(TaggedFeedUrl("Starred", std::vector<std::string>()));
-
-	json_object* feeds;
-	json_object_object_get_ex(feeds_query, "feeds", &feeds);
-
-	array_list* feeds_list = json_object_get_array(feeds);
-	int feeds_length = feeds_list->length;
-
-	for (int i = 0; i < feeds_length; i++) {
-		json_object* feed =
-			static_cast<json_object*>(feeds_list->array[i]);
-		json_object* node;
-		rsspp::Feed current_feed;
-
-		current_feed.rss_version = rsspp::Feed::OCNEWS_JSON;
-
-		json_object_object_get_ex(feed, "id", &node);
-		long feed_id = json_object_get_int(node);
-
-		json_object_object_get_ex(feed, "title", &node);
-		const auto title = json_object_get_string(node);
-		if (title != nullptr) {
-			current_feed.title = title;
-		} else {
-			LOG(Level::WARN, "Subscription has no title, so let's call it \"%i\"", i);
-			current_feed.title = std::string("~") + std::to_string(i);
-		}
-
-		json_object_object_get_ex(feed, "url", &node);
-		const auto link = json_object_get_string(node);
-		if (link != nullptr) {
-			current_feed.link = link;
-		}
-
-		while (known_feeds.find(current_feed.title) != known_feeds.end()) {
-			current_feed.title += "*";
-		}
-		known_feeds[current_feed.title] = std::make_pair(current_feed, feed_id);
-
-		json_object_object_get_ex(feed, "folderId", &node);
-		long folder_id = json_object_get_int(node);
-
-		std::vector<std::string> tags;
-		if (folder_id != 0) {
-			tags.push_back(folders_map[folder_id]);
-		}
-
-		result.push_back(TaggedFeedUrl(current_feed.title, tags));
-	}
-
-	std::sort(++begin(result),
-		end(result),
-	[](const TaggedFeedUrl& a, const TaggedFeedUrl& b) {
-		return a.first < b.first;
-	});
 
 	return result;
 }
@@ -224,66 +204,43 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 		std::to_string(known_feeds[feed_id].second != 0 ? 0 : 2);
 	query += "&id=" + std::to_string(known_feeds[feed_id].second);
 
-	json_object* response;
+	json response;
 	if (!this->query(query, &response)) {
 		return feed;
 	}
-	JsonUptr response_uptr(response, json_object_put);
 
-	json_object* items;
-	json_object_object_get_ex(response, "items", &items);
-	if (json_object_get_type(items) != json_type_array) {
-		LOG(Level::ERROR,
-			"OcNewsApi::fetch_feed: items is not an array");
-		return feed;
-	}
+	try {
+		json items = response.at("items");
 
-	array_list* list = json_object_get_array(items);
-	int array_length = list->length;
+		feed.items.clear();
 
-	feed.items.clear();
+		for (auto& [i_str, item_j] : items.items()) {
+			rsspp::Item item;
 
-	for (int i = 0; i < array_length; i++) {
-		json_object* item_j = static_cast<json_object*>(list->array[i]);
-		json_object* node;
-		rsspp::Item item;
+			if (item_j.contains("title") && !item_j.at("title").is_null()) {
+				item.title = item_j.at("title");
+			}
 
-		json_object_object_get_ex(item_j, "title", &node);
-		const auto title = json_object_get_string(node);
-		if (title != nullptr) {
-			item.title = title;
-		}
+			if (item_j.contains("url") && !item_j.at("url").is_null()) {
+				item.link = item_j.at("url");
+			}
 
-		json_object_object_get_ex(item_j, "url", &node);
-		const auto link = json_object_get_string(node);
-		if (link != nullptr) {
-			item.link = link;
-		}
+			if (item_j.contains("author") && !item_j.at("author").is_null()) {
+				item.author = item_j.at("author");
+			}
 
-		json_object_object_get_ex(item_j, "author", &node);
-		const auto author = json_object_get_string(node);
-		if (author != nullptr) {
-			item.author = author;
-		}
+			if (item_j.contains("body") && !item_j.at("body").is_null()) {
+				item.content_encoded = item_j.at("body");
+			}
 
-		json_object_object_get_ex(item_j, "body", &node);
-		const auto content_encoded = json_object_get_string(node);
-		if (content_encoded != nullptr) {
-			item.content_encoded = content_encoded;
-		}
-
-		{
-			json_object* type_obj;
-
-			json_object_object_get_ex(item_j, "enclosureMime", &type_obj);
-			json_object_object_get_ex(item_j, "enclosureLink", &node);
-
-			const auto type_ptr = json_object_get_string(type_obj);
-			const auto url_ptr = json_object_get_string(node);
-
-			if (type_ptr != nullptr && url_ptr != nullptr) {
-				const std::string type = type_ptr;
-				const std::string url = url_ptr;
+			if (
+				item_j.contains("enclosureMime")
+				&& !item_j.at("enclosureMime").is_null()
+				&& item_j.contains("enclosureLink")
+				&& !item_j.at("enclosureLink").is_null()
+			) {
+				const std::string type = item_j.at("enclosureMime");
+				const std::string url = item_j.at("enclosureLink");
 				item.enclosures.push_back(
 				rsspp::Enclosure {
 					url,
@@ -293,36 +250,39 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 				}
 				);
 			}
+
+			long id = item_j["id"];
+			long f_id = item_j["feedId"];
+
+			std::string guid = i_str;
+			if (item_j.contains("guid") && !item_j.at("guid").is_null()) {
+				guid = item_j.at("guid");
+			}
+
+			item.guid = std::to_string(id) + ":" + std::to_string(f_id) + "/" + guid;
+
+			bool unread = item_j["unread"];
+			if (unread) {
+				item.labels.push_back("ocnews:unread");
+			} else {
+				item.labels.push_back("ocnews:read");
+			}
+
+			time_t updated = item_j["pubDate"];
+
+			item.pubDate = utils::mt_strf_localtime(
+					"%a, %d %b %Y %H:%M:%S %z",
+					updated);
+
+			feed.items.push_back(item);
 		}
-
-		json_object_object_get_ex(item_j, "id", &node);
-		long id = json_object_get_int(node);
-
-		json_object_object_get_ex(item_j, "feedId", &node);
-		long f_id = json_object_get_int(node);
-
-		json_object_object_get_ex(item_j, "guid", &node);
-		const auto guid = json_object_get_string(node);
-		item.guid = std::to_string(id) + ":" + std::to_string(f_id) +
-			"/" + (guid ? std::string(guid) : std::to_string(i));
-
-		json_object_object_get_ex(item_j, "unread", &node);
-		bool unread = json_object_get_boolean(node);
-		if (unread) {
-			item.labels.push_back("ocnews:unread");
-		} else {
-			item.labels.push_back("ocnews:read");
-		}
-
-		json_object_object_get_ex(item_j, "pubDate", &node);
-		time_t updated = (time_t)json_object_get_int(node);
-
-		item.pubDate = utils::mt_strf_localtime(
-				"%a, %d %b %Y %H:%M:%S %z",
-				updated);
-
-		feed.items.push_back(item);
+	} catch (json::exception& e) {
+		LOG(Level::ERROR,
+			"OcNewsApi::fetch_feed: failed to parse items: %s",
+			e.what());
+		return feed;
 	}
+
 
 	return feed;
 }
@@ -333,7 +293,7 @@ void OcNewsApi::add_custom_headers(curl_slist** /* custom_headers */)
 }
 
 bool OcNewsApi::query(const std::string& query,
-	json_object** result,
+	nlohmann::json* result,
 	const std::string& post)
 {
 	CurlHandle handle;
@@ -386,7 +346,14 @@ bool OcNewsApi::query(const std::string& query,
 
 	if (result) {
 		const std::string buff = curlDataReceiver->get_data();
-		*result = json_tokener_parse(buff.c_str());
+		try {
+			*result = json::parse(buff);
+		} catch (json::parse_error& e) {
+			LOG(Level::ERROR,
+				"OcNewsApi::query: reply failed to parse: %s",
+				buff);
+			return false;
+		}
 	}
 	return true;
 }
