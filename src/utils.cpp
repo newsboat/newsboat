@@ -200,9 +200,10 @@ std::string utils::convert_text(const std::string& text, const std::string& toco
 	return std::string(reinterpret_cast<const char*>(result.data()), result.size());
 }
 
-std::string utils::get_command_output(const std::string& cmd)
+std::vector<std::uint8_t> utils::get_command_output(const std::string& cmd)
 {
-	return std::string(utils::bridged::get_command_output(cmd));
+	auto output = utils::bridged::get_command_output(cmd);
+	return std::vector<std::uint8_t>(output.begin(), output.end());
 }
 
 std::string utils::http_method_str(const HTTPMethod method)

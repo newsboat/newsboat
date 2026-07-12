@@ -535,12 +535,13 @@ TEST_CASE("consolidate_whitespace preserves leading whitespace", "[utils]")
 
 TEST_CASE("get_command_output()", "[utils]")
 {
-	REQUIRE(utils::get_command_output("ls /dev/null") == "/dev/null\n");
+	REQUIRE(utils::string_from_utf8_lossy(utils::get_command_output("ls /dev/null")) ==
+		"/dev/null\n");
 	REQUIRE_NOTHROW(utils::get_command_output(
 			"a-program-that-is-guaranteed-to-not-exists"));
 	REQUIRE(utils::get_command_output(
-			"a-program-that-is-guaranteed-to-not-exists") == "");
-	REQUIRE(utils::get_command_output("echo c\" d e") == "");
+			"a-program-that-is-guaranteed-to-not-exists") == std::vector<std::uint8_t> {});
+	REQUIRE(utils::get_command_output("echo c\" d e") == std::vector<std::uint8_t> {});
 }
 
 TEST_CASE("extract_filter()", "[utils]")

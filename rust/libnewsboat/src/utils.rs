@@ -390,7 +390,7 @@ pub fn unescape_url(rs_str: &str) -> Option<String> {
 
 /// Runs given command in a shell, and returns the output (from stdout; stderr is printed to the
 /// screen).
-pub fn get_command_output(cmd: &str) -> String {
+pub fn get_command_output(cmd: &str) -> Vec<u8> {
     let cmd = Command::new("sh")
         .arg("-c")
         .arg(cmd)
@@ -398,9 +398,7 @@ pub fn get_command_output(cmd: &str) -> String {
         // https://github.com/newsboat/newsboat/issues/455 for an example).
         .stdin(Stdio::inherit())
         .output();
-    // from_utf8_lossy will convert any bad bytes to U+FFFD
-    cmd.map(|cmd| String::from_utf8_lossy(&cmd.stdout).into_owned())
-        .unwrap_or_else(|_| String::from(""))
+    cmd.map(|cmd| cmd.stdout).unwrap_or_else(|_| Vec::new())
 }
 
 // This function assumes that the user is not interested in the command's output (not even errors
@@ -1638,15 +1636,12 @@ mod tests {
 
     #[test]
     fn t_get_command_output() {
-        assert_eq!(
-            get_command_output("ls /dev/null"),
-            "/dev/null\n".to_string()
-        );
+        assert_eq!(get_command_output("ls /dev/null"), b"/dev/null\n");
         assert_eq!(
             get_command_output("a-program-that-is-guaranteed-to-not-exists"),
-            "".to_string()
+            b""
         );
-        assert_eq!(get_command_output("echo c\" d e"), "".to_string());
+        assert_eq!(get_command_output("echo c\" d e"), b"");
     }
 
     #[test]

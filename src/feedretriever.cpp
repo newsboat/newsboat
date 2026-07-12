@@ -263,9 +263,10 @@ rsspp::Feed FeedRetriever::download_http(const std::string& uri)
 
 rsspp::Feed FeedRetriever::get_execplugin(const std::string& plugin)
 {
-	std::string buf = utils::get_command_output(plugin);
+	const auto buf = utils::get_command_output(plugin);
+	const std::string strBuf(buf.begin(), buf.end());
 	rsspp::Parser p;
-	const rsspp::Feed f = p.parse_buffer(buf);
+	const rsspp::Feed f = p.parse_buffer(strBuf);
 	LOG(Level::DEBUG,
 		"FeedRetriever::get_execplugin: execplugin %s, valid = %s",
 		plugin,
