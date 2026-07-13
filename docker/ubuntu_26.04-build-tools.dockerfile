@@ -1,10 +1,10 @@
 # All the programs and libraries necessary to build Newsboat with newer
-# compilers. Contains GCC 16 and Rust 1.96.0 by default.
+# compilers. Contains GCC 16 and Rust 1.97.0 by default.
 #
 # Configurable via build-args:
 #
 # - cxx_package -- additional Ubuntu packages to install. Default: g++-16
-# - rust_version -- Rust version to install. Default: 1.96.0
+# - rust_version -- Rust version to install. Default: 1.97.0
 # - cc -- C compiler to use. This gets copied into CC environment variable.
 #       Default: gcc-16
 # - cxx -- C++ compiler to use. This gets copied into CXX environment variable.
@@ -101,7 +101,7 @@ USER builder
 ENV HOME=/home/builder
 WORKDIR /home/builder/src
 
-ARG rust_version=1.96.0
+ARG rust_version=1.97.0
 
 RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && chmod +x $HOME/rustup.sh \
