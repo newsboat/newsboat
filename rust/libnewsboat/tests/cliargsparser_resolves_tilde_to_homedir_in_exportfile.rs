@@ -20,6 +20,6 @@ fn t_cliargsparser_dash_capital_e_resolves_tilde_to_homedir() {
 
     check(vec![
         "newsboat".into(),
-        format!("--export-to-file={}", &arg).into(),
+        format!("--export-to-file={}", arg).into(),
     ]);
 }

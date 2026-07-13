@@ -143,7 +143,7 @@ impl ConfigPaths {
         if !self.silent {
             eprintln!(
                 "{}",
-                &gettext("Migrating configs and data from Newsbeuter's XDG dirs...")
+                gettext("Migrating configs and data from Newsbeuter's XDG dirs...")
             );
         }
 
@@ -199,7 +199,7 @@ impl ConfigPaths {
         if !self.silent {
             eprintln!(
                 "{}",
-                &gettext("Migrating configs and data from ~/.newsbeuter/...")
+                gettext("Migrating configs and data from ~/.newsbeuter/...")
             );
         }
 
@@ -210,7 +210,7 @@ impl ConfigPaths {
                 if !self.silent {
                     eprintln!(
                         "{}",
-                        &fmt!(
+                        fmt!(
                             &gettext("Aborting migration because mkdir on `%s' failed: %s"),
                             &newsboat_dir.to_string_lossy().into_owned(),
                             err.to_string()

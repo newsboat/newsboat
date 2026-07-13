@@ -20,6 +20,6 @@ fn t_cliargsparser_dash_u_resolves_tilde_to_homedir() {
 
     check(vec![
         "newsboat".into(),
-        format!("--url-file={}", &arg).into(),
+        format!("--url-file={}", arg).into(),
     ]);
 }
