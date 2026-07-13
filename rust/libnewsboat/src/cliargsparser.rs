@@ -472,7 +472,7 @@ mod tests {
     fn t_supports_combined_short_option_and_value() {
         let filename = "cache.db";
 
-        let opts = vec!["newsboat".into(), format!("-c{}", &filename).into()];
+        let opts = vec!["newsboat".into(), format!("-c{}", filename).into()];
 
         let args = CliArgsParser::new(opts);
 
@@ -526,7 +526,7 @@ mod tests {
     fn t_supports_equals_between_combined_short_option_and_value() {
         let filename = "cache.db";
 
-        let opts = vec!["newsboat".into(), format!("-c={}", &filename).into()];
+        let opts = vec!["newsboat".into(), format!("-c={}", filename).into()];
 
         let args = CliArgsParser::new(opts);
 

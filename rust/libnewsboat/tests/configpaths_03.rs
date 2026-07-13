@@ -19,7 +19,7 @@ fn assert_dirs_exist_after_create_dirs(dirs: &[&path::Path], tmp: &TempDir) {
     assert!(paths.create_dirs());
 
     for dir in dirs {
-        println!("Checking if `{}' directory exists", &dir.display());
+        println!("Checking if `{}' directory exists", dir.display());
         assert!(dir.exists());
     }
 }

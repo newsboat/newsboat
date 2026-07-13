@@ -20,6 +20,6 @@ fn t_cliargsparser_dash_i_resolves_tilde_to_homedir() {
 
     check(vec![
         "newsboat".into(),
-        format!("--import-from-opml={}", &arg).into(),
+        format!("--import-from-opml={}", arg).into(),
     ]);
 }
