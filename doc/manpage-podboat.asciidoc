@@ -65,10 +65,6 @@ include::podboat-cfgcmds.asciidoc[]
 
 include::chapter-format-strings.asciidoc[]
 
-== PODCAST STATES
-
-include::chapter-podcast-states.asciidoc[]
-
 == FILES
 
 include::chapter-files.asciidoc[]
