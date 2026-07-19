@@ -30,6 +30,9 @@ vbox
     label
       .expand:0
       text[fileprompt]:""
+    label
+      text[current_directory]:""
+      .expand:0
     !input[filename]
       .expand:h
       text[filenametext]:""
