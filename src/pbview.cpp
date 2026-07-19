@@ -13,6 +13,7 @@
 #include "listformatter.h"
 #include "logger.h"
 #include "pbcontroller.h"
+#include "stflpp.h"
 #include "strprintf.h"
 
 using namespace newsboat;
@@ -309,11 +310,11 @@ void PbView::handle_resize()
 
 void PbView::apply_colors_to_all_forms()
 {
-	using namespace std::placeholders;
-	colorman.apply_colors(std::bind(&newsboat::Stfl::Form::set, &dllist_form, _1,
-			_2));
-	colorman.apply_colors(std::bind(&newsboat::Stfl::Form::set, &help_form, _1,
-			_2));
+	const auto styles = colorman.get_stfl_styles();
+	for (const auto& [name, value] : styles) {
+		dllist_form.set(name, value);
+		help_form.set(name, value);
+	}
 }
 
 std::pair<double, std::string> PbView::get_speed_human_readable(double kbps)
