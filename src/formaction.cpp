@@ -875,7 +875,15 @@ std::string FormAction::bookmark(const std::string& url,
 			my_argv[1] = "-c";
 			my_argv[2] = cmdline.c_str();
 			my_argv[3] = nullptr;
-			return utils::run_program(my_argv, "");
+			const auto result = utils::run_program(my_argv, "");
+			if (!result) {
+				LOG(Level::USERERROR,
+					"formaction: running `%s' failed with exit code %d",
+					cmdline.c_str(),
+					result.error());
+				return "";
+			}
+			return result.value();
 		}
 	} else {
 		return _(
