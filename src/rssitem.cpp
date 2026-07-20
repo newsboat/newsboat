@@ -122,6 +122,9 @@ void RssItem::set_unread(bool u)
 
 std::string RssItem::pubDate() const
 {
+	// i18n: do not translate this string. It was a mistake to make it
+	// translatable, but undoing it might break some users' filters.
+	// See 2c56225b1cf5ee836d4aa4f875b0d591911811ec.
 	return utils::mt_strf_localtime(_("%a, %d %b %Y %T %z"), pubDate_);
 }
 
