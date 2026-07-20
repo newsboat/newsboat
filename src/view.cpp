@@ -243,8 +243,7 @@ int View::run()
 	return EXIT_SUCCESS;
 }
 
-std::string View::run_modal(std::shared_ptr<FormAction> f,
-	const std::string& value)
+void View::run_modal(std::shared_ptr<FormAction> f)
 {
 	// Modal dialogs should not allow changing to a different dialog (except by
 	// closing the modal dialog)
@@ -324,12 +323,6 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 				}
 			}
 		}
-	}
-
-	if (value.empty()) {
-		return "";
-	} else {
-		return f->get_value(value);
 	}
 }
 
@@ -649,11 +642,8 @@ std::optional<Filepath> View::run_filebrowser(const Filepath& default_filename)
 	apply_colors(filebrowser);
 	filebrowser->set_default_filename(default_filename);
 	filebrowser->set_parent_formaction(get_current_formaction());
-	const std::string res = run_modal(filebrowser, "filenametext");
-	if (res.empty()) {
-		return std::nullopt;
-	}
-	return Filepath::from_locale_string(res);
+	run_modal(filebrowser);
+	return filebrowser->get_result();
 }
 
 std::optional<Filepath> View::run_dirbrowser()
@@ -662,11 +652,8 @@ std::optional<Filepath> View::run_dirbrowser()
 			*this, filebrowser_str, cfg, FileBrowserFormAction::Variant::DirectorySelection);
 	apply_colors(dirbrowser);
 	dirbrowser->set_parent_formaction(get_current_formaction());
-	std::string res = run_modal(dirbrowser, "filenametext");
-	if (res.empty()) {
-		return std::nullopt;
-	}
-	return Filepath::from_locale_string(res);
+	run_modal(dirbrowser);
+	return dirbrowser->get_result();
 }
 
 std::string View::select_tag(const std::string& current_tag)
@@ -682,7 +669,7 @@ std::string View::select_tag(const std::string& current_tag)
 	selecttag->set_parent_formaction(get_current_formaction());
 	selecttag->set_tags(tags);
 	selecttag->set_selected_value(current_tag);
-	run_modal(selecttag, "");
+	run_modal(selecttag);
 	return selecttag->get_selected_value();
 }
 
@@ -694,7 +681,7 @@ std::string View::select_filter(const std::vector<FilterNameExprPair>& filters)
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
 	selecttag->set_filters(filters);
-	run_modal(selecttag, "");
+	run_modal(selecttag);
 	return selecttag->get_selected_value();
 }
 

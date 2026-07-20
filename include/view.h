@@ -34,8 +34,7 @@ public:
 	explicit View(Controller&);
 	~View();
 	int run();
-	std::string run_modal(std::shared_ptr<FormAction> f,
-		const std::string& value = "");
+	void run_modal(std::shared_ptr<FormAction> f);
 
 	void set_feedlist(std::vector<std::shared_ptr<RssFeed>> feeds);
 	void update_visible_feeds(std::vector<std::shared_ptr<RssFeed>> feeds);
