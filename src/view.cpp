@@ -172,11 +172,9 @@ int View::run()
 		// first, we take the current formaction.
 		std::shared_ptr<FormAction> fa = get_current_formaction();
 
-		// we signal "oh, you will receive an operation soon"
 		fa->prepare();
-
-		// we then receive the event and ignore timeouts.
-		const std::string event = fa->draw_form_wait_for_event(INT_MAX);
+		fa->draw_form();
+		const auto event = fa->wait_for_event();
 
 		if (ctrl_c_hit) {
 			ctrl_c_hit = false;
@@ -191,28 +189,28 @@ int View::run()
 			}
 		}
 
-		if (event.empty() || event == "TIMEOUT") {
+		if (event.name.empty() || event.name == "TIMEOUT") {
 			continue;
 		}
 
-		if (event == "RESIZE") {
+		if (event.name == "RESIZE") {
 			handle_resize();
 			continue;
 		}
 
-		if (handle_qna_event(event, fa)) {
+		if (handle_event(event, fa)) {
 			continue;
 		}
 
-		LOG(Level::DEBUG, "View::run: event = %s", event);
+		LOG(Level::DEBUG, "View::run: event = %s", event.name);
 
-		const auto key_combination = KeyCombination::from_bindkey(event);
+		const auto key_combination = KeyCombination::from_bindkey(event.name);
 		if (have_macroprefix) {
 			have_macroprefix = false;
 			status_line.show_message("");
 			LOG(Level::DEBUG,
 				"View::run: running macro `%s'",
-				event);
+				event.name);
 			run_commands(keys->get_macro(key_combination), BindingType::Macro);
 		} else {
 			if (key_combination == KeyCombination("ESC") && !key_sequence.empty()) {
@@ -266,22 +264,23 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 
 		fa->prepare();
 
-		const std::string event = fa->draw_form_wait_for_event(INT_MAX);
-		LOG(Level::DEBUG, "View::run: event = %s", event);
-		if (event.empty() || event == "TIMEOUT") {
+		fa->draw_form();
+		const auto event = fa->wait_for_event();
+		LOG(Level::DEBUG, "View::run: event = %s", event.name);
+		if (event.name.empty() || event.name == "TIMEOUT") {
 			continue;
 		}
 
-		if (event == "RESIZE") {
+		if (event.name == "RESIZE") {
 			handle_resize();
 			continue;
 		}
 
-		if (handle_qna_event(event, fa)) {
+		if (handle_event(event, fa)) {
 			continue;
 		}
 
-		const auto key_combination = KeyCombination::from_bindkey(event);
+		const auto key_combination = KeyCombination::from_bindkey(event.name);
 		if (key_combination == KeyCombination("ESC") && !key_sequence.empty()) {
 			key_sequence.clear();
 		} else {
@@ -649,7 +648,7 @@ std::optional<Filepath> View::run_filebrowser(const Filepath& default_filename)
 	apply_colors(filebrowser);
 	filebrowser->set_default_filename(default_filename);
 	filebrowser->set_parent_formaction(get_current_formaction());
-	const std::string res = run_modal(filebrowser, "filenametext");
+	const std::string res = run_modal(filebrowser, "filename_value");
 	if (res.empty()) {
 		return std::nullopt;
 	}
@@ -662,7 +661,7 @@ std::optional<Filepath> View::run_dirbrowser()
 			*this, filebrowser_str, cfg, FileBrowserFormAction::Variant::DirectorySelection);
 	apply_colors(dirbrowser);
 	dirbrowser->set_parent_formaction(get_current_formaction());
-	std::string res = run_modal(dirbrowser, "filenametext");
+	std::string res = run_modal(dirbrowser, "filename_value");
 	if (res.empty()) {
 		return std::nullopt;
 	}
@@ -710,19 +709,20 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	char result = 0;
 
 	do {
-		const std::string event = f->draw_form_wait_for_event(0);
-		LOG(Level::DEBUG, "View::confirm: event = %s", event);
-		if (event.empty()) {
+		f->draw_form();
+		const auto event =f->wait_for_event();
+		LOG(Level::DEBUG, "View::confirm: event = %s", event.name);
+		if (event.name.empty() || event.name == "TIMEOUT") {
 			continue;
 		}
-		if (event == "ESC" || event == "ENTER") {
+		if (event.name == "ESC" || event.name == "ENTER") {
 			result = 0;
 			LOG(Level::DEBUG,
 				"View::confirm: user pressed ESC or ENTER, we "
 				"cancel confirmation dialog");
 			break;
 		}
-		result = keys->get_key(event);
+		result = keys->get_key(event.name);
 		LOG(Level::DEBUG,
 			"View::confirm: key = %c (%u)",
 			result,
@@ -1185,16 +1185,17 @@ void View::inside_cmdline(bool f)
 	is_inside_cmdline = f;
 }
 
-bool View::handle_qna_event(const std::string& event,
+bool View::handle_event(const Event& event,
 	std::shared_ptr<FormAction> fa)
 {
 	if (is_inside_qna) {
-		LOG(Level::DEBUG, "View::handle_qna_event: we're inside QNA input");
+		LOG(Level::DEBUG, "View::handle_event: we're inside QNA input");
 		fa->handle_qna_event(event, is_inside_cmdline);
 
 		return true;
+	} else {
+		return fa->handle_event(event);
 	}
-	return false;
 }
 
 void View::handle_resize()
