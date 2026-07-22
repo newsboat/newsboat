@@ -1,4 +1,5 @@
-use libnewsboat::colormanager::{self, ActionHandlerStatus};
+use libnewsboat::colormanager;
+use libnewsboat::configparser::ActionHandlerStatus;
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496

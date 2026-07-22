@@ -4,96 +4,11 @@ use std::sync::LazyLock;
 use gettextrs::gettext;
 use strprintf::fmt;
 
-use crate::logger::{self, Level};
-use crate::utils;
-
-#[derive(Debug)]
-pub enum ActionHandlerStatus {
-    InvalidCommand,
-    TooFewParameters,
-    CustomErrorMessage(String),
-}
-
-struct TextStyle {
-    fgcolor: String,
-    bgcolor: String,
-    attributes: Vec<String>,
-}
-
-impl TextStyle {
-    pub fn from(
-        fgcolor: &str,
-        bgcolor: &str,
-        attributes: &[&str],
-    ) -> Result<Self, ActionHandlerStatus> {
-        let fgcolor = if utils::is_valid_color(fgcolor) {
-            fgcolor.to_string()
-        } else {
-            return Err(ActionHandlerStatus::CustomErrorMessage(fmt!(
-                &gettext("`%s' is not a valid color"),
-                fgcolor
-            )));
-        };
-
-        let bgcolor = if utils::is_valid_color(bgcolor) {
-            bgcolor.to_string()
-        } else {
-            return Err(ActionHandlerStatus::CustomErrorMessage(fmt!(
-                &gettext("`%s' is not a valid color"),
-                bgcolor
-            )));
-        };
-
-        let attributes = attributes
-            .iter()
-            .map(|attribute| {
-                if utils::is_valid_attribute(attribute) {
-                    Ok(attribute.to_string())
-                } else {
-                    Err(ActionHandlerStatus::CustomErrorMessage(fmt!(
-                        &gettext("`%s' is not a valid attribute"),
-                        *attribute
-                    )))
-                }
-            })
-            .collect::<Result<Vec<_>, _>>()?;
-
-        Ok(Self {
-            fgcolor,
-            bgcolor,
-            attributes,
-        })
-    }
-
-    pub fn get_stfl_style_string(&self) -> String {
-        let mut result = String::new();
-
-        if self.fgcolor != "default" {
-            result.push_str("fg=");
-            result.push_str(&self.fgcolor);
-        }
-
-        if self.bgcolor != "default" {
-            if !result.is_empty() {
-                result.push(',');
-            }
-            result.push_str("bg=");
-            result.push_str(&self.bgcolor);
-        }
-
-        for attribute in &self.attributes {
-            if attribute != "default" {
-                if !result.is_empty() {
-                    result.push(',');
-                }
-                result.push_str("attr=");
-                result.push_str(attribute);
-            }
-        }
-
-        result
-    }
-}
+use crate::configparser::ActionHandlerStatus;
+use crate::{
+    logger::{self, Level},
+    textstyle::TextStyle,
+};
 
 static DEFAULT_STYLES: LazyLock<HashMap<&str, TextStyle>> = LazyLock::new(|| {
     // Unwrapping `TextStyle::from` results in this function should be fine because the inputs are
@@ -191,17 +106,7 @@ impl ColorManager {
     pub fn dump_config(&self) -> Vec<String> {
         self.element_styles
             .iter()
-            .map(|(element, style)| {
-                let mut attributes_str = String::new();
-                for attribute in &style.attributes {
-                    attributes_str.push(' ');
-                    attributes_str.push_str(attribute);
-                }
-                format!(
-                    "color {} {} {}{}",
-                    element, style.fgcolor, style.bgcolor, attributes_str
-                )
-            })
+            .map(|(element, style)| format!("color {} {}", element, style.get_config_string()))
             .collect()
     }
 
@@ -270,5 +175,148 @@ impl ColorManager {
         }
 
         stfl_styles
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::configparser::ActionHandlerStatus;
+
+    use super::ColorManager;
+
+    #[test]
+    fn t_colormanager_handle_action_unknown_command() {
+        let mut colormanager = ColorManager::default();
+        assert_eq!(
+            colormanager.handle_action("notaconfigcommand", &[]),
+            Err(ActionHandlerStatus::InvalidCommand)
+        );
+    }
+
+    #[test]
+    fn t_colormanager_handle_action_too_few_parameters() {
+        let mut colormanager = ColorManager::default();
+        assert_eq!(
+            colormanager.handle_action("color", &[]),
+            Err(ActionHandlerStatus::TooFewParameters)
+        );
+
+        assert_eq!(
+            colormanager.handle_action("color", &["background"]),
+            Err(ActionHandlerStatus::TooFewParameters)
+        );
+
+        assert_eq!(
+            colormanager.handle_action("color", &["background", "red"]),
+            Err(ActionHandlerStatus::TooFewParameters)
+        );
+    }
+
+    #[test]
+    fn t_colormanager_handle_action_invalid_element_name() {
+        let mut colormanager = ColorManager::default();
+
+        assert!(matches!(
+            colormanager.handle_action("color", &["notanelement", "red", "blue"]),
+            Err(ActionHandlerStatus::CustomErrorMessage(_))
+        ));
+    }
+
+    #[test]
+    fn t_colormanager_handle_action_invalid_style() {
+        let mut colormanager = ColorManager::default();
+
+        assert!(matches!(
+            colormanager.handle_action("color", &["background", "notacolor", "blue"]),
+            Err(ActionHandlerStatus::CustomErrorMessage(_))
+        ));
+
+        assert!(matches!(
+            colormanager.handle_action("color", &["background", "red", "notacolor"]),
+            Err(ActionHandlerStatus::CustomErrorMessage(_))
+        ));
+
+        assert!(matches!(
+            colormanager.handle_action("color", &["background", "red", "blue", "notanattribute"]),
+            Err(ActionHandlerStatus::CustomErrorMessage(_))
+        ));
+
+        assert!(matches!(
+            colormanager.handle_action(
+                "color",
+                &["background", "red", "blue", "bold", "notanattribute"]
+            ),
+            Err(ActionHandlerStatus::CustomErrorMessage(_))
+        ));
+    }
+
+    #[test]
+    fn t_colormanager_dump_config() {
+        let mut colormanager = ColorManager::default();
+
+        assert!(colormanager.dump_config().is_empty());
+
+        colormanager
+            .handle_action("color", &["info", "red", "blue", "underline", "bold"])
+            .unwrap();
+
+        let dump = colormanager.dump_config();
+        assert_eq!(dump.len(), 1);
+        assert_eq!(dump.first().unwrap(), "color info red blue underline bold");
+
+        colormanager
+            .handle_action("color", &["info", "white", "black"])
+            .unwrap();
+
+        let dump = colormanager.dump_config();
+        assert_eq!(dump.len(), 1);
+        assert_eq!(dump.first().unwrap(), "color info white black");
+    }
+
+    #[test]
+    fn t_colormanager_get_stfl_styles_fallback() {
+        let mut colormanager = ColorManager::default();
+
+        let element = "hint-keys-delimiter";
+
+        // Element has its own default
+        let styles = colormanager.get_stfl_styles();
+        let style = styles.get(element).unwrap();
+        assert_eq!(style, "fg=white,bg=blue");
+
+        // When "info" is set explicitly, element takes over "info" style as fallback
+        colormanager
+            .handle_action("color", &["info", "red", "black", "underline"])
+            .unwrap();
+        let styles = colormanager.get_stfl_styles();
+        let style = styles.get(element).unwrap();
+        assert_eq!(style, "fg=red,bg=black,attr=underline");
+
+        // When element is set explicitly, fallback to "info" is not used
+        colormanager
+            .handle_action("color", &[element, "yellow", "default"])
+            .unwrap();
+        let styles = colormanager.get_stfl_styles();
+        let style = styles.get(element).unwrap();
+        assert_eq!(style, "fg=yellow");
+    }
+
+    #[test]
+    fn t_colormanager_get_stfl_styles_article_has_extra_bold_underline() {
+        let mut colormanager = ColorManager::default();
+
+        colormanager
+            .handle_action("color", &["article", "red", "blue"])
+            .unwrap();
+        let styles = colormanager.get_stfl_styles();
+        assert_eq!(styles.get("article").unwrap(), "fg=red,bg=blue");
+        assert_eq!(
+            styles.get("color_bold").unwrap(),
+            "fg=red,bg=blue,attr=bold"
+        );
+        assert_eq!(
+            styles.get("color_underline").unwrap(),
+            "fg=red,bg=blue,attr=underline"
+        );
     }
 }
