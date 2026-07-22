@@ -11,6 +11,8 @@ pub mod utils;
 
 pub mod charencoding;
 pub mod cliargsparser;
+pub mod colormanager;
+pub mod configparser;
 pub mod configpaths;
 pub mod filepath;
 pub mod filterparser;
@@ -25,3 +27,4 @@ pub mod matcher;
 pub mod matchererror;
 pub mod scopemeasure;
 pub mod stflrichtext;
+pub mod textstyle;
