@@ -7,6 +7,8 @@ extern "C" {
 
 #include <string>
 
+#include "event.h"
+
 namespace newsboat {
 
 class Stfl {
@@ -26,6 +28,10 @@ public:
 		Form& operator=(Form&&) = delete;
 
 		std::string run(int timeout);
+		void draw_form();
+		void recalculate_widget_dimensions();
+
+		Event wait_for_event(int timeout);
 
 		std::string get(const std::string& name);
 		void set(const std::string& name, const std::string& value);
@@ -41,6 +47,10 @@ public:
 			const std::string& text);
 
 	private:
+		std::string convert(std::wstring input);
+		std::string key_to_string(wint_t wch);
+		std::string function_key_to_string(wint_t wch);
+
 		stfl_form* f;
 		stfl_ipool* ipool;
 	};
