@@ -120,7 +120,7 @@ void FormAction::set_status(const std::string& text)
 
 void FormAction::draw_form()
 {
-	f.run(-1);
+	f.draw_form();
 }
 
 std::string FormAction::draw_form_wait_for_event(unsigned int timeout)
@@ -130,7 +130,7 @@ std::string FormAction::draw_form_wait_for_event(unsigned int timeout)
 
 void FormAction::recalculate_widget_dimensions()
 {
-	f.run(-3);
+	f.recalculate_widget_dimensions();
 }
 
 void FormAction::start_cmdline(std::string default_value)

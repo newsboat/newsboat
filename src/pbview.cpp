@@ -50,7 +50,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 	bool quit = false;
 
 	// Make sure curses is initialized
-	dllist_form.run(-3);
+	dllist_form.recalculate_widget_dimensions();
 	// Hide cursor using curses
 	curs_set(0);
 
@@ -85,7 +85,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			const std::string line_format =
 				ctrl.get_cfgcont()->get_configvalue("podlist-format");
 
-			dllist_form.run(-3); // compute all widget dimensions
+			dllist_form.recalculate_widget_dimensions(); // compute all widget dimensions
 
 			auto render_line = [this, line_format](std::uint32_t line,
 			std::uint32_t width) -> StflRichText {
@@ -105,7 +105,8 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			msg_line_dllist_form.set_text(ctrl.downloads()[idx].status_msg());
 		}
 
-		const auto event = dllist_form.run(500);
+		dllist_form.draw_form();
+		const auto event = dllist_form.wait_for_event(500);
 
 		if (auto_download) {
 			if (ctrl.get_maxdownloads() >
@@ -114,16 +115,16 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			}
 		}
 
-		if (event.empty() || event == "TIMEOUT") {
+		if (event.name.empty() || event.name == "TIMEOUT") {
 			continue;
 		}
 
-		if (event == "RESIZE") {
+		if (event.name == "RESIZE") {
 			handle_resize();
 			continue;
 		}
 
-		const auto key_combination = KeyCombination::from_bindkey(event);
+		const auto key_combination = KeyCombination::from_bindkey(event.name);
 		if (key_combination == KeyCombination("ESC") && !key_sequence.empty()) {
 			key_sequence.clear();
 		} else {
@@ -303,7 +304,7 @@ void PbView::handle_resize()
 {
 	std::vector<std::reference_wrapper<newsboat::Stfl::Form>> forms = {dllist_form, help_form};
 	for (const auto& form : forms) {
-		form.get().run(-3);
+		form.get().recalculate_widget_dimensions();
 	}
 	update_view = true;
 }
@@ -354,17 +355,18 @@ void PbView::run_help()
 
 	std::vector<KeyCombination> key_sequence;
 	do {
-		const auto event = help_form.run(0);
-		if (event.empty()) {
+		help_form.draw_form();
+		const auto event = help_form.wait_for_event(0);
+		if (event.name.empty() || event.name == "TIMEOUT") {
 			continue;
 		}
 
-		if (event == "RESIZE") {
+		if (event.name == "RESIZE") {
 			handle_resize();
 			continue;
 		}
 
-		const auto key_combination = KeyCombination::from_bindkey(event);
+		const auto key_combination = KeyCombination::from_bindkey(event.name);
 		if (key_combination == KeyCombination("ESC") && !key_sequence.empty()) {
 			key_sequence.clear();
 		} else {

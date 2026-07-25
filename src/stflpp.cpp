@@ -3,6 +3,7 @@
 #include <cerrno>
 #include <langinfo.h>
 #include <mutex>
+#include <ncurses.h>
 
 #include "exception.h"
 #include "logger.h"
@@ -51,6 +52,85 @@ std::string Stfl::Form::run(int timeout)
 		return "";
 	}
 }
+
+void Stfl::Form::draw_form()
+{
+	run(-1);
+}
+
+void Stfl::Form::recalculate_widget_dimensions()
+{
+	run(-3);
+}
+
+std::string Stfl::Form::convert(std::wstring input)
+{
+	const auto output = stfl_ipool_fromwc(ipool, input.c_str());
+	return output == nullptr ? "" : std::string{output};
+}
+
+std::string Stfl::Form::key_to_string(wint_t wch)
+{
+	switch (wch) {
+	case '\r':
+	case '\n':
+		return "ENTER";
+	case ' ':
+		return "SPACE";
+	case '\t':
+		return "TAB";
+	case 27:
+		return "ESC";
+	case 127:
+		return "BACKSPACE";
+	}
+	if (wch < 32) {
+		return keyname(wch);
+	} else {
+		std::wstring key{static_cast<wchar_t>(wch)};
+		return convert(key);
+	}
+}
+
+std::string Stfl::Form::function_key_to_string(wint_t wch)
+{
+	if (wch >= KEY_F(0) && wch <= KEY_F(63)) {
+		return strprintf::fmt("F%u", wch - KEY_F0);
+	}
+	const std::string name = keyname(wch);
+	if (name.substr(0, 4) == "KEY_") {
+		// Drop "KEY_" prefix from name
+		return name.substr(4);
+	} else {
+		return name;
+	}
+}
+
+Event Stfl::Form::wait_for_event(int timeout)
+{
+	wtimeout(stdscr, timeout == 0 ? -1 : timeout);
+
+	wint_t wch{};
+	const auto rc = wget_wch(stdscr, &wch);
+	LOG(Level::DEBUG, "wait_for_event: wget_wch: rc: %d, wch: %u", rc, wch);
+	Event event;
+	if (rc == ERR) {
+		event = {"TIMEOUT", std::nullopt};
+	} else if (rc == KEY_CODE_YES) {
+		event = {function_key_to_string(wch), std::nullopt};
+	} else {
+		std::optional<std::string> printableCharacter{};
+		if (iswprint(wch)) {
+			std::wstring key{static_cast<wchar_t>(wch)};
+			printableCharacter = convert(key);
+		}
+		event = {key_to_string(wch), printableCharacter};
+	}
+	LOG(Level::DEBUG, "wait_for_event: event: %s (printable character: %s)", event.name,
+		event.printableCharacter.has_value() ? "yes" : "no");
+	return event;
+}
+
 
 std::string Stfl::Form::get(const std::string& name)
 {
