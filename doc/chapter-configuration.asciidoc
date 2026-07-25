@@ -357,6 +357,8 @@ Currently, the following elements are supported:
 - `listfocus`: the currently selected list item
 - `listnormal_unread`: an unread list item
 - `listfocus_unread`: the currently selected unread list item
+- `listnormal_deleted`: a deleted article-list item
+- `listfocus_deleted`: the currently selected deleted article-list item
 - `title` (_added in 2.25_): current dialog's title, which is usually at the
   top of the screen (but see <<show-title-bar,`show-title-bar`>> and
   <<swap-title-and-hints,`swap-title-and-hints`>>). If you don't specify
@@ -385,6 +387,8 @@ The default color configuration of Newsboat looks like this:
 	color listfocus           yellow  blue   bold
 	color listnormal_unread   white   black  bold
 	color listfocus_unread    yellow  blue   bold
+	color listnormal_deleted  white   black
+	color listfocus_deleted   yellow  blue   bold
 	color title               yellow  blue   bold
 	color info                yellow  blue   bold
 	color hint-key            yellow  blue   bold

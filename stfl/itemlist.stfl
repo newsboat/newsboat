@@ -8,6 +8,8 @@ vbox
   @title#style_normal[title]:
   @style_unread_normal[listnormal_unread]:
   @style_unread_focus[listfocus_unread]:
+  @style_deleted_normal[listnormal_deleted]:
+  @style_deleted_focus[listfocus_deleted]:
   label#title[title]
     text[head]:"Articles for '#'"
     .expand:h

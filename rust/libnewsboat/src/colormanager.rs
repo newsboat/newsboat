@@ -32,6 +32,14 @@ static DEFAULT_STYLES: LazyLock<HashMap<&str, TextStyle>> = LazyLock::new(|| {
             TextStyle::from("yellow", "blue", &["bold"]).unwrap(),
         ),
         (
+            "listnormal_deleted",
+            TextStyle::from("default", "default", &[]).unwrap(),
+        ),
+        (
+            "listfocus_deleted",
+            TextStyle::from("yellow", "blue", &["bold"]).unwrap(),
+        ),
+        (
             "info",
             TextStyle::from("yellow", "blue", &["bold"]).unwrap(),
         ),
@@ -112,6 +120,8 @@ impl ColorManager {
 
     fn style_fallback(element: &str) -> Option<&str> {
         match element {
+            "listnormal_deleted" => Some("listnormal"),
+            "listfocus_deleted" => Some("listfocus"),
             "title" => Some("info"),
             "hint-key" => Some("info"),
             "hint-keys-delimiter" => Some("info"),
