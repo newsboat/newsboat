@@ -77,7 +77,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				}
 				break;
 				case file_system::FileType::RegularFile: {
-					filename_input.set_value(selection.name.to_locale_string());
+					filename_input.set_value(selection.name.display());
 					f.set_focus("filename");
 				}
 				break;
@@ -90,13 +90,13 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				if (variant == Variant::DirectorySelection) {
 					auto fn = utils::getcwd();
 					if (!filename.empty()) {
-						fn.push(Filepath::from_locale_string(filename));
+						fn.push(Filepath::from_utf8_string(filename));
 					}
 					result = fn;
 				} else {
 					if (!filename.empty()) {
 						auto fn = utils::getcwd();
-						fn.push(Filepath::from_locale_string(filename));
+						fn.push(Filepath::from_utf8_string(filename));
 						struct stat sbuf;
 						/*
 						 * this check is very important, as people will
@@ -365,7 +365,7 @@ void FileBrowserFormAction::init()
 
 	std::string filenametext;
 	if (variant == Variant::FileSelection) {
-		filenametext = default_filename.to_locale_string();
+		filenametext = default_filename.display();
 	}
 
 	filename_input.set_value(filenametext);

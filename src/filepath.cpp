@@ -1,4 +1,5 @@
 #include "filepath.h"
+#include "libnewsboat-ffi/src/filepath.rs.h"
 
 namespace newsboat {
 
@@ -25,6 +26,13 @@ Filepath Filepath::from_locale_string(const std::string& filepath)
 {
 	Filepath result;
 	result.rs_object = filepath::bridged::create(string_to_vec(filepath));
+	return result;
+}
+
+Filepath Filepath::from_utf8_string(const std::string& filepath)
+{
+	Filepath result;
+	result.rs_object = filepath::bridged::create_from_utf8(filepath);
 	return result;
 }
 
