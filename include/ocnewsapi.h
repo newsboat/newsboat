@@ -1,9 +1,9 @@
 #ifndef NEWSBOAT_OCNEWSAPI_H_
 #define NEWSBOAT_OCNEWSAPI_H_
 
-#include <json-c/json.h>
 #include <map>
 
+#include "3rd-party/json.hpp"
 #include "remoteapi.h"
 #include "rss/feed.h"
 
@@ -28,7 +28,7 @@ private:
 	typedef std::map<std::string, std::pair<rsspp::Feed, long>> FeedMap;
 	std::string retrieve_auth();
 	bool query(const std::string& query,
-		json_object** result = nullptr,
+		nlohmann::json* result = nullptr,
 		const std::string& post = "");
 	std::string auth;
 	std::string server;
