@@ -10,6 +10,7 @@ use std::process::abort;
 
 pub mod charencoding;
 pub mod cliargsparser;
+pub mod colormanager;
 pub mod configpaths;
 pub mod filepath;
 pub mod fmtstrformatter;

@@ -5,7 +5,8 @@
 #include <vector>
 
 #include "configactionhandler.h"
-#include "textstyle.h"
+
+#include "libnewsboat-ffi/src/colormanager.rs.h" // IWYU pragma: export
 
 namespace podboat {
 class PbView;
@@ -19,6 +20,7 @@ class ConfigParser;
 
 class ColorManager : public ConfigActionHandler {
 public:
+	ColorManager();
 	~ColorManager() override = default;
 	void register_commands(ConfigParser& cfgparser);
 	void handle_action(std::string_view action,
@@ -27,7 +29,7 @@ public:
 	std::map<std::string, std::string> get_stfl_styles() const;
 
 private:
-	std::map<std::string, TextStyle> element_styles;
+	rust::Box<colormanager::bridged::ColorManager> rs_object;
 };
 
 } // namespace newsboat
