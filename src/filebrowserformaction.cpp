@@ -27,6 +27,7 @@ FileBrowserFormAction::FileBrowserFormAction(View& vv,
 	Variant variant)
 	: FormAction(vv, formstr, cfg)
 	, variant(variant)
+	, current_directory(f, "current_directory")
 	, file_prompt_line(f, "fileprompt")
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 	, view(vv)
@@ -41,8 +42,8 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	case OP_OPEN: {
 		/*
 		 * whenever "ENTER" is hit, we need to distinguish two different cases:
-		 *   - focus on files list => add name of current entry to path and, in
-		 *     case of directory, enter the directory
+		 *   - focus on files list => in case of directory, enter directory.
+		 *     Otherwise, overwrite filename field with name of entry
 		 *   - focus on filename field => exit dialog and return filename
 		 */
 		LOG(Level::DEBUG, "FileBrowserFormAction: 'opening' item");
@@ -62,27 +63,11 @@ bool FileBrowserFormAction::process_operation(Operation op,
 					auto fn = utils::getcwd();
 					update_title(fn);
 
-					switch (variant) {
-					case Variant::FileSelection: {
-						const auto fnstr = Filepath::from_locale_string(f.get("filenametext")).file_name();
-						if (fnstr) {
-							fn.push(*fnstr);
-						}
-						set_value("filenametext", fn.to_locale_string());
-						break;
-					}
-					case Variant::DirectorySelection: {
-						const auto fn_with_trailing_slash = fn.join(Filepath{});
-						set_value("filenametext", fn_with_trailing_slash.to_locale_string());
-						break;
-					}
-					}
 					do_redraw = true;
 				}
 				break;
 				case file_system::FileType::RegularFile: {
-					const auto filename = utils::getcwd().join(selection.name);
-					set_value("filenametext", filename.to_locale_string());
+					set_value("filenametext", selection.name.to_locale_string());
 					f.set_focus("filename");
 				}
 				break;
@@ -91,29 +76,40 @@ bool FileBrowserFormAction::process_operation(Operation op,
 					break;
 				}
 			} else {
-				bool do_pop = true;
-				if (variant == Variant::FileSelection) {
-					std::string fn = f.get("filenametext");
-					struct stat sbuf;
-					/*
-					 * this check is very important, as people will
-					 * kill us if they accidentaly overwrote their
-					 * files with no further warning...
-					 */
-					if (::stat(fn.c_str(), &sbuf) != -1) {
-						f.set_focus("files");
-						if (v.confirm(
-								strprintf::fmt(
-									_("Do you really want to overwrite `%s' "
-										"(y:Yes n:No)? "),
-									fn),
-								_("yn")) == *_("n")) {
-							do_pop = false;
+				const std::string filename = f.get("filenametext");
+				if (variant == Variant::DirectorySelection) {
+					auto fn = utils::getcwd();
+					if (!filename.empty()) {
+						fn.push(Filepath::from_locale_string(filename));
+					}
+					result = fn;
+				} else {
+					if (!filename.empty()) {
+						auto fn = utils::getcwd();
+						fn.push(Filepath::from_locale_string(filename));
+						struct stat sbuf;
+						/*
+						 * this check is very important, as people will
+						 * kill us if they accidentaly overwrote their
+						 * files with no further warning...
+						 */
+						if (::stat(fn.to_locale_string().c_str(), &sbuf) != -1) {
+							f.set_focus("files");
+							if (v.confirm(
+									strprintf::fmt(
+										_("Do you really want to overwrite `%s' "
+											"(y:Yes n:No)? "),
+										fn),
+									_("yn")) == *_("y")) {
+								result = fn;
+							}
+							f.set_focus("filename");
+						} else {
+							result = fn;
 						}
-						f.set_focus("filenametext");
 					}
 				}
-				if (do_pop) {
+				if (result.has_value()) {
 					curs_set(0);
 					v.pop_current_formaction();
 				}
@@ -300,6 +296,7 @@ void FileBrowserFormAction::prepare()
 	 */
 	if (do_redraw) {
 		update_title(utils::getcwd());
+		current_directory.set_text(strprintf::fmt("(%s) ", utils::getcwd().to_locale_string()));
 
 		id_at_position.clear();
 		lines.clear();
@@ -347,7 +344,7 @@ void FileBrowserFormAction::init()
 
 	switch (variant) {
 	case Variant::FileSelection:
-		file_prompt_line.set_text(_("File: "));
+		file_prompt_line.set_text(_("Filename: "));
 		break;
 	case Variant::DirectorySelection:
 		file_prompt_line.set_text(_("Directory: "));
@@ -361,14 +358,9 @@ void FileBrowserFormAction::init()
 	const int status = ::chdir(save_path.to_locale_string().c_str());
 	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", save_path, status);
 
-	std::string filenametext{};
-	switch (variant) {
-	case Variant::FileSelection:
+	std::string filenametext;
+	if (variant == Variant::FileSelection) {
 		filenametext = default_filename.to_locale_string();
-		break;
-	case Variant::DirectorySelection:
-		filenametext = save_path.to_locale_string();
-		break;
 	}
 
 	set_value("filenametext", filenametext);
@@ -383,8 +375,10 @@ void FileBrowserFormAction::init()
 
 std::vector<KeyMapHintEntry> FileBrowserFormAction::get_keymap_hint() const
 {
-	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Cancel")},
-		{OP_OPEN, _("Save")}
+	static const std::vector<KeyMapHintEntry> hints = {
+		{OP_QUIT, _("Cancel")},
+		{OP_OPEN, _("Save")},
+		{OP_SWITCH_FOCUS, _("Switch focus")},
 	};
 	return hints;
 }

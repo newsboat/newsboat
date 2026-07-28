@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_FILEBROWSERFORMACTION_H_
 #define NEWSBOAT_FILEBROWSERFORMACTION_H_
 
+#include <optional>
 #include <sys/stat.h>
 #include <grp.h>
 
@@ -27,6 +28,11 @@ public:
 	void set_default_filename(const Filepath& fn)
 	{
 		default_filename = fn;
+	}
+
+	std::optional<Filepath> get_result()
+	{
+		return result;
 	}
 
 	Dialog id() const override
@@ -67,7 +73,9 @@ private:
 	std::string get_formatted_filename(const Filepath& filename, mode_t mode);
 
 	Variant variant;
+	std::optional<Filepath> result;
 
+	LineView current_directory;
 	LineView file_prompt_line;
 	Filepath default_filename;
 
