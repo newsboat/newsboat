@@ -27,38 +27,25 @@ FeedHqUrlReader::~FeedHqUrlReader() {}
 #define SHARED_ITEMS_URL \
 	"http://feedhq.org/reader/atom/user/-/state/com.google/broadcast"
 
-#define ADD_URL(url, caption)                 \
-	do {                                  \
-		tmptags.clear();              \
-		urls.push_back({(url), FeedOrigin{}});        \
-		tmptags.push_back((caption)); \
-		tags[(url)] = tmptags;        \
-	} while (0)
-
 std::optional<utils::ReadTextFileError> FeedHqUrlReader::reload()
 {
-	urls.clear();
-	tags.clear();
+	feed_urls.clear();
 
 	if (cfg->get_configvalue_as_bool("feedhq-show-special-feeds")) {
-		std::vector<std::string> tmptags;
-		ADD_URL(BROADCAST_FRIENDS_URL,
-			std::string("~") + _("People you follow"));
-		ADD_URL(STARRED_ITEMS_URL,
-			std::string("~") + _("Starred items"));
-		ADD_URL(SHARED_ITEMS_URL, std::string("~") + _("Shared items"));
+		feed_urls.emplace_back(FeedUrl{BROADCAST_FRIENDS_URL, FeedOrigin{}, {std::string("~") + _("People you follow")}});
+		feed_urls.emplace_back(FeedUrl{STARRED_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Starred items")}});
+		feed_urls.emplace_back(FeedUrl{SHARED_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Shared items")}});
 	}
 
 	load_query_urls_from_file(file);
 
-	std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
-	for (const auto& tagged : feedurls) {
+	std::vector<TaggedFeedUrl> subscribed_urls = api->get_subscribed_urls();
+	for (const auto& tagged : subscribed_urls) {
 		std::string url = tagged.first;
 		std::vector<std::string> url_tags = tagged.second;
 
 		LOG(Level::DEBUG, "added %s to URL list", url);
-		urls.push_back({url, FeedOrigin{}});
-		tags[tagged.first] = url_tags;
+		feed_urls.emplace_back(FeedUrl{url, FeedOrigin{}, url_tags});
 		for (const auto& tag : url_tags) {
 			LOG(Level::DEBUG, "%s: added tag %s", url, tag);
 		}

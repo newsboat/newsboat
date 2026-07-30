@@ -27,9 +27,9 @@ TEST_CASE("URL reader extracts all URLs from the file", "[FileUrlReader]")
 	u.reload();
 
 	REQUIRE(u.get_urls().size() == 3);
-	REQUIRE(u.get_urls()[0].first == "http://test1.url.cc/feed.xml");
-	REQUIRE(u.get_urls()[1].first == "http://anotherfeed.com/");
-	REQUIRE(u.get_urls()[2].first == "http://onemorefeed.at/feed/");
+	REQUIRE(u.get_urls()[0].url == "http://test1.url.cc/feed.xml");
+	REQUIRE(u.get_urls()[1].url == "http://anotherfeed.com/");
+	REQUIRE(u.get_urls()[2].url == "http://onemorefeed.at/feed/");
 }
 
 TEST_CASE("URL reader stores origin for each feed", "[FileUrlReader]")
@@ -39,9 +39,9 @@ TEST_CASE("URL reader stores origin for each feed", "[FileUrlReader]")
 	u.reload();
 
 	REQUIRE(u.get_urls().size() == 3);
-	REQUIRE(u.get_urls()[0].second.file_origin->line_number == 1);
-	REQUIRE(u.get_urls()[1].second.file_origin->line_number == 2);
-	REQUIRE(u.get_urls()[2].second.file_origin->line_number == 4);
+	REQUIRE(u.get_urls()[0].origin.file_origin->line_number == 1);
+	REQUIRE(u.get_urls()[1].origin.file_origin->line_number == 2);
+	REQUIRE(u.get_urls()[2].origin.file_origin->line_number == 4);
 }
 
 TEST_CASE("URL reader extracts feeds' tags", "[FileUrlReader]")
@@ -100,11 +100,10 @@ TEST_CASE("URL reader writes files that it can understand later",
 	auto u2_urls = u2.get_urls();
 	REQUIRE(u_urls.size() == u2_urls.size());
 	for (std::size_t i = 0; i < u_urls.size(); i++) {
-		REQUIRE(u_urls[i].first == u2_urls[i].first);
+		REQUIRE(u_urls[i].url == u2_urls[i].url);
 	}
-	for (const auto& [url, origin] : u.get_urls()) {
-		(void)origin;
-		REQUIRE(u.get_tags(url) == u2.get_tags(url));
+	for (const auto& feed_url : u.get_urls()) {
+		REQUIRE(u.get_tags(feed_url.url) == u2.get_tags(feed_url.url));
 	}
 
 }
@@ -123,9 +122,9 @@ TEST_CASE("URL reader updates feed origin when writing data",
 
 		SECTION("line numbers take comments into account") {
 			const auto urls = u.get_urls();
-			REQUIRE(urls[0].second.file_origin->line_number == 1);
-			REQUIRE(urls[1].second.file_origin->line_number == 2);
-			REQUIRE(urls[2].second.file_origin->line_number == 4);
+			REQUIRE(urls[0].origin.file_origin->line_number == 1);
+			REQUIRE(urls[1].origin.file_origin->line_number == 2);
+			REQUIRE(urls[2].origin.file_origin->line_number == 4);
 		}
 
 		WHEN("Feed URLs are written to file") {
@@ -133,9 +132,9 @@ TEST_CASE("URL reader updates feed origin when writing data",
 
 			THEN("Line numbers in feed origin data are updated to account for removed comments") {
 				const auto urls = u.get_urls();
-				REQUIRE(urls[0].second.file_origin->line_number == 1);
-				REQUIRE(urls[1].second.file_origin->line_number == 2);
-				REQUIRE(urls[2].second.file_origin->line_number == 3);
+				REQUIRE(urls[0].origin.file_origin->line_number == 1);
+				REQUIRE(urls[1].origin.file_origin->line_number == 2);
+				REQUIRE(urls[2].origin.file_origin->line_number == 3);
 			}
 		}
 	}
@@ -173,7 +172,7 @@ TEST_CASE("Preserves URLs as-is", "[FileUrlReader][issue926]")
 	u.reload();
 
 	REQUIRE(u.get_urls().size() == 1);
-	REQUIRE(u.get_urls()[0].first ==
+	REQUIRE(u.get_urls()[0].url ==
 		R"_(exec:curl --silent https://feeds.metaebene.me/raumzeit/m4a  | sed 's#\(</guid>\|</id>\)#-M4A&#')_");
 }
 
@@ -284,7 +283,7 @@ TEST_CASE("FileUrlReader handles duplicate URLs by merging tags",
 	u.reload();
 
 	REQUIRE(u.get_urls().size() == 1);
-	REQUIRE(u.get_urls()[0].first == "http://anotherfeed.com/");
+	REQUIRE(u.get_urls()[0].url == "http://anotherfeed.com/");
 
 	REQUIRE(u.get_tags("http://anotherfeed.com/")[0] == "tag1");
 	REQUIRE(u.get_tags("http://anotherfeed.com/")[1] == "tag2");

@@ -15,8 +15,7 @@ OpmlUrlReader::OpmlUrlReader(ConfigContainer& c, const Filepath& url_file)
 
 std::optional<utils::ReadTextFileError> OpmlUrlReader::reload()
 {
-	urls.clear();
-	tags.clear();
+	feed_urls.clear();
 
 	std::vector<std::string> opml_urls =
 		utils::tokenize_quoted(this->get_source(), " ");
@@ -68,7 +67,6 @@ void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)
 			(char*)xmlGetProp(node, (const xmlChar*)"xmlUrl");
 		if (rssurl && strlen(rssurl) > 0) {
 			std::string theurl(rssurl);
-			urls.push_back({theurl, FeedOrigin{}});
 
 			std::vector<std::string> tmptags;
 
@@ -99,10 +97,7 @@ void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)
 			if (tag.length() > 0) {
 				tmptags.push_back(tag);
 			}
-
-			if (tmptags.size() > 0) {
-				tags[theurl] = tmptags;
-			}
+			feed_urls.emplace_back(FeedUrl{theurl, FeedOrigin{}, tmptags});
 		}
 		if (rssurl) {
 			xmlFree(rssurl);

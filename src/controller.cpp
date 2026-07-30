@@ -453,16 +453,16 @@ int Controller::run(const CliArgsParser& args)
 	std::cout.flush();
 
 	unsigned int i = 0;
-	for (const auto& [url, origin] : urlcfg->get_urls()) {
+	for (const auto& feed_url : urlcfg->get_urls()) {
 		try {
 			bool ignore_disp =
 				(cfg.get_configvalue("ignore-mode") ==
 					"display");
 			std::shared_ptr<RssFeed> feed =
 				rsscache->internalize_rssfeed(
-					url, ignore_disp ? &ign : nullptr);
-			feed->set_origin(origin);
-			feed->set_tags(urlcfg->get_tags(url));
+					feed_url.url, ignore_disp ? &ign : nullptr);
+			feed->set_origin(feed_url.origin);
+			feed->set_tags(feed_url.tags);
 			feed->set_order(i);
 			feedcontainer.add_feed(feed);
 		} catch (const DbException& e) {
@@ -472,9 +472,8 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		} catch (const std::string& str) {
 			std::cerr << strprintf::fmt(
-					_("Error while loading feed '%s': "
-						"%s"),
-					url,
+					_("Error while loading feed '%s': %s"),
+					feed_url.url,
 					str)
 				<< std::endl;
 			return EXIT_FAILURE;
@@ -829,11 +828,11 @@ void Controller::reload_urls_file()
 	std::vector<std::shared_ptr<RssFeed>> new_feeds;
 	unsigned int i = 0;
 
-	for (const auto& [url, origin] : urlcfg->get_urls()) {
-		const auto feed = feedcontainer.get_feed_by_url(url);
+	for (const auto& feed_url : urlcfg->get_urls()) {
+		const auto feed = feedcontainer.get_feed_by_url(feed_url.url);
 		if (feed) {
-			feed->set_origin(origin);
-			feed->set_tags(urlcfg->get_tags(url));
+			feed->set_origin(feed_url.origin);
+			feed->set_tags(urlcfg->get_tags(feed_url.url));
 			feed->set_order(i);
 			new_feeds.push_back(feed);
 		} else {
@@ -842,10 +841,10 @@ void Controller::reload_urls_file()
 					(cfg.get_configvalue("ignore-mode") ==
 						"display");
 				std::shared_ptr<RssFeed> new_feed =
-					rsscache->internalize_rssfeed(url,
+					rsscache->internalize_rssfeed(feed_url.url,
 						ignore_disp ? &ign : nullptr);
-				new_feed->set_origin(origin);
-				new_feed->set_tags(urlcfg->get_tags(url));
+				new_feed->set_origin(feed_url.origin);
+				new_feed->set_tags(feed_url.tags);
 				new_feed->set_order(i);
 				new_feeds.push_back(new_feed);
 			} catch (const DbException& e) {

@@ -95,12 +95,12 @@ TEST_CASE("RemoteApiUrlReader reload includes query urls and urls from the Remot
 				REQUIRE(loaded_urls.size() == 3);
 
 				const std::string query_feed = R"(query:Unread Articles:unread = "yes")";
-				REQUIRE(loaded_urls[0].first == query_feed);
-				REQUIRE(loaded_urls[0].second.file_origin->line_number == 2);
-				REQUIRE(loaded_urls[1].first == feed1);
-				REQUIRE(loaded_urls[1].second.file_origin == std::nullopt);
-				REQUIRE(loaded_urls[2].first == feed2);
-				REQUIRE(loaded_urls[2].second.file_origin == std::nullopt);
+				REQUIRE(loaded_urls[0].url == query_feed);
+				REQUIRE(loaded_urls[0].origin.file_origin->line_number == 2);
+				REQUIRE(loaded_urls[1].url == feed1);
+				REQUIRE(loaded_urls[1].origin.file_origin == std::nullopt);
+				REQUIRE(loaded_urls[2].url == feed2);
+				REQUIRE(loaded_urls[2].origin.file_origin == std::nullopt);
 
 				REQUIRE(url_reader.get_tags(query_feed).size() == 2);
 				REQUIRE(url_reader.get_tags(feed1).size() == 2);
@@ -139,7 +139,7 @@ TEST_CASE(
 			THEN("The URL is only stored once, and all unique tags are merged") {
 				const auto& loaded_urls = url_reader.get_urls();
 				REQUIRE(loaded_urls.size() == 1);
-				REQUIRE(loaded_urls[0].first == duplicate_feed);
+				REQUIRE(loaded_urls[0].url == duplicate_feed);
 
 				const auto& merged_tags = url_reader.get_tags(duplicate_feed);
 				REQUIRE(merged_tags.size() == 4);

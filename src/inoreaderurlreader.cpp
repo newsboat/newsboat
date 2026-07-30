@@ -29,37 +29,23 @@ InoreaderUrlReader::~InoreaderUrlReader() {}
 	"http://inoreader.com/reader/atom/user/-/state/com.google/" \
 	"saved-web-pages"
 
-#define ADD_URL(url, caption)                 \
-	do {                                  \
-		tmptags.clear();              \
-		urls.push_back({(url), FeedOrigin{}});        \
-		tmptags.push_back((caption)); \
-		tags[(url)] = tmptags;        \
-	} while (0)
-
 std::optional<utils::ReadTextFileError> InoreaderUrlReader::reload()
 {
-	urls.clear();
-	tags.clear();
+	feed_urls.clear();
 
 	if (cfg->get_configvalue_as_bool("inoreader-show-special-feeds")) {
-		std::vector<std::string> tmptags;
-		ADD_URL(STARRED_ITEMS_URL,
-			std::string("~") + _("Starred items"));
-		ADD_URL(BROADCAST_ITEMS_URL,
-			std::string("~") + _("Broadcast items"));
-		ADD_URL(LIKED_ITEMS_URL, std::string("~") + _("Liked items"));
-		ADD_URL(SAVED_WEB_PAGES_ITEMS_URL,
-			std::string("~") + _("Saved web pages"));
+		feed_urls.emplace_back(FeedUrl{STARRED_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Starred items")}});
+		feed_urls.emplace_back(FeedUrl{BROADCAST_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Broadcast items")}});
+		feed_urls.emplace_back(FeedUrl{LIKED_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Liked items")}});
+		feed_urls.emplace_back(FeedUrl{SAVED_WEB_PAGES_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Saved web pages")}});
 	}
 
 	load_query_urls_from_file(file);
 
-	std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
-	for (const auto& url : feedurls) {
+	std::vector<TaggedFeedUrl> subscribed_urls = api->get_subscribed_urls();
+	for (const auto& url : subscribed_urls) {
 		LOG(Level::DEBUG, "added %s to URL list", url.first);
-		urls.push_back({url.first, FeedOrigin{}});
-		tags[url.first] = url.second;
+		feed_urls.push_back(FeedUrl{url.first, FeedOrigin{}, url.second});
 		for (const auto& tag : url.second) {
 			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
 		}

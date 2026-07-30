@@ -21,26 +21,19 @@ MinifluxUrlReader::~MinifluxUrlReader() {}
 
 std::optional<utils::ReadTextFileError> MinifluxUrlReader::reload()
 {
-	urls.clear();
-	tags.clear();
+	feed_urls.clear();
 
 	if (cfg->get_configvalue_as_bool("miniflux-show-special-feeds")) {
-		std::vector<std::string> tmptags;
-		const std::string star_url = "starred";
-		urls.push_back({star_url, FeedOrigin{}});
-		std::string star_tag = std::string("~") + _("Starred items");
-		tmptags.push_back(star_tag);
-		tags[star_url] = tmptags;
+		feed_urls.emplace_back(FeedUrl{"starred", FeedOrigin{}, {std::string("~") + _("Starred items")}});
 	}
 
 	load_query_urls_from_file(file);
 
-	const std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
+	const std::vector<TaggedFeedUrl> subscribed_urls = api->get_subscribed_urls();
 
-	for (const auto& url : feedurls) {
+	for (const auto& url : subscribed_urls) {
 		LOG(Level::INFO, "added %s to URL list", url.first);
-		urls.push_back({url.first, FeedOrigin{}});
-		tags[url.first] = url.second;
+		feed_urls.emplace_back(FeedUrl{url.first, FeedOrigin{}, url.second});
 		for (const auto& tag : url.second) {
 			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
 		}

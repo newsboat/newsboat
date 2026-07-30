@@ -7,21 +7,32 @@
 
 namespace newsboat {
 
-const std::vector<std::pair<std::string, FeedOrigin>>& UrlReader::get_urls() const
+const std::vector<UrlReader::FeedUrl>& UrlReader::get_urls() const
 {
-	return urls;
+	return feed_urls;
 }
 
 std::vector<std::string>& UrlReader::get_tags(const std::string& url)
 {
-	return tags[url];
+	// TODO: Get rid of dummy return value by changing UrlReader interface
+	static std::vector<std::string> dummy{};
+
+	auto it = std::find_if(feed_urls.begin(),
+	feed_urls.end(), [&url](const FeedUrl& feed_url) {
+		return feed_url.url == url;
+	});
+	if (it != feed_urls.end()) {
+		return it->tags;
+	} else {
+		return dummy;
+	}
 }
 
 std::vector<std::string> UrlReader::get_alltags() const
 {
 	std::set<std::string> tmptags;
-	for (const auto& url_tags : tags) {
-		for (const auto& tag : url_tags.second) {
+	for (const auto& feed : feed_urls) {
+		for (const auto& tag : feed.tags) {
 			if (tag.substr(0, 1) != "~") {
 				// std::copy_if would make this code less readable IMHO
 				// cppcheck-suppress useStlAlgorithm
@@ -42,10 +53,9 @@ void UrlReader::load_query_urls_from_file(Filepath file)
 	}
 
 	const auto& other_urls = file_url_reader.get_urls();
-	for (const auto& [url, origin] : other_urls) {
-		if (utils::is_query_url(url)) {
-			urls.push_back({url, origin});
-			tags[url] = file_url_reader.get_tags(url);
+	for (const auto& feed_url : other_urls) {
+		if (utils::is_query_url(feed_url.url)) {
+			feed_urls.push_back(feed_url);
 		}
 	}
 }

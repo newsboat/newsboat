@@ -19,22 +19,20 @@ RemoteApiUrlReader::RemoteApiUrlReader(const std::string& source_name,
 
 std::optional<utils::ReadTextFileError> RemoteApiUrlReader::reload()
 {
-	urls.clear();
-	tags.clear();
+	feed_urls.clear();
 
 	load_query_urls_from_file(file);
 
-	const std::vector<TaggedFeedUrl> feedurls = api.get_subscribed_urls();
+	const std::vector<TaggedFeedUrl> subsribed_urls = api.get_subscribed_urls();
 
-	for (const auto& url : feedurls) {
-		auto it = std::find_if(urls.begin(), urls.end(),
-		[&url](const std::pair<std::string, FeedOrigin>& u) {
-			return u.first == url.first;
+	for (const auto& url : subsribed_urls) {
+		auto it = std::find_if(feed_urls.begin(), feed_urls.end(),
+		[&url](const FeedUrl& u) {
+			return u.url == url.first;
 		});
-		if (it == urls.end()) {
+		if (it == feed_urls.end()) {
 			LOG(Level::INFO, "added %s to URL list", url.first);
-			urls.push_back({url.first, FeedOrigin{}});
-			tags[url.first] = url.second;
+			feed_urls.emplace_back(FeedUrl{url.first, FeedOrigin{}, url.second});
 			for (const auto& tag : url.second) {
 				LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
 			}
@@ -47,11 +45,9 @@ std::optional<utils::ReadTextFileError> RemoteApiUrlReader::reload()
 			std::cerr << warn_msg << std::endl;
 
 			for (const auto& tag : url.second) {
-				if (std::find(tags[url.first].begin(),
-						tags[url.first].end(),
-						tag) == tags[url.first].end()) {
+				if (std::find(it->tags.begin(), it->tags.end(), tag) == it->tags.end()) {
 					LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
-					tags[url.first].push_back(tag);
+					it->tags.push_back(tag);
 				}
 			}
 		}
