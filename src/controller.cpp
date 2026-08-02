@@ -378,7 +378,8 @@ int Controller::run(const CliArgsParser& args)
 			std::cin >> res;
 			if (res == 'y') {
 				api = std::make_unique<CacheApi>(cfg, rsscache.get());
-				urlcfg = std::make_unique<CacheUrlReader>(FileUrlReader(configpaths.url_file()), api.get());
+				urlcfg = std::make_unique<CacheUrlReader>(FileUrlReader(configpaths.url_file()),
+						api.get());
 			} else {
 				return EXIT_FAILURE;
 			}

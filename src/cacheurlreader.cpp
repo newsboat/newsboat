@@ -28,7 +28,7 @@ std::optional<utils::ReadTextFileError> CacheUrlReader::reload()
 		urls.push_back({url.first, FeedOrigin{std::nullopt}});
 	}
 
-    return std::nullopt;
+	return std::nullopt;
 }
 
 std::string CacheUrlReader::get_source() const
