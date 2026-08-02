@@ -1,7 +1,6 @@
 #include "fileurlreader.h"
 
 #include <cstring>
-#include <fstream>
 #include <vector>
 #include <iostream>
 
@@ -21,12 +20,6 @@ FileUrlReader::FileUrlReader(const Filepath& file)
 std::string FileUrlReader::get_source() const
 {
 	return filename.display();
-}
-
-void FileUrlReader::add_url(const std::string& url,
-	const std::vector<std::string>& url_tags)
-{
-	feed_urls.emplace_back(FeedUrl{url, FeedOrigin{}, url_tags});
 }
 
 std::optional<utils::ReadTextFileError> FileUrlReader::reload()
@@ -81,32 +74,9 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 	return {};
 }
 
-std::optional<std::string> FileUrlReader::write_config()
+const Filepath& FileUrlReader::get_path() const
 {
-	std::fstream f;
-	f.open(filename.to_locale_string(), std::fstream::out);
-	if (!f.is_open()) {
-		const auto error_message = strerror(errno);
-		return strprintf::fmt(_("Error: failed to open file \"%s\": %s"),
-				filename,
-				error_message);
-	}
-
-	std::size_t line_number = 0;
-	for (auto& feed_url : feed_urls) {
-		line_number++;
-		f << utils::quote_if_necessary(feed_url.url);
-		for (const auto& tag : feed_url.tags) {
-			f << " \"" << tag << "\"";
-		}
-		f << std::endl;
-
-		// Update origin as writing to urls file might remove comments and empty lines,
-		// resulting in URLs ending up at different line numbers
-		feed_url.origin = FeedOrigin{FileOrigin{line_number}};
-	}
-
-	return {};
+	return filename;
 }
 
 }
