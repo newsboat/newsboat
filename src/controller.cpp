@@ -710,7 +710,7 @@ void Controller::replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int p
 	LOG(Level::DEBUG,
 		"Controller::replace_feed: after internalize_rssfeed");
 
-	auto* feed_url = urlcfg->get_entry(oldfeed.rssurl());
+	const auto* feed_url = urlcfg->get_entry(oldfeed.rssurl());
 	if (feed_url != nullptr) {
 		feed->set_tags(feed_url->tags);
 	}

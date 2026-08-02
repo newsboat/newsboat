@@ -18,12 +18,9 @@ public:
 
 	std::string get_source() const override;
 
-	void add_url(const std::string& url, const std::vector<std::string>& url_tags);
+	const Filepath& get_path() const;
 
-	/// \brief Write URLs back to the urls file.
-	///
-	/// \return A non-value on success, an error message otherwise.
-	std::optional<std::string> write_config();
+	void add_url(const std::string& url, const std::vector<std::string>& url_tags);
 
 private:
 	const Filepath filename;

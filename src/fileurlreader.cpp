@@ -81,32 +81,9 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 	return {};
 }
 
-std::optional<std::string> FileUrlReader::write_config()
+const Filepath& FileUrlReader::get_path() const
 {
-	std::fstream f;
-	f.open(filename.to_locale_string(), std::fstream::out);
-	if (!f.is_open()) {
-		const auto error_message = strerror(errno);
-		return strprintf::fmt(_("Error: failed to open file \"%s\": %s"),
-				filename,
-				error_message);
-	}
-
-	std::size_t line_number = 0;
-	for (auto& feed_url : feed_urls) {
-		line_number++;
-		f << utils::quote_if_necessary(feed_url.url);
-		for (const auto& tag : feed_url.tags) {
-			f << " \"" << tag << "\"";
-		}
-		f << std::endl;
-
-		// Update origin as writing to urls file might remove comments and empty lines,
-		// resulting in URLs ending up at different line numbers
-		feed_url.origin = FeedOrigin{FileOrigin{line_number}};
-	}
-
-	return {};
+	return filename;
 }
 
 }

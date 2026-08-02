@@ -70,100 +70,6 @@ TEST_CASE("URL reader keeps track of unique tags", "[FileUrlReader]")
 	REQUIRE(u.get_alltags().size() == 3);
 }
 
-TEST_CASE("URL reader writes files that it can understand later",
-	"[FileUrlReader]")
-{
-	const auto testDataPath = "data/test-urls.txt"_path;
-	test_helpers::TempFile urlsFile;
-
-	test_helpers::copy_file(testDataPath, urlsFile.get_path());
-
-	FileUrlReader u(urlsFile.get_path());
-	u.reload();
-	REQUIRE_FALSE(u.get_urls().empty());
-	REQUIRE_FALSE(u.get_alltags().empty());
-
-	std::ofstream urlsFileStream(urlsFile.get_path().to_locale_string());
-	REQUIRE(urlsFileStream.is_open());
-	urlsFileStream << std::string();
-	urlsFileStream.close();
-
-	u.write_config();
-
-	FileUrlReader u2(urlsFile.get_path());
-	u2.reload();
-	REQUIRE_FALSE(u2.get_urls().empty());
-	REQUIRE_FALSE(u2.get_alltags().empty());
-	REQUIRE(u.get_alltags() == u2.get_alltags());
-
-	auto u_urls = u.get_urls();
-	auto u2_urls = u2.get_urls();
-	REQUIRE(u_urls.size() == u2_urls.size());
-	for (std::size_t i = 0; i < u_urls.size(); i++) {
-		REQUIRE(u_urls[i].url == u2_urls[i].url);
-	}
-	for (const auto& feed_url : u.get_urls()) {
-		REQUIRE(u.get_entry(feed_url.url)->tags == u2.get_entry(feed_url.url)->tags);
-	}
-
-}
-
-TEST_CASE("URL reader updates feed origin when writing data",
-	"[FileUrlReader]")
-{
-	const auto testDataPath = "data/test-urls.txt"_path;
-	test_helpers::TempFile urlsFile;
-
-	test_helpers::copy_file(testDataPath, urlsFile.get_path());
-
-	GIVEN("A URL reader with some loaded feeds") {
-		FileUrlReader u(urlsFile.get_path());
-		u.reload();
-
-		SECTION("line numbers take comments into account") {
-			const auto urls = u.get_urls();
-			REQUIRE(urls[0].origin.file_origin->line_number == 1);
-			REQUIRE(urls[1].origin.file_origin->line_number == 2);
-			REQUIRE(urls[2].origin.file_origin->line_number == 4);
-		}
-
-		WHEN("Feed URLs are written to file") {
-			u.write_config();
-
-			THEN("Line numbers in feed origin data are updated to account for removed comments") {
-				const auto urls = u.get_urls();
-				REQUIRE(urls[0].origin.file_origin->line_number == 1);
-				REQUIRE(urls[1].origin.file_origin->line_number == 2);
-				REQUIRE(urls[2].origin.file_origin->line_number == 3);
-			}
-		}
-	}
-}
-
-TEST_CASE("write_config quotes exec: and filter: urls", "[FileUrlReader]")
-{
-	test_helpers::TempFile urlsFile;
-	FileUrlReader u(urlsFile.get_path());
-
-	GIVEN("a url reader with an exec: and filter: feed") {
-		u.add_url(R"(exec:cat header body footer)", {"tag1", "tag 2"});
-		u.add_url(R"(filter:sed "s/foo/bar":https://example.com/feed.xml)", {"tag1", "tag 2"});
-
-		WHEN("the urls are saved to disk") {
-			u.write_config();
-
-			THEN("the exec: and filter: feeds are properly quoted") {
-				const auto content = test_helpers::file_contents(urlsFile.get_path());
-				// Looks like there is an extra newline at the end so allowing more than 2 lines
-				REQUIRE(content.size() >= 2);
-				REQUIRE(content[0] == R"("exec:cat header body footer" "tag1" "tag 2")");
-				REQUIRE(content[1] ==
-					R"("filter:sed \"s/foo/bar\":https://example.com/feed.xml" "tag1" "tag 2")");
-			}
-		}
-	}
-}
-
 TEST_CASE("Preserves URLs as-is", "[FileUrlReader][issue926]")
 {
 	const auto testDataPath = "data/926-urls"_path;
@@ -193,16 +99,6 @@ TEST_CASE("URL reader returns error structure if file cannot be opened",
 		}
 	}
 
-	SECTION("write_config() works fine if file does not exist") {
-		const auto error_message = u.write_config();
-		REQUIRE_FALSE(error_message.has_value());
-
-		SECTION("after writing file, reload() succeeds") {
-			const auto error_message = u.reload();
-			REQUIRE_FALSE(error_message.has_value());
-		}
-	}
-
 	test_helpers::copy_file(testDataPath, urlsFile.get_path());
 
 	SECTION("reload() succeeds if url file exists") {
@@ -217,26 +113,10 @@ TEST_CASE("URL reader returns error structure if file cannot be opened",
 			const auto error_message = u.reload();
 			REQUIRE(error_message.has_value());
 		}
-
-		THEN("write_config() still works fine") {
-			const auto error_message = u.write_config();
-			REQUIRE_FALSE(error_message.has_value());
-		}
 	}
 
 	GIVEN("that the urls file is not writable") {
 		test_helpers::Chmod notWritable(urlsFile.get_path(), S_IRUSR);
-
-		THEN("write_config() returns an error message") {
-			const auto error_message = u.write_config();
-			REQUIRE(error_message.has_value());
-
-			SECTION("the error message contains the filename") {
-				INFO("error_message: " + error_message.value());
-				REQUIRE(error_message.value().find(urlsFile.get_path().to_locale_string()) !=
-					std::string::npos);
-			}
-		}
 
 		THEN("reload() still work fine") {
 			const auto error_message = u.reload();
