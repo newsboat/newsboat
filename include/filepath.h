@@ -36,6 +36,13 @@ public:
 	/// etc.
 	static Filepath from_locale_string(const std::string&);
 
+	/// Constructs a filepath from string in utf-8 encoding.
+	///
+	/// \note This does not perform any canonicalization, i.e. it does nothing
+	/// to tilde (~), repeated path separators (path///to/file), symbolic links
+	/// etc.
+	static Filepath from_utf8_string(const std::string&);
+
 	Filepath(Filepath&&) = default;
 	Filepath& operator=(Filepath&&) = default;
 

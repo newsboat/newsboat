@@ -19,6 +19,7 @@ mod bridged {
 
         fn create_empty() -> Box<PathBuf>;
         fn create(filepath: Vec<u8>) -> Box<PathBuf>;
+        fn create_from_utf8(filepath: &str) -> Box<PathBuf>;
         fn equals(lhs: &PathBuf, rhs: &PathBuf) -> bool;
         fn less_than(lhs: &PathBuf, rhs: &PathBuf) -> bool;
         fn into_bytes(filepath: &PathBuf) -> Vec<u8>;
@@ -41,6 +42,10 @@ fn create(filepath: Vec<u8>) -> Box<PathBuf> {
     let filepath: &OsStr = OsStrExt::from_bytes(&filepath);
     let filepath = std::path::Path::new(filepath);
     Box::new(PathBuf(filepath.to_path_buf()))
+}
+
+fn create_from_utf8(filepath: &str) -> Box<PathBuf> {
+    Box::new(PathBuf(std::path::PathBuf::from(filepath)))
 }
 
 fn equals(lhs: &PathBuf, rhs: &PathBuf) -> bool {

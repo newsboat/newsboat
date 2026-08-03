@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "event.h"
 #include "history.h"
 #include "keymap.h"
 #include "lineedit.h"
@@ -76,7 +77,7 @@ public:
 	void set_status(const std::string& text);
 
 	void draw_form();
-	std::string draw_form_wait_for_event(unsigned int timeout);
+	Event wait_for_event();
 	void recalculate_widget_dimensions();
 
 	virtual void handle_cmdline(const std::string& cmd);
@@ -101,7 +102,13 @@ public:
 	void delete_word();
 	void handle_cmdline_completion();
 
-	void handle_qna_event(std::string event, bool inside_cmd);
+	virtual bool handle_event(const Event& /*event*/)
+	{
+		// Not handled by default but FormActions can override if necessary
+		return false;
+	};
+
+	void handle_qna_event(const Event& event, bool inside_cmd);
 
 	void set_parent_formaction(std::shared_ptr<FormAction> fa)
 	{
