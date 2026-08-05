@@ -33,8 +33,6 @@ public:
 	{
 	}
 
-	std::string encoding;
-
 	Version rss_version;
 	std::string title;
 	std::string title_type;

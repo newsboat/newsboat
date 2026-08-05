@@ -104,6 +104,63 @@ TEST_CASE("reload() removes downloads iff they are marked as finished or deleted
 				}
 			}
 		}
+
+		WHEN("reload() is called with also_remove_finished == false and also_remove_deleted == false") {
+			queue_loader.reload(downloads, false, false);
+
+			THEN("no files are removed") {
+				for (DlStatus status : possible_statuses) {
+					INFO("status: " << static_cast<int>(status));
+					REQUIRE(contains_download_with_status(downloads, status));
+				}
+			}
+		}
+
+		WHEN("reload() is called with also_remove_finished == true and also_remove_deleted == false") {
+			queue_loader.reload(downloads, true, false);
+
+			THEN("only files marked as finished are removed") {
+				for (DlStatus status : possible_statuses) {
+					INFO("status: " << static_cast<int>(status));
+					if (status == DlStatus::FINISHED) {
+						REQUIRE_FALSE(contains_download_with_status(downloads, status));
+					} else {
+						REQUIRE(contains_download_with_status(downloads, status));
+					}
+				}
+			}
+		}
+
+		WHEN("reload() is called with also_remove_finished == false and also_remove_deleted == true") {
+			queue_loader.reload(downloads, false, true);
+
+			THEN("only files marked as deleted are removed") {
+				for (DlStatus status : possible_statuses) {
+					INFO("status: " << static_cast<int>(status));
+					if (status == DlStatus::DELETED) {
+						REQUIRE_FALSE(contains_download_with_status(downloads, status));
+					} else {
+						REQUIRE(contains_download_with_status(downloads, status));
+					}
+				}
+			}
+		}
+
+		WHEN("reload() is called with also_remove_finished == true and also_remove_deleted == true") {
+			queue_loader.reload(downloads, true, true);
+
+			THEN("only files marked as finished or deleted are removed") {
+				for (DlStatus status : possible_statuses) {
+					INFO("status: " << static_cast<int>(status));
+					if (status == DlStatus::FINISHED || status == DlStatus::DELETED) {
+						REQUIRE_FALSE(contains_download_with_status(downloads, status));
+					} else {
+						REQUIRE(contains_download_with_status(downloads, status));
+					}
+				}
+			}
+		}
+
 	}
 }
 
@@ -347,7 +404,7 @@ TEST_CASE("Generates filename if it's absent from the queue file",
 }
 
 TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "
-	"if `delete-played-files` is set",
+	"if `delete-played-files` is set and the third parameter is not set to `true`",
 	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
@@ -412,9 +469,9 @@ TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 
 	QueueLoader queue_loader(queueFile.get_path(), cfg, empty_callback);
 
-	test_helpers::TempFile fileInDeletedStatte;
+	test_helpers::TempFile fileInDeletedState;
 	test_helpers::copy_file("data/empty-file"_path,
-		fileInDeletedStatte.get_path());
+		fileInDeletedState.get_path());
 
 	test_helpers::TempFile fileInFinishedState;
 	test_helpers::copy_file("data/empty-file"_path,
@@ -426,7 +483,7 @@ TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 
 	std::vector<Download> downloads;
 	downloads.emplace_back(empty_callback);
-	downloads.back().set_filename(fileInDeletedStatte.get_path());
+	downloads.back().set_filename(fileInDeletedState.get_path());
 	downloads.back().set_url("https://nonempty.example.com/1");
 	downloads.back().set_status(DlStatus::DELETED);
 
@@ -453,14 +510,77 @@ TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 		downloads.back().set_status(status);
 	}
 
-	REQUIRE(test_helpers::file_exists(fileInDeletedStatte.get_path()));
+	REQUIRE(test_helpers::file_exists(fileInDeletedState.get_path()));
 	REQUIRE(test_helpers::file_exists(fileInFinishedState.get_path()));
 	REQUIRE(test_helpers::file_exists(fileToBePreserved.get_path()));
 
 	queue_loader.reload(downloads, true);
 
-	REQUIRE_FALSE(test_helpers::file_exists(fileInDeletedStatte.get_path()));
+	REQUIRE_FALSE(test_helpers::file_exists(fileInDeletedState.get_path()));
 	REQUIRE_FALSE(test_helpers::file_exists(fileInFinishedState.get_path()));
+	REQUIRE(test_helpers::file_exists(fileToBePreserved.get_path()));
+}
+
+TEST_CASE("reload() removes no files "
+	"when passed `false` as the second and third parameter",
+	"[QueueLoader]")
+{
+	test_helpers::TempFile queueFile;
+	auto empty_callback = []() {};
+
+	ConfigContainer cfg;
+
+	QueueLoader queue_loader(queueFile.get_path(), cfg, empty_callback);
+
+	test_helpers::TempFile fileInDeletedState;
+	test_helpers::copy_file("data/empty-file"_path,
+		fileInDeletedState.get_path());
+
+	test_helpers::TempFile fileInFinishedState;
+	test_helpers::copy_file("data/empty-file"_path,
+		fileInFinishedState.get_path());
+
+	test_helpers::TempFile fileToBePreserved;
+	test_helpers::copy_file("data/empty-file"_path,
+		fileToBePreserved.get_path());
+
+	std::vector<Download> downloads;
+	downloads.emplace_back(empty_callback);
+	downloads.back().set_filename(fileInDeletedState.get_path());
+	downloads.back().set_url("https://nonempty.example.com/1");
+	downloads.back().set_status(DlStatus::DELETED);
+
+	downloads.emplace_back(empty_callback);
+	downloads.back().set_filename(fileInFinishedState.get_path());
+	downloads.back().set_url("https://nonempty.example.com/2");
+	downloads.back().set_status(DlStatus::FINISHED);
+
+	// This list misses three statuses: DELETED and FINISHED, which are handled
+	// above, and DOWNLOADING, which aborts the `reload()`.
+	const std::vector<DlStatus> other_statuses = {
+		DlStatus::QUEUED,
+		DlStatus::CANCELLED,
+		DlStatus::FAILED,
+		DlStatus::MISSING,
+		DlStatus::READY,
+		DlStatus::PLAYED,
+		DlStatus::RENAME_FAILED
+	};
+	for (const auto status : other_statuses) {
+		downloads.emplace_back(empty_callback);
+		downloads.back().set_filename(fileToBePreserved.get_path());
+		downloads.back().set_url("https://eps.example.com/" + std::to_string(rand()));
+		downloads.back().set_status(status);
+	}
+
+	REQUIRE(test_helpers::file_exists(fileInDeletedState.get_path()));
+	REQUIRE(test_helpers::file_exists(fileInFinishedState.get_path()));
+	REQUIRE(test_helpers::file_exists(fileToBePreserved.get_path()));
+
+	queue_loader.reload(downloads, false, false);
+
+	REQUIRE(test_helpers::file_exists(fileInDeletedState.get_path()));
+	REQUIRE(test_helpers::file_exists(fileInFinishedState.get_path()));
 	REQUIRE(test_helpers::file_exists(fileToBePreserved.get_path()));
 }
 

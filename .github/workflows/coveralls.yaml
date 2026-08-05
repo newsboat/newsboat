@@ -47,10 +47,10 @@ jobs:
         with:
           components: llvm-tools-preview
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Cache ~/.cargo
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         id: cargo_cache
         with:
           key: cargo2-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}

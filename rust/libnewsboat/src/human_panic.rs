@@ -130,7 +130,7 @@ fn print_panic_msg(panic_info: &PanicHookInfo) -> io::Result<()> {
 fn get_error_message(panic_info: &PanicHookInfo) -> String {
     let payload = panic_info.payload().downcast_ref::<&str>();
     if let Some(payload) = payload {
-        format!("Message: {}", &payload)
+        format!("Message: {}", payload)
     } else {
         String::from("No error message")
     }

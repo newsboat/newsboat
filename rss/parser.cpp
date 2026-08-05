@@ -286,10 +286,9 @@ Feed Parser::parse_buffer(const std::string& buffer, const std::string& url,
 	Feed f = parse_xmlnode(root_element);
 
 	if (doc->encoding) {
-		f.encoding = (const char*)doc->encoding;
+		LOG(Level::INFO, "Parser::parse_buffer: encoding = %s", (const char*)doc->encoding);
 	}
 
-	LOG(Level::INFO, "Parser::parse_buffer: encoding = %s", f.encoding);
 
 	return f;
 }
@@ -308,10 +307,8 @@ Feed Parser::parse_file(const Filepath& filename)
 	Feed f = parse_xmlnode(root_element);
 
 	if (doc->encoding) {
-		f.encoding = (const char*)doc->encoding;
+		LOG(Level::INFO, "Parser::parse_file: encoding = %s", (const char*)doc->encoding);
 	}
-
-	LOG(Level::INFO, "Parser::parse_file: encoding = %s", f.encoding);
 
 	return f;
 }

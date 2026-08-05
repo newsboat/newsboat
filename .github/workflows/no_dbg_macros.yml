@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Check out the code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: "Check for dbg! macros"
         # `!` in front of the command negates its exit code: this script will

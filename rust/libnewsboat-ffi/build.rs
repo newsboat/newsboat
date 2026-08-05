@@ -14,12 +14,14 @@ fn main() {
     add_cxxbridge("charencoding");
     add_cxxbridge("filepath");
     add_cxxbridge("cliargsparser");
+    add_cxxbridge("colormanager");
     add_cxxbridge("configpaths");
     add_cxxbridge("fmtstrformatter");
     add_cxxbridge("fslock");
     add_cxxbridge("history");
     add_cxxbridge("keycombination");
     add_cxxbridge("keymap");
+    add_cxxbridge("lineedit");
     add_cxxbridge("logger");
     add_cxxbridge("matchererror");
     add_cxxbridge("scopemeasure");

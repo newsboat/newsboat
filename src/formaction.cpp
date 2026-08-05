@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cinttypes>
+#include <cwctype>
 #include <ncurses.h>
 
 #include "config.h"
@@ -120,17 +121,17 @@ void FormAction::set_status(const std::string& text)
 
 void FormAction::draw_form()
 {
-	f.run(-1);
+	f.draw_form();
 }
 
-std::string FormAction::draw_form_wait_for_event(unsigned int timeout)
+Event FormAction::wait_for_event()
 {
-	return f.run(timeout);
+	return f.wait_for_event(INT_MAX);
 }
 
 void FormAction::recalculate_widget_dimensions()
 {
-	f.run(-3);
+	f.recalculate_widget_dimensions();
 }
 
 void FormAction::start_cmdline(std::string default_value)
@@ -625,26 +626,28 @@ void FormAction::handle_cmdline_completion()
 	last_fragment = suggestion;
 }
 
-void FormAction::handle_qna_event(std::string event, bool inside_cmd)
+void FormAction::handle_qna_event(const Event& event, bool inside_cmd)
 {
-	if (event == "ESC") {
+	if (event.name == "ESC") {
 		cancel_qna();
-	} else if (inside_cmd && event == "TAB") {
+	} else if (inside_cmd && event.name == "TAB") {
 		handle_cmdline_completion();
-	} else if (event == "UP") {
+	} else if (event.name == "UP") {
 		qna_previous_history();
-	} else if (event == "DOWN") {
+	} else if (event.name == "DOWN") {
 		qna_next_history();
-	} else if (event == "ENTER") {
+	} else if (event.name == "ENTER") {
 		finish_qna_question();
-	} else if (event == "^U") {
+	} else if (event.name == "^U") {
 		clear_line();
-	} else if (event == "^K") {
+	} else if (event.name == "^K") {
 		clear_eol();
-	} else if (event == "^G") {
+	} else if (event.name == "^G") {
 		cancel_qna();
-	} else if (event == "^W") {
+	} else if (event.name == "^W") {
 		delete_word();
+	} else {
+		qna_input.handle_event(event);
 	}
 }
 

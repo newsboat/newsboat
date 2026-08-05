@@ -10,6 +10,7 @@ use std::process::abort;
 
 pub mod charencoding;
 pub mod cliargsparser;
+pub mod colormanager;
 pub mod configpaths;
 pub mod filepath;
 pub mod fmtstrformatter;
@@ -18,6 +19,7 @@ pub mod history;
 pub mod human_panic;
 pub mod keycombination;
 pub mod keymap;
+pub mod lineedit;
 pub mod logger;
 pub mod matchererror;
 pub mod scopemeasure;

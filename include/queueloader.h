@@ -22,10 +22,12 @@ public:
 		std::function<void()> cb_require_view_update);
 
 	/// Synchronize the queue file with \a downloads. Downloads with `DELETED`
-	/// status are removed. If \a also_remove_finished is `true`, `FINISHED`
-	/// downloads are removed too.
+	/// status are removed by default; if \a also_remove_deleted is set
+	/// to `false`, then they will be preserved. If \a also_remove_finished
+	/// is `true`, `FINISHED` downloads are removed too.
 	void reload(std::vector<Download>& downloads,
-		bool also_remove_finished = false) const;
+		bool also_remove_finished = false,
+		bool also_remove_deleted = true) const;
 
 private:
 	newsboat::Filepath get_filename(const std::string& str) const;
@@ -49,11 +51,15 @@ private:
 	/// If `also_remove_finished` is `true`, downloads with `FINISHED` status
 	/// are put into "to delete" category.
 	///
+	/// Similarly to above, if `also_remove_deleted` is `true`, downloads
+	/// with `DELETED` status will be put into the "to delete" category.
+	///
 	/// Returns:
 	/// - nullopt if one of the downloads is currently being downloaded;
 	/// - otherwise, a struct with categorized downloads.
 	static std::optional<CategorizedDownloads> categorize_downloads(
-		const std::vector<Download>& downloads, bool also_remove_finished);
+		const std::vector<Download>& downloads, bool also_remove_finished,
+		bool also_remove_deleted);
 
 	/// Adds downloads from the queue file to the "to keep" category.
 	void update_from_queue_file(CategorizedDownloads& downloads) const;

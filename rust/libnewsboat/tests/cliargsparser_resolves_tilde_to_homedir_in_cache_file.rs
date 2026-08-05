@@ -24,6 +24,6 @@ fn t_cliargsparser_dash_c_resolves_tilde_to_homedir() {
 
     check(vec![
         "newsboat".into(),
-        format!("--cache-file={}", &arg).into(),
+        format!("--cache-file={}", arg).into(),
     ]);
 }

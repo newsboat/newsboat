@@ -48,7 +48,7 @@ const std::string RemoteApi::read_password(const Filepath& file)
 const std::string RemoteApi::eval_password(const std::string& cmd)
 {
 	LOG(Level::DEBUG, "RemoteApi::eval_password: running `%s`", cmd);
-	std::string pass = utils::get_command_output(cmd);
+	std::string pass = utils::string_from_utf8_lossy(utils::get_command_output(cmd));
 	LOG(Level::DEBUG, "RemoteApi::eval_password: command printed out `%s'", pass);
 	const auto pos = pass.find_first_of("\n\r");
 

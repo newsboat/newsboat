@@ -1,12 +1,14 @@
 #ifndef NEWSBOAT_FILEBROWSERFORMACTION_H_
 #define NEWSBOAT_FILEBROWSERFORMACTION_H_
 
+#include <optional>
 #include <sys/stat.h>
 #include <grp.h>
 
 #include "configcontainer.h"
 #include "file_system.h"
 #include "formaction.h"
+#include "lineedit.h"
 #include "listwidget.h"
 #include "stflrichtext.h"
 
@@ -14,7 +16,11 @@ namespace newsboat {
 
 class FileBrowserFormAction : public FormAction {
 public:
-	FileBrowserFormAction(View&, std::string formstr, ConfigContainer* cfg);
+	enum class Variant {
+		FileSelection,
+		DirectorySelection,
+	};
+	FileBrowserFormAction(View&, std::string formstr, ConfigContainer* cfg, Variant variant);
 	~FileBrowserFormAction() override = default;
 	void prepare() override;
 	void init() override;
@@ -25,16 +31,35 @@ public:
 		default_filename = fn;
 	}
 
+	std::optional<Filepath> get_result()
+	{
+		return result;
+	}
+
 	Dialog id() const override
 	{
+		switch (variant) {
+		case Variant::FileSelection:
+			return Dialog::FileBrowser;
+		case Variant::DirectorySelection:
+			return Dialog::DirBrowser;
+		}
 		return Dialog::FileBrowser;
 	}
 	std::string title() override;
 
+	bool handle_event(const Event& event) override;
+
 protected:
 	std::string main_widget() const override
 	{
-		return "filename";
+		switch (variant) {
+		case Variant::FileSelection:
+			return "filename";
+		case Variant::DirectorySelection:
+			return "files";
+		}
+		return "";
 	}
 
 private:
@@ -50,7 +75,12 @@ private:
 
 	std::string get_formatted_filename(const Filepath& filename, mode_t mode);
 
+	Variant variant;
+	std::optional<Filepath> result;
+
+	LineView current_directory;
 	LineView file_prompt_line;
+	LineEdit filename_input;
 	Filepath default_filename;
 
 	ListWidget files_list;

@@ -22,7 +22,9 @@ CXX_FOR_BUILD?=$(CXX)
 # compiler and linker flags
 DEFINES=-DLOCALEDIR='"$(localedir)"' -DCATCH_AMALGAMATED_CUSTOM_MAIN
 
-WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
+# `-Wno-unused-function` specified to work around json-c 0.19
+# https://github.com/json-c/json-c/issues/941
+WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code -Wno-unused-function
 INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss -I$(CARGO_TARGET_DIR)/cxxbridge/
 # Keep in sync with c++ version specified in FFI build.rs
 BARE_CXXFLAGS=-std=c++17 -O2 -ggdb $(INCLUDES)
