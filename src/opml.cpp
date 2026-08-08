@@ -109,37 +109,51 @@ void rec_find_rss_outlines(
 
 				std::string nurl = std::string(url);
 
-				// Liferea uses a pipe to signal feeds read from
-				// the output of a program in its OPMLs. Convert
-				// them to our syntax.
-				if (url.length() >= 1 && url[0] == '|') {
-					nurl = strprintf::fmt(
-							"exec:%s", url.substr(1));
-					LOG(Level::DEBUG,
-						"opml::import: liferea-style "
-						"url %s converted to %s",
-						url,
-						nurl);
-				}
+			// Liferea uses a pipe prefix in its OPMLs to signal feeds
+			// that are read from the output of a program. Converting
+			// such a URL into an `exec:` URL lets a shared OPML file
+			// run arbitrary shell commands on the victim's machine on
+			// the next feed refresh (the `exec:` scheme is passed
+			// verbatim to `sh -c`). Skip these entries; users who need
+			// a program-generated feed can add `exec:<script>` to
+			// their urls file manually.
+			bool skip_url = false;
+			if (url.length() >= 1 && url[0] == '|') {
+				LOG(Level::WARN,
+					"opml::import: skipping Liferea-style "
+					"pipe URL '%s' for security reasons; if "
+					"you trust it, add 'exec:%s' to your urls "
+					"file manually",
+					url,
+					url.substr(1));
+				skip_url = true;
+			}
 
-				// Handle OPML filters.
-				char* filtercmd = (char*)xmlGetProp(
-						node, (const xmlChar*)"filtercmd");
-				if (filtercmd) {
-					LOG(Level::DEBUG,
-						"opml::import: adding filter "
-						"command %s to url %s",
-						filtercmd,
-						nurl);
-					nurl.insert(0,
-						strprintf::fmt("filter:%s:",
-							filtercmd));
-					xmlFree(filtercmd);
-				}
+			// A `filtercmd` attribute turns the outline into a
+			// `filter:` URL whose command is run via `sh -c` on
+			// refresh. For the same reason as the pipe syntax above,
+			// do not honour it during import; keep the URL as a
+			// regular feed subscription instead.
+			char* filtercmd = (char*)xmlGetProp(
+					node, (const xmlChar*)"filtercmd");
+			if (filtercmd) {
+				LOG(Level::WARN,
+					"opml::import: ignoring 'filtercmd' "
+					"attribute '%s' on URL '%s' for security "
+					"reasons; if you trust it, add "
+					"'filter:%s:%s' to your urls file manually",
+					filtercmd,
+					nurl,
+					filtercmd,
+					nurl);
+				xmlFree(filtercmd);
+			}
 
+			if (!skip_url) {
 				// Filters and scripts may have arguments, so,
 				// quote them when needed.
-				const std::string quoted_url = utils::quote_if_necessary(nurl);
+				const std::string quoted_url =
+					utils::quote_if_necessary(nurl);
 
 				LOG(Level::DEBUG,
 					"opml::import: size = %" PRIu64,
@@ -195,6 +209,7 @@ void rec_find_rss_outlines(
 				}
 
 				xmlFree(category);
+			}
 
 			} else {
 				char* text = (char*)xmlGetProp(

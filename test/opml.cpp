@@ -177,8 +177,9 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 	}
 }
 
-TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
-	"into `exec:` URLs (Liferea convention)", "[Opml]")
+TEST_CASE("import() skips URLs that start with a pipe symbol (\"|\") "
+	"for security instead of turning them into `exec:` URLs",
+	"[Opml]")
 {
 	test_helpers::TempFile urlsFile;
 
@@ -194,8 +195,11 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 	using URL = std::string;
 	using Tag = std::string;
 	using Tags = std::vector<Tag>;
+	// The Liferea-style pipe URL ("|~/fetch_tweets.py") is dropped so
+	// that importing a shared OPML file cannot inject an `exec:` URL
+	// that runs arbitrary commands on feed refresh. Only the regular
+	// feed URL is imported.
 	const std::map<URL, Tags> opmlUrls {
-		{"exec:~/fetch_tweets.py", {"~Birdsite search"}},
 		{"https://example.com/feed.atom", {"~example.com website (Atom feed)", "tagged"}},
 	};
 
@@ -213,8 +217,8 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 	}
 }
 
-TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
-	"(appears to be Liferea convention)",
+TEST_CASE("import() ignores the \"filtercmd\" attribute for security and "
+	"keeps the URL as a regular feed",
 	"[Opml]")
 {
 	test_helpers::TempFile urlsFile;
@@ -231,9 +235,13 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 	using URL = std::string;
 	using Tag = std::string;
 	using Tags = std::vector<Tag>;
+	// The "filtercmd" attribute is dropped so that importing a shared
+	// OPML file cannot inject a `filter:` URL that runs arbitrary
+	// commands on feed refresh. The outline's own xmlUrl is still
+	// imported as a regular feed subscription.
 	const std::map<URL, Tags> opmlUrls {
 		{"https://example.com/another_feed.atom", {"~example.com website (Atom feed)", "misc"}},
-		{"filter:~/.bin/keep_interesting.pl:https://example.com/firehose", {"~Firehose"}},
+		{"https://example.com/firehose", {"~Firehose"}},
 	};
 
 	REQUIRE(urlcfg.get_urls().size() == opmlUrls.size());
@@ -372,7 +380,9 @@ TEST_CASE("import() returns an error when the <body> element is missing", "[Opml
 //		type="rss"
 //		filtercmd="~/.bin/keep_interesting.pl"
 //		xmlUrl="|~/.bin/fetch_tweets.py" />
-// Urls file:
-// filter:~/.bin/keep_interesing.pl:exec:~/.bin/fetch_tweets.py
+// For security, OPML import no longer converts pipe-prefixed xmlUrl
+// values into `exec:` URLs (the outline above is skipped) and no longer
+// honours the `filtercmd` attribute. Users who need these can add the
+// equivalent `exec:`/`filter:` entries to their urls file manually.
 
 // ignores <outline> without title/text
