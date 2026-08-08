@@ -20,6 +20,8 @@ TEST_CASE(
 	SECTION("Each processed action adds corresponding entry to return value") {
 		c.handle_action("color", {"listnormal", "default", "default"});
 		c.handle_action("color", {"listfocus_unread", "cyan", "default", "bold", "underline"});
+		c.handle_action("color", {"listnormal_deleted", "red", "default", "dim"});
+		c.handle_action("color", {"listfocus_deleted", "red", "default", "reverse"});
 		c.handle_action("color", {"background", "red", "yellow"});
 		c.handle_action("color", {"info", "green", "white", "reverse"});
 		c.handle_action("color", {"end-of-text-marker", "color123", "default", "dim", "protect"});
@@ -30,6 +32,8 @@ TEST_CASE(
 
 		REQUIRE(styles.at("listnormal") == "");
 		REQUIRE(styles.at("listfocus_unread") == "fg=cyan,attr=bold,attr=underline");
+		REQUIRE(styles.at("listnormal_deleted") == "fg=red,attr=dim");
+		REQUIRE(styles.at("listfocus_deleted") == "fg=red,attr=reverse");
 		REQUIRE(styles.at("background") == "fg=red,bg=yellow");
 		REQUIRE(styles.at("info") == "fg=green,bg=white,attr=reverse");
 		REQUIRE(styles.at("title") == "fg=green,bg=white,attr=reverse");
