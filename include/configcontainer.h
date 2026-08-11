@@ -25,7 +25,7 @@ enum class FeedSortMethod {
 	LATEST_UNREAD
 };
 
-enum class ArtSortMethod { TITLE, FLAGS, AUTHOR, LINK, GUID, DATE, RANDOM };
+enum class ArtSortMethod { TITLE, FLAGS, AUTHOR, LINK, GUID, DATE, UNREAD, RANDOM };
 
 enum class SortDirection { ASC, DESC };
 
@@ -44,13 +44,27 @@ struct FeedSortStrategy {
 	}
 };
 
-struct ArticleSortStrategy {
+struct ArticleSortRule {
 	ArtSortMethod sm = ArtSortMethod::DATE;
 	SortDirection sd = SortDirection::ASC;
 
-	bool operator==(const ArticleSortStrategy& other) const
+	bool operator==(const ArticleSortRule& other) const
 	{
 		return sm == other.sm && sd == other.sd;
+	}
+
+	bool operator!=(const ArticleSortRule& other) const
+	{
+		return !(*this == other);
+	}
+};
+
+struct ArticleSortStrategy {
+	std::vector<ArticleSortRule> rules{{}};
+
+	bool operator==(const ArticleSortStrategy& other) const
+	{
+		return rules == other.rules;
 	}
 
 	bool operator!=(const ArticleSortStrategy& other) const
