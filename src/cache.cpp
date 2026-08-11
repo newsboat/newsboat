@@ -107,7 +107,6 @@ static int string_vector_callback(void* myVec,
 	char** /* azColName */)
 {
 	auto vec = static_cast<std::vector<std::string>*>(myVec);
-
 	assert(argc == 1);
 	assert(argv[0] != nullptr);
 

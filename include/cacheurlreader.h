@@ -19,7 +19,6 @@ public:
 	std::string get_source() const override;
 
 private:
-	Cache* cache;
 	FileUrlReader file_reader;
 	RemoteApi* api;
 };

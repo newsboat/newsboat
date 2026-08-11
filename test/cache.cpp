@@ -1208,3 +1208,32 @@ TEST_CASE("Ignoring articles in search", "[Cache]")
 	REQUIRE(search_items.size() == 0 );
 	REQUIRE(no_ignore_items.size() == 1);
 }
+
+
+TEST_CASE("fetch_feed_urls returns feeds correctly", "[Cache]")
+{
+	auto cfg = std::make_unique<ConfigContainer>();
+	auto rsscache = Cache::in_memory(*cfg);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(*cfg, *rsscache, easyHandle);
+	test_helpers::TempFile dbfile;
+
+
+	auto feedurl1 = "file://data/rss20_1.xml";
+	auto feedurl2 = "file://data/atom10_1.xml";
+
+	RssParser parser1(feedurl1, *rsscache, *cfg, nullptr);
+	RssParser parser2(feedurl2, *rsscache, *cfg, nullptr);
+
+	auto feed1 = parser1.parse(feed_retriever.retrieve(feedurl1));
+	auto feed2 = parser2.parse(feed_retriever.retrieve(feedurl2));
+
+	rsscache->externalize_rssfeed(*feed1, false);
+	rsscache->externalize_rssfeed(*feed2, false);
+
+	auto feeds = rsscache->fetch_feed_urls();
+
+	REQUIRE(feeds.size() == 2);
+	REQUIRE(feeds[1] == feedurl1);
+	REQUIRE(feeds[0] == feedurl2);
+}
