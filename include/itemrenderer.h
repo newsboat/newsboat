@@ -46,7 +46,7 @@ std::string to_plain_text(
 /// highlight the resulting text. \a links is filled with all the links
 /// found in the article (which is useful for article view, which lets
 /// users open the links by their number).
-std::tuple<std::string, size_t, int> to_stfl_list(
+nonstd::expected<std::pair<std::string, size_t>, int> to_stfl_list(
 	ConfigContainer& cfg,
 	RssItem& item,
 	unsigned int text_width,

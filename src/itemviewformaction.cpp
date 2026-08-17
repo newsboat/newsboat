@@ -130,10 +130,7 @@ void ItemViewFormAction::prepare()
 				}
 			}
 
-			int renderer_status = 0;
-
-			std::tie(formatted_text, num_lines, renderer_status) =
-				item_renderer::to_stfl_list(
+			auto result = item_renderer::to_stfl_list(
 					// cfg can't be nullptr because that's a long-lived object
 					// created at the very start of the program.
 					*cfg,
@@ -143,6 +140,15 @@ void ItemViewFormAction::prepare()
 					&rxman,
 					Dialog::Article,
 					links);
+
+			int renderer_status = 0;
+
+			if (result.has_value()) {
+				std::tie(formatted_text, num_lines) = result.value();
+			}
+			else {
+				renderer_status = result.error();
+			}
 
 			if (renderer_status != 0) {
 				const auto renderer = cfg->get_configvalue_as_filepath("html-renderer");

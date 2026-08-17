@@ -274,7 +274,7 @@ std::string item_renderer::to_plain_text(
 	return txtfmt.format_text_plain(width);
 }
 
-std::tuple<std::string, size_t, int> item_renderer::to_stfl_list(
+nonstd::expected<std::pair<std::string, size_t>, int> item_renderer::to_stfl_list(
 	ConfigContainer& cfg,
 	RssItem& item,
 	unsigned int text_width,
@@ -306,7 +306,11 @@ std::tuple<std::string, size_t, int> item_renderer::to_stfl_list(
 	auto [stfl_list, line_count] = txtfmt.format_text_to_list(rxman, location, text_width,
 			window_width);
 
-	return {stfl_list, line_count, renderer_status};
+	if (renderer_status != 0) {
+		return nonstd::unexpected_type<int>(renderer_status);
+	}
+
+	return std::make_pair(stfl_list, line_count);
 }
 
 void render_source(

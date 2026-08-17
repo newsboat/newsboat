@@ -685,9 +685,10 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 			"}";
 
 		Links links;
-		auto [text, num_lines, status] = item_renderer::to_stfl_list(cfg, *item, 80, 80, &rxman,
+		auto result = item_renderer::to_stfl_list(cfg, *item, 80, 80, &rxman,
 				Dialog::Article, links);
-		REQUIRE(status == 0);
+		REQUIRE(result.has_value());
+		auto [text, num_lines] = result.value();
 		REQUIRE(text == expected);
 		REQUIRE(num_lines > 0);
 	}
