@@ -145,8 +145,7 @@ void ItemViewFormAction::prepare()
 
 			if (result.has_value()) {
 				std::tie(formatted_text, num_lines) = result.value();
-			}
-			else {
+			} else {
 				renderer_status = result.error();
 			}
 
