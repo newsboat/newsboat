@@ -1,11 +1,14 @@
 #include "curldatareceiver.h"
 
+#include <limits>
+
 namespace newsboat {
 
 std::unique_ptr<newsboat::CurlDataReceiver> CurlDataReceiver::register_data_handler(
-	CurlHandle& curlHandle)
+	CurlHandle& curlHandle, std::size_t max_data_size)
 {
-	return std::unique_ptr<CurlDataReceiver>(new CurlDataReceiver(curlHandle));
+	return std::unique_ptr<CurlDataReceiver>(
+		new CurlDataReceiver(curlHandle, max_data_size));
 }
 
 const std::string& CurlDataReceiver::get_data() const
@@ -13,8 +16,10 @@ const std::string& CurlDataReceiver::get_data() const
 	return accumulated_data;
 }
 
-CurlDataReceiver::CurlDataReceiver(CurlHandle& curlHandle)
+CurlDataReceiver::CurlDataReceiver(CurlHandle& curlHandle,
+	std::size_t max_data_size_)
 	: curl_handle(curlHandle)
+	, max_data_size(max_data_size_)
 {
 	curl_easy_setopt(curl_handle.ptr(), CURLOPT_WRITEDATA, this);
 	curl_easy_setopt(curl_handle.ptr(), CURLOPT_WRITEFUNCTION,
@@ -31,16 +36,22 @@ size_t CurlDataReceiver::write_callback(char* buffer, size_t size, size_t nmemb,
 	void* receiver)
 {
 	auto data_receiver = static_cast<CurlDataReceiver*>(receiver);
-	const auto data = std::string(buffer, size * nmemb);
-
-	data_receiver->handle_data(data);
-
-	return size * nmemb;
+	if (nmemb != 0 && size > std::numeric_limits<size_t>::max() / nmemb) {
+		return 0;
+	}
+	return data_receiver->handle_data(buffer, size * nmemb);
 }
 
-void CurlDataReceiver::handle_data(const std::string& data)
+size_t CurlDataReceiver::handle_data(const char* data, size_t data_size)
 {
-	accumulated_data += data;
+	if (max_data_size != 0
+		&& (data_size > max_data_size
+			|| accumulated_data.size() > max_data_size - data_size)) {
+		return 0;
+	}
+
+	accumulated_data.append(data, data_size);
+	return data_size;
 }
 
 } // namespace newsboat
