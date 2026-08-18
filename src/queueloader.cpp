@@ -121,9 +121,6 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 			continue;
 		}
 
-		LOG(Level::DEBUG,
-			"QueueLoader::reload: loaded `%s' from queue file",
-			line);
 		const std::vector<std::string> fields = utils::tokenize_quoted(line);
 		bool url_found = false;
 
@@ -142,6 +139,26 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 			}
 			continue;
 		}
+
+		const bool valid_status = fields.size() < 3
+			|| fields[2] == "missing"
+			|| fields[2] == "downloaded"
+			|| fields[2] == "played"
+			|| fields[2] == "finished";
+		const bool valid_fields = !utils::contains_control_characters(fields[0])
+			&& fields.size() <= 3
+			&& valid_status
+			&& (fields.size() < 2
+				|| !utils::contains_control_characters(fields[1]));
+		if (!valid_fields) {
+			LOG(Level::USERERROR,
+				"QueueLoader: skipping malformed queue entry");
+			continue;
+		}
+
+		LOG(Level::DEBUG,
+			"QueueLoader::reload: loaded `%s' from queue file",
+			line);
 
 		for (const auto& dl : downloads.to_keep) {
 			if (fields[0] == dl.url()) {

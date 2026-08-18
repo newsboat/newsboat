@@ -18,7 +18,23 @@ QueueManager::QueueManager(ConfigContainer* cfg_, Filepath queue_file)
 EnqueueResult QueueManager::enqueue_url(RssItem& item, RssFeed& feed)
 {
 	const std::string& url = item.enclosure_url();
+	if (!utils::is_http_url(url) || utils::contains_control_characters(url)) {
+		LOG(Level::USERERROR,
+			"QueueManager: refusing to enqueue an invalid podcast URL");
+		EnqueueResult result;
+		result.status = EnqueueStatus::INVALID_ENQUEUE_DATA;
+		return result;
+	}
+
 	const Filepath filename = generate_enqueue_filename(item, feed);
+	if (utils::contains_control_characters(filename.to_locale_string())) {
+		LOG(Level::USERERROR,
+			"QueueManager: refusing to enqueue a filename with control "
+			"characters");
+		EnqueueResult result;
+		result.status = EnqueueStatus::INVALID_ENQUEUE_DATA;
+		return result;
+	}
 
 	std::fstream f;
 	f.open(queue_file.to_locale_string(), std::fstream::in);
@@ -128,6 +144,13 @@ EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
 
 		const auto enclosure_type = item->enclosure_type();
 		const auto enclosure_url = item->enclosure_url();
+		if (!utils::is_http_url(enclosure_url)
+			|| utils::contains_control_characters(enclosure_url)) {
+			LOG(Level::DEBUG,
+				"QueueManager::autoenqueue: skipping enclosure with "
+				"invalid URL");
+			continue;
+		}
 
 		if (!enclosure_type.empty() && !utils::is_valid_podcast_type(enclosure_type)) {
 			LOG(Level::DEBUG, "QueueManager::autoenqueue: Skipping enclosure with url `%s'"
@@ -139,21 +162,21 @@ EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
 			"QueueManager::autoenqueue: enclosure_url = `%s' enclosure_type = `%s'",
 			enclosure_url,
 			enclosure_type);
-		if (utils::is_http_url(item->enclosure_url())) {
-			LOG(Level::INFO,
-				"QueueManager::autoenqueue: enqueuing `%s'",
-				item->enclosure_url());
-			const auto result = enqueue_url(*item, feed);
-			switch (result.status) {
-			case EnqueueStatus::QUEUED_SUCCESSFULLY:
-			case EnqueueStatus::URL_QUEUED_ALREADY:
-				// Not an issue, continue processing rest of items
-				break;
-			case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
-			case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
-				// Let caller of `autoenqueue` handle the issue
-				return result;
-			}
+		LOG(Level::INFO,
+			"QueueManager::autoenqueue: enqueuing `%s'",
+			item->enclosure_url());
+		const auto result = enqueue_url(*item, feed);
+		switch (result.status) {
+		case EnqueueStatus::QUEUED_SUCCESSFULLY:
+		case EnqueueStatus::URL_QUEUED_ALREADY:
+			// Not an issue, continue processing rest of items
+			break;
+		case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
+		case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
+			return result;
+		case EnqueueStatus::INVALID_ENQUEUE_DATA:
+			// Invalid metadata is skipped; continue processing other items.
+			break;
 		}
 	}
 

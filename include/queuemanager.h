@@ -16,6 +16,7 @@ enum class EnqueueStatus {
 	URL_QUEUED_ALREADY, // `extra_string` should specify the concerning URL
 	OUTPUT_FILENAME_USED_ALREADY, // `extra_filename` should specify the generated filename
 	QUEUE_FILE_OPEN_ERROR, // `extra_filename` should specify the location of the queue file
+	INVALID_ENQUEUE_DATA, // The URL or generated filename contains invalid data
 };
 
 struct EnqueueResult {
@@ -46,4 +47,3 @@ private:
 }
 
 #endif /* NEWSBOAT_QUEUEMANAGER_H_ */
-
