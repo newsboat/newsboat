@@ -731,6 +731,9 @@ void Controller::replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int p
 			v->get_statusline().show_error(
 				strprintf::fmt(_("Failed to open queue file: %s."), result.extra_filename));
 			break;
+		case EnqueueStatus::INVALID_ENQUEUE_DATA:
+			// Invalid remote metadata is skipped by QueueManager.
+			break;
 		}
 	}
 

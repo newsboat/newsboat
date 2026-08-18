@@ -34,6 +34,7 @@ enum class HTTPMethod {
 };
 
 std::string strip_comments(const std::string& line);
+bool contains_control_characters(std::string_view str);
 std::vector<std::string> tokenize(const std::string& str,
 	std::string delimiters = " \r\n\t");
 std::vector<std::string> tokenize_spaced(const std::string& str,
