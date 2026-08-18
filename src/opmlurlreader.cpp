@@ -68,6 +68,16 @@ void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)
 			(char*)xmlGetProp(node, (const xmlChar*)"xmlUrl");
 		if (rssurl && strlen(rssurl) > 0) {
 			std::string theurl(rssurl);
+			xmlFree(rssurl);
+
+			if (!utils::is_http_url(theurl)) {
+				LOG(Level::USERERROR,
+					"OpmlUrlReader: skipping non-HTTP(S) URL from "
+					"remote OPML: %s",
+					theurl);
+				return;
+			}
+
 			urls.push_back({theurl, FeedOrigin{}});
 
 			std::vector<std::string> tmptags;
@@ -103,8 +113,7 @@ void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)
 			if (tmptags.size() > 0) {
 				tags[theurl] = tmptags;
 			}
-		}
-		if (rssurl) {
+		} else if (rssurl) {
 			xmlFree(rssurl);
 		}
 	}
