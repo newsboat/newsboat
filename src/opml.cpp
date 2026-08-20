@@ -187,7 +187,7 @@ void rec_find_rss_outlines(
 					ss = std::istringstream(category);
 				}
 
-				auto& urltags = urlcfg.get_tags(quoted_url);
+				auto& urltags = urlcfg.get_entry(quoted_url)->tags;
 				while (std::getline(ss, token, ',')) {
 					if (std::find(urltags.begin(), urltags.end(), token) == urltags.end()) {
 						urltags.push_back(token);

@@ -36,11 +36,12 @@ public:
 	/// Tiny RSS").
 	virtual std::string get_source() const = 0;
 
-	/// \brief A list of feed URLs with their origin
+	/// \brief A list of feed URLs with their origin and tags
 	const std::vector<UrlReader::FeedUrl>& get_urls() const;
 
-	/// \brief Tags of feed that has url `url`.
-	std::vector<std::string>& get_tags(const std::string& url);
+	/// \brief Get entry of feed that has url `url`
+	/// (or nullptr if it does not exist)
+	FeedUrl* get_entry(const std::string& url);
 
 	/// \brief List of all extant tags.
 	std::vector<std::string> get_alltags() const;

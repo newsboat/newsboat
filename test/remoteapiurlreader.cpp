@@ -102,9 +102,9 @@ TEST_CASE("RemoteApiUrlReader reload includes query urls and urls from the Remot
 				REQUIRE(loaded_urls[2].url == feed2);
 				REQUIRE(loaded_urls[2].origin.file_origin == std::nullopt);
 
-				REQUIRE(url_reader.get_tags(query_feed).size() == 2);
-				REQUIRE(url_reader.get_tags(feed1).size() == 2);
-				REQUIRE(url_reader.get_tags(feed2).size() == 0);
+				REQUIRE(url_reader.get_entry(query_feed)->tags.size() == 2);
+				REQUIRE(url_reader.get_entry(feed1)->tags.size() == 2);
+				REQUIRE(url_reader.get_entry(feed2)->tags.size() == 0);
 			}
 
 			THEN("Alltags includes tags from both sources but excludes title rename tags") {
@@ -141,7 +141,7 @@ TEST_CASE(
 				REQUIRE(loaded_urls.size() == 1);
 				REQUIRE(loaded_urls[0].url == duplicate_feed);
 
-				const auto& merged_tags = url_reader.get_tags(duplicate_feed);
+				const auto& merged_tags = url_reader.get_entry(duplicate_feed)->tags;
 				REQUIRE(merged_tags.size() == 4);
 				REQUIRE(merged_tags[0] == "tag1");
 				REQUIRE(merged_tags[1] == "tag2");

@@ -49,17 +49,17 @@ TEST_CASE("URL reader extracts feeds' tags", "[FileUrlReader]")
 	FileUrlReader u("data/test-urls.txt"_path);
 	u.reload();
 
-	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml").size() == 3);
-	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml")[0] == "~title");
-	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml")[1] == "tag1");
-	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml")[2] == "tag2");
+	REQUIRE(u.get_entry("http://test1.url.cc/feed.xml")->tags.size() == 3);
+	REQUIRE(u.get_entry("http://test1.url.cc/feed.xml")->tags[0] == "~title");
+	REQUIRE(u.get_entry("http://test1.url.cc/feed.xml")->tags[1] == "tag1");
+	REQUIRE(u.get_entry("http://test1.url.cc/feed.xml")->tags[2] == "tag2");
 
-	REQUIRE(u.get_tags("http://anotherfeed.com/").size() == 0);
+	REQUIRE(u.get_entry("http://anotherfeed.com/")->tags.size() == 0);
 
-	REQUIRE(u.get_tags("http://onemorefeed.at/feed/").size() == 3);
-	REQUIRE(u.get_tags("http://onemorefeed.at/feed/")[0] == "tag1");
-	REQUIRE(u.get_tags("http://onemorefeed.at/feed/")[1] == "~another title");
-	REQUIRE(u.get_tags("http://onemorefeed.at/feed/")[2] == "tag3");
+	REQUIRE(u.get_entry("http://onemorefeed.at/feed/")->tags.size() == 3);
+	REQUIRE(u.get_entry("http://onemorefeed.at/feed/")->tags[0] == "tag1");
+	REQUIRE(u.get_entry("http://onemorefeed.at/feed/")->tags[1] == "~another title");
+	REQUIRE(u.get_entry("http://onemorefeed.at/feed/")->tags[2] == "tag3");
 }
 
 TEST_CASE("URL reader keeps track of unique tags", "[FileUrlReader]")
@@ -103,7 +103,7 @@ TEST_CASE("URL reader writes files that it can understand later",
 		REQUIRE(u_urls[i].url == u2_urls[i].url);
 	}
 	for (const auto& feed_url : u.get_urls()) {
-		REQUIRE(u.get_tags(feed_url.url) == u2.get_tags(feed_url.url));
+		REQUIRE(u.get_entry(feed_url.url)->tags == u2.get_entry(feed_url.url)->tags);
 	}
 
 }
@@ -285,8 +285,10 @@ TEST_CASE("FileUrlReader handles duplicate URLs by merging tags",
 	REQUIRE(u.get_urls().size() == 1);
 	REQUIRE(u.get_urls()[0].url == "http://anotherfeed.com/");
 
-	REQUIRE(u.get_tags("http://anotherfeed.com/")[0] == "tag1");
-	REQUIRE(u.get_tags("http://anotherfeed.com/")[1] == "tag2");
-	REQUIRE(u.get_tags("http://anotherfeed.com/")[2] == "tag3");
-	REQUIRE(u.get_tags("http://anotherfeed.com/")[3] == "tag4");
+	auto& tags = u.get_entry("http://anotherfeed.com/")->tags;
+	REQUIRE(tags.size() == 4);
+	REQUIRE(tags[0] == "tag1");
+	REQUIRE(tags[1] == "tag2");
+	REQUIRE(tags[2] == "tag3");
+	REQUIRE(tags[3] == "tag4");
 }

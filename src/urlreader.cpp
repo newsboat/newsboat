@@ -12,19 +12,16 @@ const std::vector<UrlReader::FeedUrl>& UrlReader::get_urls() const
 	return feed_urls;
 }
 
-std::vector<std::string>& UrlReader::get_tags(const std::string& url)
+UrlReader::FeedUrl* UrlReader::get_entry(const std::string& url)
 {
-	// TODO: Get rid of dummy return value by changing UrlReader interface
-	static std::vector<std::string> dummy{};
-
 	auto it = std::find_if(feed_urls.begin(),
 	feed_urls.end(), [&url](const FeedUrl& feed_url) {
 		return feed_url.url == url;
 	});
 	if (it != feed_urls.end()) {
-		return it->tags;
+		return &*it;
 	} else {
-		return dummy;
+		return nullptr;
 	}
 }
 

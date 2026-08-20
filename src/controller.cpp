@@ -710,7 +710,10 @@ void Controller::replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int p
 	LOG(Level::DEBUG,
 		"Controller::replace_feed: after internalize_rssfeed");
 
-	feed->set_tags(urlcfg->get_tags(oldfeed.rssurl()));
+	auto* feed_url = urlcfg->get_entry(oldfeed.rssurl());
+	if (feed_url != nullptr) {
+		feed->set_tags(feed_url->tags);
+	}
 	feed->set_order(oldfeed.get_order());
 	feedcontainer.replace_feed(pos, feed);
 
@@ -832,7 +835,7 @@ void Controller::reload_urls_file()
 		const auto feed = feedcontainer.get_feed_by_url(feed_url.url);
 		if (feed) {
 			feed->set_origin(feed_url.origin);
-			feed->set_tags(urlcfg->get_tags(feed_url.url));
+			feed->set_tags(feed_url.tags);
 			feed->set_order(i);
 			new_feeds.push_back(feed);
 		} else {

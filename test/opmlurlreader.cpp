@@ -63,7 +63,7 @@ TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 		const auto e = expected.find(feed_url.url);
 		REQUIRE(e != expected.cend());
 
-		const auto tags = reader.get_tags(feed_url.url);
+		const auto& tags = reader.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == e->second);
 	}
 
@@ -124,7 +124,7 @@ TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
 		const auto e = expected.find(feed_url.url);
 		REQUIRE(e != expected.cend());
 
-		const auto tags = reader.get_tags(feed_url.url);
+		const auto& tags = reader.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == e->second);
 	}
 
@@ -189,7 +189,7 @@ TEST_CASE("OpmlUrlReader::reload() skips things that can't be parsed",
 		const auto e = expected.find(feed_url.url);
 		REQUIRE(e != expected.cend());
 
-		const auto tags = reader.get_tags(feed_url.url);
+		const auto& tags = reader.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == e->second);
 	}
 

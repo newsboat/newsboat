@@ -138,7 +138,7 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 		const auto entry = testUrls.find(feed_url.url);
 		REQUIRE(entry != testUrls.cend());
 
-		const auto tags = urlcfg.get_tags(feed_url.url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 
@@ -170,7 +170,7 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 		const auto entry = combinedUrls.find(feed_url.url);
 		REQUIRE(entry != testUrls.cend());
 
-		const auto tags = urlcfg.get_tags(feed_url.url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 }
@@ -205,7 +205,7 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 		const auto entry = opmlUrls.find(feed_url.url);
 		REQUIRE(entry != opmlUrls.cend());
 
-		const auto tags = urlcfg.get_tags(feed_url.url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 }
@@ -241,7 +241,7 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 		const auto entry = opmlUrls.find(feed_url.url);
 		REQUIRE(entry != opmlUrls.cend());
 
-		const auto tags = urlcfg.get_tags(feed_url.url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 }
@@ -274,7 +274,7 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 		const auto entry = testUrls.find(feed_url.url);
 		REQUIRE(entry != testUrls.cend());
 
-		const auto tags = urlcfg.get_tags(feed_url.url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 
@@ -300,7 +300,7 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 		const auto entry = combinedUrls.find(feed_url.url);
 		REQUIRE(entry != testUrls.cend());
 
-		const auto tags = urlcfg.get_tags(feed_url.url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 }
@@ -317,7 +317,7 @@ TEST_CASE("import() tags from category attribute", "[Opml]")
 	const std::vector<std::string> tags{"tag one", "tag_two", "tag/three"};
 	const auto& urls = urlcfg.get_urls();
 	REQUIRE(urls.size() == 1);
-	REQUIRE(urlcfg.get_tags(urls[0].url) == tags);
+	REQUIRE(urlcfg.get_entry(urls[0].url)->tags == tags);
 }
 
 TEST_CASE("import() returns an error when the <opml> root element is missing", "[Opml]")
