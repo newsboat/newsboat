@@ -95,7 +95,7 @@ impl ColorManager {
                     if !DEFAULT_STYLES.contains_key(element) {
                         return Err(ActionHandlerStatus::CustomErrorMessage(fmt!(
                             &gettext("`%s' is not a valid configuration element"),
-                            action
+                            *element
                         )));
                     }
 
