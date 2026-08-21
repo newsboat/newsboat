@@ -162,6 +162,7 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 	combinedUrls.insert(testUrls.cbegin(), testUrls.cend());
 	combinedUrls.insert(opmlUrls.cbegin(), opmlUrls.cend());
 
+	urlcfg.reload();
 	REQUIRE(urlcfg.get_urls().size() == combinedUrls.size());
 
 	for (const auto& feed_url : urlcfg.get_urls()) {
@@ -197,6 +198,7 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 		{"https://example.com/feed.atom", {"~example.com website (Atom feed)", "tagged"}},
 	};
 
+	urlcfg.reload();
 	REQUIRE(urlcfg.get_urls().size() == opmlUrls.size());
 
 	for (const auto& feed_url : urlcfg.get_urls()) {
@@ -233,6 +235,7 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 		{"filter:~/.bin/keep_interesting.pl:https://example.com/firehose", {"~Firehose"}},
 	};
 
+	urlcfg.reload();
 	REQUIRE(urlcfg.get_urls().size() == opmlUrls.size());
 
 	for (const auto& feed_url : urlcfg.get_urls()) {
@@ -292,6 +295,7 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 	combinedUrls.insert(testUrls.cbegin(), testUrls.cend());
 	combinedUrls.insert(opmlUrls.cbegin(), opmlUrls.cend());
 
+	urlcfg.reload();
 	REQUIRE(urlcfg.get_urls().size() == combinedUrls.size());
 
 	for (const auto& feed_url : urlcfg.get_urls()) {
@@ -307,7 +311,8 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 
 TEST_CASE("import() tags from category attribute", "[Opml]")
 {
-	FileUrlReader urlcfg;
+	test_helpers::TempFile urlsFile;
+	FileUrlReader urlcfg(urlsFile.get_path());
 	const auto path =
 		"file:/"_path // `Filepath` will append an extra slash
 		.join(utils::getcwd())
@@ -315,6 +320,7 @@ TEST_CASE("import() tags from category attribute", "[Opml]")
 	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	const std::vector<std::string> tags{"tag one", "tag_two", "tag/three"};
+	urlcfg.reload();
 	const auto& urls = urlcfg.get_urls();
 	REQUIRE(urls.size() == 1);
 	REQUIRE(urlcfg.get_entry(urls[0].url)->tags == tags);

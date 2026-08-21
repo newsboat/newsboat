@@ -24,9 +24,6 @@ public:
 	virtual ~UrlReader() = default;
 
 	/// \brief Re-read the input file.
-	///
-	/// \note This overwrites the contents of `urls` and `tags`, so
-	/// make sure to save your modifications with `write_config()`.
 	virtual std::optional<utils::ReadTextFileError> reload() = 0;
 
 	/// \brief User-visible description of where URLs come from.
