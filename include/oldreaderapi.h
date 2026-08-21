@@ -21,7 +21,6 @@ public:
 		const std::string& guid) override;
 
 private:
-	std::vector<std::string> get_tags(xmlNode* node);
 	std::string get_new_token();
 	std::string retrieve_auth();
 	std::string post_content(const std::string& url,

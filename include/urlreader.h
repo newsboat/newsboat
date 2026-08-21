@@ -1,7 +1,6 @@
 #ifndef NEWSBOAT_URLREADER_H_
 #define NEWSBOAT_URLREADER_H_
 
-#include <map>
 #include <optional>
 #include <string>
 #include <vector>
@@ -15,6 +14,12 @@ namespace newsboat {
 /// \brief Base class for classes that supply Newsboat with feed URLs.
 class UrlReader {
 public:
+	struct FeedUrl {
+		std::string url;
+		FeedOrigin origin;
+		std::vector<std::string> tags;
+	};
+
 	UrlReader() = default;
 	virtual ~UrlReader() = default;
 
@@ -31,11 +36,12 @@ public:
 	/// Tiny RSS").
 	virtual std::string get_source() const = 0;
 
-	/// \brief A list of feed URLs with their origin
-	const std::vector<std::pair<std::string, FeedOrigin>>& get_urls() const;
+	/// \brief A list of feed URLs with their origin and tags
+	const std::vector<UrlReader::FeedUrl>& get_urls() const;
 
-	/// \brief Tags of feed that has url `url`.
-	std::vector<std::string>& get_tags(const std::string& url);
+	/// \brief Get entry of feed that has url `url`
+	/// (or nullptr if it does not exist)
+	FeedUrl* get_entry(const std::string& url);
 
 	/// \brief List of all extant tags.
 	std::vector<std::string> get_alltags() const;
@@ -43,8 +49,7 @@ public:
 protected:
 	void load_query_urls_from_file(Filepath file);
 
-	std::vector<std::pair<std::string, FeedOrigin>> urls;
-	std::map<std::string, std::vector<std::string>> tags;
+	std::vector<FeedUrl> feed_urls;
 };
 
 } // namespace newsboat

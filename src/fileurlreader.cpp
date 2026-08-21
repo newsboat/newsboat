@@ -2,8 +2,6 @@
 
 #include <cstring>
 #include <fstream>
-#include <unordered_map>
-#include <set>
 #include <vector>
 #include <iostream>
 
@@ -28,14 +26,12 @@ std::string FileUrlReader::get_source() const
 void FileUrlReader::add_url(const std::string& url,
 	const std::vector<std::string>& url_tags)
 {
-	urls.push_back({url, FeedOrigin{}});
-	tags[url] = url_tags;
+	feed_urls.emplace_back(FeedUrl{url, FeedOrigin{}, url_tags});
 }
 
 std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 {
-	urls.clear();
-	tags.clear();
+	feed_urls.clear();
 
 	auto result = utils::read_text_file(filename);
 	if (!result) {
@@ -57,17 +53,15 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 			continue;
 		}
 
-		std::string url = tokens[0];
-		auto it = std::find_if(urls.begin(), urls.end(),
-		[&url](const std::pair<std::string, FeedOrigin>& u) {
-			return u.first == url;
+		const std::string url = tokens[0];
+		tokens.erase(tokens.begin());
+
+		auto it = std::find_if(feed_urls.begin(), feed_urls.end(),
+		[&url](const FeedUrl& u) {
+			return u.url == url;
 		});
-		if (it == urls.end()) {
-			urls.push_back({url, FeedOrigin{FileOrigin{line_number}}});
-			tokens.erase(tokens.begin());
-			if (!tokens.empty()) {
-				tags[url] = tokens;
-			}
+		if (it == feed_urls.end()) {
+			feed_urls.emplace_back(FeedUrl{url, FeedOrigin{FileOrigin{line_number}}, tokens});
 		} else {
 			std::string warn_msg = strprintf::fmt(
 					_("Warning: Duplicate URL found: %s. Merging tags."),
@@ -76,12 +70,9 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 			LOG(Level::USERERROR, warn_msg.c_str());
 			std::cerr << warn_msg << std::endl;
 
-			tokens.erase(tokens.begin());
 			for (const std::string& tag : tokens) {
-				if (std::find(tags[url].begin(),
-						tags[url].end(),
-						tag) == tags[url].end()) {
-					tags[url].push_back(tag);
+				if (std::find(it->tags.begin(), it->tags.end(), tag) == it->tags.end()) {
+					it->tags.push_back(tag);
 				}
 			}
 		}
@@ -102,19 +93,17 @@ std::optional<std::string> FileUrlReader::write_config()
 	}
 
 	std::size_t line_number = 0;
-	for (auto& [url, origin] : urls) {
+	for (auto& feed_url : feed_urls) {
 		line_number++;
-		f << utils::quote_if_necessary(url);
-		if (tags[url].size() > 0) {
-			for (const auto& tag : tags[url]) {
-				f << " \"" << tag << "\"";
-			}
+		f << utils::quote_if_necessary(feed_url.url);
+		for (const auto& tag : feed_url.tags) {
+			f << " \"" << tag << "\"";
 		}
 		f << std::endl;
 
 		// Update origin as writing to urls file might remove comments and empty lines,
 		// resulting in URLs ending up at different line numbers
-		origin = FeedOrigin{FileOrigin{line_number}};
+		feed_url.origin = FeedOrigin{FileOrigin{line_number}};
 	}
 
 	return {};

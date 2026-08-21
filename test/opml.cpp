@@ -132,14 +132,13 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 
 	REQUIRE(urlcfg.get_urls().size() == testUrls.size());
 
-	for (const auto& [url, origin] : urlcfg.get_urls()) {
-		(void)origin;
-		INFO("url = " << url);
+	for (const auto& feed_url : urlcfg.get_urls()) {
+		INFO("url = " << feed_url.url);
 
-		const auto entry = testUrls.find(url);
+		const auto entry = testUrls.find(feed_url.url);
 		REQUIRE(entry != testUrls.cend());
 
-		const auto tags = urlcfg.get_tags(url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 
@@ -165,14 +164,13 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 
 	REQUIRE(urlcfg.get_urls().size() == combinedUrls.size());
 
-	for (const auto& [url, origin] : urlcfg.get_urls()) {
-		(void)origin;
-		INFO("url = " << url);
+	for (const auto& feed_url : urlcfg.get_urls()) {
+		INFO("url = " << feed_url.url);
 
-		const auto entry = combinedUrls.find(url);
+		const auto entry = combinedUrls.find(feed_url.url);
 		REQUIRE(entry != testUrls.cend());
 
-		const auto tags = urlcfg.get_tags(url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 }
@@ -201,14 +199,13 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 
 	REQUIRE(urlcfg.get_urls().size() == opmlUrls.size());
 
-	for (const auto& [url, origin] : urlcfg.get_urls()) {
-		(void)origin;
-		INFO("url = " << url);
+	for (const auto& feed_url : urlcfg.get_urls()) {
+		INFO("url = " << feed_url.url);
 
-		const auto entry = opmlUrls.find(url);
+		const auto entry = opmlUrls.find(feed_url.url);
 		REQUIRE(entry != opmlUrls.cend());
 
-		const auto tags = urlcfg.get_tags(url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 }
@@ -238,14 +235,13 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 
 	REQUIRE(urlcfg.get_urls().size() == opmlUrls.size());
 
-	for (const auto& [url, origin] : urlcfg.get_urls()) {
-		(void)origin;
-		INFO("url = " << url);
+	for (const auto& feed_url : urlcfg.get_urls()) {
+		INFO("url = " << feed_url.url);
 
-		const auto entry = opmlUrls.find(url);
+		const auto entry = opmlUrls.find(feed_url.url);
 		REQUIRE(entry != opmlUrls.cend());
 
-		const auto tags = urlcfg.get_tags(url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 }
@@ -272,14 +268,13 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 
 	REQUIRE(urlcfg.get_urls().size() == testUrls.size());
 
-	for (const auto& [url, origin] : urlcfg.get_urls()) {
-		(void)origin;
-		INFO("url = " << url);
+	for (const auto& feed_url : urlcfg.get_urls()) {
+		INFO("url = " << feed_url.url);
 
-		const auto entry = testUrls.find(url);
+		const auto entry = testUrls.find(feed_url.url);
 		REQUIRE(entry != testUrls.cend());
 
-		const auto tags = urlcfg.get_tags(url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 
@@ -299,14 +294,13 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 
 	REQUIRE(urlcfg.get_urls().size() == combinedUrls.size());
 
-	for (const auto& [url, origin] : urlcfg.get_urls()) {
-		(void)origin;
-		INFO("url = " << url);
+	for (const auto& feed_url : urlcfg.get_urls()) {
+		INFO("url = " << feed_url.url);
 
-		const auto entry = combinedUrls.find(url);
+		const auto entry = combinedUrls.find(feed_url.url);
 		REQUIRE(entry != testUrls.cend());
 
-		const auto tags = urlcfg.get_tags(url);
+		const auto& tags = urlcfg.get_entry(feed_url.url)->tags;
 		REQUIRE(tags == entry->second);
 	}
 }
@@ -323,7 +317,7 @@ TEST_CASE("import() tags from category attribute", "[Opml]")
 	const std::vector<std::string> tags{"tag one", "tag_two", "tag/three"};
 	const auto& urls = urlcfg.get_urls();
 	REQUIRE(urls.size() == 1);
-	REQUIRE(urlcfg.get_tags(urls[0].first) == tags);
+	REQUIRE(urlcfg.get_entry(urls[0].url)->tags == tags);
 }
 
 TEST_CASE("import() returns an error when the <opml> root element is missing", "[Opml]")

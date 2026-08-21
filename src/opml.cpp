@@ -146,8 +146,8 @@ void rec_find_rss_outlines(
 					static_cast<uint64_t>(urlcfg.get_urls().size()));
 
 				auto& urls = urlcfg.get_urls();
-				const auto is_same_url = [&quoted_url](auto& url) {
-					return url.first == quoted_url;
+				const auto is_same_url = [&quoted_url](auto& feed_url) {
+					return feed_url.url == quoted_url;
 				};
 				if (std::find_if(urls.begin(), urls.end(), is_same_url) == urls.end()) {
 					LOG(Level::DEBUG, "opml::import: added url = %s", quoted_url);
@@ -187,7 +187,7 @@ void rec_find_rss_outlines(
 					ss = std::istringstream(category);
 				}
 
-				auto& urltags = urlcfg.get_tags(quoted_url);
+				auto& urltags = urlcfg.get_entry(quoted_url)->tags;
 				while (std::getline(ss, token, ',')) {
 					if (std::find(urltags.begin(), urltags.end(), token) == urltags.end()) {
 						urltags.push_back(token);

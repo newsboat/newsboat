@@ -28,26 +28,14 @@ OldReaderUrlReader::~OldReaderUrlReader() {}
 	"https://theoldreader.com/reader/atom/user/-/state/com.google/" \
 	"broadcast"
 
-#define ADD_URL(url, caption)                 \
-	do {                                  \
-		tmptags.clear();              \
-		urls.push_back({(url), FeedOrigin{}});        \
-		tmptags.push_back((caption)); \
-		tags[(url)] = tmptags;        \
-	} while (0)
-
 std::optional<utils::ReadTextFileError> OldReaderUrlReader::reload()
 {
-	urls.clear();
-	tags.clear();
+	feed_urls.clear();
 
 	if (cfg->get_configvalue_as_bool("oldreader-show-special-feeds")) {
-		std::vector<std::string> tmptags;
-		ADD_URL(BROADCAST_FRIENDS_URL,
-			std::string("~") + _("People you follow"));
-		ADD_URL(STARRED_ITEMS_URL,
-			std::string("~") + _("Starred items"));
-		ADD_URL(SHARED_ITEMS_URL, std::string("~") + _("Shared items"));
+		feed_urls.emplace_back(FeedUrl{BROADCAST_FRIENDS_URL, FeedOrigin{}, {std::string("~") + _("People you follow")}});
+		feed_urls.emplace_back(FeedUrl{STARRED_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Starred items")}});
+		feed_urls.emplace_back(FeedUrl{SHARED_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Shared items")}});
 	}
 
 	load_query_urls_from_file(file);
@@ -55,8 +43,7 @@ std::optional<utils::ReadTextFileError> OldReaderUrlReader::reload()
 	std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
 	for (const auto& url : feedurls) {
 		LOG(Level::DEBUG, "added %s to URL list", url.first);
-		urls.push_back({url.first, FeedOrigin{}});
-		tags[url.first] = url.second;
+		feed_urls.emplace_back(FeedUrl{url.first, FeedOrigin{}, url.second});
 		for (const auto& tag : url.second) {
 			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
 		}

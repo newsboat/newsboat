@@ -28,7 +28,6 @@ public:
 	rsspp::Feed fetch_feed(const std::string& id, CurlHandle& cached_handle);
 
 private:
-	std::vector<std::string> get_tags(xmlNode* node);
 	std::string get_new_token();
 	bool refresh_token();
 	std::string retrieve_auth();
