@@ -24,7 +24,7 @@ unicode-segmentation = "1.13.3"
 regex = "1.12.3"
 
 [dependencies.gettext-rs]
-version = "0.7.7"
+version = "0.8.0"
 # Don't let the crate build its own copy of gettext; force it to use the one
 # built into glibc.
 features = [ "gettext-system" ]
