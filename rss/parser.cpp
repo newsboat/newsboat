@@ -26,6 +26,14 @@ using namespace newsboat;
 
 namespace rsspp {
 
+namespace {
+
+// Keep enough room for unusually large feeds while preventing unbounded
+// memory growth from a remote response.
+constexpr std::size_t MAX_FEED_RESPONSE_SIZE = 50 * 1024 * 1024;
+
+}
+
 Parser::Parser(unsigned int timeout,
 	const std::string& user_agent,
 	const std::string& proxy,
@@ -105,7 +113,8 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 	}
 
 	auto curlHeaderHandler = CurlHeaderContainer::register_header_handler(easyhandle);
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(easyhandle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		easyhandle, MAX_FEED_RESPONSE_SIZE);
 
 	if (lastmodified != 0) {
 		curl_easy_setopt(easyhandle.ptr(),
