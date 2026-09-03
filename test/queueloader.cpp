@@ -1,5 +1,7 @@
 #include "queueloader.h"
 
+#include <fstream>
+
 #include "3rd-party/catch.hpp"
 #include "test_helpers/chmod.h"
 #include "test_helpers/misc.h"
@@ -675,6 +677,36 @@ TEST_CASE("reload() skips empty lines in the queue file", "[QueueLoader]")
 	REQUIRE(downloads[5].filename() == "fifth.mp3"_path);
 	REQUIRE(downloads[5].url() == "https://example.com/episode05.mp3");
 	REQUIRE(downloads[5].status() == DlStatus::QUEUED);
+}
+
+TEST_CASE("reload() skips queue entries containing control characters",
+	"[QueueLoader]")
+{
+	test_helpers::TempFile queueFile;
+	std::ofstream queue(queueFile.get_path().to_locale_string());
+	queue << "\"https://example.com/bad\rurl\" \"/tmp/bad.mp3\"" << '\n';
+	queue << "https://example.com/bad-filename.mp3 \"/tmp/bad\tfilename.mp3\"" << '\n';
+	queue << R"(https://example.com/too-many-fields.mp3 "/tmp/bad.mp3" missing extra)" << '\n';
+	queue << R"(https://example.com/unknown-status.mp3 "/tmp/bad.mp3" unknown)" << '\n';
+	queue << R"(https://example.com/good.mp3 "/tmp/good.mp3")" << '\n';
+	queue.close();
+
+	ConfigContainer cfg;
+	auto empty_callback = []() {};
+	QueueLoader queue_loader(queueFile.get_path(), cfg, empty_callback);
+	std::vector<Download> downloads;
+
+	queue_loader.reload(downloads);
+
+	REQUIRE(downloads.size() == 1);
+	REQUIRE(downloads[0].url() == "https://example.com/good.mp3");
+	REQUIRE(downloads[0].filename() == "/tmp/good.mp3"_path);
+	REQUIRE(downloads[0].status() == DlStatus::QUEUED);
+	REQUIRE(test_helpers::file_contents(queueFile.get_path()) ==
+		std::vector<std::string> {
+			R"(https://example.com/good.mp3 "/tmp/good.mp3")",
+			""
+		});
 }
 
 TEST_CASE("reload() removes empty lines from the queue file", "[QueueLoader]")

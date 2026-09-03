@@ -132,6 +132,35 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 	}
 }
 
+TEST_CASE("QueueManager sanitizes control characters in queue data",
+	"[QueueManager]")
+{
+	ConfigContainer cfg;
+	cfg.set_configvalue("download-path", "/example/");
+	cfg.set_configvalue("download-filename-format", "%n");
+
+	auto rsscache = Cache::in_memory(cfg);
+
+	RssItem item(rsscache.get());
+	item.set_enclosure_url("https://example.com/episode\r\n\t.mp3");
+	item.set_enclosure_type("audio/mpeg");
+
+	RssFeed feed(rsscache.get(), "https://example.com/news.atom");
+	feed.set_title("Feed\r\n\tname");
+
+	test_helpers::TempFile queue_file;
+	QueueManager manager(&cfg, queue_file.get_path());
+
+	const auto result = manager.enqueue_url(item, feed);
+
+	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
+	REQUIRE(test_helpers::file_contents(queue_file.get_path()) ==
+		std::vector<std::string> {
+			R"(https://example.com/episode%0D%0A%09.mp3 "/example/Feed___name")",
+			""
+		});
+}
+
 SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]")
 {
 	GIVEN("Pristine QueueManager and two RssItems") {
