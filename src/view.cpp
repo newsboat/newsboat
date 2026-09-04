@@ -525,7 +525,11 @@ std::shared_ptr<ItemListFormAction> View::push_itemlist(
 		current_formaction = formaction_stack_size() - 1;
 		return itemlist;
 	} else {
-		status_line.show_error(_("Error: feed contains no items!"));
+		if (feed->is_query_feed()) {
+			status_line.show_error(_("Error: feed contains no items!"));
+		} else {
+			status_line.show_error(_("Error: feed contains no items! You can try reloading the feed"));
+		}
 		return nullptr;
 	}
 }
