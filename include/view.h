@@ -9,6 +9,7 @@
 
 #include "formaction.h"
 #include "links.h"
+#include "rssitem.h"
 #include "statusline.h"
 #include "filepath.h"
 
@@ -78,7 +79,7 @@ public:
 	void push_help();
 	void push_urlview(const Links& links,
 		std::shared_ptr<RssFeed>& feed);
-	void push_searchresult(std::shared_ptr<RssFeed> feed,
+	void push_searchresult(std::vector<std::shared_ptr<RssItem>> items,
 		const std::string& phrase = "");
 	void view_dialogs();
 
