@@ -1,5 +1,6 @@
 #include "utils.h"
 
+#include <cctype>
 #include <cinttypes>
 #include <cstdio>
 #include <cstdlib>
@@ -47,6 +48,28 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
+
+bool utils::contains_control_characters(std::string_view str)
+{
+	for (const unsigned char c : str) {
+		if (std::iscntrl(c)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+std::string utils::replace_control_characters(std::string_view str,
+	char replacement)
+{
+	std::string result(str);
+	for (char& c : result) {
+		if (std::iscntrl(static_cast<unsigned char>(c))) {
+			c = replacement;
+		}
+	}
+	return result;
+}
 
 std::string utils::strip_comments(const std::string& line)
 {
@@ -532,6 +555,11 @@ std::string utils::join(const std::vector<std::string>& strings,
 std::string utils::censor_url(const std::string& url)
 {
 	return std::string(utils::bridged::censor_url(url));
+}
+
+std::string utils::sanitize_url(const std::string& url)
+{
+	return std::string(utils::bridged::sanitize_url(url));
 }
 
 void utils::trim(std::string& str)

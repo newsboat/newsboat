@@ -100,6 +100,11 @@ pub fn is_http_url(url: &str) -> bool {
     url.starts_with("https://") || url.starts_with("http://")
 }
 
+/// Percent-encode ASCII control characters in a URL.
+pub fn sanitize_url(url: &str) -> String {
+    percent_encode(url.as_bytes(), CONTROLS).to_string()
+}
+
 pub fn is_query_url(url: &str) -> bool {
     url.starts_with("query:")
 }
