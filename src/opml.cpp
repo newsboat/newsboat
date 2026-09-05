@@ -5,6 +5,7 @@
 #include <cstring>
 #include <sstream>
 
+#include "fileurlwriter.h"
 #include "logger.h"
 #include "rssfeed.h"
 
@@ -82,7 +83,7 @@ xmlDocPtr opml::generate(const FeedContainer& feedcontainer, bool version2)
 }
 
 void rec_find_rss_outlines(
-	FileUrlReader& urlcfg,
+	std::vector<UrlReader::FeedUrl>& feed_urls,
 	xmlNode* node,
 	std::string tag)
 {
@@ -143,13 +144,12 @@ void rec_find_rss_outlines(
 
 				LOG(Level::DEBUG,
 					"opml::import: size = %" PRIu64,
-					static_cast<uint64_t>(urlcfg.get_urls().size()));
+					static_cast<uint64_t>(feed_urls.size()));
 
-				auto& urls = urlcfg.get_urls();
 				const auto is_same_url = [&quoted_url](auto& feed_url) {
 					return feed_url.url == quoted_url;
 				};
-				if (std::find_if(urls.begin(), urls.end(), is_same_url) == urls.end()) {
+				if (std::find_if(feed_urls.begin(), feed_urls.end(), is_same_url) == feed_urls.end()) {
 					LOG(Level::DEBUG, "opml::import: added url = %s", quoted_url);
 					std::vector<std::string> tags;
 
@@ -172,7 +172,7 @@ void rec_find_rss_outlines(
 						tags.push_back(tag);
 					}
 
-					urlcfg.add_url(quoted_url, tags);
+					feed_urls.emplace_back(UrlReader::FeedUrl{quoted_url, {}, tags});
 				} else {
 					LOG(Level::DEBUG,
 						"opml::import: url = %s is already in list",
@@ -187,7 +187,9 @@ void rec_find_rss_outlines(
 					ss = std::istringstream(category);
 				}
 
-				auto& urltags = urlcfg.get_entry(quoted_url)->tags;
+				// Dereference should be save because either the url was already in the list or it was just added.
+				auto& feed_url = *std::find_if(feed_urls.begin(), feed_urls.end(), is_same_url);
+				auto& urltags = feed_url.tags;
 				while (std::getline(ss, token, ',')) {
 					if (std::find(urltags.begin(), urltags.end(), token) == urltags.end()) {
 						urltags.push_back(token);
@@ -212,7 +214,7 @@ void rec_find_rss_outlines(
 				}
 			}
 		}
-		rec_find_rss_outlines(urlcfg, node->children, newtag);
+		rec_find_rss_outlines(feed_urls, node->children, newtag);
 
 		node = node->next;
 	}
@@ -220,7 +222,7 @@ void rec_find_rss_outlines(
 
 std::optional<std::string> opml::import(
 	const Filepath& filename,
-	FileUrlReader& urlcfg)
+	const FileUrlReader& urlcfg)
 {
 	xmlDoc* doc = xmlReadFile(filename.to_locale_string().c_str(), nullptr, 0);
 	if (doc == nullptr) {
@@ -228,6 +230,7 @@ std::optional<std::string> opml::import(
 	}
 
 	std::optional<std::string> error_message;
+	std::vector<UrlReader::FeedUrl> feed_urls = urlcfg.get_urls();
 
 	xmlNode* root = xmlDocGetRootElement(doc);
 	if (strcmp((const char*)root->name, "opml") != 0) {
@@ -241,9 +244,9 @@ std::optional<std::string> opml::import(
 		if (strcmp((const char*)node->name, "body") == 0) {
 			foundBody = true;
 			LOG(Level::DEBUG, "opml::import: found body");
-			rec_find_rss_outlines(urlcfg, node->children, "");
+			rec_find_rss_outlines(feed_urls, node->children, "");
 
-			error_message = urlcfg.write_config();
+			error_message = FileUrlWriter::write_urls(feed_urls, urlcfg.get_path());
 			if (error_message.has_value()) {
 				break;
 			}
