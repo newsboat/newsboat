@@ -110,108 +110,108 @@ void rec_find_rss_outlines(
 
 				std::string nurl = std::string(url);
 
-			// Liferea uses a pipe prefix in its OPMLs to signal feeds
-			// that are read from the output of a program. Converting
-			// such a URL into an `exec:` URL lets a shared OPML file
-			// run arbitrary shell commands on the victim's machine on
-			// the next feed refresh (the `exec:` scheme is passed
-			// verbatim to `sh -c`). Skip these entries; users who need
-			// a program-generated feed can add `exec:<script>` to
-			// their urls file manually.
-			bool skip_url = false;
-			if (url.length() >= 1 && url[0] == '|') {
-				LOG(Level::WARN,
-					"opml::import: skipping Liferea-style "
-					"pipe URL '%s' for security reasons; if "
-					"you trust it, add 'exec:%s' to your urls "
-					"file manually",
-					url,
-					url.substr(1));
-				skip_url = true;
-			}
+				// Liferea uses a pipe prefix in its OPMLs to signal feeds
+				// that are read from the output of a program. Converting
+				// such a URL into an `exec:` URL lets a shared OPML file
+				// run arbitrary shell commands on the victim's machine on
+				// the next feed refresh (the `exec:` scheme is passed
+				// verbatim to `sh -c`). Skip these entries; users who need
+				// a program-generated feed can add `exec:<script>` to
+				// their urls file manually.
+				bool skip_url = false;
+				if (url.length() >= 1 && url[0] == '|') {
+					LOG(Level::WARN,
+						"opml::import: skipping Liferea-style "
+						"pipe URL '%s' for security reasons; if "
+						"you trust it, add 'exec:%s' to your urls "
+						"file manually",
+						url,
+						url.substr(1));
+					skip_url = true;
+				}
 
-			// A `filtercmd` attribute turns the outline into a
-			// `filter:` URL whose command is run via `sh -c` on
-			// refresh. For the same reason as the pipe syntax above,
-			// do not honour it during import; keep the URL as a
-			// regular feed subscription instead.
-			char* filtercmd = (char*)xmlGetProp(
-					node, (const xmlChar*)"filtercmd");
-			if (filtercmd) {
-				LOG(Level::WARN,
-					"opml::import: ignoring 'filtercmd' "
-					"attribute '%s' on URL '%s' for security "
-					"reasons; if you trust it, add "
-					"'filter:%s:%s' to your urls file manually",
-					filtercmd,
-					nurl,
-					filtercmd,
-					nurl);
-				xmlFree(filtercmd);
-			}
+				// A `filtercmd` attribute turns the outline into a
+				// `filter:` URL whose command is run via `sh -c` on
+				// refresh. For the same reason as the pipe syntax above,
+				// do not honour it during import; keep the URL as a
+				// regular feed subscription instead.
+				char* filtercmd = (char*)xmlGetProp(
+						node, (const xmlChar*)"filtercmd");
+				if (filtercmd) {
+					LOG(Level::WARN,
+						"opml::import: ignoring 'filtercmd' "
+						"attribute '%s' on URL '%s' for security "
+						"reasons; if you trust it, add "
+						"'filter:%s:%s' to your urls file manually",
+						filtercmd,
+						nurl,
+						filtercmd,
+						nurl);
+					xmlFree(filtercmd);
+				}
 
-			if (!skip_url) {
-				// Filters and scripts may have arguments, so,
-				// quote them when needed.
-				const std::string quoted_url =
-					utils::quote_if_necessary(nurl);
+				if (!skip_url) {
+					// Filters and scripts may have arguments, so,
+					// quote them when needed.
+					const std::string quoted_url =
+						utils::quote_if_necessary(nurl);
 
-				LOG(Level::DEBUG,
-					"opml::import: size = %" PRIu64,
-					static_cast<uint64_t>(feed_urls.size()));
-
-				const auto is_same_url = [&quoted_url](auto& feed_url) {
-					return feed_url.url == quoted_url;
-				};
-				if (std::find_if(feed_urls.begin(), feed_urls.end(), is_same_url) == feed_urls.end()) {
-					LOG(Level::DEBUG, "opml::import: added url = %s", quoted_url);
-					std::vector<std::string> tags;
-
-					char* text_p = (char*)xmlGetProp(node, (const xmlChar*)"text");
-					if (!text_p) {
-						text_p = (char*)xmlGetProp(node, (const xmlChar*)"title");
-					}
-					if (text_p) {
-						if (text_p[0] != '\0') {
-							tags.push_back(std::string{"~"} + text_p);
-						}
-						xmlFree(text_p);
-					}
-
-					if (tag.length() > 0) {
-						LOG(Level::DEBUG,
-							"opml::import: appending tag %s to url %s",
-							tag,
-							quoted_url);
-						tags.push_back(tag);
-					}
-
-					feed_urls.emplace_back(UrlReader::FeedUrl{quoted_url, {}, tags});
-				} else {
 					LOG(Level::DEBUG,
-						"opml::import: url = %s is already in list",
-						quoted_url);
-				}
+						"opml::import: size = %" PRIu64,
+						static_cast<uint64_t>(feed_urls.size()));
 
-				// Add tags
-				std::string token;
-				std::istringstream ss;
-				char* category = (char*)xmlGetProp(node, (const xmlChar*)"category");
-				if (category) {
-					ss = std::istringstream(category);
-				}
+					const auto is_same_url = [&quoted_url](auto& feed_url) {
+						return feed_url.url == quoted_url;
+					};
+					if (std::find_if(feed_urls.begin(), feed_urls.end(), is_same_url) == feed_urls.end()) {
+						LOG(Level::DEBUG, "opml::import: added url = %s", quoted_url);
+						std::vector<std::string> tags;
 
-				// Dereference should be save because either the url was already in the list or it was just added.
-				auto& feed_url = *std::find_if(feed_urls.begin(), feed_urls.end(), is_same_url);
-				auto& urltags = feed_url.tags;
-				while (std::getline(ss, token, ',')) {
-					if (std::find(urltags.begin(), urltags.end(), token) == urltags.end()) {
-						urltags.push_back(token);
+						char* text_p = (char*)xmlGetProp(node, (const xmlChar*)"text");
+						if (!text_p) {
+							text_p = (char*)xmlGetProp(node, (const xmlChar*)"title");
+						}
+						if (text_p) {
+							if (text_p[0] != '\0') {
+								tags.push_back(std::string{"~"} + text_p);
+							}
+							xmlFree(text_p);
+						}
+
+						if (tag.length() > 0) {
+							LOG(Level::DEBUG,
+								"opml::import: appending tag %s to url %s",
+								tag,
+								quoted_url);
+							tags.push_back(tag);
+						}
+
+						feed_urls.emplace_back(UrlReader::FeedUrl{quoted_url, {}, tags});
+					} else {
+						LOG(Level::DEBUG,
+							"opml::import: url = %s is already in list",
+							quoted_url);
 					}
-				}
 
-				xmlFree(category);
-			}
+					// Add tags
+					std::string token;
+					std::istringstream ss;
+					char* category = (char*)xmlGetProp(node, (const xmlChar*)"category");
+					if (category) {
+						ss = std::istringstream(category);
+					}
+
+					// Dereference should be save because either the url was already in the list or it was just added.
+					auto& feed_url = *std::find_if(feed_urls.begin(), feed_urls.end(), is_same_url);
+					auto& urltags = feed_url.tags;
+					while (std::getline(ss, token, ',')) {
+						if (std::find(urltags.begin(), urltags.end(), token) == urltags.end()) {
+							urltags.push_back(token);
+						}
+					}
+
+					xmlFree(category);
+				}
 
 			} else {
 				char* text = (char*)xmlGetProp(
