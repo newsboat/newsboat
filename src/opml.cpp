@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cinttypes>
 #include <cstring>
+#include <iostream>
 #include <sstream>
 
 #include "fileurlwriter.h"
@@ -120,13 +121,14 @@ void rec_find_rss_outlines(
 				// their urls file manually.
 				bool skip_url = false;
 				if (url.length() >= 1 && url[0] == '|') {
-					LOG(Level::WARN,
-						"opml::import: skipping Liferea-style "
-						"pipe URL '%s' for security reasons; if "
-						"you trust it, add 'exec:%s' to your urls "
-						"file manually",
-						url,
-						url.substr(1));
+					const auto msg =
+						strprintf::fmt(
+							_("Skipping pipe URL '%s' for security reasons; if you trust it, "
+								"add 'exec:%s' to your urls file manually."),
+							url,
+							url.substr(1));
+					std::cerr << msg << std::endl;
+					LOG(Level::USERERROR, msg);
 					skip_url = true;
 				}
 
@@ -138,15 +140,18 @@ void rec_find_rss_outlines(
 				char* filtercmd = (char*)xmlGetProp(
 						node, (const xmlChar*)"filtercmd");
 				if (filtercmd) {
-					LOG(Level::WARN,
-						"opml::import: ignoring 'filtercmd' "
-						"attribute '%s' on URL '%s' for security "
-						"reasons; if you trust it, add "
-						"'filter:%s:%s' to your urls file manually",
-						filtercmd,
-						nurl,
-						filtercmd,
-						nurl);
+					const auto msg =
+						strprintf::fmt(
+							_("Ignoring 'filtercmd' attribute '%s' on URL '%s' for security reasons; "
+								"if you trust it, replace '%s' with 'filter:%s:%s' "
+								"in your urls file manually."),
+							filtercmd,
+							nurl,
+							nurl,
+							filtercmd,
+							nurl);
+					std::cerr << msg << std::endl;
+					LOG(Level::USERERROR, msg);
 					xmlFree(filtercmd);
 				}
 
