@@ -3,6 +3,7 @@
 #include <cstring>
 #include <sstream>
 
+#include "config.h"
 #include "logger.h"
 #include "utils.h"
 
@@ -65,8 +66,24 @@ void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)
 	if (node) {
 		char* rssurl =
 			(char*)xmlGetProp(node, (const xmlChar*)"xmlUrl");
-		if (rssurl && strlen(rssurl) > 0) {
+		if (rssurl) {
 			std::string theurl(rssurl);
+			xmlFree(rssurl);
+
+			if (theurl.empty()) {
+				return;
+			}
+
+			if (theurl[0] == '|') {
+				const auto msg =
+					strprintf::fmt(
+						_("Skipping pipe URL '%s' for security reasons; if you trust it, "
+							"add 'exec:%s' to your urls file manually."),
+						theurl,
+						theurl.substr(1));
+				LOG(Level::USERERROR, msg);
+				return;
+			}
 
 			std::vector<std::string> tmptags;
 
@@ -98,9 +115,6 @@ void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)
 				tmptags.push_back(tag);
 			}
 			feed_urls.emplace_back(FeedUrl{theurl, FeedOrigin{}, tmptags});
-		}
-		if (rssurl) {
-			xmlFree(rssurl);
 		}
 	}
 }
