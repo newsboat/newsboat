@@ -612,7 +612,12 @@ TEST_CASE("run_program() works for large inputs", "[utils]")
 		argv[1] = "-c";
 		argv[2] = "cat";
 		argv[3] = nullptr;
-		sync->output = utils::run_program(argv, *large_input);
+		const auto result = utils::run_program(argv, *large_input);
+		if (result) {
+			sync->output = result.value();
+		} else {
+			sync->output = result.error();
+		}
 
 		{
 			std::lock_guard<std::mutex> g(sync->mtx);
