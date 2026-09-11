@@ -140,6 +140,11 @@ void rec_find_rss_outlines(
 				char* filtercmd = (char*)xmlGetProp(
 						node, (const xmlChar*)"filtercmd");
 				if (filtercmd) {
+					// Copy the string so each argument to strprintf::fmt is
+					// a different memory location. This works around a weird
+					// issue in strprintf: https://github.com/newsboat/newsboat/issues/3438
+					const auto nurl2 = nurl;
+					const auto nurl3 = nurl;
 					const auto msg =
 						strprintf::fmt(
 							_("Ignoring 'filtercmd' attribute '%s' on URL '%s' for security reasons; "
@@ -147,9 +152,9 @@ void rec_find_rss_outlines(
 								"in your urls file manually."),
 							filtercmd,
 							nurl,
-							nurl,
+							nurl2,
 							filtercmd,
-							nurl);
+							nurl3);
 					std::cerr << msg << std::endl;
 					LOG(Level::USERERROR, msg);
 					xmlFree(filtercmd);
