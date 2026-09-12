@@ -1631,7 +1631,24 @@ TEST_CASE(
 	// (via https://github.com/curl/curl/pull/20416)
 	// To avoid mismatches between the curl version bundled on the rust side (curl-sys) and the
 	// system curl version, apply manual casting to uint32_t.
-	REQUIRE(utils::get_auth_method("any") == static_cast<std::uint32_t>(CURLAUTH_ANY));
+	//
+	// Due to the fact that `get_auth_method()` is implemented in Rust and
+	// links to `curl-sys` crate that defines its own constants, it's possible
+	// for the method to return a different value than the one we get from curl
+	// headers. This can happen when libcurl and curl-sys versions don't match.
+	// This is generally harmless since libcurl upholds backwards compatibility
+	// and curl-sys constants should work fine; however, tests that check
+	// equality break. In order to avoid breakage, the check here is more lax
+	// than strict equality.
+	const auto any_method = utils::get_auth_method("any");
+	REQUIRE(any_method > 0); // Some bits of CURLAUTH_ANY should be set
+	const std::vector<uint32_t> other_methods {
+		CURLAUTH_NTLM, CURLAUTH_BASIC, CURLAUTH_DIGEST, CURLAUTH_DIGEST_IE, CURLAUTH_GSSNEGOTIATE
+	};
+	for (auto other : other_methods) {
+		REQUIRE(any_method != other); // CURLAUTH_ANY can't just equal some other method
+	}
+
 	REQUIRE(utils::get_auth_method("ntlm") == CURLAUTH_NTLM);
 	REQUIRE(utils::get_auth_method("basic") == CURLAUTH_BASIC);
 	REQUIRE(utils::get_auth_method("digest") == CURLAUTH_DIGEST);
