@@ -1640,28 +1640,29 @@ TEST_CASE(
 	// and curl-sys constants should work fine; however, tests that check
 	// equality break. In order to avoid breakage, the check here is more lax
 	// than strict equality.
-	const auto any_method = utils::get_auth_method("any");
-	REQUIRE(any_method > 0); // Some bits of CURLAUTH_ANY should be set
 	const std::vector<uint32_t> other_methods {
 		CURLAUTH_NTLM, CURLAUTH_BASIC, CURLAUTH_DIGEST, CURLAUTH_DIGEST_IE, CURLAUTH_GSSNEGOTIATE
 	};
-	for (auto other : other_methods) {
-		REQUIRE(any_method != other); // CURLAUTH_ANY can't just equal some other method
-	}
+	const auto require_that_method_is_not_one_of_other_methods = [&](const uint32_t method) {
+		REQUIRE(method > 0); // Some bits have to be set
+		for (auto other : other_methods) {
+			REQUIRE(method != other);
+		}
+	};
 
-	const auto anysafe_method = utils::get_auth_method("anysafe");
-	for (auto other : other_methods) {
-		REQUIRE(anysafe_method != other); // CURLAUTH_ANYSAFE can't just equal some other method
-	}
+	// These return CURLAUTH_ANY
+	require_that_method_is_not_one_of_other_methods(utils::get_auth_method("any"));
+	require_that_method_is_not_one_of_other_methods(utils::get_auth_method(""));
+	require_that_method_is_not_one_of_other_methods(utils::get_auth_method("test"));
+
+	// This one returns CURLAUTH_ANYSAFE
+	require_that_method_is_not_one_of_other_methods(utils::get_auth_method("anysafe"));
 
 	REQUIRE(utils::get_auth_method("ntlm") == CURLAUTH_NTLM);
 	REQUIRE(utils::get_auth_method("basic") == CURLAUTH_BASIC);
 	REQUIRE(utils::get_auth_method("digest") == CURLAUTH_DIGEST);
 	REQUIRE(utils::get_auth_method("digest_ie") == CURLAUTH_DIGEST_IE);
 	REQUIRE(utils::get_auth_method("gssnegotiate") == CURLAUTH_GSSNEGOTIATE);
-
-	REQUIRE(utils::get_auth_method("") == static_cast<std::uint32_t>(CURLAUTH_ANY));
-	REQUIRE(utils::get_auth_method("test") == static_cast<std::uint32_t>(CURLAUTH_ANY));
 }
 
 TEST_CASE(
