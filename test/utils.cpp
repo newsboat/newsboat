@@ -1649,12 +1649,16 @@ TEST_CASE(
 		REQUIRE(any_method != other); // CURLAUTH_ANY can't just equal some other method
 	}
 
+	const auto anysafe_method = utils::get_auth_method("anysafe");
+	for (auto other : other_methods) {
+		REQUIRE(anysafe_method != other); // CURLAUTH_ANYSAFE can't just equal some other method
+	}
+
 	REQUIRE(utils::get_auth_method("ntlm") == CURLAUTH_NTLM);
 	REQUIRE(utils::get_auth_method("basic") == CURLAUTH_BASIC);
 	REQUIRE(utils::get_auth_method("digest") == CURLAUTH_DIGEST);
 	REQUIRE(utils::get_auth_method("digest_ie") == CURLAUTH_DIGEST_IE);
 	REQUIRE(utils::get_auth_method("gssnegotiate") == CURLAUTH_GSSNEGOTIATE);
-	REQUIRE(utils::get_auth_method("anysafe") == static_cast<std::uint32_t>(CURLAUTH_ANYSAFE));
 
 	REQUIRE(utils::get_auth_method("") == static_cast<std::uint32_t>(CURLAUTH_ANY));
 	REQUIRE(utils::get_auth_method("test") == static_cast<std::uint32_t>(CURLAUTH_ANY));
