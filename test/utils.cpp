@@ -1631,16 +1631,38 @@ TEST_CASE(
 	// (via https://github.com/curl/curl/pull/20416)
 	// To avoid mismatches between the curl version bundled on the rust side (curl-sys) and the
 	// system curl version, apply manual casting to uint32_t.
-	REQUIRE(utils::get_auth_method("any") == static_cast<std::uint32_t>(CURLAUTH_ANY));
+	//
+	// Due to the fact that `get_auth_method()` is implemented in Rust and
+	// links to `curl-sys` crate that defines its own constants, it's possible
+	// for the method to return a different value than the one we get from curl
+	// headers. This can happen when libcurl and curl-sys versions don't match.
+	// This is generally harmless since libcurl upholds backwards compatibility
+	// and curl-sys constants should work fine; however, tests that check
+	// equality break. In order to avoid breakage, the check here is more lax
+	// than strict equality.
+	const std::vector<uint32_t> other_methods {
+		CURLAUTH_NTLM, CURLAUTH_BASIC, CURLAUTH_DIGEST, CURLAUTH_DIGEST_IE, CURLAUTH_GSSNEGOTIATE
+	};
+	const auto require_that_method_is_not_one_of_other_methods = [&](const uint32_t method) {
+		REQUIRE(method > 0); // Some bits have to be set
+		for (auto other : other_methods) {
+			REQUIRE(method != other);
+		}
+	};
+
+	// These return CURLAUTH_ANY
+	require_that_method_is_not_one_of_other_methods(utils::get_auth_method("any"));
+	require_that_method_is_not_one_of_other_methods(utils::get_auth_method(""));
+	require_that_method_is_not_one_of_other_methods(utils::get_auth_method("test"));
+
+	// This one returns CURLAUTH_ANYSAFE
+	require_that_method_is_not_one_of_other_methods(utils::get_auth_method("anysafe"));
+
 	REQUIRE(utils::get_auth_method("ntlm") == CURLAUTH_NTLM);
 	REQUIRE(utils::get_auth_method("basic") == CURLAUTH_BASIC);
 	REQUIRE(utils::get_auth_method("digest") == CURLAUTH_DIGEST);
 	REQUIRE(utils::get_auth_method("digest_ie") == CURLAUTH_DIGEST_IE);
 	REQUIRE(utils::get_auth_method("gssnegotiate") == CURLAUTH_GSSNEGOTIATE);
-	REQUIRE(utils::get_auth_method("anysafe") == static_cast<std::uint32_t>(CURLAUTH_ANYSAFE));
-
-	REQUIRE(utils::get_auth_method("") == static_cast<std::uint32_t>(CURLAUTH_ANY));
-	REQUIRE(utils::get_auth_method("test") == static_cast<std::uint32_t>(CURLAUTH_ANY));
 }
 
 TEST_CASE(
