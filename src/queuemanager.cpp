@@ -17,7 +17,18 @@ QueueManager::QueueManager(ConfigContainer* cfg_, Filepath queue_file)
 
 EnqueueResult QueueManager::enqueue_url(RssItem& item, RssFeed& feed)
 {
-	const std::string& url = item.enclosure_url();
+	const std::string url = utils::sanitize_url(item.enclosure_url());
+	if (!utils::is_http_url(url)) {
+		LOG(Level::USERERROR,
+			"QueueManager: refusing to enqueue a non-HTTP podcast URL `%s' "
+			"from feed `%s'",
+			url,
+			feed.rssurl());
+		EnqueueResult result;
+		result.status = EnqueueStatus::INVALID_ENQUEUE_DATA;
+		return result;
+	}
+
 	const Filepath filename = generate_enqueue_filename(item, feed);
 
 	std::fstream f;
@@ -75,7 +86,7 @@ std::string get_hostname_from_url(const std::string& url)
 
 Filepath QueueManager::generate_enqueue_filename(RssItem& item, RssFeed& feed)
 {
-	const std::string& url = item.enclosure_url();
+	const std::string url = utils::sanitize_url(item.enclosure_url());
 	const std::string& title = utils::utf8_to_locale(item.title());
 	const time_t pubDate = item.pubDate_timestamp();
 
@@ -115,7 +126,8 @@ Filepath QueueManager::generate_enqueue_filename(RssItem& item, RssFeed& feed)
 		fmt.register_fmt('N', utils::replace_all(feed.title(), "/", "_"));
 	}
 
-	return Filepath::from_locale_string(fmt.do_format(dlformat.to_locale_string()));
+	return Filepath::from_locale_string(
+		utils::replace_control_characters(fmt.do_format(dlformat.to_locale_string())));
 }
 
 EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
@@ -128,6 +140,13 @@ EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
 
 		const auto enclosure_type = item->enclosure_type();
 		const auto enclosure_url = item->enclosure_url();
+		if (!utils::is_http_url(enclosure_url)) {
+			LOG(Level::DEBUG,
+				"QueueManager::autoenqueue: skipping enclosure with "
+				"invalid URL `%s'",
+				enclosure_url);
+			continue;
+		}
 
 		if (!enclosure_type.empty() && !utils::is_valid_podcast_type(enclosure_type)) {
 			LOG(Level::DEBUG, "QueueManager::autoenqueue: Skipping enclosure with url `%s'"
@@ -139,21 +158,21 @@ EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
 			"QueueManager::autoenqueue: enclosure_url = `%s' enclosure_type = `%s'",
 			enclosure_url,
 			enclosure_type);
-		if (utils::is_http_url(item->enclosure_url())) {
-			LOG(Level::INFO,
-				"QueueManager::autoenqueue: enqueuing `%s'",
-				item->enclosure_url());
-			const auto result = enqueue_url(*item, feed);
-			switch (result.status) {
-			case EnqueueStatus::QUEUED_SUCCESSFULLY:
-			case EnqueueStatus::URL_QUEUED_ALREADY:
-				// Not an issue, continue processing rest of items
-				break;
-			case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
-			case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
-				// Let caller of `autoenqueue` handle the issue
-				return result;
-			}
+		LOG(Level::INFO,
+			"QueueManager::autoenqueue: enqueuing `%s'",
+			item->enclosure_url());
+		const auto result = enqueue_url(*item, feed);
+		switch (result.status) {
+		case EnqueueStatus::QUEUED_SUCCESSFULLY:
+		case EnqueueStatus::URL_QUEUED_ALREADY:
+			// Not an issue, continue processing rest of items
+			break;
+		case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
+		case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
+			return result;
+		case EnqueueStatus::INVALID_ENQUEUE_DATA:
+			// Invalid metadata is skipped; continue processing other items.
+			break;
 		}
 	}
 
