@@ -127,7 +127,7 @@ Filepath QueueManager::generate_enqueue_filename(RssItem& item, RssFeed& feed)
 	}
 
 	return Filepath::from_locale_string(
-		utils::replace_control_characters(fmt.do_format(dlformat.to_locale_string())));
+			utils::replace_control_characters(fmt.do_format(dlformat.to_locale_string())));
 }
 
 EnqueueResult QueueManager::autoenqueue(RssFeed& feed)

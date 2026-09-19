@@ -155,10 +155,10 @@ TEST_CASE("QueueManager sanitizes control characters in queue data",
 
 	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
 	REQUIRE(test_helpers::file_contents(queue_file.get_path()) ==
-		std::vector<std::string> {
-			R"(https://example.com/episode%0D%0A%09.mp3 "/example/Feed___name")",
-			""
-		});
+	std::vector<std::string> {
+		R"(https://example.com/episode%0D%0A%09.mp3 "/example/Feed___name")",
+		""
+	});
 }
 
 SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]")

@@ -703,10 +703,10 @@ TEST_CASE("reload() skips queue entries containing control characters",
 	REQUIRE(downloads[0].filename() == "/tmp/good.mp3"_path);
 	REQUIRE(downloads[0].status() == DlStatus::QUEUED);
 	REQUIRE(test_helpers::file_contents(queueFile.get_path()) ==
-		std::vector<std::string> {
-			R"(https://example.com/good.mp3 "/tmp/good.mp3")",
-			""
-		});
+	std::vector<std::string> {
+		R"(https://example.com/good.mp3 "/tmp/good.mp3")",
+		""
+	});
 }
 
 TEST_CASE("reload() removes empty lines from the queue file", "[QueueLoader]")
