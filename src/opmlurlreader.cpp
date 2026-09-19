@@ -85,6 +85,12 @@ void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)
 				return;
 			}
 
+			if (!utils::has_supported_url_schema(theurl)) {
+				LOG(Level::USERERROR,
+					strprintf::fmt(_("Skipping URL with unsupported schema: '%s'"), theurl));
+				return;
+			}
+
 			std::vector<std::string> tmptags;
 
 			char* rsstext = (char*)xmlGetProp(node, (const xmlChar*)"text");

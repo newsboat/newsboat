@@ -74,7 +74,7 @@ rsspp::Feed FeedRetriever::retrieve(const std::string& uri)
 		return download_filterplugin(std::string(parts.script_name), std::string(parts.url));
 	} else if (utils::is_query_url(uri)) {
 		return {};
-	} else if (uri.substr(0, 7) == "file://") {
+	} else if (utils::is_file_url(uri)) {
 		const auto path = Filepath::from_locale_string(uri.substr(7, uri.length() - 7));
 		return parse_file(path);
 	} else {

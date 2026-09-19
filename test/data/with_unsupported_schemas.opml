@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Example OPML that has URLs with unsupported schemas</title>
+    </head>
+
+    <body>
+        <outline type="rss" title="An FTP feed" xmlUrl="ftp://example.com/~user/news.rss" />
+        <outline xmlUrl="https://example.com/feed.atom" type="rss" title="Normal feed" />
+        <outline title="Echoes of eternity" xmlUrl="nntp://example.com/newsboat" type="rss" />
+    </body>
+</opml>

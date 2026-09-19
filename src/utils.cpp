@@ -925,4 +925,14 @@ void utils::wait_for_keypress()
 	endwin(); // Restore terminal settings
 }
 
+bool utils::is_file_url(std::string_view url)
+{
+	return url.substr(0, 7) == "file://";
+}
+
+bool utils::has_supported_url_schema(const std::string& url)
+{
+	return is_http_url(url) || is_file_url(url);
+}
+
 } // namespace newsboat

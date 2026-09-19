@@ -369,6 +369,97 @@ TEST_CASE("import() returns an error when the <body> element is missing", "[Opml
 		"the <body> element in the <opml> root element is missing");
 }
 
+TEST_CASE("import() skips verbatim exec: URLs", "[Opml]")
+{
+	test_helpers::TempFile urlsFile;
+
+	FileUrlReader urlcfg(urlsFile.get_path());
+	urlcfg.reload();
+
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/with_verbatim_exec_url.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
+
+	urlcfg.reload();
+	const auto urls = urlcfg.get_urls();
+	REQUIRE(urls.size() == 1);
+	REQUIRE(urls[0].url == "https://example.com/feed.atom");
+	const std::vector<std::string> expected_feed_tags({ "~Normal feed", "tagged" });
+	REQUIRE(urls[0].tags == expected_feed_tags);
+	const std::vector<std::string> expected_alltags({ "tagged" });
+	REQUIRE(urlcfg.get_alltags() == expected_alltags);
+}
+
+TEST_CASE("import() skips verbatim filter: URLs", "[Opml]")
+{
+	test_helpers::TempFile urlsFile;
+
+	FileUrlReader urlcfg(urlsFile.get_path());
+	urlcfg.reload();
+
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/with_verbatim_filter_url.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
+
+	urlcfg.reload();
+	const auto urls = urlcfg.get_urls();
+	REQUIRE(urls.size() == 1);
+	REQUIRE(urls[0].url == "https://example.com/feed.atom");
+	const std::vector<std::string> expected_feed_tags({ "~Normal feed", "tagged" });
+	REQUIRE(urls[0].tags == expected_feed_tags);
+	const std::vector<std::string> expected_alltags({ "tagged" });
+	REQUIRE(urlcfg.get_alltags() == expected_alltags);
+}
+
+TEST_CASE("import() skips verbatim query: URLs", "[Opml]")
+{
+	test_helpers::TempFile urlsFile;
+
+	FileUrlReader urlcfg(urlsFile.get_path());
+	urlcfg.reload();
+
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/with_verbatim_query_url.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
+
+	urlcfg.reload();
+	const auto urls = urlcfg.get_urls();
+	REQUIRE(urls.size() == 1);
+	REQUIRE(urls[0].url == "https://example.com/feed.atom");
+	const std::vector<std::string> expected_feed_tags({ "~Normal feed", "tagged" });
+	REQUIRE(urls[0].tags == expected_feed_tags);
+	const std::vector<std::string> expected_alltags({ "tagged" });
+	REQUIRE(urlcfg.get_alltags() == expected_alltags);
+}
+
+TEST_CASE("import() skips URLs with unsupported schemas", "[Opml]")
+{
+	test_helpers::TempFile urlsFile;
+
+	FileUrlReader urlcfg(urlsFile.get_path());
+	urlcfg.reload();
+
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/with_unsupported_schemas.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
+
+	urlcfg.reload();
+	const auto urls = urlcfg.get_urls();
+	REQUIRE(urls.size() == 1);
+	REQUIRE(urls[0].url == "https://example.com/feed.atom");
+	std::vector<std::string> expected_tags({ "~Normal feed" });
+	REQUIRE(urls[0].tags == expected_tags);
+	REQUIRE(urlcfg.get_alltags().empty());
+}
+
 // falls back to "url" if "xmlUrl" is absent
 
 // skips an entry if xmlUrl/url is absent
