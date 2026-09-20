@@ -38,6 +38,10 @@ bool enqueue_item_enclosure(RssItem& item, RssFeed& feed,
 			v.get_statusline().show_error(
 				strprintf::fmt(_("Failed to open queue file: %s."), result.extra_filename));
 			return false;
+		case EnqueueStatus::INVALID_ENQUEUE_DATA:
+			v.get_statusline().show_error(
+				_("Item has a non-HTTP enclosure URL."));
+			return false;
 		}
 
 		// Not reachable, all switch cases return a result already,
