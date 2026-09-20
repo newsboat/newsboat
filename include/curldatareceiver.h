@@ -16,6 +16,7 @@ public:
 		CurlHandle& curlHandle, std::size_t max_data_size = 0);
 
 	const std::string& get_data() const;
+	bool has_exceeded_max_data_size() const;
 	virtual ~CurlDataReceiver();
 
 protected:
@@ -32,6 +33,7 @@ private:
 
 	CurlHandle& curl_handle;
 	const std::size_t max_data_size;
+	bool exceeded_max_data_size = false;
 	std::string accumulated_data;
 };
 

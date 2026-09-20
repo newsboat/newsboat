@@ -2,6 +2,7 @@
 #define NEWSBOAT_RSSPPPARSER_H_
 
 #include <curl/curl.h>
+#include <cstddef>
 #include <libxml/parser.h>
 #include <optional>
 #include <string>
@@ -43,7 +44,8 @@ public:
 		time_t lastmodified = 0,
 		const std::string& etag = "",
 		newsboat::RemoteApi* api = 0,
-		const std::string& cookie_cache = "");
+		const std::string& cookie_cache = "",
+		std::size_t max_response_size = 50 * 1024 * 1024);
 	Feed parse_buffer(const std::string& buffer,
 		const std::string& url = "", std::optional<std::string> charset = std::nullopt);
 	Feed parse_file(const newsboat::Filepath& filename);

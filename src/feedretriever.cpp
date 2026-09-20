@@ -205,7 +205,8 @@ rsspp::Feed FeedRetriever::download_http(const std::string& uri)
 				lm,
 				etag,
 				api,
-				cfg.get_configvalue_as_filepath("cookie-cache").to_locale_string());
+				cfg.get_configvalue_as_filepath("cookie-cache").to_locale_string(),
+				utils::get_download_max_size(cfg));
 
 		auto store_lm_etag = [&]() {
 			LOG(Level::DEBUG,

@@ -69,7 +69,8 @@ std::string FreshRssApi::retrieve_auth()
 		CURLOPT_URL,
 		(cfg.get_configvalue("freshrss-url") + FRESHRSS_LOGIN).c_str());
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(handle.ptr());
 
@@ -100,7 +101,8 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 		(cfg.get_configvalue("freshrss-url") + FRESHRSS_SUBSCRIPTION_LIST)
 		.c_str());
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
@@ -286,7 +288,8 @@ std::string FreshRssApi::get_new_token()
 		(cfg.get_configvalue("freshrss-url") + FRESHRSS_API_TOKEN_URL)
 		.c_str());
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
@@ -393,7 +396,8 @@ std::string FreshRssApi::post_content(const std::string& url,
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postdata.c_str());
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, url.c_str());
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
@@ -426,7 +430,8 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 		CURLOPT_URL,
 		query.c_str());
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(cached_handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		cached_handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(cached_handle.ptr());
 

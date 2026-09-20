@@ -73,6 +73,7 @@ ConfigContainer::ConfigContainer()
 	{
 		"download-full-page",
 		ConfigData("false", ConfigDataType::BOOL)},
+	{"download-max-size", ConfigData("50", ConfigDataType::INT)},
 	{"download-path", ConfigData("~/", ConfigDataType::PATH)},
 	{"download-retries", ConfigData("1", ConfigDataType::INT)},
 	{"download-timeout", ConfigData("30", ConfigDataType::INT)},

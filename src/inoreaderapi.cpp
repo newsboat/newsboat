@@ -60,7 +60,8 @@ std::string InoreaderApi::retrieve_auth()
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postcontent.c_str());
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, INOREADER_LOGIN);
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(list);
@@ -93,7 +94,8 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, INOREADER_SUBSCRIPTION_LIST);
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
@@ -315,7 +317,8 @@ std::string InoreaderApi::post_content(const std::string& url,
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postdata.c_str());
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, url.c_str());
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);

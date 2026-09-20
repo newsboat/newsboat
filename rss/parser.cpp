@@ -26,14 +26,6 @@ using namespace newsboat;
 
 namespace rsspp {
 
-namespace {
-
-// Keep enough room for unusually large feeds while preventing unbounded
-// memory growth from a remote response.
-constexpr std::size_t MAX_FEED_RESPONSE_SIZE = 50 * 1024 * 1024;
-
-}
-
 Parser::Parser(unsigned int timeout,
 	const std::string& user_agent,
 	const std::string& proxy,
@@ -63,7 +55,8 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 	time_t lastmodified,
 	const std::string& etag,
 	newsboat::RemoteApi* api,
-	const std::string& cookie_cache)
+	const std::string& cookie_cache,
+	std::size_t max_response_size)
 {
 	CURLcode ret;
 	curl_slist* custom_headers{};
@@ -114,7 +107,7 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 
 	auto curlHeaderHandler = CurlHeaderContainer::register_header_handler(easyhandle);
 	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
-		easyhandle, MAX_FEED_RESPONSE_SIZE);
+		easyhandle, max_response_size);
 
 	if (lastmodified != 0) {
 		curl_easy_setopt(easyhandle.ptr(),
@@ -218,6 +211,10 @@ nonstd::expected<Feed, Parser::Error> Parser::parse_url(const std::string& url,
 					// it's actually 64 bits. Thus casting to `int64_t` is either
 					// a no-op, or an up-cast which is always safe.
 					static_cast<int64_t>(status));
+		} else if (curlDataReceiver->has_exceeded_max_data_size()) {
+			msg = _(
+				"downloaded response exceeds the configured maximum size "
+				"(download-max-size)");
 		} else {
 			msg = curl_easy_strerror(ret);
 		}

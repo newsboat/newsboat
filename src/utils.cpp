@@ -10,6 +10,7 @@
 #include <iconv.h>
 #include <langinfo.h>
 #include <libxml/uri.h>
+#include <limits>
 #include <mutex>
 #include <ncurses.h>
 #include <pwd.h>
@@ -47,6 +48,17 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
+
+std::size_t utils::get_download_max_size(const ConfigContainer& cfgcont)
+{
+	constexpr std::size_t bytes_per_mib = 1024 * 1024;
+	const auto size_mib = static_cast<std::size_t>(
+		cfgcont.get_configvalue_as_int("download-max-size"));
+	if (size_mib > std::numeric_limits<std::size_t>::max() / bytes_per_mib) {
+		return std::numeric_limits<std::size_t>::max();
+	}
+	return size_mib * bytes_per_mib;
+}
 
 std::string utils::strip_comments(const std::string& line)
 {
@@ -270,7 +282,8 @@ std::string utils::retrieve_url(const std::string& url,
 	set_common_curl_options(easyhandle, cfgcont);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_URL, url.c_str());
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(easyhandle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		easyhandle, get_download_max_size(cfgcont));
 
 	switch (method) {
 	case HTTPMethod::GET:
@@ -311,6 +324,12 @@ std::string utils::retrieve_url(const std::string& url,
 		<< "[" << (body != nullptr ? body->c_str() : "-") << "]";
 
 	std::string buf = curlDataReceiver->get_data();
+	if (curlDataReceiver->has_exceeded_max_data_size()) {
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_ERRORBUFFER, NULL);
+		throw std::string(_(
+			"downloaded response exceeds the configured maximum size "
+			"(download-max-size)"));
+	}
 	if (res != CURLE_OK) {
 		std::string errmsg(errbuf);
 		if (errmsg.empty()) {

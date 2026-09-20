@@ -66,7 +66,8 @@ std::string FeedHqApi::retrieve_auth()
 		CURLOPT_URL,
 		(cfg.get_configvalue("feedhq-url") + FEEDHQ_LOGIN).c_str());
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(handle.ptr());
 
@@ -96,7 +97,8 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 		CURLOPT_URL,
 		(cfg.get_configvalue("feedhq-url") + FEEDHQ_SUBSCRIPTION_LIST)
 		.c_str());
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
@@ -256,7 +258,8 @@ std::string FeedHqApi::get_new_token()
 		(cfg.get_configvalue("feedhq-url") + FEEDHQ_API_TOKEN_URL)
 		.c_str());
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
@@ -350,7 +353,8 @@ std::string FeedHqApi::post_content(const std::string& url,
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postdata.c_str());
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, url.c_str());
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);

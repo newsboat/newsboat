@@ -16,6 +16,11 @@ const std::string& CurlDataReceiver::get_data() const
 	return accumulated_data;
 }
 
+bool CurlDataReceiver::has_exceeded_max_data_size() const
+{
+	return exceeded_max_data_size;
+}
+
 CurlDataReceiver::CurlDataReceiver(CurlHandle& curlHandle,
 	std::size_t max_data_size_)
 	: curl_handle(curlHandle)
@@ -47,6 +52,7 @@ size_t CurlDataReceiver::handle_data(const char* data, size_t data_size)
 	if (max_data_size != 0
 		&& (data_size > max_data_size
 			|| accumulated_data.size() > max_data_size - data_size)) {
+		exceeded_max_data_size = true;
 		return 0;
 	}
 

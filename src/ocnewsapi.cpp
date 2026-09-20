@@ -316,7 +316,8 @@ bool OcNewsApi::query(const std::string& query,
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 	curl_easy_setopt(handle.ptr(), CURLOPT_USERPWD, auth.c_str());
 
-	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(
+		handle, utils::get_download_max_size(cfg));
 
 	CURLcode res = curl_easy_perform(handle.ptr());
 

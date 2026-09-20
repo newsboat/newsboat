@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_UTIL_H_
 #define NEWSBOAT_UTIL_H_
 
+#include <cstddef>
 #include <cstdint>
 #include <curl/curl.h>
 #include <libxml/parser.h>
@@ -75,6 +76,7 @@ std::string retrieve_url(const std::string& url,
 	const std::string& authinfo = "",
 	const std::string* body = nullptr,
 	const HTTPMethod method = HTTPMethod::GET);
+std::size_t get_download_max_size(const ConfigContainer& cfgcont);
 std::string run_program(const char* argv[], const std::string& input);
 
 Filepath resolve_tilde(const Filepath&);
