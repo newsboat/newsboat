@@ -1,12 +1,12 @@
 # H. Gökhan SARI <hsa2@difuzyon.net>, 2008
-# Emir SARI <emir_sari@icloud.com>, 2020-2025
+# Emir SARI <emir_sari@icloud.com>, 2020-2026
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-09-20 15:29+0300\n"
-"PO-Revision-Date: 2026-06-07 18:00+0300\n"
+"PO-Revision-Date: 2026-09-20 18:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -268,7 +268,7 @@ msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr ""
-"%N %V - '%s' için%?F? '%F' süzgeciyle eşleşen&? arama sonuçları (%u "
+"%N %V - \"%s\" için%?F? \"%F\" süzgeciyle eşleşen&? arama sonuçları (%u "
 "okunmamış, %t toplam)"
 
 #: src/configcontainer.cpp:347
@@ -291,17 +291,17 @@ msgstr "bilinmeyen yapılandırma seçeneği: %s"
 #: src/configdata.cpp:54
 #, c-format
 msgid "expected boolean value, found `%s' instead"
-msgstr "boole değeri bekleniyordu, '%s' bulundu"
+msgstr "boole değeri bekleniyordu, \"%s\" bulundu"
 
 #: src/configdata.cpp:64
 #, c-format
 msgid "expected integer value, found `%s' instead"
-msgstr "tamsayı bekleniyordu, '%s' bulundu"
+msgstr "tamsayı bekleniyordu, \"%s\" bulundu"
 
 #: src/configdata.cpp:74
 #, c-format
 msgid "invalid configuration value `%s'"
-msgstr "geçersiz yapılandırma değeri '%s'"
+msgstr "geçersiz yapılandırma değeri \"%s\""
 
 #: src/confighandlerexception.cpp:19
 msgid "invalid parameters."
@@ -331,12 +331,12 @@ msgstr "%s %u. satır"
 #: src/configparser.cpp:128
 #, c-format
 msgid "unknown command `%s'"
-msgstr "bilinmeyen komut '%s'"
+msgstr "bilinmeyen komut \"%s\""
 
 #: src/configparser.cpp:135
 #, c-format
 msgid "Error while processing command `%s' (%s): %s"
-msgstr "'%s' (%s) komutu işlenirken hata: %s"
+msgstr "\"%s\" (%s) komutu işlenirken hata: %s"
 
 #: src/controller.cpp:142 src/pbcontroller.cpp:235
 #, c-format
@@ -371,7 +371,7 @@ msgstr "Önbellek açılıyor..."
 #: src/controller.cpp:220 src/controller.cpp:228
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
-msgstr "Hata: '%s' önbellek dosyası açılamadı: %s"
+msgstr "Hata: \"%s\" önbellek dosyası açılamadı: %s"
 
 #: src/controller.cpp:259
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
@@ -427,7 +427,7 @@ msgstr ""
 #: src/controller.cpp:361
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
-msgstr "HATA: Bilinmeyen urls-source '%s'"
+msgstr "HATA: Bilinmeyen urls-source \"%s\""
 
 #: src/controller.cpp:368
 #, c-format
@@ -526,7 +526,7 @@ msgstr "Veritabanından beslemeler alınırken hata oluştu: "
 #: src/controller.cpp:475
 #, c-format
 msgid "Error while loading feed '%s': %s"
-msgstr "'%s' beslemesi yüklenirken hata: %s"
+msgstr "\"%s\" beslemesi yüklenirken hata: %s"
 
 #: src/controller.cpp:489 src/controller.cpp:573
 msgid "Cleaning up cache..."
@@ -577,9 +577,8 @@ msgid "Failed to open queue file: %s."
 msgstr "Kuyruk dosyası açılamadı: %s."
 
 #: src/controller.cpp:738 src/itemutils.cpp:43
-#, fuzzy
 msgid "Item has a non-HTTP enclosure URL."
-msgstr "Ögenin bir ilişiği yok."
+msgstr "Ögenin HTTP olmayan ek URL'si var."
 
 #: src/controller.cpp:760
 #, c-format
@@ -609,7 +608,7 @@ msgstr "%s: %s: Bilinmeyen komut"
 #: src/controller.cpp:1031
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
-msgstr "Hata: Yapılandırma dosyası '%s' açılamadı!"
+msgstr "Hata: Yapılandırma dosyası \"%s\" açılamadı!"
 
 #: src/dialogsformaction.cpp:66
 msgid "Close"
@@ -787,7 +786,7 @@ msgstr "Tüm beslemeler okundu olarak imleniyor..."
 #: src/feedlistformaction.cpp:432 src/itemlistformaction.cpp:709
 #, c-format
 msgid "No filter found with name `%s'."
-msgstr "'%s' adlı bir süzgeç bulunamadı."
+msgstr "\"%s\" adlı bir süzgeç bulunamadı."
 
 #: src/feedlistformaction.cpp:440 src/itemlistformaction.cpp:717
 msgid "No filters defined."
@@ -882,7 +881,7 @@ msgstr "Aranıyor..."
 #: src/feedlistformaction.cpp:1021 src/itemlistformaction.cpp:987
 #, c-format
 msgid "Error while searching for `%s': %s"
-msgstr "'%s' aranırken hata: %s"
+msgstr "\"%s\" aranırken hata: %s"
 
 #: src/feedlistformaction.cpp:1033 src/itemlistformaction.cpp:994
 msgid "No results."
@@ -900,7 +899,7 @@ msgstr "Besleme Listesi - %u okunmamış, %u toplam"
 #: src/feedlistformaction.cpp:1140 src/itemlistformaction.cpp:1690
 #, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
-msgstr "Hata: Süzgeç ifadesi '%s' ayrıştırılamadı: %s"
+msgstr "Hata: Süzgeç ifadesi \"%s\" ayrıştırılamadı: %s"
 
 #: src/feedlistformaction.cpp:1159
 #, c-format
@@ -916,12 +915,11 @@ msgstr "Hata: Desteklenmeyen URL: %s"
 #: src/filebrowserformaction.cpp:110
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "'%s' üzerine yazmak istediğinize emin misiniz (e:Evet h:Hayır)? "
+msgstr "\"%s\" üzerine yazmak istediğinize emin misiniz (e:Evet h:Hayır)? "
 
 #: src/filebrowserformaction.cpp:352
-#, fuzzy
 msgid "Filename: "
-msgstr "Dosya: "
+msgstr "Dosya adı: "
 
 #: src/filebrowserformaction.cpp:355
 msgid "Directory: "
@@ -938,9 +936,8 @@ msgid "Save"
 msgstr "Kaydet"
 
 #: src/filebrowserformaction.cpp:385
-#, fuzzy
 msgid "Switch focus"
-msgstr "Araç takımları arasındaki odağı değiştir"
+msgstr "Odağı değiştir"
 
 #: src/filebrowserformaction.cpp:437
 #, c-format
@@ -966,7 +963,7 @@ msgstr "Hata: \"%s\" dosyası açılamadı: %s"
 #: src/rssignores.cpp:33
 #, c-format
 msgid "couldn't parse filter expression `%s': %s"
-msgstr "süzgeç ifadesi '%s', ayrıştırılamadı: %s"
+msgstr "süzgeç ifadesi \"%s\", ayrıştırılamadı: %s"
 
 #: src/formaction.cpp:61
 #, c-format
@@ -990,7 +987,7 @@ msgstr "kullanım: set <yapılandırma-değeri> <değer>"
 #: src/formaction.cpp:314
 #, c-format
 msgid "error setting '%s' to '%s': %s"
-msgstr "'%s', '%s' olarak ayarlanırken hata: %s"
+msgstr "\"%s\", \"%s\" olarak ayarlanırken hata: %s"
 
 #: src/formaction.cpp:323
 msgid "usage: set <variable>[=<value>]"
@@ -1228,13 +1225,13 @@ msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
-"'%s' üzerine yaz ('%s' içinde)? Bunun gibi %d çakışma daha var (e:Evet "
+"\"%s\" üzerine yaz (\"%s\" içinde)? Bunun gibi %d çakışma daha var (e:Evet "
 "v:Tümüne evet h:Hayır a:Tümüne hayır)"
 
 #: src/itemlistformaction.cpp:1653
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
-msgstr "'%s' üzerine yaz ('%s' içinde)? (e:Evet h:Hayır)"
+msgstr "\"%s\" üzerine yaz (\"%s\" içinde)? (e:Evet h:Hayır)"
 
 #: src/itemlistformaction.cpp:1709
 #, c-format
@@ -1285,7 +1282,7 @@ msgstr "Ögenin bir ilişiği yok."
 #: src/itemutils.cpp:16
 #, c-format
 msgid "Item's enclosure has non-http link: '%s'"
-msgstr "Öge ilişiğinde http olmayan bir bağlantı var: '%s'"
+msgstr "Öge ilişiğinde http olmayan bir bağlantı var: \"%s\""
 
 #: src/itemutils.cpp:24
 #, c-format
@@ -1357,7 +1354,7 @@ msgstr "Hata: Geçersiz düzenli ifade!"
 #: src/keymap.cpp:39
 #, c-format
 msgid "`%s' is not a valid operation"
-msgstr "'%s', geçerli bir işlem değil"
+msgstr "\"%s\", geçerli bir işlem değil"
 
 #: src/keymap.cpp:70
 msgid "Open feed/article"
@@ -1500,9 +1497,8 @@ msgid "Mark download as deleted"
 msgstr "İndirmeyi silindi olarak imle"
 
 #: src/keymap.cpp:331
-#, fuzzy
 msgid "Reload the queue"
-msgstr "İndirmeyi kuyruğa ekle"
+msgstr "Kuyruğu yeniden yükle"
 
 #: src/keymap.cpp:338
 msgid "Purge finished and deleted downloads from queue"
@@ -1740,12 +1736,12 @@ msgstr "Sayfanın/listenin sonuna taşı"
 #: src/regexmanager.cpp:137
 #, c-format
 msgid "`%s' is not a valid context"
-msgstr "'%s', geçerli bir bağlam değil"
+msgstr "\"%s\", geçerli bir bağlam değil"
 
 #: src/keymap.cpp:1155
 #, c-format
 msgid "`%s' is not a valid key command"
-msgstr "'%s', geçerli bir düğme komutu değil"
+msgstr "\"%s\", geçerli bir düğme komutu değil"
 
 #: src/keymap.cpp:1190
 msgid "failed to parse binding"
@@ -1764,12 +1760,12 @@ msgstr "%s için işlem sırası ayrıştırılamadı"
 #: src/matcherexception.cpp:14
 #, c-format
 msgid "attribute `%s' is not available."
-msgstr "'%s' özniteliği kullanılabilir değil."
+msgstr "\"%s\" özniteliği kullanılabilir değil."
 
 #: src/matcherexception.cpp:18
 #, c-format
 msgid "regular expression '%s' is invalid: %s"
-msgstr "düzenli ifade '%s', geçersiz: %s"
+msgstr "düzenli ifade \"%s\", geçersiz: %s"
 
 #: src/minifluxapi.cpp:58
 #, c-format
@@ -1782,6 +1778,8 @@ msgid ""
 "Skipping pipe URL '%s' for security reasons; if you trust it, add 'exec:%s' "
 "to your urls file manually."
 msgstr ""
+"Veriyolu URL'si \"%s\", güvenlik gerekçelerinden dolayı atlanıyor. Eğer ona "
+"güveniyorsanız URL'ler dosyanıza elle \"exec:%s\" ifadesini ekleyin."
 
 #: src/opml.cpp:149
 #, c-format
@@ -1789,11 +1787,14 @@ msgid ""
 "Ignoring 'filtercmd' attribute '%s' on URL '%s' for security reasons; if you "
 "trust it, replace '%s' with 'filter:%s:%s' in your urls file manually."
 msgstr ""
+"\"%2$s\" URL'sindeki \"filtercmd\" özniteliği \"%1$s\", güvenlik "
+"gerekçelerinden dolayı yok sayılıyor. Eğer ona güveniyorsanız URL'ler "
+"dosyanızdaki \"%3$s\" ifadesini elle \"filter:%4$s:%5$s\" ile değiştirin."
 
 #: src/opml.cpp:164 src/opmlurlreader.cpp:90
 #, c-format
 msgid "Skipping URL with unsupported schema: '%s'"
-msgstr ""
+msgstr "Desteklenmeyen şemalı URL atlanıyor: \"%s\""
 
 #: src/opml.cpp:261
 #, c-format
@@ -1811,7 +1812,8 @@ msgstr "<opml> kök ögesindeki <body> ögesi eksik"
 #: src/pbcontroller.cpp:75
 #, c-format
 msgid "XDG: configuration directory '%s' not accessible, using '%s' instead."
-msgstr "XDG: Yapılandırma dizini '%s', erişilemez; yerine '%s' kullanılıyor."
+msgstr "XDG: Yapılandırma dizini \"%s\" erişilebilir değil; yerine \"%s\" "
+"kullanılıyor."
 
 #: src/pbcontroller.cpp:123
 msgid "Fatal error: couldn't determine home directory!"
@@ -1828,7 +1830,7 @@ msgstr ""
 #: src/pbcontroller.cpp:144
 #, c-format
 msgid "Fatal error: couldn't create configuration directory `%s': (%i) %s"
-msgstr "Onulmaz hata: '%s' yapılandırma dizini oluşturulamadı: (%i) %s"
+msgstr "Onulmaz hata: \"%s\" yapılandırma dizini oluşturulamadı: (%i) %s"
 
 #: src/pbcontroller.cpp:204
 #, c-format
@@ -1928,7 +1930,7 @@ msgstr ""
 #: src/regexmanager.cpp:145 src/rssignores.cpp:46
 #, c-format
 msgid "`%s' is not a valid regular expression: %s"
-msgstr "'%s', geçerli bir düzenli ifade değil: %s"
+msgstr "\"%s\", geçerli bir düzenli ifade değil: %s"
 
 #: src/reloader.cpp:92
 #, c-format
@@ -1966,7 +1968,7 @@ msgstr "Halihazırda ilk arama sonucunda."
 #: src/searchresultslistformaction.cpp:89
 #, c-format
 msgid "Search Result - '%s'"
-msgstr "Arama Sonucu - '%s'"
+msgstr "Arama Sonucu - \"%s\""
 
 #: src/selectformaction.cpp:251 src/selectformaction.cpp:274
 msgid "Select Tag"
@@ -1980,12 +1982,12 @@ msgstr "Süzgeç Seç"
 #: rust/libnewsboat/src/textstyle.rs:23 rust/libnewsboat/src/textstyle.rs:32
 #, c-format
 msgid "`%s' is not a valid color"
-msgstr "'%s', geçerli bir renk değil"
+msgstr "\"%s\", geçerli bir renk değil"
 
 #: src/textstyle.cpp:31 rust/libnewsboat/src/textstyle.rs:44
 #, c-format
 msgid "`%s' is not a valid attribute"
-msgstr "'%s', geçersiz bir öznitelik"
+msgstr "\"%s\", geçersiz bir öznitelik"
 
 #: src/urlviewformaction.cpp:61 src/urlviewformaction.cpp:115
 msgid "No links available!"
@@ -2082,7 +2084,7 @@ msgstr "%s: %s: Geçersiz loglevel değeri"
 
 #: rust/libnewsboat/src/colormanager.rs:97
 msgid "`%s' is not a valid configuration element"
-msgstr "'%s', geçerli bir yapılandırma ögesi değil"
+msgstr "\"%s\", geçerli bir yapılandırma ögesi değil"
 
 #: rust/libnewsboat/src/configpaths.rs:85
 msgid ""
@@ -2102,7 +2104,7 @@ msgstr "Yapılandırmalar ve veriler ~/.newsbeuter/'den alınıyor..."
 
 #: rust/libnewsboat/src/configpaths.rs:214
 msgid "Aborting migration because mkdir on `%s' failed: %s"
-msgstr "Göç iptal ediliyor; çünkü '%s' üzerinde mkdir başarısız oldu: %s"
+msgstr "Göç iptal ediliyor; çünkü \"%s\" üzerinde mkdir başarısız oldu: %s"
 
 #: rust/libnewsboat/src/filterparser.rs:129
 msgid "attribute name"
@@ -2136,7 +2138,7 @@ msgstr "İç ayrıştırma hatası"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file '%s': %s"
-msgstr "Kilit dosyası '%s' açılamadı: %s"
+msgstr "Kilit dosyası \"%s\" açılamadı: %s"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:80
 #: rust/libnewsboat/src/fslock.rs:112
@@ -2145,12 +2147,12 @@ msgstr "<dosya adı geçersiz UTF-8 karakterleri içeriyor>"
 
 #: rust/libnewsboat/src/fslock.rs:77
 msgid "Failed to write PID to lock file '%s': %s"
-msgstr "PID, '%s' kilit dosyasına yazılamadı: %s"
+msgstr "PID, \"%s\" kilit dosyasına yazılamadı: %s"
 
 #: rust/libnewsboat/src/fslock.rs:109
 msgid "Failed to lock '%s', already locked by process with PID %s"
 msgstr ""
-"'%s' kilitlenemedi, halihazırda PID'si %s olan işlem tarafından kilitlenmiş"
+"\"%s\" kilitlenemedi, halihazırda PID'si %s olan işlem tarafından kilitlenmiş"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
