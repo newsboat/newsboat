@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2026-06-05 19:02+0300\n"
+"POT-Creation-Date: 2026-09-20 15:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -205,71 +205,66 @@ msgstr ""
 msgid "Caught newsboat::Exception with message: %s"
 msgstr ""
 
-#: src/colormanager.cpp:94
-#, c-format
-msgid "`%s' is not a valid configuration element"
-msgstr ""
-
-#: src/configcontainer.cpp:175
+#: src/configcontainer.cpp:176
 #, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
 
-#: src/configcontainer.cpp:204
+#: src/configcontainer.cpp:205
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
 msgstr ""
 
-#: src/configcontainer.cpp:316
+#: src/configcontainer.cpp:317
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
 msgstr ""
 
-#: src/configcontainer.cpp:320
+#: src/configcontainer.cpp:321
 msgid "%N %V - Dialogs"
 msgstr ""
 
-#: src/configcontainer.cpp:323
+#: src/configcontainer.cpp:324
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
 
-#: src/configcontainer.cpp:327
+#: src/configcontainer.cpp:328
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr ""
 
-#: src/configcontainer.cpp:331
+#: src/configcontainer.cpp:332
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
 msgstr ""
 
-#: src/configcontainer.cpp:335
+#: src/configcontainer.cpp:336
 msgid "%N %V - Help"
 msgstr ""
 
-#: src/configcontainer.cpp:338
+#: src/configcontainer.cpp:339
 msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr ""
 
-#: src/configcontainer.cpp:342
+#: src/configcontainer.cpp:343
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr ""
 
-#: src/configcontainer.cpp:346
+#: src/configcontainer.cpp:347
 msgid "%N %V - Select Filter"
 msgstr ""
 
-#: src/configcontainer.cpp:350
+#: src/configcontainer.cpp:351
 msgid "%N %V - Select Tag"
 msgstr ""
 
-#: src/configcontainer.cpp:354
+#: src/configcontainer.cpp:355
 msgid "%N %V - URLs"
 msgstr ""
 
-#: src/configcontainer.cpp:491
+#: src/configcontainer.cpp:492
 #, c-format
 msgid "unknown config option: %s"
 msgstr ""
@@ -334,9 +329,9 @@ msgid "Loading configuration..."
 msgstr ""
 
 #: src/controller.cpp:187 src/controller.cpp:237 src/controller.cpp:381
-#: src/controller.cpp:442 src/controller.cpp:446 src/controller.cpp:486
-#: src/controller.cpp:493 src/controller.cpp:508 src/controller.cpp:526
-#: src/controller.cpp:537 src/controller.cpp:581 src/pbcontroller.cpp:292
+#: src/controller.cpp:442 src/controller.cpp:446 src/controller.cpp:485
+#: src/controller.cpp:492 src/controller.cpp:507 src/controller.cpp:525
+#: src/controller.cpp:536 src/controller.cpp:580 src/pbcontroller.cpp:292
 #: src/pbcontroller.cpp:308
 msgid "done."
 msgstr ""
@@ -486,78 +481,82 @@ msgstr ""
 msgid "Error while loading feed '%s': %s"
 msgstr ""
 
-#: src/controller.cpp:490 src/controller.cpp:574
+#: src/controller.cpp:489 src/controller.cpp:573
 msgid "Cleaning up cache..."
 msgstr ""
 
-#: src/controller.cpp:501
+#: src/controller.cpp:500
 msgid "Prepopulating query feeds..."
 msgstr ""
 
-#: src/controller.cpp:523
+#: src/controller.cpp:522
 msgid "Importing list of read articles..."
 msgstr ""
 
-#: src/controller.cpp:534
+#: src/controller.cpp:533
 msgid "Exporting list of read articles..."
 msgstr ""
 
-#: src/controller.cpp:589
+#: src/controller.cpp:588
 #, c-format
 msgid ""
 "%<PRIu64> unreachable feeds found. See `cleanup-on-quit` in newsboat(1) for "
 "details."
 msgstr ""
 
-#: src/controller.cpp:593
+#: src/controller.cpp:592
 msgid "Press any key to continue"
 msgstr ""
 
-#: src/controller.cpp:601
+#: src/controller.cpp:600
 msgid "failed: "
 msgstr ""
 
-#: src/controller.cpp:625
+#: src/controller.cpp:624
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr ""
 
-#: src/controller.cpp:727 src/itemutils.cpp:34
+#: src/controller.cpp:729 src/itemutils.cpp:34
 #, c-format
 msgid "Generated filename (%s) is used already."
 msgstr ""
 
-#: src/controller.cpp:732 src/itemutils.cpp:39
+#: src/controller.cpp:734 src/itemutils.cpp:39
 #, c-format
 msgid "Failed to open queue file: %s."
 msgstr ""
 
-#: src/controller.cpp:754
+#: src/controller.cpp:738 src/itemutils.cpp:43
+msgid "Item has a non-HTTP enclosure URL."
+msgstr ""
+
+#: src/controller.cpp:760
 #, c-format
 msgid "Error importing OPML to urls file %s: %s"
 msgstr ""
 
-#: src/controller.cpp:763
+#: src/controller.cpp:769
 #, c-format
 msgid "An error occurred while parsing %s: %s"
 msgstr ""
 
-#: src/controller.cpp:770
+#: src/controller.cpp:776
 #, c-format
 msgid "Import of %s finished."
 msgstr ""
 
-#: src/controller.cpp:917
+#: src/controller.cpp:923
 #, c-format
 msgid "%u unread articles"
 msgstr ""
 
-#: src/controller.cpp:922
+#: src/controller.cpp:928
 #, c-format
 msgid "%s: %s: unknown command"
 msgstr ""
 
-#: src/controller.cpp:1025
+#: src/controller.cpp:1031
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr ""
@@ -579,27 +578,8 @@ msgid "Error: you can't remove the feed list!"
 msgstr ""
 
 #: src/dialogsformaction.cpp:121 src/feedlistformaction.cpp:1049
-#: src/itemlistformaction.cpp:1416 src/urlviewformaction.cpp:168
+#: src/itemlistformaction.cpp:1419 src/urlviewformaction.cpp:168
 msgid "Invalid position!"
-msgstr ""
-
-#: src/dirbrowserformaction.cpp:268
-msgid "Directory: "
-msgstr ""
-
-#: src/dirbrowserformaction.cpp:287 src/filebrowserformaction.cpp:303
-#: src/pbview.cpp:429 src/selectformaction.cpp:250 src/selectformaction.cpp:253
-msgid "Cancel"
-msgstr ""
-
-#: src/dirbrowserformaction.cpp:288 src/filebrowserformaction.cpp:304
-#: src/itemlistformaction.cpp:1396 src/itemviewformaction.cpp:578
-msgid "Save"
-msgstr ""
-
-#: src/dirbrowserformaction.cpp:339
-#, c-format
-msgid "Save Files - %s"
 msgstr ""
 
 #: src/download.cpp:58
@@ -646,17 +626,17 @@ msgstr ""
 msgid "unknown (bug)."
 msgstr ""
 
-#: src/feedhqurlreader.cpp:46 src/oldreaderurlreader.cpp:47
+#: src/feedhqurlreader.cpp:35 src/oldreaderurlreader.cpp:36
 msgid "People you follow"
 msgstr ""
 
-#: src/feedhqurlreader.cpp:48 src/freshrssurlreader.cpp:32
-#: src/inoreaderurlreader.cpp:48 src/minifluxurlreader.cpp:31
-#: src/oldreaderurlreader.cpp:49
+#: src/feedhqurlreader.cpp:36 src/freshrssurlreader.cpp:29
+#: src/inoreaderurlreader.cpp:37 src/minifluxurlreader.cpp:27
+#: src/oldreaderurlreader.cpp:37
 msgid "Starred items"
 msgstr ""
 
-#: src/feedhqurlreader.cpp:49 src/oldreaderurlreader.cpp:50
+#: src/feedhqurlreader.cpp:37 src/oldreaderurlreader.cpp:38
 msgid "Shared items"
 msgstr ""
 
@@ -705,15 +685,16 @@ msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
 msgstr ""
 
 #: src/feedlistformaction.cpp:301 src/feedlistformaction.cpp:386
-#: src/feedlistformaction.cpp:515 src/filebrowserformaction.cpp:99
+#: src/feedlistformaction.cpp:515 src/filebrowserformaction.cpp:113
 #: src/itemlistformaction.cpp:107 src/itemlistformaction.cpp:519
-#: src/view.cpp:189
+#: src/view.cpp:186
 msgid "yn"
 msgstr ""
 
 #: src/feedlistformaction.cpp:301 src/feedlistformaction.cpp:386
-#: src/feedlistformaction.cpp:515 src/itemlistformaction.cpp:107
-#: src/itemlistformaction.cpp:519 src/view.cpp:189
+#: src/feedlistformaction.cpp:515 src/filebrowserformaction.cpp:113
+#: src/itemlistformaction.cpp:107 src/itemlistformaction.cpp:519
+#: src/view.cpp:186
 msgid "y"
 msgstr ""
 
@@ -763,7 +744,7 @@ msgid "Search for: "
 msgstr ""
 
 #: src/feedlistformaction.cpp:464 src/feedlistformaction.cpp:480
-#: src/formaction.cpp:721 src/formaction.cpp:723 src/itemlistformaction.cpp:671
+#: src/formaction.cpp:724 src/formaction.cpp:726 src/itemlistformaction.cpp:671
 #: src/itemlistformaction.cpp:687 src/itemrenderer.cpp:77
 msgid "Title: "
 msgstr ""
@@ -773,7 +754,7 @@ msgstr ""
 msgid "Filter: "
 msgstr ""
 
-#: src/feedlistformaction.cpp:514 src/view.cpp:187
+#: src/feedlistformaction.cpp:514 src/view.cpp:184
 msgid "Do you really want to quit (y:Yes n:No)? "
 msgstr ""
 
@@ -785,7 +766,7 @@ msgstr ""
 msgid "Cannot open exec feeds in the browser!"
 msgstr ""
 
-#: src/feedlistformaction.cpp:658 src/itemlistformaction.cpp:1392
+#: src/feedlistformaction.cpp:658 src/itemlistformaction.cpp:1395
 msgid "Clear filter"
 msgstr ""
 
@@ -794,23 +775,23 @@ msgid "Clear tag"
 msgstr ""
 
 #: src/feedlistformaction.cpp:663 src/helpformaction.cpp:162
-#: src/itemlistformaction.cpp:1394 src/itemviewformaction.cpp:577
-#: src/pbview.cpp:420 src/pbview.cpp:427 src/searchresultslistformaction.cpp:18
+#: src/itemlistformaction.cpp:1397 src/itemviewformaction.cpp:577
+#: src/pbview.cpp:432 src/pbview.cpp:439 src/searchresultslistformaction.cpp:18
 #: src/urlviewformaction.cpp:155
 msgid "Quit"
 msgstr ""
 
-#: src/feedlistformaction.cpp:664 src/itemlistformaction.cpp:1395
+#: src/feedlistformaction.cpp:664 src/itemlistformaction.cpp:1398
 #: src/searchresultslistformaction.cpp:19
 msgid "Open"
 msgstr ""
 
-#: src/feedlistformaction.cpp:665 src/itemlistformaction.cpp:1398
+#: src/feedlistformaction.cpp:665 src/itemlistformaction.cpp:1401
 #: src/itemviewformaction.cpp:579
 msgid "Next Unread"
 msgstr ""
 
-#: src/feedlistformaction.cpp:666 src/itemlistformaction.cpp:1397
+#: src/feedlistformaction.cpp:666 src/itemlistformaction.cpp:1400
 msgid "Reload"
 msgstr ""
 
@@ -822,18 +803,18 @@ msgstr ""
 msgid "Mark Read"
 msgstr ""
 
-#: src/feedlistformaction.cpp:669 src/itemlistformaction.cpp:1399
+#: src/feedlistformaction.cpp:669 src/itemlistformaction.cpp:1402
 msgid "Mark All Read"
 msgstr ""
 
 #: src/feedlistformaction.cpp:670 src/helpformaction.cpp:163
-#: src/itemlistformaction.cpp:1400 src/searchresultslistformaction.cpp:21
+#: src/itemlistformaction.cpp:1403 src/searchresultslistformaction.cpp:21
 msgid "Search"
 msgstr ""
 
 #: src/feedlistformaction.cpp:671 src/helpformaction.cpp:187
-#: src/itemlistformaction.cpp:1401 src/itemviewformaction.cpp:582
-#: src/pbview.cpp:325 src/pbview.cpp:435 src/searchresultslistformaction.cpp:22
+#: src/itemlistformaction.cpp:1404 src/itemviewformaction.cpp:582
+#: src/pbview.cpp:336 src/pbview.cpp:447 src/searchresultslistformaction.cpp:22
 #: src/urlviewformaction.cpp:158
 msgid "Help"
 msgstr ""
@@ -851,7 +832,7 @@ msgstr ""
 msgid "No results."
 msgstr ""
 
-#: src/feedlistformaction.cpp:1044 src/itemlistformaction.cpp:1411
+#: src/feedlistformaction.cpp:1044 src/itemlistformaction.cpp:1414
 msgid "Position not visible!"
 msgstr ""
 
@@ -860,7 +841,7 @@ msgstr ""
 msgid "Feed List - %u unread, %u total"
 msgstr ""
 
-#: src/feedlistformaction.cpp:1140 src/itemlistformaction.cpp:1687
+#: src/feedlistformaction.cpp:1140 src/itemlistformaction.cpp:1690
 #, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
 msgstr ""
@@ -875,30 +856,49 @@ msgstr ""
 msgid "Error: unsupported URL: %s"
 msgstr ""
 
-#: src/filebrowserformaction.cpp:96
+#: src/filebrowserformaction.cpp:110
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
 msgstr ""
 
-#: src/filebrowserformaction.cpp:99
-msgid "n"
+#: src/filebrowserformaction.cpp:352
+msgid "Filename: "
 msgstr ""
 
-#: src/filebrowserformaction.cpp:282
-msgid "File: "
+#: src/filebrowserformaction.cpp:355
+msgid "Directory: "
 msgstr ""
 
-#: src/filebrowserformaction.cpp:354
+#: src/filebrowserformaction.cpp:383 src/pbview.cpp:441
+#: src/selectformaction.cpp:250 src/selectformaction.cpp:253
+msgid "Cancel"
+msgstr ""
+
+#: src/filebrowserformaction.cpp:384 src/itemlistformaction.cpp:1399
+#: src/itemviewformaction.cpp:578
+msgid "Save"
+msgstr ""
+
+#: src/filebrowserformaction.cpp:385
+msgid "Switch focus"
+msgstr ""
+
+#: src/filebrowserformaction.cpp:437
 #, c-format
 msgid "Save File - %s"
 msgstr ""
 
-#: src/fileurlreader.cpp:73 src/remoteapiurlreader.cpp:43
+#: src/filebrowserformaction.cpp:440
+#, c-format
+msgid "Save Files - %s"
+msgstr ""
+
+#: src/fileurlreader.cpp:60 src/remoteapiurlreader.cpp:41
 #, c-format
 msgid "Warning: Duplicate URL found: %s. Merging tags."
 msgstr ""
 
-#: src/fileurlreader.cpp:99
+#: src/fileurlwriter.cpp:18
 #, c-format
 msgid "Error: failed to open file \"%s\": %s"
 msgstr ""
@@ -909,89 +909,89 @@ msgstr ""
 msgid "couldn't parse filter expression `%s': %s"
 msgstr ""
 
-#: src/formaction.cpp:60
+#: src/formaction.cpp:61
 #, c-format
 msgid "Operation \"%s\" not handled in dialog \"%s\""
 msgstr ""
 
-#: src/formaction.cpp:100
+#: src/formaction.cpp:101
 #, c-format
 msgid "Too many arguments for %s"
 msgstr ""
 
-#: src/formaction.cpp:168
+#: src/formaction.cpp:169
 #, c-format
 msgid "Too many arguments to \"cmdline\" command: %s"
 msgstr ""
 
-#: src/formaction.cpp:187
+#: src/formaction.cpp:188
 msgid "usage: set <config-option> <value>"
 msgstr ""
 
-#: src/formaction.cpp:313
+#: src/formaction.cpp:314
 #, c-format
 msgid "error setting '%s' to '%s': %s"
 msgstr ""
 
-#: src/formaction.cpp:322
+#: src/formaction.cpp:323
 msgid "usage: set <variable>[=<value>]"
 msgstr ""
 
-#: src/formaction.cpp:336
+#: src/formaction.cpp:337
 msgid "usage: source <file> [...]"
 msgstr ""
 
-#: src/formaction.cpp:353
+#: src/formaction.cpp:354
 msgid "usage: dumpconfig <file>"
 msgstr ""
 
-#: src/formaction.cpp:358
+#: src/formaction.cpp:359
 #, c-format
 msgid "Saved configuration to %s"
 msgstr ""
 
-#: src/formaction.cpp:366
+#: src/formaction.cpp:367
 msgid "usage: exec <operation>"
 msgstr ""
 
-#: src/formaction.cpp:373
+#: src/formaction.cpp:374
 msgid "Operation not found"
 msgstr ""
 
-#: src/formaction.cpp:397
+#: src/formaction.cpp:398
 #, c-format
 msgid "Not a command: %s"
 msgstr ""
 
-#: src/formaction.cpp:669
+#: src/formaction.cpp:672
 msgid "Saving bookmark..."
 msgstr ""
 
-#: src/formaction.cpp:675 src/formaction.cpp:747
+#: src/formaction.cpp:678 src/formaction.cpp:750
 msgid "Saved bookmark."
 msgstr ""
 
-#: src/formaction.cpp:678 src/formaction.cpp:750
+#: src/formaction.cpp:681 src/formaction.cpp:753
 msgid "Error while saving bookmark: "
 msgstr ""
 
-#: src/formaction.cpp:718
+#: src/formaction.cpp:721
 msgid "URL: "
 msgstr ""
 
-#: src/formaction.cpp:725
+#: src/formaction.cpp:728
 msgid "Description: "
 msgstr ""
 
-#: src/formaction.cpp:726
+#: src/formaction.cpp:729
 msgid "Feed title: "
 msgstr ""
 
-#: src/formaction.cpp:741
+#: src/formaction.cpp:744
 msgid "Saving bookmark on autopilot..."
 msgstr ""
 
-#: src/formaction.cpp:882
+#: src/formaction.cpp:885
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -1017,15 +1017,15 @@ msgstr ""
 msgid "link"
 msgstr ""
 
-#: src/inoreaderurlreader.cpp:50
+#: src/inoreaderurlreader.cpp:38
 msgid "Broadcast items"
 msgstr ""
 
-#: src/inoreaderurlreader.cpp:51
+#: src/inoreaderurlreader.cpp:39
 msgid "Liked items"
 msgstr ""
 
-#: src/inoreaderurlreader.cpp:53
+#: src/inoreaderurlreader.cpp:40
 msgid "Saved web pages"
 msgstr ""
 
@@ -1060,24 +1060,24 @@ msgstr ""
 msgid "Flags: "
 msgstr ""
 
-#: src/itemlistformaction.cpp:425 src/itemlistformaction.cpp:1491
+#: src/itemlistformaction.cpp:425 src/itemlistformaction.cpp:1494
 msgid "Error: no item selected!"
 msgstr ""
 
 #: src/itemlistformaction.cpp:458 src/itemlistformaction.cpp:467
 #: src/itemlistformaction.cpp:491 src/itemviewformaction.cpp:384
 #: src/itemviewformaction.cpp:396 src/itemviewformaction.cpp:429
-#: src/view.cpp:811 src/view.cpp:882
+#: src/view.cpp:797 src/view.cpp:868
 msgid "No unread items."
 msgstr ""
 
 #: src/itemlistformaction.cpp:475 src/itemviewformaction.cpp:407
-#: src/view.cpp:953
+#: src/view.cpp:939
 msgid "Already on last item."
 msgstr ""
 
 #: src/itemlistformaction.cpp:484 src/itemviewformaction.cpp:418
-#: src/view.cpp:919
+#: src/view.cpp:905
 msgid "Already on first item."
 msgstr ""
 
@@ -1113,7 +1113,7 @@ msgstr ""
 msgid "Flags updated."
 msgstr ""
 
-#: src/itemlistformaction.cpp:1101 src/view.cpp:454 src/view.cpp:477
+#: src/itemlistformaction.cpp:1101 src/view.cpp:445 src/view.cpp:468
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr ""
@@ -1125,52 +1125,52 @@ msgid_plural "%u days ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/itemlistformaction.cpp:1470 src/itemviewformaction.cpp:211
+#: src/itemlistformaction.cpp:1473 src/itemviewformaction.cpp:211
 #: src/itemviewformaction.cpp:631
 msgid "Aborted saving."
 msgstr ""
 
-#: src/itemlistformaction.cpp:1475 src/itemviewformaction.cpp:635
+#: src/itemlistformaction.cpp:1478 src/itemviewformaction.cpp:635
 #, c-format
 msgid "Saved article to %s"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1478 src/itemviewformaction.cpp:637
+#: src/itemlistformaction.cpp:1481 src/itemviewformaction.cpp:637
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1487
+#: src/itemlistformaction.cpp:1490
 msgid "Error: no filename provided"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1573
+#: src/itemlistformaction.cpp:1576
 #, c-format
 msgid "Query Feed - %s"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1580
+#: src/itemlistformaction.cpp:1583
 #, c-format
 msgid "Article List - %s"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1621
+#: src/itemlistformaction.cpp:1624
 msgid "yanq"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1643
+#: src/itemlistformaction.cpp:1646
 #, c-format
 msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1650
+#: src/itemlistformaction.cpp:1653
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1706
+#: src/itemlistformaction.cpp:1709
 #, c-format
 msgid "Error: Some filter attributes are not available in itemlist: %s"
 msgstr ""
@@ -1238,7 +1238,7 @@ msgstr ""
 msgid "Bottom"
 msgstr ""
 
-#: src/itemviewformaction.cpp:177 src/view.cpp:587
+#: src/itemviewformaction.cpp:177 src/view.cpp:578
 #, c-format
 msgid "Error while marking article as read: %s"
 msgstr ""
@@ -1433,258 +1433,262 @@ msgid "Mark download as deleted"
 msgstr ""
 
 #: src/keymap.cpp:331
-msgid "Purge finished and deleted downloads from queue"
+msgid "Reload the queue"
 msgstr ""
 
 #: src/keymap.cpp:338
-msgid "Toggle automatic download on/off"
+msgid "Purge finished and deleted downloads from queue"
 msgstr ""
 
 #: src/keymap.cpp:345
-msgid "Start player with currently selected download"
+msgid "Toggle automatic download on/off"
 msgstr ""
 
 #: src/keymap.cpp:352
-msgid "Mark file as finished (not played)"
+msgid "Start player with currently selected download"
 msgstr ""
 
 #: src/keymap.cpp:359
-msgid "Increase the number of concurrent downloads"
+msgid "Mark file as finished (not played)"
 msgstr ""
 
 #: src/keymap.cpp:366
-msgid "Decrease the number of concurrent downloads"
+msgid "Increase the number of concurrent downloads"
 msgstr ""
 
 #: src/keymap.cpp:373
-msgid "Redraw screen"
+msgid "Decrease the number of concurrent downloads"
 msgstr ""
 
 #: src/keymap.cpp:380
-msgid "Open the commandline"
+msgid "Redraw screen"
 msgstr ""
 
 #: src/keymap.cpp:387
-msgid "Set a filter"
+msgid "Open the commandline"
 msgstr ""
 
 #: src/keymap.cpp:394
-msgid "Select a predefined filter"
+msgid "Set a filter"
 msgstr ""
 
 #: src/keymap.cpp:401
-msgid "Clear currently set filter"
+msgid "Select a predefined filter"
 msgstr ""
 
 #: src/keymap.cpp:408
-msgid "Bookmark current link/article"
+msgid "Clear currently set filter"
 msgstr ""
 
 #: src/keymap.cpp:415
-msgid "Edit flags"
+msgid "Bookmark current link/article"
 msgstr ""
 
 #: src/keymap.cpp:422
-msgid "Go to next feed"
+msgid "Edit flags"
 msgstr ""
 
 #: src/keymap.cpp:429
-msgid "Go to previous feed"
+msgid "Go to next feed"
 msgstr ""
 
 #: src/keymap.cpp:436
-msgid "Go to next unread feed"
+msgid "Go to previous feed"
 msgstr ""
 
 #: src/keymap.cpp:443
-msgid "Go to previous unread feed"
+msgid "Go to next unread feed"
 msgstr ""
 
 #: src/keymap.cpp:450
-msgid "Call a macro"
+msgid "Go to previous unread feed"
 msgstr ""
 
 #: src/keymap.cpp:457
-msgid "Delete article"
+msgid "Call a macro"
 msgstr ""
 
 #: src/keymap.cpp:464
-msgid "Delete all articles"
+msgid "Delete article"
 msgstr ""
 
 #: src/keymap.cpp:471
-msgid "Purge deleted articles"
+msgid "Delete all articles"
 msgstr ""
 
 #: src/keymap.cpp:478
-msgid "Edit subscribed URLs"
+msgid "Purge deleted articles"
 msgstr ""
 
 #: src/keymap.cpp:485
-msgid "Close currently selected dialog"
+msgid "Edit subscribed URLs"
 msgstr ""
 
 #: src/keymap.cpp:492
-msgid "View list of open dialogs"
+msgid "Close currently selected dialog"
 msgstr ""
 
 #: src/keymap.cpp:499
-msgid "Go to next dialog"
+msgid "View list of open dialogs"
 msgstr ""
 
 #: src/keymap.cpp:506
-msgid "Go to previous dialog"
+msgid "Go to next dialog"
 msgstr ""
 
 #: src/keymap.cpp:513
-msgid "Pipe article to command"
+msgid "Go to previous dialog"
 msgstr ""
 
 #: src/keymap.cpp:520
-msgid "Sort current list"
+msgid "Pipe article to command"
 msgstr ""
 
 #: src/keymap.cpp:527
+msgid "Sort current list"
+msgstr ""
+
+#: src/keymap.cpp:534
 msgid "Sort current list (reverse)"
 msgstr ""
 
-#: src/keymap.cpp:535
+#: src/keymap.cpp:542
 msgid "Return to previous search results (if any)"
 msgstr ""
 
-#: src/keymap.cpp:542
+#: src/keymap.cpp:549
 msgid "Go to the feed of the article"
 msgstr ""
 
-#: src/keymap.cpp:550
+#: src/keymap.cpp:557
 msgid "Open URL 1"
 msgstr ""
 
-#: src/keymap.cpp:557
+#: src/keymap.cpp:564
 msgid "Open URL 2"
 msgstr ""
 
-#: src/keymap.cpp:564
+#: src/keymap.cpp:571
 msgid "Open URL 3"
 msgstr ""
 
-#: src/keymap.cpp:571
+#: src/keymap.cpp:578
 msgid "Open URL 4"
 msgstr ""
 
-#: src/keymap.cpp:578
+#: src/keymap.cpp:585
 msgid "Open URL 5"
 msgstr ""
 
-#: src/keymap.cpp:585
+#: src/keymap.cpp:592
 msgid "Open URL 6"
 msgstr ""
 
-#: src/keymap.cpp:592
+#: src/keymap.cpp:599
 msgid "Open URL 7"
 msgstr ""
 
-#: src/keymap.cpp:599
+#: src/keymap.cpp:606
 msgid "Open URL 8"
 msgstr ""
 
-#: src/keymap.cpp:606
+#: src/keymap.cpp:613
 msgid "Open URL 9"
 msgstr ""
 
-#: src/keymap.cpp:613
+#: src/keymap.cpp:620
 msgid "Open URL 10"
 msgstr ""
 
-#: src/keymap.cpp:621
+#: src/keymap.cpp:628
 msgid "Start cmdline with 1"
 msgstr ""
 
-#: src/keymap.cpp:628
+#: src/keymap.cpp:635
 msgid "Start cmdline with 2"
 msgstr ""
 
-#: src/keymap.cpp:635
+#: src/keymap.cpp:642
 msgid "Start cmdline with 3"
 msgstr ""
 
-#: src/keymap.cpp:642
+#: src/keymap.cpp:649
 msgid "Start cmdline with 4"
 msgstr ""
 
-#: src/keymap.cpp:649
+#: src/keymap.cpp:656
 msgid "Start cmdline with 5"
 msgstr ""
 
-#: src/keymap.cpp:656
+#: src/keymap.cpp:663
 msgid "Start cmdline with 6"
 msgstr ""
 
-#: src/keymap.cpp:663
+#: src/keymap.cpp:670
 msgid "Start cmdline with 7"
 msgstr ""
 
-#: src/keymap.cpp:670
+#: src/keymap.cpp:677
 msgid "Start cmdline with 8"
 msgstr ""
 
-#: src/keymap.cpp:677
+#: src/keymap.cpp:684
 msgid "Start cmdline with 9"
 msgstr ""
 
-#: src/keymap.cpp:685
+#: src/keymap.cpp:692
 msgid "Move to the previous entry"
 msgstr ""
 
-#: src/keymap.cpp:692
+#: src/keymap.cpp:699
 msgid "Move to the next entry"
 msgstr ""
 
-#: src/keymap.cpp:699
+#: src/keymap.cpp:706
 msgid "Move to the previous page"
 msgstr ""
 
-#: src/keymap.cpp:706
+#: src/keymap.cpp:713
 msgid "Move to the next page"
 msgstr ""
 
-#: src/keymap.cpp:713
+#: src/keymap.cpp:720
 msgid "Move half page up"
 msgstr ""
 
-#: src/keymap.cpp:720
+#: src/keymap.cpp:727
 msgid "Move half page down"
 msgstr ""
 
-#: src/keymap.cpp:728
+#: src/keymap.cpp:735
 msgid "Move to the start of page/list"
 msgstr ""
 
-#: src/keymap.cpp:735
+#: src/keymap.cpp:742
 msgid "Move to the end of page/list"
 msgstr ""
 
-#: src/keymap.cpp:1142 src/keymap.cpp:1168 src/keymap.cpp:1197
+#: src/keymap.cpp:1149 src/keymap.cpp:1175 src/keymap.cpp:1204
 #: src/regexmanager.cpp:137
 #, c-format
 msgid "`%s' is not a valid context"
 msgstr ""
 
-#: src/keymap.cpp:1148
+#: src/keymap.cpp:1155
 #, c-format
 msgid "`%s' is not a valid key command"
 msgstr ""
 
-#: src/keymap.cpp:1183
+#: src/keymap.cpp:1190
 msgid "failed to parse binding"
 msgstr ""
 
-#: src/keymap.cpp:1211
+#: src/keymap.cpp:1218
 #, c-format
 msgid "unknown context: %s"
 msgstr ""
 
-#: src/keymap.cpp:1284
+#: src/keymap.cpp:1291
 #, c-format
 msgid "failed to parse operation sequence for %s"
 msgstr ""
@@ -1704,16 +1708,35 @@ msgstr ""
 msgid "Authentication check using %s failed (HTTP response code: %s)"
 msgstr ""
 
-#: src/opml.cpp:227
+#: src/opml.cpp:125 src/opmlurlreader.cpp:80
+#, c-format
+msgid ""
+"Skipping pipe URL '%s' for security reasons; if you trust it, add 'exec:%s' "
+"to your urls file manually."
+msgstr ""
+
+#: src/opml.cpp:149
+#, c-format
+msgid ""
+"Ignoring 'filtercmd' attribute '%s' on URL '%s' for security reasons; if you "
+"trust it, replace '%s' with 'filter:%s:%s' in your urls file manually."
+msgstr ""
+
+#: src/opml.cpp:164 src/opmlurlreader.cpp:90
+#, c-format
+msgid "Skipping URL with unsupported schema: '%s'"
+msgstr ""
+
+#: src/opml.cpp:261
 #, c-format
 msgid "Error: failed to parse OPML file \"%s\""
 msgstr ""
 
-#: src/opml.cpp:235
+#: src/opml.cpp:270
 msgid "the <opml> root element is missing"
 msgstr ""
 
-#: src/opml.cpp:256
+#: src/opml.cpp:291
 msgid "the <body> element in the <opml> root element is missing"
 msgstr ""
 
@@ -1761,65 +1784,65 @@ msgstr ""
 msgid "start download on startup"
 msgstr ""
 
-#: src/pbview.cpp:65
+#: src/pbview.cpp:66
 #, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total"
 msgstr ""
 
-#: src/pbview.cpp:72
+#: src/pbview.cpp:73
 #, c-format
 msgid " - %u parallel downloads"
 msgstr ""
 
-#: src/pbview.cpp:192
+#: src/pbview.cpp:194
 msgid "Error: can't quit: download(s) in progress."
 msgstr ""
 
-#: src/pbview.cpp:227
+#: src/pbview.cpp:229
 msgid "Error: download needs to be finished before the file can be played."
 msgstr ""
 
-#: src/pbview.cpp:275
+#: src/pbview.cpp:277 src/pbview.cpp:286
 msgid "Error: unable to perform operation: download(s) in progress."
 msgstr ""
 
-#: src/pbview.cpp:313
+#: src/pbview.cpp:324
 msgid "KB/s"
 msgstr ""
 
-#: src/pbview.cpp:315
+#: src/pbview.cpp:326
 msgid "MB/s"
 msgstr ""
 
-#: src/pbview.cpp:317
+#: src/pbview.cpp:328
 msgid "GB/s"
 msgstr ""
 
-#: src/pbview.cpp:428
+#: src/pbview.cpp:440
 msgid "Download"
 msgstr ""
 
-#: src/pbview.cpp:430
+#: src/pbview.cpp:442
 msgid "Delete"
 msgstr ""
 
-#: src/pbview.cpp:431
+#: src/pbview.cpp:443
 msgid "Purge Finished"
 msgstr ""
 
-#: src/pbview.cpp:432
+#: src/pbview.cpp:444
 msgid "Toggle Automatic Download"
 msgstr ""
 
-#: src/pbview.cpp:433
+#: src/pbview.cpp:445
 msgid "Play"
 msgstr ""
 
-#: src/pbview.cpp:434
+#: src/pbview.cpp:446
 msgid "Mark as Finished"
 msgstr ""
 
-#: src/queueloader.cpp:125
+#: src/queueloader.cpp:130
 #, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when Podboat "
@@ -1850,7 +1873,10 @@ msgstr ""
 msgid "too few arguments"
 msgstr ""
 
-#: src/rssitem.cpp:125
+#. i18n: do not translate this string. It was a mistake to make it
+#. translatable, but undoing it might break some users' filters.
+#. See 44f8ceed2371de42bac533733bdd18dab4f41c67.
+#: src/rssitem.cpp:128
 msgid "%a, %d %b %Y %T %z"
 msgstr ""
 
@@ -1876,11 +1902,13 @@ msgid "Select Filter"
 msgstr ""
 
 #: src/textstyle.cpp:18 src/textstyle.cpp:23
+#: rust/libnewsboat/src/textstyle.rs:23 rust/libnewsboat/src/textstyle.rs:32
 #, c-format
 msgid "`%s' is not a valid color"
 msgstr ""
 
 #: src/textstyle.cpp:31
+#: rust/libnewsboat/src/textstyle.rs:44
 #, c-format
 msgid "`%s' is not a valid attribute"
 msgstr ""
@@ -1897,47 +1925,47 @@ msgstr ""
 msgid "URLs"
 msgstr ""
 
-#: src/utils.cpp:763
+#: src/utils.cpp:792
 #, c-format
 msgid "Failed to open file: %s"
 msgstr ""
 
-#: src/utils.cpp:767
+#: src/utils.cpp:796
 #, c-format
 msgid "Failed to read line %u: %s"
 msgstr ""
 
-#: src/view.cpp:163
+#: src/view.cpp:162
 msgid "Error: failed to execute startup commands"
 msgstr ""
 
-#: src/view.cpp:310
+#: src/view.cpp:307
 msgid "Operation ignored in modal dialog"
 msgstr ""
 
-#: src/view.cpp:440
+#: src/view.cpp:431
 #, c-format
 msgid "Running browser: %s"
 msgstr ""
 
-#: src/view.cpp:507 src/view.cpp:533
+#: src/view.cpp:498 src/view.cpp:524
 msgid "Error: feed contains no items!"
 msgstr ""
 
-#: src/view.cpp:676
+#: src/view.cpp:661
 msgid "No tags defined."
 msgstr ""
 
-#: src/view.cpp:1012
+#: src/view.cpp:998
 msgid "Updating query feed..."
 msgstr ""
 
-#: src/view.cpp:1025
+#: src/view.cpp:1011
 #, c-format
 msgid "Error: couldn't prepare query feed: %s"
 msgstr ""
 
-#: rss/atomparser.cpp:17 rss/parser.cpp:397 rss/rss09xparser.cpp:21
+#: rss/atomparser.cpp:17 rss/parser.cpp:394 rss/rss09xparser.cpp:21
 #: rss/rss10parser.cpp:18 rss/rss20parser.cpp:17
 msgid "XML root node is NULL"
 msgstr ""
@@ -1946,23 +1974,23 @@ msgstr ""
 msgid "could not parse buffer"
 msgstr ""
 
-#: rss/parser.cpp:305
+#: rss/parser.cpp:304
 msgid "could not parse file"
 msgstr ""
 
-#: rss/parser.cpp:330
+#: rss/parser.cpp:327
 msgid "no RSS version"
 msgstr ""
 
-#: rss/parser.cpp:346
+#: rss/parser.cpp:343
 msgid "invalid RSS version"
 msgstr ""
 
-#: rss/parser.cpp:367 rss/parser.cpp:378
+#: rss/parser.cpp:364 rss/parser.cpp:375
 msgid "invalid Atom version"
 msgstr ""
 
-#: rss/parser.cpp:383
+#: rss/parser.cpp:380
 msgid "no Atom version"
 msgstr ""
 
@@ -1976,6 +2004,10 @@ msgstr ""
 
 #: rust/libnewsboat/src/cliargsparser.rs:236
 msgid "%s: %s: invalid loglevel value"
+msgstr ""
+
+#: rust/libnewsboat/src/colormanager.rs:97
+msgid "`%s' is not a valid configuration element"
 msgstr ""
 
 #: rust/libnewsboat/src/configpaths.rs:85
