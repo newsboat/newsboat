@@ -61,6 +61,8 @@
 #include "ttrssapi.h"
 #include "utils.h"
 #include "view.h"
+#include "cacheurlreader.h"
+#include "cacheapi.h"
 
 namespace newsboat {
 
@@ -371,7 +373,16 @@ int Controller::run(const CliArgsParser& args)
 	if (api) {
 		if (!api->authenticate()) {
 			std::cerr << _("Authentication failed.") << std::endl;
-			return EXIT_FAILURE;
+			std::cerr << _("Do you want to use offline mode? [y/n]") << std::endl;
+			char res;
+			std::cin >> res;
+			if (res == 'y') {
+				api = std::make_unique<CacheApi>(cfg, rsscache.get());
+				urlcfg = std::make_unique<CacheUrlReader>(FileUrlReader(configpaths.url_file()),
+						api.get());
+			} else {
+				return EXIT_FAILURE;
+			}
 		}
 	}
 	const auto error_message = urlcfg->reload();

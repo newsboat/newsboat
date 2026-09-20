@@ -101,6 +101,20 @@ static int single_string_callback(void* handler,
 	return 0;
 }
 
+static int string_vector_callback(void* myVec,
+	int argc,
+	char** argv,
+	char** /* azColName */)
+{
+	auto vec = static_cast<std::vector<std::string>*>(myVec);
+	assert(argc == 1);
+	assert(argv[0] != nullptr);
+
+	vec->push_back(argv[0]);
+
+	return 0;
+}
+
 static int rssfeed_callback(void* myfeed, int argc, char** argv,
 	char** /* azColName */)
 {
@@ -1206,6 +1220,16 @@ std::string Cache::fetch_description(const RssItem& item)
 
 	run_sql(query, store_description, &description);
 	return description;
+}
+
+std::vector<std::string> Cache::fetch_feed_urls()
+{
+	std::vector<std::string> urls;
+
+	std::string query = "SELECT rssurl FROM rss_feed";
+	run_sql(query, string_vector_callback, &urls);
+
+	return urls;
 }
 
 SchemaVersion Cache::get_schema_version()
