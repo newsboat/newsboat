@@ -13,5 +13,5 @@ fn t_run_program_works_for_large_inputs() {
     sleep(std::time::Duration::from_secs(1));
     assert!(runner.is_finished());
     let result = runner.join().expect("Runner thread panicked");
-    assert_eq!(result, large_input);
+    assert_eq!(result, (large_input, 0));
 }
