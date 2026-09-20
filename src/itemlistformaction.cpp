@@ -990,15 +990,7 @@ void ItemListFormAction::qna_start_search()
 		return;
 	}
 
-	if (items.empty()) {
-		v.get_statusline().show_error(_("No results."));
-		return;
-	}
-
-	std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(rsscache, ""));
-	search_dummy_feed->set_search_feed(true);
-	search_dummy_feed->add_items(items);
-	v.push_searchresult(search_dummy_feed, searchphrase);
+	v.push_searchresult(std::move(items), searchphrase);
 }
 
 void ItemListFormAction::do_update_visible_items()

@@ -19,7 +19,6 @@ class FeedListFormAction : public ListFormAction {
 public:
 	FeedListFormAction(View&,
 		std::string formstr,
-		Cache* cc,
 		FilterContainer& f,
 		ConfigContainer* cfg,
 		RegexManager& r);
@@ -107,8 +106,6 @@ private:
 	FilterContainer& filter_container;
 
 	std::optional<FeedSortStrategy> old_sort_strategy;
-
-	Cache* cache;
 };
 
 } // namespace newsboat
