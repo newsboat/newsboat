@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2026-06-05 19:02+0300\n"
+"POT-Creation-Date: 2026-09-20 15:29+0300\n"
 "PO-Revision-Date: 2026-06-07 18:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
@@ -216,23 +216,18 @@ msgstr "newsboat::MatcherException şu iletiyle yakalandı: %s"
 msgid "Caught newsboat::Exception with message: %s"
 msgstr "newsboat::Exception şu iletiyle yakalandı: %s"
 
-#: src/colormanager.cpp:94
-#, c-format
-msgid "`%s' is not a valid configuration element"
-msgstr "'%s', geçerli bir yapılandırma ögesi değil"
-
-#: src/configcontainer.cpp:175
+#: src/configcontainer.cpp:176
 #, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
 "Newsboat: Yeniden yükleme tamamlandı, %f okunmamış besleme (toplamda %n "
 "okunmamış yazı)"
 
-#: src/configcontainer.cpp:204
+#: src/configcontainer.cpp:205
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
 msgstr "%4i [%6dMB/%6tMB] [%%%-6p] [%12K] %-20S %u -> %F"
 
-#: src/configcontainer.cpp:316
+#: src/configcontainer.cpp:317
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
@@ -240,11 +235,11 @@ msgstr ""
 "%N %V - '%T' beslemesindeki yazılar (%u okunmamış, %t toplam)%?F? süzgeçle "
 "eşleşen '%F'&? - %U"
 
-#: src/configcontainer.cpp:320
+#: src/configcontainer.cpp:321
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Diyalog"
 
-#: src/configcontainer.cpp:323
+#: src/configcontainer.cpp:324
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
@@ -252,23 +247,23 @@ msgstr ""
 "%N %V - %?F?Beslemeler&Beslemeleriniz? (%u okunmamış, %t toplam)%?F? "
 "süzgeçle eşleşen '%F'&?%?T? - künye `%T'&?"
 
-#: src/configcontainer.cpp:327
+#: src/configcontainer.cpp:328
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Aç&Kaydet? - %f"
 
-#: src/configcontainer.cpp:331
+#: src/configcontainer.cpp:332
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
 msgstr "%N %V - %?O?Dizin Aç&Dosyayı Kaydet? - %f"
 
-#: src/configcontainer.cpp:335
+#: src/configcontainer.cpp:336
 msgid "%N %V - Help"
 msgstr "%N %V - Yardım"
 
-#: src/configcontainer.cpp:338
+#: src/configcontainer.cpp:339
 msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - '%T' yazısı (%u okunmamış, %t toplam) - %U"
 
-#: src/configcontainer.cpp:342
+#: src/configcontainer.cpp:343
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
@@ -276,19 +271,19 @@ msgstr ""
 "%N %V - '%s' için%?F? '%F' süzgeciyle eşleşen&? arama sonuçları (%u "
 "okunmamış, %t toplam)"
 
-#: src/configcontainer.cpp:346
+#: src/configcontainer.cpp:347
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Süzgeç Seç"
 
-#: src/configcontainer.cpp:350
+#: src/configcontainer.cpp:351
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Künye Seç"
 
-#: src/configcontainer.cpp:354
+#: src/configcontainer.cpp:355
 msgid "%N %V - URLs"
 msgstr "%N %V - URL'ler"
 
-#: src/configcontainer.cpp:491
+#: src/configcontainer.cpp:492
 #, c-format
 msgid "unknown config option: %s"
 msgstr "bilinmeyen yapılandırma seçeneği: %s"
@@ -353,9 +348,9 @@ msgid "Loading configuration..."
 msgstr "Yapılandırma yükleniyor..."
 
 #: src/controller.cpp:187 src/controller.cpp:237 src/controller.cpp:381
-#: src/controller.cpp:442 src/controller.cpp:446 src/controller.cpp:486
-#: src/controller.cpp:493 src/controller.cpp:508 src/controller.cpp:526
-#: src/controller.cpp:537 src/controller.cpp:581 src/pbcontroller.cpp:292
+#: src/controller.cpp:442 src/controller.cpp:446 src/controller.cpp:485
+#: src/controller.cpp:492 src/controller.cpp:507 src/controller.cpp:525
+#: src/controller.cpp:536 src/controller.cpp:580 src/pbcontroller.cpp:292
 #: src/pbcontroller.cpp:308
 msgid "done."
 msgstr "bitti."
@@ -533,23 +528,23 @@ msgstr "Veritabanından beslemeler alınırken hata oluştu: "
 msgid "Error while loading feed '%s': %s"
 msgstr "'%s' beslemesi yüklenirken hata: %s"
 
-#: src/controller.cpp:490 src/controller.cpp:574
+#: src/controller.cpp:489 src/controller.cpp:573
 msgid "Cleaning up cache..."
 msgstr "Önbellek temizleniyor..."
 
-#: src/controller.cpp:501
+#: src/controller.cpp:500
 msgid "Prepopulating query feeds..."
 msgstr "Sorgu beslemesi güncelleniyor..."
 
-#: src/controller.cpp:523
+#: src/controller.cpp:522
 msgid "Importing list of read articles..."
 msgstr "Okunmuş yazıların listesi içe aktarılıyor..."
 
-#: src/controller.cpp:534
+#: src/controller.cpp:533
 msgid "Exporting list of read articles..."
 msgstr "Okunmuş yazıların listesi dışa aktarılıyor..."
 
-#: src/controller.cpp:589
+#: src/controller.cpp:588
 #, c-format
 msgid ""
 "%<PRIu64> unreachable feeds found. See `cleanup-on-quit` in newsboat(1) for "
@@ -558,55 +553,60 @@ msgstr ""
 "%<PRIu64> erişilemeyen besleme bulundu. Ayrıntılar için newsboat(1) içinde "
 "'cleanup-on-quit'e bakın."
 
-#: src/controller.cpp:593
+#: src/controller.cpp:592
 msgid "Press any key to continue"
 msgstr "Sürdürmek için bir düğmeye basın"
 
-#: src/controller.cpp:601
+#: src/controller.cpp:600
 msgid "failed: "
 msgstr "başarısız: "
 
-#: src/controller.cpp:625
+#: src/controller.cpp:624
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Hata: Tüm beslemeler okundu olarak imlenemedi: %s"
 
-#: src/controller.cpp:727 src/itemutils.cpp:34
+#: src/controller.cpp:729 src/itemutils.cpp:34
 #, c-format
 msgid "Generated filename (%s) is used already."
 msgstr "Oluşturulan dosya adı (%s) halihazırda kullanımda."
 
-#: src/controller.cpp:732 src/itemutils.cpp:39
+#: src/controller.cpp:734 src/itemutils.cpp:39
 #, c-format
 msgid "Failed to open queue file: %s."
 msgstr "Kuyruk dosyası açılamadı: %s."
 
-#: src/controller.cpp:754
+#: src/controller.cpp:738 src/itemutils.cpp:43
+#, fuzzy
+msgid "Item has a non-HTTP enclosure URL."
+msgstr "Ögenin bir ilişiği yok."
+
+#: src/controller.cpp:760
 #, c-format
 msgid "Error importing OPML to urls file %s: %s"
 msgstr "%s URL'ler dosyasını açmak için OPML içe aktarılırken hata: %s"
 
-#: src/controller.cpp:763
+#: src/controller.cpp:769
 #, c-format
 msgid "An error occurred while parsing %s: %s"
 msgstr "%s ayrıştırılırken bir hata oluştu: %s"
 
-#: src/controller.cpp:770
+#: src/controller.cpp:776
 #, c-format
 msgid "Import of %s finished."
 msgstr "%s içe aktarımı tamamlandı."
 
-#: src/controller.cpp:917
+#: src/controller.cpp:923
 #, c-format
 msgid "%u unread articles"
 msgstr "%u okunmamış yazı"
 
-#: src/controller.cpp:922
+#: src/controller.cpp:928
 #, c-format
 msgid "%s: %s: unknown command"
 msgstr "%s: %s: Bilinmeyen komut"
 
-#: src/controller.cpp:1025
+#: src/controller.cpp:1031
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Hata: Yapılandırma dosyası '%s' açılamadı!"
@@ -628,28 +628,9 @@ msgid "Error: you can't remove the feed list!"
 msgstr "Hata: Besleme listesini silemezsiniz!"
 
 #: src/dialogsformaction.cpp:121 src/feedlistformaction.cpp:1049
-#: src/itemlistformaction.cpp:1416 src/urlviewformaction.cpp:168
+#: src/itemlistformaction.cpp:1419 src/urlviewformaction.cpp:168
 msgid "Invalid position!"
 msgstr "Geçersiz konum!"
-
-#: src/dirbrowserformaction.cpp:268
-msgid "Directory: "
-msgstr "Dizin: "
-
-#: src/dirbrowserformaction.cpp:287 src/filebrowserformaction.cpp:303
-#: src/pbview.cpp:429 src/selectformaction.cpp:250 src/selectformaction.cpp:253
-msgid "Cancel"
-msgstr "İptal"
-
-#: src/dirbrowserformaction.cpp:288 src/filebrowserformaction.cpp:304
-#: src/itemlistformaction.cpp:1396 src/itemviewformaction.cpp:578
-msgid "Save"
-msgstr "Kaydet"
-
-#: src/dirbrowserformaction.cpp:339
-#, c-format
-msgid "Save Files - %s"
-msgstr "Dosyaları Kaydet - %s"
 
 #: src/download.cpp:58
 msgid "queued"
@@ -695,17 +676,17 @@ msgstr "yeniden adlandırma başarısız"
 msgid "unknown (bug)."
 msgstr "bilinmiyor (hata)."
 
-#: src/feedhqurlreader.cpp:46 src/oldreaderurlreader.cpp:47
+#: src/feedhqurlreader.cpp:35 src/oldreaderurlreader.cpp:36
 msgid "People you follow"
 msgstr "İzlediğiniz kişiler"
 
-#: src/feedhqurlreader.cpp:48 src/freshrssurlreader.cpp:32
-#: src/inoreaderurlreader.cpp:48 src/minifluxurlreader.cpp:31
-#: src/oldreaderurlreader.cpp:49
+#: src/feedhqurlreader.cpp:36 src/freshrssurlreader.cpp:29
+#: src/inoreaderurlreader.cpp:37 src/minifluxurlreader.cpp:27
+#: src/oldreaderurlreader.cpp:37
 msgid "Starred items"
 msgstr "Yıldızlı ögeler"
 
-#: src/feedhqurlreader.cpp:49 src/oldreaderurlreader.cpp:50
+#: src/feedhqurlreader.cpp:37 src/oldreaderurlreader.cpp:38
 msgid "Shared items"
 msgstr "Paylaşılan ögeler"
 
@@ -759,15 +740,16 @@ msgstr ""
 "Bu beslemeyi okundu imlemek istediğinize emin misiniz (e:Evet h:Hayır)? "
 
 #: src/feedlistformaction.cpp:301 src/feedlistformaction.cpp:386
-#: src/feedlistformaction.cpp:515 src/filebrowserformaction.cpp:99
+#: src/feedlistformaction.cpp:515 src/filebrowserformaction.cpp:113
 #: src/itemlistformaction.cpp:107 src/itemlistformaction.cpp:519
-#: src/view.cpp:189
+#: src/view.cpp:186
 msgid "yn"
 msgstr "eh"
 
 #: src/feedlistformaction.cpp:301 src/feedlistformaction.cpp:386
-#: src/feedlistformaction.cpp:515 src/itemlistformaction.cpp:107
-#: src/itemlistformaction.cpp:519 src/view.cpp:189
+#: src/feedlistformaction.cpp:515 src/filebrowserformaction.cpp:113
+#: src/itemlistformaction.cpp:107 src/itemlistformaction.cpp:519
+#: src/view.cpp:186
 msgid "y"
 msgstr "e"
 
@@ -818,7 +800,7 @@ msgid "Search for: "
 msgstr "Ara: "
 
 #: src/feedlistformaction.cpp:464 src/feedlistformaction.cpp:480
-#: src/formaction.cpp:721 src/formaction.cpp:723 src/itemlistformaction.cpp:671
+#: src/formaction.cpp:724 src/formaction.cpp:726 src/itemlistformaction.cpp:671
 #: src/itemlistformaction.cpp:687 src/itemrenderer.cpp:77
 msgid "Title: "
 msgstr "Başlık: "
@@ -828,7 +810,7 @@ msgstr "Başlık: "
 msgid "Filter: "
 msgstr "Süzgeç: "
 
-#: src/feedlistformaction.cpp:514 src/view.cpp:187
+#: src/feedlistformaction.cpp:514 src/view.cpp:184
 msgid "Do you really want to quit (y:Yes n:No)? "
 msgstr "Çıkmak istediğinize emin misiniz (e:Evet h:Hayır)? "
 
@@ -840,7 +822,7 @@ msgstr "Sorgu beslemeleri tarayıcıda açılamaz!"
 msgid "Cannot open exec feeds in the browser!"
 msgstr "Exec beslemeleri tarayıcıda açılamaz!"
 
-#: src/feedlistformaction.cpp:658 src/itemlistformaction.cpp:1392
+#: src/feedlistformaction.cpp:658 src/itemlistformaction.cpp:1395
 msgid "Clear filter"
 msgstr "Süzgeci temizle"
 
@@ -849,23 +831,23 @@ msgid "Clear tag"
 msgstr "Künyeyi temizle"
 
 #: src/feedlistformaction.cpp:663 src/helpformaction.cpp:162
-#: src/itemlistformaction.cpp:1394 src/itemviewformaction.cpp:577
-#: src/pbview.cpp:420 src/pbview.cpp:427 src/searchresultslistformaction.cpp:18
+#: src/itemlistformaction.cpp:1397 src/itemviewformaction.cpp:577
+#: src/pbview.cpp:432 src/pbview.cpp:439 src/searchresultslistformaction.cpp:18
 #: src/urlviewformaction.cpp:155
 msgid "Quit"
 msgstr "Çık"
 
-#: src/feedlistformaction.cpp:664 src/itemlistformaction.cpp:1395
+#: src/feedlistformaction.cpp:664 src/itemlistformaction.cpp:1398
 #: src/searchresultslistformaction.cpp:19
 msgid "Open"
 msgstr "Aç"
 
-#: src/feedlistformaction.cpp:665 src/itemlistformaction.cpp:1398
+#: src/feedlistformaction.cpp:665 src/itemlistformaction.cpp:1401
 #: src/itemviewformaction.cpp:579
 msgid "Next Unread"
 msgstr "Sonraki Okunmamış"
 
-#: src/feedlistformaction.cpp:666 src/itemlistformaction.cpp:1397
+#: src/feedlistformaction.cpp:666 src/itemlistformaction.cpp:1400
 msgid "Reload"
 msgstr "Yenile"
 
@@ -877,18 +859,18 @@ msgstr "Tümünü Yenile"
 msgid "Mark Read"
 msgstr "Okundu"
 
-#: src/feedlistformaction.cpp:669 src/itemlistformaction.cpp:1399
+#: src/feedlistformaction.cpp:669 src/itemlistformaction.cpp:1402
 msgid "Mark All Read"
 msgstr "Tümü Okundu"
 
 #: src/feedlistformaction.cpp:670 src/helpformaction.cpp:163
-#: src/itemlistformaction.cpp:1400 src/searchresultslistformaction.cpp:21
+#: src/itemlistformaction.cpp:1403 src/searchresultslistformaction.cpp:21
 msgid "Search"
 msgstr "Ara"
 
 #: src/feedlistformaction.cpp:671 src/helpformaction.cpp:187
-#: src/itemlistformaction.cpp:1401 src/itemviewformaction.cpp:582
-#: src/pbview.cpp:325 src/pbview.cpp:435 src/searchresultslistformaction.cpp:22
+#: src/itemlistformaction.cpp:1404 src/itemviewformaction.cpp:582
+#: src/pbview.cpp:336 src/pbview.cpp:447 src/searchresultslistformaction.cpp:22
 #: src/urlviewformaction.cpp:158
 msgid "Help"
 msgstr "Yardım"
@@ -906,7 +888,7 @@ msgstr "'%s' aranırken hata: %s"
 msgid "No results."
 msgstr "Sonuç yok."
 
-#: src/feedlistformaction.cpp:1044 src/itemlistformaction.cpp:1411
+#: src/feedlistformaction.cpp:1044 src/itemlistformaction.cpp:1414
 msgid "Position not visible!"
 msgstr "Konum görünür değil!"
 
@@ -915,7 +897,7 @@ msgstr "Konum görünür değil!"
 msgid "Feed List - %u unread, %u total"
 msgstr "Besleme Listesi - %u okunmamış, %u toplam"
 
-#: src/feedlistformaction.cpp:1140 src/itemlistformaction.cpp:1687
+#: src/feedlistformaction.cpp:1140 src/itemlistformaction.cpp:1690
 #, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
 msgstr "Hata: Süzgeç ifadesi '%s' ayrıştırılamadı: %s"
@@ -931,30 +913,51 @@ msgstr ""
 msgid "Error: unsupported URL: %s"
 msgstr "Hata: Desteklenmeyen URL: %s"
 
-#: src/filebrowserformaction.cpp:96
+#: src/filebrowserformaction.cpp:110
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
 msgstr "'%s' üzerine yazmak istediğinize emin misiniz (e:Evet h:Hayır)? "
 
-#: src/filebrowserformaction.cpp:99
-msgid "n"
-msgstr "h"
-
-#: src/filebrowserformaction.cpp:282
-msgid "File: "
+#: src/filebrowserformaction.cpp:352
+#, fuzzy
+msgid "Filename: "
 msgstr "Dosya: "
 
-#: src/filebrowserformaction.cpp:354
+#: src/filebrowserformaction.cpp:355
+msgid "Directory: "
+msgstr "Dizin: "
+
+#: src/filebrowserformaction.cpp:383 src/pbview.cpp:441
+#: src/selectformaction.cpp:250 src/selectformaction.cpp:253
+msgid "Cancel"
+msgstr "İptal"
+
+#: src/filebrowserformaction.cpp:384 src/itemlistformaction.cpp:1399
+#: src/itemviewformaction.cpp:578
+msgid "Save"
+msgstr "Kaydet"
+
+#: src/filebrowserformaction.cpp:385
+#, fuzzy
+msgid "Switch focus"
+msgstr "Araç takımları arasındaki odağı değiştir"
+
+#: src/filebrowserformaction.cpp:437
 #, c-format
 msgid "Save File - %s"
 msgstr "Dosyaya Kaydet - %s"
 
-#: src/fileurlreader.cpp:73 src/remoteapiurlreader.cpp:43
+#: src/filebrowserformaction.cpp:440
+#, c-format
+msgid "Save Files - %s"
+msgstr "Dosyaları Kaydet - %s"
+
+#: src/fileurlreader.cpp:60 src/remoteapiurlreader.cpp:41
 #, c-format
 msgid "Warning: Duplicate URL found: %s. Merging tags."
 msgstr "Uyarı: Yinelenmiş URL bulundu: %s. Künyeler birleştiriliyor."
 
-#: src/fileurlreader.cpp:99
+#: src/fileurlwriter.cpp:18
 #, c-format
 msgid "Error: failed to open file \"%s\": %s"
 msgstr "Hata: \"%s\" dosyası açılamadı: %s"
@@ -965,88 +968,89 @@ msgstr "Hata: \"%s\" dosyası açılamadı: %s"
 msgid "couldn't parse filter expression `%s': %s"
 msgstr "süzgeç ifadesi '%s', ayrıştırılamadı: %s"
 
-#: src/formaction.cpp:60
+#: src/formaction.cpp:61
 #, c-format
 msgid "Operation \"%s\" not handled in dialog \"%s\""
 msgstr "\"%s\" işlemi \"%s\" içinde halledilmedi"
 
-#: src/formaction.cpp:100
+#: src/formaction.cpp:101
+#, c-format
 msgid "Too many arguments for %s"
 msgstr "%s için pek fazla argümon"
 
-#: src/formaction.cpp:168
+#: src/formaction.cpp:169
 #, c-format
 msgid "Too many arguments to \"cmdline\" command: %s"
 msgstr "\"cmdline\" komutu için pek fazla argüman: %s"
 
-#: src/formaction.cpp:187
+#: src/formaction.cpp:188
 msgid "usage: set <config-option> <value>"
 msgstr "kullanım: set <yapılandırma-değeri> <değer>"
 
-#: src/formaction.cpp:313
+#: src/formaction.cpp:314
 #, c-format
 msgid "error setting '%s' to '%s': %s"
 msgstr "'%s', '%s' olarak ayarlanırken hata: %s"
 
-#: src/formaction.cpp:322
+#: src/formaction.cpp:323
 msgid "usage: set <variable>[=<value>]"
 msgstr "kullanım: set <değişken>[=<değer>]"
 
-#: src/formaction.cpp:336
+#: src/formaction.cpp:337
 msgid "usage: source <file> [...]"
 msgstr "kullanım: kaynak <dosya> [...]"
 
-#: src/formaction.cpp:353
+#: src/formaction.cpp:354
 msgid "usage: dumpconfig <file>"
 msgstr "kullanım: dumpconfig <dosya>"
 
-#: src/formaction.cpp:358
+#: src/formaction.cpp:359
 #, c-format
 msgid "Saved configuration to %s"
 msgstr "Yapılandırma, %s dosyasına kaydedildi"
 
-#: src/formaction.cpp:366
+#: src/formaction.cpp:367
 msgid "usage: exec <operation>"
 msgstr "kullanım: exec <işlem>"
 
-#: src/formaction.cpp:373
+#: src/formaction.cpp:374
 msgid "Operation not found"
 msgstr "İşlem bulunamadı"
 
-#: src/formaction.cpp:397
+#: src/formaction.cpp:398
 #, c-format
 msgid "Not a command: %s"
 msgstr "Bir komut değil: %s"
 
-#: src/formaction.cpp:669
+#: src/formaction.cpp:672
 msgid "Saving bookmark..."
 msgstr "Yer imi kaydediliyor..."
 
-#: src/formaction.cpp:675 src/formaction.cpp:747
+#: src/formaction.cpp:678 src/formaction.cpp:750
 msgid "Saved bookmark."
 msgstr "Yer imi kaydedildi."
 
-#: src/formaction.cpp:678 src/formaction.cpp:750
+#: src/formaction.cpp:681 src/formaction.cpp:753
 msgid "Error while saving bookmark: "
 msgstr "Yer imi kaydedilirken hata: "
 
-#: src/formaction.cpp:718
+#: src/formaction.cpp:721
 msgid "URL: "
 msgstr "URL: "
 
-#: src/formaction.cpp:725
+#: src/formaction.cpp:728
 msgid "Description: "
 msgstr "Açıklama: "
 
-#: src/formaction.cpp:726
+#: src/formaction.cpp:729
 msgid "Feed title: "
 msgstr "Besleme başlığı: "
 
-#: src/formaction.cpp:741
+#: src/formaction.cpp:744
 msgid "Saving bookmark on autopilot..."
 msgstr "Yer imi otomatik pilotta kaydediliyor..."
 
-#: src/formaction.cpp:882
+#: src/formaction.cpp:885
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -1074,15 +1078,15 @@ msgstr "gömülü flash:"
 msgid "link"
 msgstr "bağlantı"
 
-#: src/inoreaderurlreader.cpp:50
+#: src/inoreaderurlreader.cpp:38
 msgid "Broadcast items"
 msgstr "Ögeleri yayımla"
 
-#: src/inoreaderurlreader.cpp:51
+#: src/inoreaderurlreader.cpp:39
 msgid "Liked items"
 msgstr "Beğenilen ögeler"
 
-#: src/inoreaderurlreader.cpp:53
+#: src/inoreaderurlreader.cpp:40
 msgid "Saved web pages"
 msgstr "Kayıtlı web sayfaları"
 
@@ -1117,24 +1121,24 @@ msgstr "Adres listesi boş."
 msgid "Flags: "
 msgstr "Bayraklar: "
 
-#: src/itemlistformaction.cpp:425 src/itemlistformaction.cpp:1491
+#: src/itemlistformaction.cpp:425 src/itemlistformaction.cpp:1494
 msgid "Error: no item selected!"
 msgstr "Hata: Hiçbir öge seçilmedi!"
 
 #: src/itemlistformaction.cpp:458 src/itemlistformaction.cpp:467
 #: src/itemlistformaction.cpp:491 src/itemviewformaction.cpp:384
 #: src/itemviewformaction.cpp:396 src/itemviewformaction.cpp:429
-#: src/view.cpp:811 src/view.cpp:882
+#: src/view.cpp:797 src/view.cpp:868
 msgid "No unread items."
 msgstr "Okunmamış öge kalmadı."
 
 #: src/itemlistformaction.cpp:475 src/itemviewformaction.cpp:407
-#: src/view.cpp:953
+#: src/view.cpp:939
 msgid "Already on last item."
 msgstr "Halihazırda son öge üzerinde."
 
 #: src/itemlistformaction.cpp:484 src/itemviewformaction.cpp:418
-#: src/view.cpp:919
+#: src/view.cpp:905
 msgid "Already on first item."
 msgstr "Halihazırda ilk öge üzerinde."
 
@@ -1173,7 +1177,7 @@ msgstr ""
 msgid "Flags updated."
 msgstr "Bayraklar güncellendi."
 
-#: src/itemlistformaction.cpp:1101 src/view.cpp:454 src/view.cpp:477
+#: src/itemlistformaction.cpp:1101 src/view.cpp:445 src/view.cpp:468
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Hata: Süzgeç uygulanırken hata oluştu: %s"
@@ -1185,40 +1189,40 @@ msgid_plural "%u days ago"
 msgstr[0] "1 gün önce"
 msgstr[1] "%u gün önce"
 
-#: src/itemlistformaction.cpp:1470 src/itemviewformaction.cpp:211
+#: src/itemlistformaction.cpp:1473 src/itemviewformaction.cpp:211
 #: src/itemviewformaction.cpp:631
 msgid "Aborted saving."
 msgstr "Kaydetme iptal edildi."
 
-#: src/itemlistformaction.cpp:1475 src/itemviewformaction.cpp:635
+#: src/itemlistformaction.cpp:1478 src/itemviewformaction.cpp:635
 #, c-format
 msgid "Saved article to %s"
 msgstr "Yazı, %s konumuna kaydedildi"
 
-#: src/itemlistformaction.cpp:1478 src/itemviewformaction.cpp:637
+#: src/itemlistformaction.cpp:1481 src/itemviewformaction.cpp:637
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Hata: Yazı, %s konumuna kaydedilemedi"
 
-#: src/itemlistformaction.cpp:1487
+#: src/itemlistformaction.cpp:1490
 msgid "Error: no filename provided"
 msgstr "Hata: Bir dosya adı sağlanmadı"
 
-#: src/itemlistformaction.cpp:1573
+#: src/itemlistformaction.cpp:1576
 #, c-format
 msgid "Query Feed - %s"
 msgstr "Sorgu Beslemesi - %s"
 
-#: src/itemlistformaction.cpp:1580
+#: src/itemlistformaction.cpp:1583
 #, c-format
 msgid "Article List - %s"
 msgstr "Yazı Listesi - %s"
 
-#: src/itemlistformaction.cpp:1621
+#: src/itemlistformaction.cpp:1624
 msgid "yanq"
 msgstr "evha"
 
-#: src/itemlistformaction.cpp:1643
+#: src/itemlistformaction.cpp:1646
 #, c-format
 msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
@@ -1227,15 +1231,16 @@ msgstr ""
 "'%s' üzerine yaz ('%s' içinde)? Bunun gibi %d çakışma daha var (e:Evet "
 "v:Tümüne evet h:Hayır a:Tümüne hayır)"
 
-#: src/itemlistformaction.cpp:1650
+#: src/itemlistformaction.cpp:1653
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
 msgstr "'%s' üzerine yaz ('%s' içinde)? (e:Evet h:Hayır)"
 
-#: src/itemlistformaction.cpp:1706
+#: src/itemlistformaction.cpp:1709
 #, c-format
 msgid "Error: Some filter attributes are not available in itemlist: %s"
-msgstr "Hata: Öge listesinde kimi süzgeç öznitelikleri kullanılabilir değil: %s"
+msgstr ""
+"Hata: Öge listesinde kimi süzgeç öznitelikleri kullanılabilir değil: %s"
 
 #: src/itemrenderer.cpp:75
 msgid "Feed: "
@@ -1300,7 +1305,7 @@ msgstr "Yukarı"
 msgid "Bottom"
 msgstr "Aşağı"
 
-#: src/itemviewformaction.cpp:177 src/view.cpp:587
+#: src/itemviewformaction.cpp:177 src/view.cpp:578
 #, c-format
 msgid "Error while marking article as read: %s"
 msgstr "Yazı, okundu olarak imlenirken hata oluştu: %s"
@@ -1495,258 +1500,263 @@ msgid "Mark download as deleted"
 msgstr "İndirmeyi silindi olarak imle"
 
 #: src/keymap.cpp:331
+#, fuzzy
+msgid "Reload the queue"
+msgstr "İndirmeyi kuyruğa ekle"
+
+#: src/keymap.cpp:338
 msgid "Purge finished and deleted downloads from queue"
 msgstr "Tamamlanan ve silinen indirmeleri kuyruktan temizle"
 
-#: src/keymap.cpp:338
+#: src/keymap.cpp:345
 msgid "Toggle automatic download on/off"
 msgstr "Otomatik indirmeyi aç/kapat"
 
-#: src/keymap.cpp:345
+#: src/keymap.cpp:352
 msgid "Start player with currently selected download"
 msgstr "Oynatıcı seçilen indirme ile başlat"
 
-#: src/keymap.cpp:352
+#: src/keymap.cpp:359
 msgid "Mark file as finished (not played)"
 msgstr "Dosyayı bitmiş olarak imle (oynatılmadı)"
 
-#: src/keymap.cpp:359
+#: src/keymap.cpp:366
 msgid "Increase the number of concurrent downloads"
 msgstr "Eşzamanlı indirmelerin sayısını artır"
 
-#: src/keymap.cpp:366
+#: src/keymap.cpp:373
 msgid "Decrease the number of concurrent downloads"
 msgstr "Eşzamanlı indirmelerin sayısını azalt"
 
-#: src/keymap.cpp:373
+#: src/keymap.cpp:380
 msgid "Redraw screen"
 msgstr "Ekranı yeniden çiz"
 
-#: src/keymap.cpp:380
+#: src/keymap.cpp:387
 msgid "Open the commandline"
 msgstr "Komut satırını aç"
 
-#: src/keymap.cpp:387
+#: src/keymap.cpp:394
 msgid "Set a filter"
 msgstr "Süzgeç ayarla"
 
-#: src/keymap.cpp:394
+#: src/keymap.cpp:401
 msgid "Select a predefined filter"
 msgstr "Önceden tanımlanmış bir süzgeç seç"
 
-#: src/keymap.cpp:401
+#: src/keymap.cpp:408
 msgid "Clear currently set filter"
 msgstr "Geçerli süzgeci temizle"
 
-#: src/keymap.cpp:408
+#: src/keymap.cpp:415
 msgid "Bookmark current link/article"
 msgstr "Geçerli yazıyı yer imlerine ekle"
 
-#: src/keymap.cpp:415
+#: src/keymap.cpp:422
 msgid "Edit flags"
 msgstr "Bayrakları düzenle"
 
-#: src/keymap.cpp:422
+#: src/keymap.cpp:429
 msgid "Go to next feed"
 msgstr "Sonraki beslemeye git"
 
-#: src/keymap.cpp:429
+#: src/keymap.cpp:436
 msgid "Go to previous feed"
 msgstr "Önceki beslemeye git"
 
-#: src/keymap.cpp:436
+#: src/keymap.cpp:443
 msgid "Go to next unread feed"
 msgstr "Sonraki okunmamış beslemeye git"
 
-#: src/keymap.cpp:443
+#: src/keymap.cpp:450
 msgid "Go to previous unread feed"
 msgstr "Önceki okunmamış beslemeye git"
 
-#: src/keymap.cpp:450
+#: src/keymap.cpp:457
 msgid "Call a macro"
 msgstr "Makro çağır"
 
-#: src/keymap.cpp:457
+#: src/keymap.cpp:464
 msgid "Delete article"
 msgstr "Yazıyı sil"
 
-#: src/keymap.cpp:464
+#: src/keymap.cpp:471
 msgid "Delete all articles"
 msgstr "Tüm yazıları sil"
 
-#: src/keymap.cpp:471
+#: src/keymap.cpp:478
 msgid "Purge deleted articles"
 msgstr "Silinen yazıları temizle"
 
-#: src/keymap.cpp:478
+#: src/keymap.cpp:485
 msgid "Edit subscribed URLs"
 msgstr "Abone olunan adresleri düzenle"
 
-#: src/keymap.cpp:485
+#: src/keymap.cpp:492
 msgid "Close currently selected dialog"
 msgstr "Seçili iletişim kutusunu kapat"
 
-#: src/keymap.cpp:492
+#: src/keymap.cpp:499
 msgid "View list of open dialogs"
 msgstr "Açık iletişim kutularının listesini görüntüle"
 
-#: src/keymap.cpp:499
+#: src/keymap.cpp:506
 msgid "Go to next dialog"
 msgstr "Sonraki iletişim kutusuna git"
 
-#: src/keymap.cpp:506
+#: src/keymap.cpp:513
 msgid "Go to previous dialog"
 msgstr "Önceki iletişim kutusuna git"
 
-#: src/keymap.cpp:513
+#: src/keymap.cpp:520
 msgid "Pipe article to command"
 msgstr "Yazıyı komuta kanalla"
 
-#: src/keymap.cpp:520
+#: src/keymap.cpp:527
 msgid "Sort current list"
 msgstr "Mevcut listeyi sırala"
 
-#: src/keymap.cpp:527
+#: src/keymap.cpp:534
 msgid "Sort current list (reverse)"
 msgstr "Mevcut listeyi sırala (tersten)"
 
-#: src/keymap.cpp:535
+#: src/keymap.cpp:542
 msgid "Return to previous search results (if any)"
 msgstr "Önceki arama sonuçlarına dön (varsa)"
 
-#: src/keymap.cpp:542
+#: src/keymap.cpp:549
 msgid "Go to the feed of the article"
 msgstr "Yazının beslemesine git"
 
-#: src/keymap.cpp:550
+#: src/keymap.cpp:557
 msgid "Open URL 1"
 msgstr "Aç: URL 1"
 
-#: src/keymap.cpp:557
+#: src/keymap.cpp:564
 msgid "Open URL 2"
 msgstr "Aç: URL 2"
 
-#: src/keymap.cpp:564
+#: src/keymap.cpp:571
 msgid "Open URL 3"
 msgstr "Aç: URL 3"
 
-#: src/keymap.cpp:571
+#: src/keymap.cpp:578
 msgid "Open URL 4"
 msgstr "Aç: URL 4"
 
-#: src/keymap.cpp:578
+#: src/keymap.cpp:585
 msgid "Open URL 5"
 msgstr "Aç: URL 5"
 
-#: src/keymap.cpp:585
+#: src/keymap.cpp:592
 msgid "Open URL 6"
 msgstr "Aç: URL 6"
 
-#: src/keymap.cpp:592
+#: src/keymap.cpp:599
 msgid "Open URL 7"
 msgstr "Aç: URL 7"
 
-#: src/keymap.cpp:599
+#: src/keymap.cpp:606
 msgid "Open URL 8"
 msgstr "Aç: URL 8"
 
-#: src/keymap.cpp:606
+#: src/keymap.cpp:613
 msgid "Open URL 9"
 msgstr "Aç: URL 9"
 
-#: src/keymap.cpp:613
+#: src/keymap.cpp:620
 msgid "Open URL 10"
 msgstr "Aç: URL 10"
 
-#: src/keymap.cpp:621
+#: src/keymap.cpp:628
 msgid "Start cmdline with 1"
 msgstr "Komut satırını 1 ile başlat"
 
-#: src/keymap.cpp:628
+#: src/keymap.cpp:635
 msgid "Start cmdline with 2"
 msgstr "Komut satırını 2 ile başlat"
 
-#: src/keymap.cpp:635
+#: src/keymap.cpp:642
 msgid "Start cmdline with 3"
 msgstr "Komut satırını 3 ile başlat"
 
-#: src/keymap.cpp:642
+#: src/keymap.cpp:649
 msgid "Start cmdline with 4"
 msgstr "Komut satırını 4 ile başlat"
 
-#: src/keymap.cpp:649
+#: src/keymap.cpp:656
 msgid "Start cmdline with 5"
 msgstr "Komut satırını 5 ile başlat"
 
-#: src/keymap.cpp:656
+#: src/keymap.cpp:663
 msgid "Start cmdline with 6"
 msgstr "Komut satırını 6 ile başlat"
 
-#: src/keymap.cpp:663
+#: src/keymap.cpp:670
 msgid "Start cmdline with 7"
 msgstr "Komut satırını 7 ile başlat"
 
-#: src/keymap.cpp:670
+#: src/keymap.cpp:677
 msgid "Start cmdline with 8"
 msgstr "Komut satırını 8 ile başlat"
 
-#: src/keymap.cpp:677
+#: src/keymap.cpp:684
 msgid "Start cmdline with 9"
 msgstr "Komut satırını 9 ile başlat"
 
-#: src/keymap.cpp:685
+#: src/keymap.cpp:692
 msgid "Move to the previous entry"
 msgstr "Önceki girdiye taşı"
 
-#: src/keymap.cpp:692
+#: src/keymap.cpp:699
 msgid "Move to the next entry"
 msgstr "Sonraki girdiye taşı"
 
-#: src/keymap.cpp:699
+#: src/keymap.cpp:706
 msgid "Move to the previous page"
 msgstr "Önceki sayfaya taşı"
 
-#: src/keymap.cpp:706
+#: src/keymap.cpp:713
 msgid "Move to the next page"
 msgstr "Sonraki sayfaya taşı"
 
-#: src/keymap.cpp:713
+#: src/keymap.cpp:720
 msgid "Move half page up"
 msgstr "Yarım sayfa yukarı çık"
 
-#: src/keymap.cpp:720
+#: src/keymap.cpp:727
 msgid "Move half page down"
 msgstr "Yarım sayfa aşağı in"
 
-#: src/keymap.cpp:728
+#: src/keymap.cpp:735
 msgid "Move to the start of page/list"
 msgstr "Sayfanın/listenin başına taşı"
 
-#: src/keymap.cpp:735
+#: src/keymap.cpp:742
 msgid "Move to the end of page/list"
 msgstr "Sayfanın/listenin sonuna taşı"
 
-#: src/keymap.cpp:1142 src/keymap.cpp:1168 src/keymap.cpp:1197
+#: src/keymap.cpp:1149 src/keymap.cpp:1175 src/keymap.cpp:1204
 #: src/regexmanager.cpp:137
 #, c-format
 msgid "`%s' is not a valid context"
 msgstr "'%s', geçerli bir bağlam değil"
 
-#: src/keymap.cpp:1148
+#: src/keymap.cpp:1155
 #, c-format
 msgid "`%s' is not a valid key command"
 msgstr "'%s', geçerli bir düğme komutu değil"
 
-#: src/keymap.cpp:1183
+#: src/keymap.cpp:1190
 msgid "failed to parse binding"
 msgstr "bağıntı ayrıştırılamadı"
 
-#: src/keymap.cpp:1211
+#: src/keymap.cpp:1218
 #, c-format
 msgid "unknown context: %s"
 msgstr "bilinmeyen bağlam: %s"
 
-#: src/keymap.cpp:1284
+#: src/keymap.cpp:1291
 #, c-format
 msgid "failed to parse operation sequence for %s"
 msgstr "%s için işlem sırası ayrıştırılamadı"
@@ -1766,16 +1776,35 @@ msgstr "düzenli ifade '%s', geçersiz: %s"
 msgid "Authentication check using %s failed (HTTP response code: %s)"
 msgstr "%s kullanarak yetkilendirme denetimi başarısız (HTTP yanıtı kodu: %s)"
 
-#: src/opml.cpp:227
+#: src/opml.cpp:125 src/opmlurlreader.cpp:80
+#, c-format
+msgid ""
+"Skipping pipe URL '%s' for security reasons; if you trust it, add 'exec:%s' "
+"to your urls file manually."
+msgstr ""
+
+#: src/opml.cpp:149
+#, c-format
+msgid ""
+"Ignoring 'filtercmd' attribute '%s' on URL '%s' for security reasons; if you "
+"trust it, replace '%s' with 'filter:%s:%s' in your urls file manually."
+msgstr ""
+
+#: src/opml.cpp:164 src/opmlurlreader.cpp:90
+#, c-format
+msgid "Skipping URL with unsupported schema: '%s'"
+msgstr ""
+
+#: src/opml.cpp:261
 #, c-format
 msgid "Error: failed to parse OPML file \"%s\""
 msgstr "Hata: OPML dosyası \"%s\", ayrıştırılamadı"
 
-#: src/opml.cpp:235
+#: src/opml.cpp:270
 msgid "the <opml> root element is missing"
 msgstr "<opml> kök ögesi eksik"
 
-#: src/opml.cpp:256
+#: src/opml.cpp:291
 msgid "the <body> element in the <opml> root element is missing"
 msgstr "<opml> kök ögesindeki <body> ögesi eksik"
 
@@ -1827,65 +1856,65 @@ msgstr "<dosya>'yı kilit dosyası olarak kullan"
 msgid "start download on startup"
 msgstr "başlangıçta indirmeyi başlat"
 
-#: src/pbview.cpp:65
+#: src/pbview.cpp:66
 #, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total"
 msgstr "Kuyruk (%u indirme sürüyor, %u toplam) - %.2f %s toplam"
 
-#: src/pbview.cpp:72
+#: src/pbview.cpp:73
 #, c-format
 msgid " - %u parallel downloads"
 msgstr " - %u paralel indirme"
 
-#: src/pbview.cpp:192
+#: src/pbview.cpp:194
 msgid "Error: can't quit: download(s) in progress."
 msgstr "Hata: Çıkılamadı: Süren indirme(ler) var."
 
-#: src/pbview.cpp:227
+#: src/pbview.cpp:229
 msgid "Error: download needs to be finished before the file can be played."
 msgstr "Hata: Dosya oynatılmadan önce indirme işleminin bitmesi gerekiyor."
 
-#: src/pbview.cpp:275
+#: src/pbview.cpp:277 src/pbview.cpp:286
 msgid "Error: unable to perform operation: download(s) in progress."
 msgstr "Hata: İşlem gerçekleştirilemedi: Süren indirme(ler) var."
 
-#: src/pbview.cpp:313
+#: src/pbview.cpp:324
 msgid "KB/s"
 msgstr "KB/sn"
 
-#: src/pbview.cpp:315
+#: src/pbview.cpp:326
 msgid "MB/s"
 msgstr "MB/sn"
 
-#: src/pbview.cpp:317
+#: src/pbview.cpp:328
 msgid "GB/s"
 msgstr "GB/sn"
 
-#: src/pbview.cpp:428
+#: src/pbview.cpp:440
 msgid "Download"
 msgstr "İndir"
 
-#: src/pbview.cpp:430
+#: src/pbview.cpp:442
 msgid "Delete"
 msgstr "Sil"
 
-#: src/pbview.cpp:431
+#: src/pbview.cpp:443
 msgid "Purge Finished"
 msgstr "Tamamlananları Temizle"
 
-#: src/pbview.cpp:432
+#: src/pbview.cpp:444
 msgid "Toggle Automatic Download"
 msgstr "Otomatik İndirmeyi Aç/Kapat"
 
-#: src/pbview.cpp:433
+#: src/pbview.cpp:445
 msgid "Play"
 msgstr "Oynat"
 
-#: src/pbview.cpp:434
+#: src/pbview.cpp:446
 msgid "Mark as Finished"
 msgstr "Bitti olarak imle"
 
-#: src/queueloader.cpp:125
+#: src/queueloader.cpp:130
 #, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when Podboat "
@@ -1919,7 +1948,10 @@ msgstr "Hata: Geçersiz besleme!"
 msgid "too few arguments"
 msgstr "pek az değişken"
 
-#: src/rssitem.cpp:125
+#. i18n: do not translate this string. It was a mistake to make it
+#. translatable, but undoing it might break some users' filters.
+#. See 44f8ceed2371de42bac533733bdd18dab4f41c67.
+#: src/rssitem.cpp:128
 msgid "%a, %d %b %Y %T %z"
 msgstr "%a, %d %b %Y %T %z"
 
@@ -1945,11 +1977,12 @@ msgid "Select Filter"
 msgstr "Süzgeç Seç"
 
 #: src/textstyle.cpp:18 src/textstyle.cpp:23
+#: rust/libnewsboat/src/textstyle.rs:23 rust/libnewsboat/src/textstyle.rs:32
 #, c-format
 msgid "`%s' is not a valid color"
 msgstr "'%s', geçerli bir renk değil"
 
-#: src/textstyle.cpp:31
+#: src/textstyle.cpp:31 rust/libnewsboat/src/textstyle.rs:44
 #, c-format
 msgid "`%s' is not a valid attribute"
 msgstr "'%s', geçersiz bir öznitelik"
@@ -1966,47 +1999,47 @@ msgstr "Yer İmlerine Ekle"
 msgid "URLs"
 msgstr "Adresler"
 
-#: src/utils.cpp:763
+#: src/utils.cpp:792
 #, c-format
 msgid "Failed to open file: %s"
 msgstr "Dosya açılamadı: %s"
 
-#: src/utils.cpp:767
+#: src/utils.cpp:796
 #, c-format
 msgid "Failed to read line %u: %s"
 msgstr "%u. satır okunamadı: %s"
 
-#: src/view.cpp:163
+#: src/view.cpp:162
 msgid "Error: failed to execute startup commands"
 msgstr "Hata: Başlangıç komutları yürütülemedi"
 
-#: src/view.cpp:310
+#: src/view.cpp:307
 msgid "Operation ignored in modal dialog"
 msgstr "İşlem, kipsel iletişim kutusunda yok sayıldı"
 
-#: src/view.cpp:440
+#: src/view.cpp:431
 #, c-format
 msgid "Running browser: %s"
 msgstr "Tarayıcı çalışıyor: %s"
 
-#: src/view.cpp:507 src/view.cpp:533
+#: src/view.cpp:498 src/view.cpp:524
 msgid "Error: feed contains no items!"
 msgstr "Hata: Beslemede bir şey yok!"
 
-#: src/view.cpp:676
+#: src/view.cpp:661
 msgid "No tags defined."
 msgstr "Tanımlı hiçbir künye yok."
 
-#: src/view.cpp:1012
+#: src/view.cpp:998
 msgid "Updating query feed..."
 msgstr "Sorgu beslemesi güncelleniyor..."
 
-#: src/view.cpp:1025
+#: src/view.cpp:1011
 #, c-format
 msgid "Error: couldn't prepare query feed: %s"
 msgstr "Hata: Sorgu beslemesi hazırlanamadı: %s"
 
-#: rss/atomparser.cpp:17 rss/parser.cpp:397 rss/rss09xparser.cpp:21
+#: rss/atomparser.cpp:17 rss/parser.cpp:394 rss/rss09xparser.cpp:21
 #: rss/rss10parser.cpp:18 rss/rss20parser.cpp:17
 msgid "XML root node is NULL"
 msgstr "XML kök düğümü NULL"
@@ -2015,23 +2048,23 @@ msgstr "XML kök düğümü NULL"
 msgid "could not parse buffer"
 msgstr "arabellek ayrıştırılamadı"
 
-#: rss/parser.cpp:305
+#: rss/parser.cpp:304
 msgid "could not parse file"
 msgstr "dosya ayrıştırılamadı"
 
-#: rss/parser.cpp:330
+#: rss/parser.cpp:327
 msgid "no RSS version"
 msgstr "RSS sürümü yok"
 
-#: rss/parser.cpp:346
+#: rss/parser.cpp:343
 msgid "invalid RSS version"
 msgstr "geçersiz RSS sürümü"
 
-#: rss/parser.cpp:367 rss/parser.cpp:378
+#: rss/parser.cpp:364 rss/parser.cpp:375
 msgid "invalid Atom version"
 msgstr "geçersiz Atom sürümü"
 
-#: rss/parser.cpp:383
+#: rss/parser.cpp:380
 msgid "no Atom version"
 msgstr "Atom sürümü yok"
 
@@ -2046,6 +2079,10 @@ msgstr "desteklenmeyen besleme biçimi"
 #: rust/libnewsboat/src/cliargsparser.rs:236
 msgid "%s: %s: invalid loglevel value"
 msgstr "%s: %s: Geçersiz loglevel değeri"
+
+#: rust/libnewsboat/src/colormanager.rs:97
+msgid "`%s' is not a valid configuration element"
+msgstr "'%s', geçerli bir yapılandırma ögesi değil"
 
 #: rust/libnewsboat/src/configpaths.rs:85
 msgid ""
