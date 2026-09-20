@@ -191,6 +191,9 @@ std::string mt_strf_localtime(const std::string& format, time_t t);
 std::string preserve_quotes(const std::string& s);
 
 void wait_for_keypress();
+
+bool is_file_url(std::string_view url);
+bool has_supported_url_schema(const std::string& url);
 }
 
 } // namespace newsboat

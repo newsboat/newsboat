@@ -9,6 +9,7 @@
 #include "fileurlwriter.h"
 #include "logger.h"
 #include "rssfeed.h"
+#include "utils.h"
 
 namespace newsboat {
 
@@ -104,9 +105,7 @@ void rec_find_rss_outlines(
 				xmlFree(url_p);
 
 				LOG(Level::DEBUG,
-					"opml::import: found RSS outline with "
-					"url = "
-					"%s",
+					"opml::import: found RSS outline with url = %s",
 					url);
 
 				std::string nurl = std::string(url);
@@ -158,6 +157,15 @@ void rec_find_rss_outlines(
 					std::cerr << msg << std::endl;
 					LOG(Level::USERERROR, msg);
 					xmlFree(filtercmd);
+				}
+
+				if (!utils::has_supported_url_schema(url)) {
+					const auto msg =
+						strprintf::fmt(_("Skipping URL with unsupported schema: '%s'"), url);
+					std::cerr << msg << std::endl;
+					LOG(Level::USERERROR, msg);
+
+					skip_url = true;
 				}
 
 				if (!skip_url) {
@@ -222,7 +230,6 @@ void rec_find_rss_outlines(
 
 					xmlFree(category);
 				}
-
 			} else {
 				char* text = (char*)xmlGetProp(
 						node, (const xmlChar*)"text");

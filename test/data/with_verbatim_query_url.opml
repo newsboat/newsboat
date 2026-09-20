@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Example OPML that has a URL that starts with query:</title>
+    </head>
+
+    <body>
+        <outline title="tagged">
+            <outline xmlUrl="https://example.com/feed.atom" type="rss" title="Normal feed" />
+        </outline>
+        <outline type="rss" title="Everything" xmlUrl="query:Every possible article:title =~ &quot;.*&quot;" />
+    </body>
+</opml>

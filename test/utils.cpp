@@ -2299,3 +2299,30 @@ TEST_CASE("convert_text() converts text between encodings: ISO-8859-1 to utf8", 
 
 	verify_convert_text(input, "UTF-8", "ISO-8859-1", expected);
 }
+
+TEST_CASE("is_file_url() returns true if URL's schema is file://", "[utils]")
+{
+	REQUIRE(utils::is_file_url("file:///usr/local/share/example.rss"));
+	REQUIRE_FALSE(utils::is_file_url("https://newsboat.org/"));
+}
+
+TEST_CASE("has_supported_url_schema() is only true for HTTP(S) and file://", "[utils]")
+{
+	const std::vector<std::string> true_for {
+		"http://example.com/",
+		"https://newsboat.org/news.atom",
+		"file:///etc/hostname"
+	};
+	for (const auto& url : true_for) {
+		REQUIRE(utils::has_supported_url_schema(url));
+	}
+
+	const std::vector<std::string> false_for {
+		"mailto:newsboat@googlegroups.com",
+		"ftp://example.com/pub/newsboat",
+		"irc://irc.libera.chat/#newsboat"
+	};
+	for (const auto& url : false_for) {
+		REQUIRE_FALSE(utils::has_supported_url_schema(url));
+	}
+}
