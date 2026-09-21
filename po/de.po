@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-09-20 15:29+0300\n"
-"PO-Revision-Date: 2026-06-09 18:00+0200\n"
+"PO-Revision-Date: 2026-09-21 18:00+0200\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -581,9 +581,8 @@ msgid "Failed to open queue file: %s."
 msgstr "Öffnen der Warteschlangendatei fehlgeschlagen: %s."
 
 #: src/controller.cpp:738 src/itemutils.cpp:43
-#, fuzzy
 msgid "Item has a non-HTTP enclosure URL."
-msgstr "Der Eintrag hat keine Anlage."
+msgstr "Der Eintrag hat eine Anlage mit Nicht-HTTP-URL."
 
 #: src/controller.cpp:760
 #, c-format
@@ -923,9 +922,8 @@ msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
 msgstr "Wollen Sie wirklich „%s“ überschreiben (j:Ja n:Nein)? "
 
 #: src/filebrowserformaction.cpp:352
-#, fuzzy
 msgid "Filename: "
-msgstr "Datei: "
+msgstr "Dateiname: "
 
 #: src/filebrowserformaction.cpp:355
 msgid "Directory: "
@@ -942,9 +940,8 @@ msgid "Save"
 msgstr "Speichern"
 
 #: src/filebrowserformaction.cpp:385
-#, fuzzy
 msgid "Switch focus"
-msgstr "Fokus zwischen Steuerelementen wechseln"
+msgstr "Fokus wechseln"
 
 #: src/filebrowserformaction.cpp:437
 #, c-format
@@ -1509,9 +1506,8 @@ msgid "Mark download as deleted"
 msgstr "Download als gelöscht markieren"
 
 #: src/keymap.cpp:331
-#, fuzzy
 msgid "Reload the queue"
-msgstr "Download zur Warteschlange hinzufügen"
+msgstr "Warteschlange neu laden"
 
 #: src/keymap.cpp:338
 msgid "Purge finished and deleted downloads from queue"
@@ -1791,6 +1787,8 @@ msgid ""
 "Skipping pipe URL '%s' for security reasons; if you trust it, add 'exec:%s' "
 "to your urls file manually."
 msgstr ""
+"Die Pipe-URL „%s“ wurde aus Sicherheitsgründen übersprungen; wenn Sie dem "
+"Befehl vertrauen, können Sie „exec:%s“ Ihrer urls-Datei händisch hinzufügen."
 
 #: src/opml.cpp:149
 #, c-format
@@ -1798,11 +1796,14 @@ msgid ""
 "Ignoring 'filtercmd' attribute '%s' on URL '%s' for security reasons; if you "
 "trust it, replace '%s' with 'filter:%s:%s' in your urls file manually."
 msgstr ""
+"Das „filtercmd“-Attribut „%s“ wurde für die URL „%s“ aus Sicherheitsgründen "
+"ignoriert; wenn Sie dem Befehl vertrauen, können Sie „%s“ mit „filter:%s:%s“ "
+"in Ihrer urls-Datei händisch ersetzen."
 
 #: src/opml.cpp:164 src/opmlurlreader.cpp:90
 #, c-format
 msgid "Skipping URL with unsupported schema: '%s'"
-msgstr ""
+msgstr "URL mit nicht unterstütztem Schema übersprungen: „%s“"
 
 #: src/opml.cpp:261
 #, c-format
