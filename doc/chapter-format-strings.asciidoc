@@ -94,10 +94,32 @@ Identifier:Meaning
 [[podlist-format-p]]<<podlist-format-p,+p+>>:Downloaded precentage, displays one digit of precision
 [[podlist-format-k]]<<podlist-format-k,+k+>>:Download speed, displays two digit of precision, always in KB/s (does not include the "KB/s" text)
 [[podlist-format-K]]<<podlist-format-K,+K+>>:Download speed, displays two digit of precision, human readable (automatically switches between KB/s, MB/s, and GB/s)
-[[podlist-format-S]]<<podlist-format-S,+S+>>:Status of download, displays one of the folowing; "queued", "downloading", "ready", "canceled", "deleted", "missing", "played", "finished" or "failed"
+[[podlist-format-S]]<<podlist-format-S,+S+>>:Status of download, refer to the table <<available-podcast-states,+Available Podcast States+>> for all possible statuses
 [[podlist-format-u]]<<podlist-format-u,+u+>>:Url of the download
 [[podlist-format-F]]<<podlist-format-F,+F+>>:Absolute filename of the download from the root directory (e.g. ~/downloads/podcast.mp3 -> /home/name/downloads/podcast.mp3)
 [[podlist-format-b]]<<podlist-format-b,+b+>>:Basename of the download (e.g. /home/name/downloads/podcast.mp3 -> podcast.mp3)
+|======================================================================
+
+Podboat uses multiple states to describe the current status of each podcast
+download in the queue. 
+
+The following table lists all possible states and their meaning:
+
+.Available Podcast States
+[[available-podcast-states]]
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
+State:Meaning
+[[dl-status-queued]]<<dl-status-queued,+queued+>>:The default state when initially added to the queue file, ready to be downloaded
+[[dl-status-downloading]]<<dl-status-downloading,+downloading+>>:Currently downloading this podcast to disk
+[[dl-status-ready]]<<dl-status-ready,+ready+>>:The downloading process was successful and is ready to be played
+[[dl-status-canceled]]<<dl-status-canceled,+canceled+>>:<<pb-cancel,+pb-cancel+>> has been called while downloading and will stop that process
+[[dl-status-deleted]]<<dl-status-deleted,+deleted+>>:Will be removed from queue file upon exit Podboat or by calling <<pb-purge,+pb-purge+>>
+[[dl-status-played]]<<dl-status-played,+played+>>:Set after a <<pb-play,+pb-play+>> call and the player is run. As of Newsboat version 2.44, the return code of the player is not checked.
+[[dl-status-finished]]<<dl-status-finished,+finished+>>:Manually marked using <<pb-mark-as-finished,+pb-mark-as-finished+>>
+[[dl-status-missing]]<<dl-status-missing,+missing+>>:The podcast was downloaded successfully but is no longer at the expected location
+[[dl-status-failed]]<<dl-status-failed,+failed+>>:A failure occured after attempting to initially download or re-download a podcast
+[[dl-status-rename-failed]]<<dl-status-rename-failed,+rename failed+>>:The download was successful but Podboat failed to remove the temporary suffix
 |======================================================================
 
 .Available Identifiers for download-path and download-filename-format
