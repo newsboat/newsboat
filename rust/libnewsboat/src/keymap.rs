@@ -119,6 +119,23 @@ fn binding(input: &str) -> IResult<&str, Binding> {
     ))
 }
 
+fn unbind(input: &str) -> IResult<&str, Unbind> {
+    let (input, _) = space0(input)?;
+    let (input, key_sequence) = key_sequence(input)?;
+    let (input, _) = space1(input)?;
+    let (input, contexts) = contexts(input)?;
+    let (input, _) = space0(input)?;
+    let (input, _) = complete(eof).parse(input)?;
+
+    Ok((
+        input,
+        Unbind {
+            key_sequence,
+            contexts: contexts.into_iter().map(|s| s.to_owned()).collect(),
+        },
+    ))
+}
+
 /// Split a semicolon-separated list of operations into a vector.
 ///
 /// Each operation is represented by a non-empty sub-vector, where the first element is the name of
@@ -153,10 +170,17 @@ pub struct Binding {
 }
 
 pub fn tokenize_binding(input: &str) -> Option<Binding> {
-    match binding(input) {
-        Ok((_, binding)) => Some(binding),
-        Err(_error) => None,
-    }
+    binding(input).ok().map(|(_, binding)| binding)
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Unbind {
+    pub key_sequence: String,
+    pub contexts: Vec<String>,
+}
+
+pub fn tokenize_unbind(input: &str) -> Option<Unbind> {
+    unbind(input).ok().map(|(_, unbind)| unbind)
 }
 
 #[cfg(test)]
@@ -165,6 +189,7 @@ mod tests {
     use super::key_sequence;
     use super::tokenize_binding;
     use super::tokenize_operation_sequence;
+    use super::tokenize_unbind;
 
     macro_rules! vec_of_strings {
         ($($x:expr),*) => (vec![$($x.to_string()),*]);
@@ -647,5 +672,23 @@ mod tests {
     #[test]
     fn t_test_tokenize_binding_incomplete_description_syntax() {
         assert_eq!(tokenize_binding("q everywhere quit -- "), None);
+    }
+
+    #[test]
+    fn t_tokenize_unbind() {
+        let input = "ov feedlist,articlelist";
+
+        let parsed_unbind = tokenize_unbind(input).unwrap();
+
+        assert_eq!(parsed_unbind.key_sequence, "ov");
+        assert_eq!(parsed_unbind.contexts, vec!["feedlist", "articlelist"]);
+    }
+
+    #[test]
+    fn t_tokenize_unbind_missing_parts() {
+        assert_eq!(tokenize_unbind(""), None);
+        assert_eq!(tokenize_unbind("gg"), None);
+        assert_eq!(tokenize_unbind("everywhere"), None);
+        assert_eq!(tokenize_unbind("feedlist,articlelist"), None);
     }
 }
