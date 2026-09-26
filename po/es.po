@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-09-20 15:29+0300\n"
-"PO-Revision-Date: 2025-06-19 18:04+0200\n"
+"PO-Revision-Date: 2026-09-21 19:53+0200\n"
 "Last-Translator: Roberto Michán Sánchez <robertoms258@gmail.com>\n"
 "Language-Team: ROOT <epsilon@correoe.no-ip.org>, OmeGa <omega@mailoo.org>, "
 "José Manuel García-Patos <josemanuel@gesaku.es>, Marcos Cruz "
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.9\n"
 
 #: newsboat.cpp:34
 #, c-format
@@ -575,9 +575,8 @@ msgid "Failed to open queue file: %s."
 msgstr "Error al abrir el archivo de cola: %s."
 
 #: src/controller.cpp:738 src/itemutils.cpp:43
-#, fuzzy
 msgid "Item has a non-HTTP enclosure URL."
-msgstr "El artículo no tiene recipiente."
+msgstr "El artículo no tiene una URL HTTP de enclosure."
 
 #: src/controller.cpp:760
 #, c-format
@@ -903,6 +902,8 @@ msgstr "Error: no se pudo procesar la expresión de filtrado `%s': %s"
 #, c-format
 msgid "Error: Some filter attributes are not available in feedlist: %s"
 msgstr ""
+"Error: Algunos atributos de filtrado no están disponibles en la lista de "
+"fuentes: %s"
 
 #: src/feedretriever.cpp:81
 #, c-format
@@ -915,9 +916,8 @@ msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
 msgstr "¿Realmente quieres sobreescribir `%s'? (s:Sí n:No) "
 
 #: src/filebrowserformaction.cpp:352
-#, fuzzy
 msgid "Filename: "
-msgstr "Archivo: "
+msgstr "Nombre de archivo: "
 
 #: src/filebrowserformaction.cpp:355
 msgid "Directory: "
@@ -934,9 +934,8 @@ msgid "Save"
 msgstr "Guardar"
 
 #: src/filebrowserformaction.cpp:385
-#, fuzzy
 msgid "Switch focus"
-msgstr "Cambiar el foco entre widgets"
+msgstr "Cambiar foco"
 
 #: src/filebrowserformaction.cpp:437
 #, c-format
@@ -951,7 +950,7 @@ msgstr "Guardar archivos - %s"
 #: src/fileurlreader.cpp:60 src/remoteapiurlreader.cpp:41
 #, c-format
 msgid "Warning: Duplicate URL found: %s. Merging tags."
-msgstr ""
+msgstr "Advertencia: URL duplicada encontrada: %s. Fusionando etiquetas."
 
 #: src/fileurlwriter.cpp:18
 #, c-format
@@ -965,19 +964,19 @@ msgid "couldn't parse filter expression `%s': %s"
 msgstr "no se pudo procesar la expresión de filtrado `%s': %s"
 
 #: src/formaction.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Operation \"%s\" not handled in dialog \"%s\""
-msgstr "Operación no encontrada"
+msgstr "Operación \"%s\" no admitida en el diálogo \"%s\""
 
 #: src/formaction.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Too many arguments for %s"
-msgstr "demasiados parámetros."
+msgstr "Demasiados parámetros para %s"
 
 #: src/formaction.cpp:169
 #, c-format
 msgid "Too many arguments to \"cmdline\" command: %s"
-msgstr ""
+msgstr "Demasiados parámetros para el comando \"cmdline\": %s"
 
 #: src/formaction.cpp:188
 msgid "usage: set <config-option> <value>"
@@ -1236,6 +1235,8 @@ msgstr "Sobreescribir `%s' en `%s'? (s:Sí n:No)"
 #, c-format
 msgid "Error: Some filter attributes are not available in itemlist: %s"
 msgstr ""
+"Error: Algunos atributos de filtrado no están disponibles en la lista de "
+"artículos: %s"
 
 #: src/itemrenderer.cpp:75
 msgid "Feed: "
@@ -1501,9 +1502,8 @@ msgid "Mark download as deleted"
 msgstr "Marcar la descarga como eliminada"
 
 #: src/keymap.cpp:331
-#, fuzzy
 msgid "Reload the queue"
-msgstr "Añadir descarga a la cola"
+msgstr "Recargar cola"
 
 #: src/keymap.cpp:338
 msgid "Purge finished and deleted downloads from queue"
@@ -1785,6 +1785,8 @@ msgid ""
 "Skipping pipe URL '%s' for security reasons; if you trust it, add 'exec:%s' "
 "to your urls file manually."
 msgstr ""
+"Omitiendo la URL intermedia '%s' por razones de seguridad; si confías en "
+"ella, añade 'exec:%s' a tu fichero de urls manualmente."
 
 #: src/opml.cpp:149
 #, c-format
@@ -1792,11 +1794,14 @@ msgid ""
 "Ignoring 'filtercmd' attribute '%s' on URL '%s' for security reasons; if you "
 "trust it, replace '%s' with 'filter:%s:%s' in your urls file manually."
 msgstr ""
+"Ignorando el atributo de 'filtercmd' '%s' en la URL '%s' por razones de "
+"seguridad; si confías en ella, reemplaza '%s' con 'filter:%s:%s' a tu "
+"fichero de urls manualmente."
 
 #: src/opml.cpp:164 src/opmlurlreader.cpp:90
 #, c-format
 msgid "Skipping URL with unsupported schema: '%s'"
-msgstr ""
+msgstr "Omitiendo URL con esquema no admitido: '%s'"
 
 #: src/opml.cpp:261
 #, c-format
@@ -1805,11 +1810,11 @@ msgstr "Error: no se pudo analizar el archivo OPML \"%s\""
 
 #: src/opml.cpp:270
 msgid "the <opml> root element is missing"
-msgstr ""
+msgstr "falta el elemento raíz <opml>"
 
 #: src/opml.cpp:291
 msgid "the <body> element in the <opml> root element is missing"
-msgstr ""
+msgstr "falta el elemento <body> en el elemento raíz <opml>"
 
 #: src/pbcontroller.cpp:75
 #, c-format
