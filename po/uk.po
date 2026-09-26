@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-09-20 15:29+0300\n"
-"PO-Revision-Date: 2026-06-15 19:31+0300\n"
+"PO-Revision-Date: 2026-09-26 18:56+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -1155,7 +1155,7 @@ msgstr "Позначаю все, що вище, як прочитані..."
 #: src/itemlistformaction.cpp:614 src/itemlistformaction.cpp:630
 #: src/itemviewformaction.cpp:305 src/itemviewformaction.cpp:321
 msgid "Pipe article to command: "
-msgstr "Пайпувати статтю до каманди: "
+msgstr "Пайпувати статтю до команди: "
 
 #. i18n: This string is related to the letters in parentheses in the
 #. "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
@@ -1616,7 +1616,7 @@ msgstr "Повернутись до попереднього діалогу"
 
 #: src/keymap.cpp:520
 msgid "Pipe article to command"
-msgstr "Пайпувати статтю до каманди"
+msgstr "Пайпувати статтю до команди"
 
 #: src/keymap.cpp:527
 msgid "Sort current list"
