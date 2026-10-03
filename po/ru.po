@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-09-20 15:29+0300\n"
-"PO-Revision-Date: 2026-06-15 19:30+0300\n"
+"PO-Revision-Date: 2026-09-26 19:00+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -580,9 +580,8 @@ msgid "Failed to open queue file: %s."
 msgstr "Не удалось открыть файл очереди: %s."
 
 #: src/controller.cpp:738 src/itemutils.cpp:43
-#, fuzzy
 msgid "Item has a non-HTTP enclosure URL."
-msgstr "У записи нет вложений."
+msgstr "Схема URL вложения этой записи не HTTP."
 
 #: src/controller.cpp:760
 #, c-format
@@ -922,7 +921,6 @@ msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
 msgstr "Вы правда хотите перезаписать `%s' (y:Да n:Нет)? "
 
 #: src/filebrowserformaction.cpp:352
-#, fuzzy
 msgid "Filename: "
 msgstr "Файл: "
 
@@ -941,9 +939,8 @@ msgid "Save"
 msgstr "Сохранить"
 
 #: src/filebrowserformaction.cpp:385
-#, fuzzy
 msgid "Switch focus"
-msgstr "Переключить фокус между виджетами"
+msgstr "Переключить фокус"
 
 #: src/filebrowserformaction.cpp:437
 #, c-format
@@ -1507,9 +1504,8 @@ msgid "Mark download as deleted"
 msgstr "Отметить загрузку как удаленную"
 
 #: src/keymap.cpp:331
-#, fuzzy
 msgid "Reload the queue"
-msgstr "Добавить загрузку в очередь"
+msgstr "Перечитать очередь"
 
 #: src/keymap.cpp:338
 msgid "Purge finished and deleted downloads from queue"
@@ -1789,6 +1785,8 @@ msgid ""
 "Skipping pipe URL '%s' for security reasons; if you trust it, add 'exec:%s' "
 "to your urls file manually."
 msgstr ""
+"Пропускаем пайп-URL '%s' из соображений безопасности; если доверяете ему, "
+"вручную добавьте в файл urls 'exec:%s'."
 
 #: src/opml.cpp:149
 #, c-format
@@ -1796,11 +1794,13 @@ msgid ""
 "Ignoring 'filtercmd' attribute '%s' on URL '%s' for security reasons; if you "
 "trust it, replace '%s' with 'filter:%s:%s' in your urls file manually."
 msgstr ""
+"Игнорируем атрибут 'filtercmd' '%s' ссылки '%s' из соображений безопасности; "
+"если доверяете ему, вручную замените в файле urls '%s' на 'filter:%s:%s'."
 
 #: src/opml.cpp:164 src/opmlurlreader.cpp:90
 #, c-format
 msgid "Skipping URL with unsupported schema: '%s'"
-msgstr ""
+msgstr "Пропускаем URL с неподдерживаемой схемой: '%s'"
 
 #: src/opml.cpp:261
 #, c-format
