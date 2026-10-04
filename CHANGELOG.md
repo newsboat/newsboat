@@ -1,17 +1,98 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2026-09-26
+## 2.45 - 2026-10-04
 
-Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes TK
+This release was delayed by a week in order to work on security fixes.
 
 ### Added
+
+- `pb-reload` command which (like `pb-purge`) loads new items from the queue but
+    (unlike `pb-purge`) does not purge anything (Henry Wandover)
+- `keep-forever-if-flagged-with` setting to mark items that should not be
+    deleted by `keep-articles-days` (#2722) (amrSherif12)
+- `listnormal_deleted` and `listfocus_deleted` highlight groups for deleted (but
+    not yet purged) items. Defaults are the same as `listnormal` and
+    `listfocus`, so existing colorschemes don't need updating (Éric NICOLAS)
+
 ### Changed
+
+- Updated translations: Dutch (Dennis van der Schagt),
+    German (Lysander Trischler), Italian (Mauro Scomparin), Russian
+    and Ukrainian (Alexander Batischev), Spanish (Roboron3042),
+    Turkish (Emir SARI)
 - Bumped minimum supported Rust version to 1.94.0
-### Deprecated
+
 ### Removed
+
+- Ability to import OPML that contains pipe URLs, `filtercmd`, or URLs with
+    schemas other thatn `http://`, `https://`, or `file://`. The reason are the
+    security fixes listed below. If your workflows relied on these abilities,
+    please open and issue and let's find a way to bring these features back
+    without compromising other setups.
+
 ### Fixed
+
+- `exec:` feeds garbled the encoding (#1412) (Dennis van der Schagt)
+
 ### Security
+
+- Remote code execution via manual OPML import (`--import-from-opml`)
+
+    All Newsboat releases are affected.
+
+    CVE ID pending.
+
+    Newsboat imported pipe-URLs (turning them into `exec:` feeds) and
+    `filtercmd` URLs (turning them into `filter:` feeds). As a result, Newsboat
+    executed shell commands provided in the OPML file.
+
+    Starting with 2.45, Newsboat will warn about each of those during import and
+    either skip the URL (if it's a pipe-URL) or ignore the filtering part (if
+    it's a `filtercmd` URL). You can add them manually if you trust the OPML
+    source.
+
+    Disclosed via a pull request and fixed in #3400 by Devon Kirk.
+
+- GHSA-4m8m-vj3m-hfxx: Remote code execution via OPML import (both manual
+    `--import-from-opml` and `opml-url` config setting)
+
+    All Newsboat releases are affected.
+
+    CVE ID pending.
+
+    Newsboat did not sanitize the URLs imported from OPML. An attacker could
+    include `exec:` or `filter:` URLs in the OPML, which would be imported
+    verbatim and execute shell commands during feed reload.
+
+    Starting with 2.45, Newsboat will refuse to import URLs with unsupported
+    schemas. Currently supported schemas are `http://`, `https://`, and
+    `file://`.
+
+    Disclosed via a pull request #3426 by Acts1631. Fixed in #3445 by Alexander
+    Batischev.
+
+- GHSA-pvg7-gjxf-23c9: Podboat could write at arbitrary paths
+
+    All Newsboat releases are affected.
+
+    CVE ID pending.
+
+    Newsboat writes podcast URLs and filenames into a "queue" file, which is in
+    plain text and uses tabs and spaces for structuring the data. The queue file
+    is then read by Podboat, which downloads the files. Newsboat did not
+    sanitize podcast URLs and filenames, and Podboat did not properly validate
+    the file structure, giving an attacker an opportunity to mess up the file
+    format and trick Podboat into downloading other URLs and writing them at
+    arbitrary paths.
+
+    Starting with 2.45, Newsboat takes care to sanitize special characters when
+    writing the queue file. Additionally, Podboat ignores malformed entries in
+    the queue.
+
+    Users are advised to check their existing queue files for any entries they
+    don't recognize.
+
+    Disclosed via a pull request and fixed in #3427 by Acts1631.
 
 
 
