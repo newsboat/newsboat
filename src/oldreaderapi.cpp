@@ -2,9 +2,9 @@
 
 #include <cstring>
 #include <curl/curl.h>
-#include <json.h>
 #include <vector>
 
+#include "3rd-party/json.hpp"
 #include "config.h"
 #include "curldatareceiver.h"
 #include "curlhandle.h"
@@ -23,6 +23,8 @@
 #define OLDREADER_API_MARK_ALL_READ_URL OLDREADER_API_PREFIX "mark-all-as-read"
 #define OLDREADER_API_EDIT_TAG_URL OLDREADER_API_PREFIX "edit-tag"
 #define OLDREADER_API_TOKEN_URL OLDREADER_API_PREFIX "token"
+
+using json = nlohmann::json;
 
 // for reference, see https://github.com/theoldreader/api
 
@@ -107,83 +109,67 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 		"OldReaderApi::get_subscribed_urls: document = %s",
 		result);
 
-	json_object* reply = json_tokener_parse(result.c_str());
-	if (reply == nullptr) {
+	json reply;
+	try {
+		reply = json::parse(result);
+	} catch (json::parse_error& e) {
 		LOG(Level::ERROR,
-			"OldReaderApi::get_subscribed_urls: failed to parse "
-			"response as JSON.");
+			"OldReaderApi::get_subscribed_urls: failed to parse response as JSON: %s",
+			e.what());
 		return urls;
 	}
 
-	json_object* subscription_obj{};
-	json_object_object_get_ex(reply, "subscriptions", &subscription_obj);
-	struct array_list* subscriptions =
-		json_object_get_array(subscription_obj);
+	try {
+		const json& subscriptions = reply.at("subscriptions");
 
-	int len = array_list_length(subscriptions);
+		for (std::size_t i = 0; i < subscriptions.size(); i++) {
+			std::vector<std::string> tags;
+			const json& sub = subscriptions.at(i);
 
-	for (int i = 0; i < len; i++) {
-		std::vector<std::string> tags;
-		json_object* sub =
-			json_object_array_get_idx(subscription_obj, i);
-
-		json_object* node{};
-
-		json_object_object_get_ex(sub, "id", &node);
-		const char* id = json_object_get_string(node);
-		if (id == nullptr) {
-			LOG(Level::WARN, "Skipping a subscription without an id");
-			continue;
-		}
-
-		json_object_object_get_ex(sub, "title", &node);
-		const char* title_ptr = json_object_get_string(node);
-		std::string title;
-		if (title_ptr != nullptr) {
-			title = title_ptr;
-		} else {
-			LOG(Level::WARN, "Subscription has no title, so let's call it \"%i\"", i);
-			title = std::to_string(i);
-		}
-
-		// Ignore URLs where ID start with given prefix - those never
-		// load, always returning 404 and annoying people
-		const char* prefix = "tor/sponsored/";
-		if (strncmp(id, prefix, strlen(prefix)) != 0) {
-			tags.push_back(std::string("~") + title);
-
-			json_object_object_get_ex(sub, "categories", &node);
-			struct array_list* categories =
-				json_object_get_array(node);
-#if JSON_C_MAJOR_VERSION == 0 && JSON_C_MINOR_VERSION < 13
-			for (int i = 0; i < array_list_length(categories);
-				i++) {
-#else
-			for (size_t i = 0; i < array_list_length(categories);
-				i++) {
-#endif
-				json_object* cat =
-					json_object_array_get_idx(node, i);
-				json_object* label_node{};
-				json_object_object_get_ex(
-					cat, "label", &label_node);
-				const char* label = json_object_get_string(label_node);
-				if (label == nullptr) {
-					LOG(Level::WARN, "Skipping subscription's label whose name is a null value");
-					continue;
-				}
-				tags.push_back(std::string(label));
+			if (!sub.contains("id") || sub.at("id").is_null()) {
+				LOG(Level::WARN, "Skipping a subscription without an id");
+				continue;
 			}
 
-			auto url = strprintf::fmt("%s%s?n=%u",
-					OLDREADER_FEED_PREFIX,
-					id,
-					cfg.get_configvalue_as_int("oldreader-min-items"));
-			urls.push_back(TaggedFeedUrl(url, tags));
-		}
-	}
+			const std::string id = sub.at("id");
 
-	json_object_put(reply);
+			std::string title;
+			if (sub.contains("title") && !sub.at("title").is_null()) {
+				title = sub.at("title");
+			} else {
+				LOG(Level::WARN, "Subscription has no title, so let's call it \"%zu\"", i);
+				title = std::to_string(i);
+			}
+
+			// Ignore URLs where ID start with given prefix - those never
+			// load, always returning 404 and annoying people
+			const char* prefix = "tor/sponsored/";
+			if (strncmp(id.c_str(), prefix, strlen(prefix)) != 0) {
+				tags.push_back(std::string("~") + title);
+
+				const json& categories = sub.at("categories");
+				for (const auto& cat : categories) {
+					if (!cat.contains("label") || cat.at("label").is_null()) {
+						LOG(Level::WARN, "Skipping subscription's label whose name is a null value");
+						continue;
+					}
+
+					const std::string label = cat.at("label");
+					tags.push_back(label);
+				}
+
+				auto url = strprintf::fmt("%s%s?n=%u",
+						OLDREADER_FEED_PREFIX,
+						id.c_str(),
+						cfg.get_configvalue_as_int("oldreader-min-items"));
+				urls.push_back(TaggedFeedUrl(url, tags));
+			}
+		}
+	} catch (json::exception& e) {
+		LOG(Level::ERROR, "OldReaderApi::get_subscribed_urls: failed to parse subscriptions: %s",
+			e.what());
+		return urls;
+	}
 
 	return urls;
 }
