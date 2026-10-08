@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2026-09-20 15:29+0300\n"
-"PO-Revision-Date: 2026-06-08 23:08+0200\n"
+"PO-Revision-Date: 2026-10-05 22:25+0200\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -577,9 +577,8 @@ msgid "Failed to open queue file: %s."
 msgstr "Nie udało się otworzyć pliku kolejki: %s."
 
 #: src/controller.cpp:738 src/itemutils.cpp:43
-#, fuzzy
 msgid "Item has a non-HTTP enclosure URL."
-msgstr "Element nie ma żadnych załączników."
+msgstr "Element zawiera adres URL innego typu niż HTTP."
 
 #: src/controller.cpp:760
 #, c-format
@@ -921,7 +920,6 @@ msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
 msgstr "Czy na pewno chcesz nadpisać `%s' (t:Tak n:Nie)? "
 
 #: src/filebrowserformaction.cpp:352
-#, fuzzy
 msgid "Filename: "
 msgstr "Plik: "
 
@@ -940,9 +938,8 @@ msgid "Save"
 msgstr "Zapisz"
 
 #: src/filebrowserformaction.cpp:385
-#, fuzzy
 msgid "Switch focus"
-msgstr "Przełącz między aktywnymi widżetami"
+msgstr "Przełącz fokus"
 
 #: src/filebrowserformaction.cpp:437
 #, c-format
@@ -1506,9 +1503,8 @@ msgid "Mark download as deleted"
 msgstr "Oznacz pobieranie jako usunięte"
 
 #: src/keymap.cpp:331
-#, fuzzy
 msgid "Reload the queue"
-msgstr "Dodaj pobieranie do kolejki"
+msgstr "Odśwież kolejkę"
 
 #: src/keymap.cpp:338
 msgid "Purge finished and deleted downloads from queue"
@@ -1788,6 +1784,8 @@ msgid ""
 "Skipping pipe URL '%s' for security reasons; if you trust it, add 'exec:%s' "
 "to your urls file manually."
 msgstr ""
+"Pomijanie przekierowania URL '%s' z powodów bezpieczeństwa; jeśli mu ufasz, "
+"dodaj 'exec:%s' do pliku listy odnośników."
 
 #: src/opml.cpp:149
 #, c-format
@@ -1795,11 +1793,13 @@ msgid ""
 "Ignoring 'filtercmd' attribute '%s' on URL '%s' for security reasons; if you "
 "trust it, replace '%s' with 'filter:%s:%s' in your urls file manually."
 msgstr ""
+"Ignoruje atrybut 'filtercmd' '%s' w URL '%s' z powodów bezpieczeństwa; jeśli "
+"mu ufasz, zastąp '%s' przez 'filter%s:%s' w pliku listy odnośników."
 
 #: src/opml.cpp:164 src/opmlurlreader.cpp:90
 #, c-format
 msgid "Skipping URL with unsupported schema: '%s'"
-msgstr ""
+msgstr "Pomijam URL z niewspieranym protokołem: '%s'"
 
 #: src/opml.cpp:261
 #, c-format
