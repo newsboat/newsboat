@@ -286,6 +286,92 @@ TEST_CASE("handle_action() for bind", "[KeyMap]")
 	}
 }
 
+TEST_CASE("handle_action() for unbind", "[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	GIVEN("a few bindings for all contexts") {
+		k.handle_action("bind", "a everywhere quit");
+		k.handle_action("bind", "go everywhere open");
+		k.handle_action("bind", "gd everywhere open");
+
+		WHEN("single key is unbound in a context") {
+			k.handle_action("unbind", "a feedlist");
+
+			THEN("binding still exists in other contexts") {
+				check_unbound(k, KeyCombination("a"), "feedlist");
+				check_single_command_binding(k, KeyCombination("a"), "articlelist");
+			}
+		}
+
+		WHEN("multi-key sequence is unbound") {
+			k.handle_action("unbind", "go everywhere");
+
+			THEN("other bindings starting with the same key are left intact") {
+				MultiKeyBindingState binding_state{};
+				BindingType binding_type{};
+
+				k.get_operation({KeyCombination("g"), KeyCombination("o")}, "feedlist", binding_state,
+					binding_type);
+				REQUIRE(binding_state == MultiKeyBindingState::NotFound);
+
+				k.get_operation({KeyCombination("g"), KeyCombination("d")}, "feedlist", binding_state,
+					binding_type);
+				REQUIRE(binding_state == MultiKeyBindingState::Found);
+			}
+		}
+
+		WHEN("prefix of multi-key sequence is unbound") {
+			k.handle_action("unbind", "g everywhere");
+
+			THEN("bindings starting with the prefix are removed") {
+				MultiKeyBindingState binding_state{};
+				BindingType binding_type{};
+
+				k.get_operation({KeyCombination("g"), KeyCombination("o")}, "feedlist", binding_state,
+					binding_type);
+				REQUIRE(binding_state == MultiKeyBindingState::NotFound);
+
+				k.get_operation({KeyCombination("g"), KeyCombination("d")}, "feedlist", binding_state,
+					binding_type);
+				REQUIRE(binding_state == MultiKeyBindingState::NotFound);
+			}
+		}
+	}
+
+	SECTION("unbinding non-existing binding is allowed (no-op)") {
+		REQUIRE_NOTHROW(k.handle_action("unbind", "abc everywhere"));
+	}
+
+	SECTION("unbind supports same key-sequence syntax as bind") {
+		k.handle_action("bind", "^K<S-a><ENTER> everywhere quit");
+
+		MultiKeyBindingState binding_state{};
+		BindingType binding_type{};
+
+		k.get_operation({
+			KeyCombination("k", ShiftState::NoShift, ControlState::Control),
+			KeyCombination("a", ShiftState::Shift),
+			KeyCombination("ENTER"),
+		}, "feedlist", binding_state, binding_type);
+		REQUIRE(binding_state == MultiKeyBindingState::Found);
+
+		k.handle_action("unbind", "^K<S-a><ENTER> feedlist");
+
+		k.get_operation({
+			KeyCombination("k", ShiftState::NoShift, ControlState::Control),
+			KeyCombination("a", ShiftState::Shift),
+			KeyCombination("ENTER"),
+		}, "feedlist", binding_state, binding_type);
+		REQUIRE(binding_state == MultiKeyBindingState::NotFound);
+	}
+
+	SECTION("throws if incomplete") {
+		REQUIRE_THROWS_AS(k.handle_action("unbind", "a"), ConfigHandlerException);
+		REQUIRE_THROWS_AS(k.handle_action("unbind", ""), ConfigHandlerException);
+	}
+}
+
 TEST_CASE("handle_action() for unbind-key", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
