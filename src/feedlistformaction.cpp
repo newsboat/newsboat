@@ -26,7 +26,6 @@ namespace newsboat {
 
 FeedListFormAction::FeedListFormAction(View& vv,
 	std::string formstr,
-	Cache* cc,
 	FilterContainer& f,
 	ConfigContainer* cfg,
 	RegexManager& r)
@@ -37,7 +36,6 @@ FeedListFormAction::FeedListFormAction(View& vv,
 	, set_filterpos(false)
 	, rxman(r)
 	, filter_container(f)
-	, cache(cc)
 {
 	valid_cmds.push_back("tag");
 	valid_cmds.push_back("goto");
@@ -1008,11 +1006,10 @@ void FeedListFormAction::op_start_search()
 		"`%s'",
 		searchphrase);
 	if (searchphrase.length() > 0) {
-		auto message_lifetime = v.get_statusline().show_message_until_finished(
-				_("Searching..."));
 		searchhistory.add_line(searchphrase);
 		std::vector<std::shared_ptr<RssItem>> items;
 		try {
+			auto message_lifetime = v.get_statusline().show_message_until_finished(_("Searching..."));
 			const auto utf8searchphrase = utils::locale_to_utf8(searchphrase);
 			items = v.get_ctrl().search_for_items(
 					utf8searchphrase, nullptr);
@@ -1023,15 +1020,8 @@ void FeedListFormAction::op_start_search()
 					e.what()));
 			return;
 		}
-		message_lifetime.reset();
-		if (!items.empty()) {
-			std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(cache, ""));
-			search_dummy_feed->set_search_feed(true);
-			search_dummy_feed->add_items(items);
-			v.push_searchresult(search_dummy_feed, searchphrase);
-		} else {
-			v.get_statusline().show_error(_("No results."));
-		}
+
+		v.push_searchresult(std::move(items), searchphrase);
 	}
 }
 

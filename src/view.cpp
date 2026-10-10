@@ -145,8 +145,8 @@ int View::run()
 {
 	bool have_macroprefix = false;
 
-	feedlist_form = std::make_shared<FeedListFormAction>(
-			*this, feedlist_str, rsscache, filters, cfg, rxman);
+	feedlist_form = std::make_shared<FeedListFormAction>(*this, feedlist_str, filters, cfg,
+			rxman);
 	apply_colors(feedlist_form);
 	formaction_stack.push_back(feedlist_form);
 	current_formaction = formaction_stack_size() - 1;
@@ -474,28 +474,32 @@ void View::set_tags(const std::vector<std::string>& t)
 	tags = t;
 }
 
-void View::push_searchresult(std::shared_ptr<RssFeed> feed,
+void View::push_searchresult(std::vector<std::shared_ptr<RssItem>> items,
 	const std::string& phrase)
 {
-	assert(feed != nullptr);
 	LOG(Level::DEBUG, "View::push_searchresult: pushing search result");
-	if (feed->total_item_count() > 0) {
-		if (this->get_current_formaction()->id() != Dialog::SearchResultsList) {
-			auto searchresult = std::make_shared<SearchResultsListFormAction>(
-					*this, itemlist_str, rsscache, filters, cfg, rxman);
-			apply_colors(searchresult);
-			searchresult->set_parent_formaction(get_current_formaction());
-			searchresult->add_to_history(feed, phrase);
-			searchresult->init();
-			formaction_stack.push_back(searchresult);
-			current_formaction = formaction_stack_size() - 1;
-		} else {
-			auto searchresult = std::static_pointer_cast<SearchResultsListFormAction>
-				(this->get_current_formaction());
-			searchresult->add_to_history(feed, phrase);
-		}
+	if (items.empty()) {
+		status_line.show_error(_("No results."));
+		return;
+	}
+
+	std::shared_ptr<RssFeed> feed(new RssFeed(rsscache, ""));
+	feed->set_search_feed(true);
+	feed->add_items(items);
+
+	if (this->get_current_formaction()->id() != Dialog::SearchResultsList) {
+		auto searchresult = std::make_shared<SearchResultsListFormAction>(
+				*this, itemlist_str, rsscache, filters, cfg, rxman);
+		apply_colors(searchresult);
+		searchresult->set_parent_formaction(get_current_formaction());
+		searchresult->add_to_history(feed, phrase);
+		searchresult->init();
+		formaction_stack.push_back(searchresult);
+		current_formaction = formaction_stack_size() - 1;
 	} else {
-		status_line.show_error(_("Error: feed contains no items!"));
+		auto searchresult = std::static_pointer_cast<SearchResultsListFormAction>
+			(this->get_current_formaction());
+		searchresult->add_to_history(feed, phrase);
 	}
 }
 
@@ -521,7 +525,11 @@ std::shared_ptr<ItemListFormAction> View::push_itemlist(
 		current_formaction = formaction_stack_size() - 1;
 		return itemlist;
 	} else {
-		status_line.show_error(_("Error: feed contains no items!"));
+		if (feed->is_query_feed()) {
+			status_line.show_error(_("Error: feed contains no items!"));
+		} else {
+			status_line.show_error(_("Error: feed contains no items! You can try reloading the feed"));
+		}
 		return nullptr;
 	}
 }
