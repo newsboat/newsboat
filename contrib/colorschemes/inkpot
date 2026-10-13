@@ -3,9 +3,9 @@
 
 # colors
 color background          color229   default
-color listnormal          color229   default
+color listnormal          color245   default
 color listnormal_unread   color229   default
-color listfocus           color229   color61 bold
+color listfocus           color245   color61 bold
 color listfocus_unread    color229   color61 bold
 color info                color247   color235
 color article             color229   default
