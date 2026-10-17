@@ -1,4 +1,4 @@
-name: macOS Sonoma
+name: macOS
 
 on:
   push:
@@ -12,8 +12,8 @@ on:
 
 jobs:
   build_and_test_macos:
-    name: macOS Sonoma
-    runs-on: macos-14
+    name: macOS
+    runs-on: ${{ matrix.os }}
     env:
       # Disable progress bar in Cargo. This cuts down on output, avoiding log length limits.
       TERM: dumb
@@ -26,6 +26,9 @@ jobs:
       CFLAGS: -I/opt/homebrew/opt/gettext/include -I/opt/homebrew/include
       CXXFLAGS: -I/opt/homebrew/opt/gettext/include -I/opt/homebrew/include
       RUSTFLAGS: '-D warnings'
+    strategy:
+      matrix:
+        os: [macos-15, macos-26]
 
     steps:
       - name: Check out the code
