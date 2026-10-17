@@ -7,6 +7,8 @@ color listnormal          color245   default
 color listnormal_unread   color229   default
 color listfocus           color245   color61 bold
 color listfocus_unread    color229   color61 bold
+color listnormal_deleted  color131   default
+color listfocus_deleted   color217   color61 bold
 color info                color247   color235
 color article             color229   default
 
