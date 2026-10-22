@@ -310,6 +310,12 @@ Available dialogs are:
 
 === Colors
 
+****
+Newsboat comes with user contributed themes in `/usr/share/doc/newsboat/contrib/colorschemes`.
+Those files can be included from the config using the <<include,include>> command.
+Alternatively, their content can be directly copied into Newsboat's config file.
+****
+
 It is possible to configure custom color settings in Newsboat. The basic configuration
 syntax is:
 
