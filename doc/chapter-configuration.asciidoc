@@ -11,9 +11,10 @@ far as the end of line.
 
 ****
 *User contrib* Newsboat also comes with user contributed content like scripts and color
-themes. The user contributed content can be found in
-`/usr/share/doc/newsboat/contrib/`. End users are encouraged to take a look as
-they may find something useful.
+themes. That content can typically be found in `/usr/share/doc/newsboat/contrib/`
+and is also available online at
+https://github.com/newsboat/newsboat/tree/master/contrib.
+End users are encouraged to take a look as they may find something useful.
 ****
 
 === Example
@@ -309,6 +310,14 @@ Available dialogs are:
 * `searchresultslist`
 
 === Colors
+
+****
+Newsboat comes with user contributed themes. They can typically be found in
+`/usr/share/doc/newsboat/contrib/colorschemes` and are also available online at
+https://github.com/newsboat/newsboat/tree/master/contrib/colorschemes.
+They can be included from the config using the <<include,include>> command.
+Alternatively, their content can be directly copied into Newsboat's config file.
+****
 
 It is possible to configure custom color settings in Newsboat. The basic configuration
 syntax is:
