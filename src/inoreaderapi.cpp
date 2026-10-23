@@ -2,10 +2,10 @@
 
 #include <cstring>
 #include <curl/curl.h>
-#include <json.h>
 #include <vector>
 #include <thread>
 
+#include "3rd-party/json.hpp"
 #include "curldatareceiver.h"
 #include "curlhandle.h"
 #include "logger.h"
@@ -19,6 +19,8 @@
 #define INOREADER_SUBSCRIPTION_LIST INOREADER_API_PREFIX "subscription/list"
 #define INOREADER_API_MARK_ALL_READ_URL INOREADER_API_PREFIX "mark-all-as-read"
 #define INOREADER_API_EDIT_TAG_URL INOREADER_API_PREFIX "edit-tag"
+
+using json = nlohmann::json;
 
 // for reference, see https://inoreader.com/developers
 
@@ -103,74 +105,64 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 		"InoreaderApi::get_subscribed_urls: document = %s",
 		result);
 
-	json_object* reply = json_tokener_parse(result.c_str());
-	if (reply == nullptr) {
+	json reply;
+	try {
+		reply = json::parse(result);
+	} catch (json::parse_error& e) {
 		LOG(Level::ERROR,
-			"InoreaderApi::get_subscribed_urls: failed to parse "
-			"response as JSON.");
+			"InoreaderApi::get_subscribed_urls: failed to parse response as JSON: %s", e.what());
 		return urls;
 	}
 
-	json_object* subscription_obj{};
-	json_object_object_get_ex(reply, "subscriptions", &subscription_obj);
-	struct array_list* subscriptions =
-		json_object_get_array(subscription_obj);
+	try {
+		const json& subscriptions = reply.at("subscriptions");
 
-	int len = array_list_length(subscriptions);
+		for (std::size_t i = 0; i < subscriptions.size(); i++) {
+			std::vector<std::string> tags;
+			const json& sub = subscriptions.at(i);
 
-	for (int i = 0; i < len; i++) {
-		std::vector<std::string> tags;
-		json_object* sub =
-			json_object_array_get_idx(subscription_obj, i);
-
-		json_object* node{};
-
-		json_object_object_get_ex(sub, "id", &node);
-		const char* id = json_object_get_string(node);
-		if (id == nullptr) {
-			LOG(Level::WARN, "Skipping a subscription without an id");
-			continue;
-		}
-		char* id_uenc = curl_easy_escape(handle.ptr(), id, 0);
-
-		json_object_object_get_ex(sub, "title", &node);
-		const char* title = json_object_get_string(node);
-		if (title != nullptr) {
-			tags.push_back(std::string("~") + title);
-		} else {
-			LOG(Level::WARN, "Subscription has no title, so let's call it \"%i\"", i);
-			tags.push_back(std::string("~") + std::to_string(i));
-		}
-
-		json_object_object_get_ex(sub, "categories", &node);
-		struct array_list* categories = json_object_get_array(node);
-
-#if JSON_C_MAJOR_VERSION == 0 && JSON_C_MINOR_VERSION < 13
-		for (int i = 0; i < array_list_length(categories); i++) {
-#else
-		for (size_t i = 0; i < array_list_length(categories); i++) {
-#endif
-			json_object* cat = json_object_array_get_idx(node, i);
-			json_object* label_node{};
-			json_object_object_get_ex(cat, "label", &label_node);
-			const char* label = json_object_get_string(label_node);
-			if (label == nullptr) {
-				LOG(Level::WARN, "Skipping subscription's label whose name is a null value");
+			if (!sub.contains("id") || sub.at("id").is_null()) {
+				LOG(Level::WARN, "Skipping a subscription without an id");
 				continue;
 			}
-			tags.push_back(std::string(label));
+
+			const std::string id = sub.at("id");
+
+			if (sub.contains("title") && !sub.at("title").is_null()) {
+				const std::string title = sub.at("title");
+				tags.push_back(std::string("~") + title);
+			} else {
+				LOG(Level::WARN, "Subscription has no title, so let's call it \"%zu\"", i);
+				tags.push_back(std::string("~") + std::to_string(i));
+			}
+
+			const json& categories = sub.at("categories");
+
+			for (const auto& cat : categories) {
+				if (!cat.contains("label") || cat.at("label").is_null()) {
+					LOG(Level::WARN, "Skipping subscription's label whose name is a null value");
+					continue;
+				}
+
+				const std::string label = cat.at("label");
+				tags.push_back(label);
+			}
+
+			char* id_uenc = curl_easy_escape(handle.ptr(), id.c_str(), 0);
+
+			auto url = strprintf::fmt("%s%s?n=%u",
+					INOREADER_FEED_PREFIX,
+					id_uenc,
+					cfg.get_configvalue_as_int("inoreader-min-items"));
+			urls.push_back(TaggedFeedUrl(url, tags));
+
+			curl_free(id_uenc);
 		}
-
-		auto url = strprintf::fmt("%s%s?n=%u",
-				INOREADER_FEED_PREFIX,
-				id_uenc,
-				cfg.get_configvalue_as_int("inoreader-min-items"));
-		urls.push_back(TaggedFeedUrl(url, tags));
-
-		curl_free(id_uenc);
+	} catch (json::exception& e) {
+		LOG(Level::ERROR, "InoreaderApi::get_subscribed_urls: failed to parse subscriptions: %s",
+			e.what());
+		return urls;
 	}
-
-	json_object_put(reply);
 
 	return urls;
 }
