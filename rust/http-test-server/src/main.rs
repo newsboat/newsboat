@@ -87,7 +87,7 @@ fn add_endpoint(server: &MockServer) {
         then.body(body);
     });
 
-    println!("{}", mock.id);
+    println!("{}", mock.id());
 }
 
 fn remove_endpoint(server: &MockServer) {
