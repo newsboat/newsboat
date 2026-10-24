@@ -209,13 +209,14 @@ impl Logger {
         // DateTime::format() is extremely slow; format! is way faster. See
         // https://github.com/chronotope/chrono/issues/94 for details.
         let timestamp = format!(
-            "[{}-{:02}-{:02} {:02}:{:02}:{:02}] ",
+            "[{}-{:02}-{:02} {:02}:{:02}:{:02}.{:03}] ",
             timestamp.year(),
             timestamp.month(),
             timestamp.day(),
             timestamp.hour(),
             timestamp.minute(),
-            timestamp.second()
+            timestamp.second(),
+            timestamp.timestamp_subsec_millis(),
         );
 
         let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
@@ -225,8 +226,16 @@ impl Logger {
         {
             let level = format!("{level}: ");
 
+            let thread = std::thread::current();
+            let thread_id = thread.id();
+            let thread_info = match thread.name() {
+                Some(t) => format!("{thread_id:?} ({t}) "),
+                None => format!("{thread_id:?} "),
+            };
+
             // Ignoring the error since checking every log() call will be too bothersome.
             let _ = logfile.write_all(timestamp.as_bytes());
+            let _ = logfile.write_all(thread_info.as_bytes());
             let _ = logfile.write_all(level.as_bytes());
             let _ = logfile.write_all(data);
             let _ = logfile.write_all(b"\n");
@@ -307,7 +316,7 @@ mod tests {
 
     use chrono::{NaiveDateTime, TimeDelta};
     use std::io::{self, BufRead, BufReader};
-    use std::path;
+    use std::{path, thread};
     use tempfile::TempDir;
 
     fn setup_logger() -> io::Result<(TempDir, path::PathBuf, path::PathBuf, Logger)> {
@@ -331,7 +340,14 @@ mod tests {
         Ok((tmp, logfile, error_logfile, logger))
     }
 
-    fn parse_log_line(line: &str) -> Option<(&str, &str, &str)> {
+    struct ParsedLogLine<'a> {
+        timestamp: &'a str,
+        thread_name: Option<&'a str>,
+        level: &'a str,
+        message: &'a str,
+    }
+
+    fn parse_log_line(line: &str) -> Option<ParsedLogLine<'_>> {
         if !line.starts_with('[') {
             return None;
         }
@@ -341,26 +357,40 @@ mod tests {
             .expect("Failed to find the end of the timestamp");
         // Timestamp starts with "[", we skip it by starting at 1 rather than 0.
         let timestamp = &line[1..timestamp_end];
+        let remainder = &line[timestamp_end..];
 
-        // "]" is an ASCII character, so it occupies one byte in UTF-8. As a result, we
-        // can simply add one to get the next character's byte offset. And since the
-        // next char should be a space, which is ASCII as well, we can just add 2.
-        //
-        // If timestamp is followed by something non-ASCII, indexing into &str will
-        // panic and fail the test, which is good.
-        if &line[timestamp_end + 1..timestamp_end + 2] != " " {
-            return None;
-        }
+        let remainder = remainder.strip_prefix("] ")?;
 
-        let level_end = line[timestamp_end + 2..]
+        let thread_id_end = remainder
+            .find(' ')
+            .expect("Failed to find the end of the thread ID");
+        let remainder = &remainder[thread_id_end + 1..];
+
+        let (thread_name, remainder) = if remainder.starts_with("(") {
+            let thread_name_end = remainder
+                .find(") ")
+                .expect("Failed to find end of the thread name");
+            let thread_name = &remainder[1..thread_name_end];
+            (Some(thread_name), &remainder[thread_name_end + 2..])
+        } else {
+            (None, remainder)
+        };
+
+        let level_end = remainder
             .find(':')
             .expect("Failed to find the end of the loglevel");
-        let level = &line[timestamp_end + 2..timestamp_end + 2 + level_end];
+        let level = &remainder[..level_end];
+        let remainder = &remainder[level_end..];
 
         // Message starts after ": " that follows the level, hence +2.
-        let message = &line[timestamp_end + 2 + level_end + 2..];
+        let message = &remainder[2..];
 
-        Some((timestamp, level, message))
+        Some(ParsedLogLine {
+            timestamp,
+            thread_name,
+            level,
+            message,
+        })
     }
 
     fn parse_errorlog_line(line: &str) -> Option<(&str, &str)> {
@@ -491,11 +521,12 @@ mod tests {
         for (line, expected) in reader.lines().zip(messages) {
             match line {
                 Ok(line) => {
-                    let (timestamp_str, _level, message) =
-                        parse_log_line(&line).expect("Failed to split the log line into parts");
+                    let ParsedLogLine {
+                        timestamp, message, ..
+                    } = parse_log_line(&line).expect("Failed to split the log line into parts");
 
                     let timestamp =
-                        NaiveDateTime::parse_from_str(timestamp_str, "%Y-%m-%d %H:%M:%S")
+                        NaiveDateTime::parse_from_str(timestamp, "%Y-%m-%d %H:%M:%S%.3f")
                             .expect("Failed to parse the timestamp from the log file")
                             .and_local_timezone(Local::now().timezone())
                             .unwrap();
@@ -543,10 +574,46 @@ mod tests {
         for (line, expected) in reader.lines().zip(levels.iter().map(|&(_, l)| l)) {
             match line {
                 Ok(line) => {
-                    let (_timestamp_str, level, _message) =
+                    let ParsedLogLine { level, .. } =
                         parse_log_line(&line).expect("Failed to split the log line into parts");
 
                     assert_eq!(level, expected);
+                }
+                Err(e) => panic!("Error reading a line from the log: {e:?}"),
+            }
+        }
+    }
+
+    #[test]
+    fn t_log_writes_thread_name_if_known() {
+        let (_tmp, logfile, _error_logfile, logger) = setup_logger().unwrap();
+
+        logger.set_loglevel(Level::Debug);
+
+        let test_thread_name = "thread name for test";
+        thread::Builder::new()
+            .name(test_thread_name.to_string())
+            .spawn(|| {
+                logger.log(Level::Debug, "Something happened on a named thread");
+
+                // Dropping logger to force it to flush the log and close the file
+                drop(logger);
+            })
+            .expect("failed to spawn named thread")
+            .join()
+            .expect("failed to join thread");
+
+        log_contains_n_lines(&logfile, 1).unwrap();
+
+        let file = File::open(logfile).unwrap();
+        let reader = BufReader::new(file);
+        for line in reader.lines() {
+            match line {
+                Ok(line) => {
+                    let ParsedLogLine { thread_name, .. } =
+                        parse_log_line(&line).expect("Failed to split the log line into parts");
+                    assert!(thread_name.is_some());
+                    assert_eq!(thread_name.unwrap(), test_thread_name);
                 }
                 Err(e) => panic!("Error reading a line from the log: {e:?}"),
             }
@@ -826,7 +893,7 @@ mod tests {
                         .expect("Failed to split the error log line into parts");
 
                     let timestamp =
-                        NaiveDateTime::parse_from_str(timestamp_str, "%Y-%m-%d %H:%M:%S")
+                        NaiveDateTime::parse_from_str(timestamp_str, "%Y-%m-%d %H:%M:%S%.3f")
                             .expect("Failed to parse the timestamp from the log file")
                             .and_local_timezone(Local::now().timezone())
                             .unwrap();
