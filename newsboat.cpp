@@ -8,7 +8,6 @@
 #include <utility>
 #include <vector>
 
-#include "cache.h"
 #include "cliargsparser.h"
 #include "config.h"
 #include "configpaths.h"
@@ -265,11 +264,7 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	Controller c(configpaths);
-	newsboat::View v(c);
-	c.set_view(&v);
 	CliArgsParser args(argc, argv);
-
 	configpaths.process_args(args);
 
 	if (args.should_print_usage()) {
@@ -281,6 +276,10 @@ int main(int argc, char* argv[])
 		print_version(args.program_name(), args.show_version());
 		return EXIT_SUCCESS;
 	}
+
+	Controller c(configpaths);
+	newsboat::View v(c);
+	c.set_view(&v);
 
 	int ret;
 	try {
