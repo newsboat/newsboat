@@ -372,6 +372,19 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 		REQUIRE(lines[1] == "");
 	}
 
+	SECTION("%h is empty when the enclosure URL has no hostname") {
+		cfg.set_configvalue("download-filename-format", "%h");
+		item.set_enclosure_url("http:///podcast.mp3");
+
+		const auto result = manager.enqueue_url(item, *feed);
+
+		REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
+		const auto lines = test_helpers::file_contents(queue_file.get_path());
+		REQUIRE(lines.size() == 2);
+		REQUIRE(lines[0] == R"(http:///podcast.mp3 "/example/")");
+		REQUIRE(lines[1] == "");
+	}
+
 	SECTION("%u for the enclosure URL's basename") {
 		cfg.set_configvalue("download-filename-format", "%u");
 
