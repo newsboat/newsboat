@@ -10,6 +10,21 @@
 
 namespace newsboat {
 
+namespace {
+
+std::string sanitize_path_component(std::string component)
+{
+	component = utils::replace_all(component, "/", "_");
+	// Format widths can truncate a value, so neutralize any leading dot
+	// rather than only handling "." and "..".
+	if (!component.empty() && component[0] == '.') {
+		component[0] = '_';
+	}
+	return component;
+}
+
+}
+
 QueueManager::QueueManager(ConfigContainer* cfg_, Filepath queue_file)
 	: cfg(cfg_)
 	, queue_file(std::move(queue_file))
@@ -102,9 +117,9 @@ Filepath QueueManager::generate_enqueue_filename(RssItem& item, RssFeed& feed)
 	}
 
 	FmtStrFormatter fmt;
-	fmt.register_fmt('n', utils::replace_all(feed.title(), "/", "_"));
-	fmt.register_fmt('h', get_hostname_from_url(url));
-	fmt.register_fmt('u', base);
+	fmt.register_fmt('n', sanitize_path_component(feed.title()));
+	fmt.register_fmt('h', sanitize_path_component(get_hostname_from_url(url)));
+	fmt.register_fmt('u', sanitize_path_component(base));
 	fmt.register_fmt('F', utils::mt_strf_localtime("%F", pubDate));
 	fmt.register_fmt('m', utils::mt_strf_localtime("%m", pubDate));
 	fmt.register_fmt('b', utils::mt_strf_localtime("%b", pubDate));
@@ -114,16 +129,16 @@ Filepath QueueManager::generate_enqueue_filename(RssItem& item, RssFeed& feed)
 	fmt.register_fmt('S', utils::mt_strf_localtime("%S", pubDate));
 	fmt.register_fmt('y', utils::mt_strf_localtime("%y", pubDate));
 	fmt.register_fmt('Y', utils::mt_strf_localtime("%Y", pubDate));
-	fmt.register_fmt('t', utils::replace_all(title, "/", "_"));
-	fmt.register_fmt('e', utils::replace_all(extension, "/", "_"));
+	fmt.register_fmt('t', sanitize_path_component(title));
+	fmt.register_fmt('e', sanitize_path_component(extension));
 
 	if (feed.rssurl() != item.feedurl() &&
 		item.get_feedptr() != nullptr) {
 		std::string feedtitle = item.get_feedptr()->title();
 		utils::remove_soft_hyphens(feedtitle);
-		fmt.register_fmt('N', utils::replace_all(feedtitle, "/", "_"));
+		fmt.register_fmt('N', sanitize_path_component(feedtitle));
 	} else {
-		fmt.register_fmt('N', utils::replace_all(feed.title(), "/", "_"));
+		fmt.register_fmt('N', sanitize_path_component(feed.title()));
 	}
 
 	return Filepath::from_locale_string(
