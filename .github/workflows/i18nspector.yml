@@ -22,7 +22,7 @@ jobs:
             relevant:
               - .github/workflows/**
               - docker/**
-              - po/*.{po,pot}'
+              - po/*.{po,pot}
 
   code_formatting:
     name: .po files
