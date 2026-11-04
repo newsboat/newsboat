@@ -2,15 +2,31 @@ name: "No dbg! macros in Rust code"
 
 on:
   push:
-    paths: &included_paths
-      - '**.rs'
-      - '.github/**'
   pull_request:
-    paths: *included_paths
 
 jobs:
+  changes:
+    name: "Detect relevant changes"
+    runs-on: ubuntu-24.04
+    outputs:
+      relevant: ${{ steps.filter.outputs.relevant }}
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      - name: Filter paths
+        uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            relevant:
+              - '**.rs'
+              - '.github/**'
+
   check_for_dbg_macros:
     name: "No dbg! macros in Rust code"
+    needs: changes
+    if: needs.changes.outputs.relevant == 'true'
     runs-on: ubuntu-24.04
 
     steps:
