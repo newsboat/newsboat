@@ -1,5 +1,33 @@
 # Changes for Newsboat
 
+## 2.45.1 - 2026-11-05
+
+### Security
+
+- GHSA-78q5-mpjq-5q34: Remote code execution via manual OPML import (`--import-from-opml`)
+
+    All Newsboat releases are affected.
+
+    CVE ID pending.
+
+    This is a more specific version of GHSA-4m8m-vj3m-hfxx: the vulnerability is
+    the same, but the attack vector is a bit more complex.
+
+    When importing an OPML document, Newsboat doesn't sanitise newlines in the
+    data it reads. This data is then written into a plain-text file (the urls
+    file) which is then read back line-by-line. Specially crafted OPML documents
+    could utilise this to add more lines to the urls file and inject `exec:` and
+    `filter:` special URLs that contain shell commands to be executed when such
+    URL is reloaded.
+
+    In order to resolve this, URLs are sanitized by percent-encoding them, while
+    newlines in tags are replaced by underscore character.
+
+    Responsibly disclosed via email by @ghozt, who also provided the essence
+    of the fix.
+
+
+
 ## 2.45 - 2026-10-04
 
 This release was delayed by a week in order to work on security fixes.
