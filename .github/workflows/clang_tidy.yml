@@ -2,17 +2,34 @@ name: "clang-tidy (Clang 22, Ubuntu 26.04)"
 
 on:
   push:
-    paths-ignore: &ignored_paths
-      - contrib/**
-      - doc/**
-      - po/**
-      - snap/**
   pull_request:
-    paths_ignore: *ignored_paths
 
 jobs:
+  changes:
+    name: "Detect relevant changes"
+    runs-on: ubuntu-24.04
+    outputs:
+      relevant: ${{ steps.filter.outputs.relevant }}
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      - name: Filter paths
+        uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          predicate-quantifier: 'some-with-excludes'
+          filters: |
+            relevant:
+              - '**'
+              - '!contrib/**'
+              - '!doc/**'
+              - '!po/**'
+              - '!snap/**'
   clang_tidy:
     name: Run clang-tidy
+    needs: changes
+    if: needs.changes.outputs.relevant == 'true'
     runs-on: ubuntu-24.04
 
     steps:
@@ -75,3 +92,13 @@ jobs:
             --env CLANG_TIDY=clang-tidy-22 \
             newsboat/ci-26.04-clangtidy22:latest \
             make -j$(nproc) --keep-going clang-tidy
+
+  report_success:
+    name: All succeeded or skipped
+    needs: clang_tidy
+    if: ${{ always() && !cancelled() && !failure() }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Report success
+        run: |
+          echo "Everything either finished or got skipped because it wasn't necessary"
