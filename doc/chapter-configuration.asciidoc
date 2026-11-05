@@ -1,5 +1,8 @@
 :experimental:
 
+Let's check if this single change in a document properly skips most builds
+while still reporting all of them as completed to Github.
+
 Several aspects of Newsboat can be configured via a _config_ file,
 which is stored next to the _urls_ file.
 A configuration line looks like this in general:
