@@ -171,7 +171,7 @@ pub fn trim_end(rs_str: &str) -> &str {
 }
 
 pub fn quote(input: &str) -> String {
-    let mut input = input.replace('\"', "\\\"");
+    let mut input = input.replace('\\', "\\\\").replace('\"', "\\\"");
     input.insert(0, '"');
     input.push('"');
     input
@@ -1375,6 +1375,10 @@ mod tests {
         assert_eq!(quote(""), "\"\"");
         assert_eq!(quote("Hello World!"), "\"Hello World!\"");
         assert_eq!(quote("\"Hello World!\""), "\"\\\"Hello World!\\\"\"");
+        assert_eq!(
+            quote(r#"Here's a stray backslash: \ <- Saw that?"#),
+            r#""Here's a stray backslash: \\ <- Saw that?""#
+        );
     }
 
     #[test]
@@ -2426,5 +2430,15 @@ mod tests {
                 "".into()
             )
         );
+    }
+
+    proptest::proptest! {
+        #[test]
+        fn t_quote_unquote(ref input in "\\PC*") {
+            let quoted = quote(input);
+            let unquoted = tokenize_quoted(&quoted, " \r\n\t");
+            assert_eq!(unquoted.len(), 1);
+            assert_eq!(&unquoted[0], input);
+        }
     }
 }
