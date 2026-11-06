@@ -1161,6 +1161,9 @@ void HtmlRenderer::Table::complete_row()
 void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 	std::vector<std::pair<LineType, std::string>>& lines)
 {
+	// HTML caps colspan at 1000. Use the same bound for rendered columns.
+	constexpr size_t max_table_columns = 1000;
+
 	// get number of rows
 	size_t rows = table.rows.size();
 
@@ -1170,7 +1173,11 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 		size_t count = 0;
 		for (size_t cell = 0; cell < table.rows[row].cells.size();
 			cell++) {
-			count += table.rows[row].cells[cell].span;
+			const size_t remaining = max_table_columns - count;
+			count += std::min(table.rows[row].cells[cell].span, remaining);
+			if (count == max_table_columns) {
+				break;
+			}
 		}
 		cells = std::max(cells, count);
 	}
@@ -1179,8 +1186,9 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 	std::vector<size_t> cell_widths;
 	cell_widths.resize(cells, 0);
 	for (size_t row = 0; row < rows; row++) {
-		for (size_t cell = 0; cell < table.rows[row].cells.size();
-			cell++) {
+		const size_t rendered_cells =
+			std::min(table.rows[row].cells.size(), cells);
+		for (size_t cell = 0; cell < rendered_cells; cell++) {
 			size_t width = 0;
 			if (table.rows[row].cells[cell].text.size()) {
 				for (size_t idx = 0; idx <
@@ -1192,12 +1200,12 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 								.cells[cell]
 								.text[idx]));
 			}
-			if (table.rows[row].cells[cell].span > 1) {
-				width += table.rows[row].cells[cell].span;
+			const size_t span =
+				std::min(table.rows[row].cells[cell].span, cells - cell);
+			if (span > 1) {
+				width += span;
 				// divide size evenly on columns (can be done better, I know)
-				width /= table.rows[row]
-					.cells[cell]
-					.span;
+				width /= span;
 			}
 			cell_widths[cell] = std::max(cell_widths[cell], width);
 		}
@@ -1226,10 +1234,11 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 		lines.push_back(
 			std::make_pair(LineType::nonwrappable, separator));
 	for (size_t row = 0; row < rows; row++) {
+		const size_t rendered_cells =
+			std::min(table.rows[row].cells.size(), cells);
 		// calc height of this row
 		size_t height = 0;
-		for (size_t cell = 0; cell < table.rows[row].cells.size();
-			cell++)
+		for (size_t cell = 0; cell < rendered_cells; cell++)
 			height = std::max(height,
 					table.rows[row].cells[cell].text.size());
 
@@ -1239,7 +1248,7 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 				line += vsep;
 			}
 			for (size_t cell = 0;
-				cell < table.rows[row].cells.size();
+				cell < rendered_cells;
 				cell++) {
 				size_t cell_width = 0;
 				if (idx < table.rows[row]
@@ -1261,11 +1270,10 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 						.text[idx];
 				}
 				size_t reference_width = cell_widths[cell];
-				if (table.rows[row].cells[cell].span > 1) {
-					for (size_t ic = cell + 1; ic < cell +
-						table.rows[row]
-						.cells[cell]
-						.span;
+				const size_t span =
+					std::min(table.rows[row].cells[cell].span, cells - cell);
+				if (span > 1) {
+					for (size_t ic = cell + 1; ic < cell + span;
 						++ic)
 						reference_width +=
 							cell_widths[ic] + 1;
@@ -1280,7 +1288,7 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 							reference_width - cell_width,
 							' ');
 
-				if (cell < table.rows[row].cells.size() - 1) {
+				if (cell + 1 < rendered_cells) {
 					line += vsep;
 				}
 			}
