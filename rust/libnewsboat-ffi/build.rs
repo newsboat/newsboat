@@ -1,30 +1,27 @@
-fn add_cxxbridge(module: &str) {
-    cxx_build::bridge(format!("src/{module}.rs"))
-        // Keep in sync with c++ version specified in Makefile
-        .std("c++17")
-        // Disable warnings in generated code, since we can't affect them directly. We have to do
-        // this because these warnings are turned into errors when we pass `-D warnings` to Cargo
-        // on CI.
-        .flag("-w")
-        .compile(&format!("libnewsboat-ffi-{module}"));
-    println!("cargo:rerun-if-changed=src/{module}.rs");
-}
-
 fn main() {
-    add_cxxbridge("charencoding");
-    add_cxxbridge("filepath");
-    add_cxxbridge("cliargsparser");
-    add_cxxbridge("colormanager");
-    add_cxxbridge("configpaths");
-    add_cxxbridge("fmtstrformatter");
-    add_cxxbridge("fslock");
-    add_cxxbridge("history");
-    add_cxxbridge("keycombination");
-    add_cxxbridge("keymap");
-    add_cxxbridge("lineedit");
-    add_cxxbridge("logger");
-    add_cxxbridge("matchererror");
-    add_cxxbridge("scopemeasure");
-    add_cxxbridge("stflrichtext");
-    add_cxxbridge("utils");
+    cxx_build::bridges([
+        "src/charencoding.rs",
+        "src/filepath.rs",
+        "src/cliargsparser.rs",
+        "src/colormanager.rs",
+        "src/configpaths.rs",
+        "src/fmtstrformatter.rs",
+        "src/fslock.rs",
+        "src/history.rs",
+        "src/keycombination.rs",
+        "src/keymap.rs",
+        "src/lineedit.rs",
+        "src/logger.rs",
+        "src/matchererror.rs",
+        "src/scopemeasure.rs",
+        "src/stflrichtext.rs",
+        "src/utils.rs",
+    ])
+    // Keep in sync with c++ version specified in Makefile
+    .std("c++17")
+    // Disable warnings in generated code, since we can't affect them directly. We have to do
+    // this because these warnings are turned into errors when we pass `-D warnings` to Cargo
+    // on CI.
+    .flag("-w")
+    .compile("libnewsboat-ffi-cxx");
 }
