@@ -2,21 +2,38 @@ name: FreeBSD
 
 on:
   push:
-    paths-ignore: &ignored_paths
-      - contrib/**
-      - doc/**
-      - docker/**
-      - po/**
-      - snap/**
   pull_request:
-    paths_ignore: *ignored_paths
 
 jobs:
+  changes:
+    name: "Detect relevant changes"
+    runs-on: ubuntu-24.04
+    outputs:
+      relevant: ${{ steps.filter.outputs.relevant }}
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      - name: Filter paths
+        uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          predicate-quantifier: 'some-with-excludes'
+          filters: |
+            relevant:
+              - '**'
+              - '!contrib/**'
+              - '!doc/**'
+              - '!docker/**'
+              - '!po/**'
+              - '!snap/**'
   build_and_test_freebsd:
     strategy:
       matrix:
         release: ["14.5", "15.1"]
     name: FreeBSD ${{ matrix.release }}
+    needs: changes
+    if: needs.changes.outputs.relevant == 'true'
     runs-on: ubuntu-latest
     env:
       RUSTFLAGS: '-D warnings'
