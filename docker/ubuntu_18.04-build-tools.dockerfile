@@ -66,11 +66,12 @@ ENV PATH=/home/builder/.cargo/bin:$PATH
 RUN apt-get update \
     && apt-get upgrade --assume-yes
 
-ARG cxx_package=g++-8
-
+# Fixed dependencies only -- nothing here depends on a build-arg, so this layer's
+# cache survives a `cxx_package`/`cc`/`cxx` override (the C++ compiler itself is
+# installed separately, after Rust, below).
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
-        build-essential $cxx_package libsqlite3-dev libcurl4-openssl-dev libssl-dev \
+        build-essential libsqlite3-dev libcurl4-openssl-dev libssl-dev \
         libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev gettext git \
         asciidoctor wget \
     && apt-get autoremove \
@@ -107,6 +108,21 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
         --default-host x86_64-unknown-linux-gnu \
         --default-toolchain $rust_version \
     && chmod a+w $HOME/.cargo
+
+# C++ compiler last, and in its own layer -- this is the one thing a caller
+# commonly overrides (e.g. --build-arg cxx_package=clang-7), so isolating it
+# here means that override only busts this one small layer, not the much
+# larger fixed-dependencies layer above.
+USER root
+
+ARG cxx_package=g++-8
+
+RUN apt-get update \
+    && apt-get install --assume-yes --no-install-recommends $cxx_package \
+    && apt-get autoremove \
+    && apt-get clean
+
+USER builder
 
 ARG cc=gcc-8
 ARG cxx=g++-8
