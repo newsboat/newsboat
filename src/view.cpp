@@ -537,7 +537,7 @@ std::shared_ptr<ItemListFormAction> View::push_itemlist(
 void View::push_itemlist(unsigned int pos)
 {
 	std::shared_ptr<RssFeed> feed =
-		ctrl.get_feedcontainer()->get_feed(pos);
+		ctrl.get_feedcontainer().get_feed(pos);
 	LOG(Level::DEBUG,
 		"View::push_itemlist: retrieved feed at position %d",
 		pos);
@@ -1004,7 +1004,7 @@ void View::prepare_query_feed(std::shared_ptr<RssFeed> feed)
 
 		const std::shared_ptr<AutoDiscardMessage> message =
 			status_line.show_message_until_finished(_("Updating query feed..."));
-		feed->update_items(ctrl.get_feedcontainer()->get_all_feeds());
+		feed->update_items(ctrl.get_feedcontainer().get_all_feeds());
 		feed->sort(cfg->get_article_sort_strategy());
 		notify_itemlist_change(feed);
 	}

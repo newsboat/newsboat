@@ -60,9 +60,9 @@ public:
 	void edit_urls_file(const std::string& cmdline);
 	Filepath get_urls_file();
 
-	FeedContainer* get_feedcontainer()
+	FeedContainer& get_feedcontainer()
 	{
-		return &feedcontainer;
+		return feedcontainer;
 	}
 
 	void write_item(RssItem& item, const Filepath& filename);
@@ -84,14 +84,14 @@ public:
 
 	void replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int pos, bool unattended);
 
-	ConfigContainer* get_config()
+	ConfigContainer& get_config()
 	{
-		return &cfg;
+		return cfg;
 	}
 
-	RssIgnores* get_ignores()
+	RssIgnores& get_ignores()
 	{
-		return &ign;
+		return ign;
 	}
 
 	RemoteApi* get_api()

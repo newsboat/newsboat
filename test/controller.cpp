@@ -29,9 +29,9 @@ TEST_CASE("write_item correctly parses path", "[Controller]")
 	ConfigPaths paths{};
 	Controller c(paths);
 
-	auto cfg = c.get_config();
-	cfg->set_configvalue("save-path", save_path.to_locale_string());
-	auto rsscache = Cache::in_memory(*cfg);
+	auto& cfg = c.get_config();
+	cfg.set_configvalue("save-path", save_path.to_locale_string());
+	auto rsscache = Cache::in_memory(cfg);
 
 	RssItem item(rsscache.get());
 	item.set_title("title");

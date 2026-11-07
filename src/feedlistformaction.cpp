@@ -67,7 +67,7 @@ void FeedListFormAction::prepare()
 
 	const auto sort_strategy = cfg->get_feed_sort_strategy();
 	if (!old_sort_strategy || sort_strategy != *old_sort_strategy) {
-		v.get_ctrl().get_feedcontainer()->sort_feeds(sort_strategy);
+		v.get_ctrl().get_feedcontainer().sort_feeds(sort_strategy);
 		old_sort_strategy = sort_strategy;
 		do_redraw = true;
 	}
@@ -221,7 +221,7 @@ REDO:
 	case OP_OPENALLUNREADINBROWSER:
 		if (visible_feeds.size() > 0) {
 			std::shared_ptr<RssFeed> feed =
-				v.get_ctrl().get_feedcontainer()->get_feed(pos);
+				v.get_ctrl().get_feedcontainer().get_feed(pos);
 			if (feed) {
 				LOG(Level::INFO,
 					"FeedListFormAction: opening all unread items in feed at position `%d'",
@@ -248,7 +248,7 @@ REDO:
 	case OP_OPENALLUNREADINBROWSER_AND_MARK:
 		if (visible_feeds.size() > 0) {
 			std::shared_ptr<RssFeed> feed =
-				v.get_ctrl().get_feedcontainer()->get_feed(pos);
+				v.get_ctrl().get_feedcontainer().get_feed(pos);
 			if (feed) {
 				LOG(Level::INFO,
 					"FeedListFormAction: opening all unread items in feed at position `%d' and marking read",
@@ -498,7 +498,7 @@ REDO:
 		}
 		break;
 	case OP_EDIT_URLS:
-		edit_urls(args, v.get_ctrl().get_feedcontainer()->get_feed(pos));
+		edit_urls(args, v.get_ctrl().get_feedcontainer().get_feed(pos));
 		break;
 	case OP_QUIT:
 		if (tag != "") {
@@ -540,7 +540,7 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 		return false;
 	}
 
-	std::shared_ptr<RssFeed> feed = v.get_ctrl().get_feedcontainer()->get_feed(
+	std::shared_ptr<RssFeed> feed = v.get_ctrl().get_feedcontainer().get_feed(
 			pos);
 	if (feed == nullptr) {
 		v.get_statusline().show_error(_("No feed selected!"));
@@ -921,7 +921,7 @@ void FeedListFormAction::mark_pos_if_visible(unsigned int pos)
 		vpos++;
 	}
 	vpos = 0;
-	pos = v.get_ctrl().get_feedcontainer()->get_pos_of_next_unread(pos);
+	pos = v.get_ctrl().get_feedcontainer().get_pos_of_next_unread(pos);
 	for (const auto& feed : visible_feeds) {
 		if (feed.second == pos) {
 			LOG(Level::DEBUG,
