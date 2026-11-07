@@ -87,18 +87,6 @@ jobs:
             newsboat/ci-18.04-i686:latest \
             make -j$(nproc) NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
 
-      - name: Run Clippy
-        run: |
-          docker run \
-            --rm \
-            --tty \
-            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
-            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
-            --mount type=bind,source=$(pwd),target=/home/builder/src \
-            --env RUSTFLAGS='-D warnings' \
-            newsboat/ci-18.04-i686:latest \
-            cargo clippy --all-targets --all-features -- -D warnings -A unknown-lints
-
       - name: Fake install
         run: |
           docker run \
@@ -114,3 +102,15 @@ jobs:
               make DESTDIR=fakeroot install && \
               make DESTDIR=fakeroot uninstall && \
               test $(find fakeroot -type f -print | wc -l) -eq 0'
+
+      - name: Run Clippy
+        run: |
+          docker run \
+            --rm \
+            --tty \
+            --mount type=bind,source=$HOME/.cargo/git,target=/home/builder/.cargo/git \
+            --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+            --mount type=bind,source=$(pwd),target=/home/builder/src \
+            --env RUSTFLAGS='-D warnings' \
+            newsboat/ci-18.04-i686:latest \
+            cargo clippy --all-targets --all-features -- -D warnings -A unknown-lints
