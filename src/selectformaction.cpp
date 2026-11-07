@@ -201,13 +201,13 @@ std::string SelectFormAction::format_line(const std::string& selecttag_format,
 {
 	FmtStrFormatter fmt;
 
-	const auto feedcontainer = v.get_ctrl().get_feedcontainer();
+	const auto& feedcontainer = v.get_ctrl().get_feedcontainer();
 
-	const auto total_feeds = feedcontainer->get_feed_count_per_tag(tag);
+	const auto total_feeds = feedcontainer.get_feed_count_per_tag(tag);
 	const auto unread_feeds =
-		feedcontainer->get_unread_feed_count_per_tag(tag);
+		feedcontainer.get_unread_feed_count_per_tag(tag);
 	const auto unread_articles =
-		feedcontainer->get_unread_item_count_per_tag(tag);
+		feedcontainer.get_unread_item_count_per_tag(tag);
 
 	fmt.register_fmt('i', strprintf::fmt("%u", pos));
 	fmt.register_fmt('T', tag);

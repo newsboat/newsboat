@@ -842,7 +842,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_ARTICLEFEED: {
-		auto feeds = v.get_ctrl().get_feedcontainer()->get_all_feeds();
+		auto feeds = v.get_ctrl().get_feedcontainer().get_all_feeds();
 		size_t pos;
 		auto article_feed = visible_items[itempos].first->get_feedptr();
 		for (pos = 0; pos < feeds.size(); pos++) {

@@ -199,7 +199,7 @@ void FeedContainer::populate_query_feeds()
 	}
 }
 
-unsigned int FeedContainer::get_feed_count_per_tag(const std::string& tag)
+unsigned int FeedContainer::get_feed_count_per_tag(const std::string& tag) const
 {
 	unsigned int count = 0;
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
@@ -213,7 +213,7 @@ unsigned int FeedContainer::get_feed_count_per_tag(const std::string& tag)
 }
 
 unsigned int FeedContainer::get_unread_feed_count_per_tag(
-	const std::string& tag)
+	const std::string& tag) const
 {
 	unsigned int count = 0;
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
@@ -227,7 +227,7 @@ unsigned int FeedContainer::get_unread_feed_count_per_tag(
 }
 
 unsigned int FeedContainer::get_unread_item_count_per_tag(
-	const std::string& tag)
+	const std::string& tag) const
 {
 	unsigned int count = 0;
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);

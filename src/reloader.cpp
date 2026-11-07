@@ -71,7 +71,7 @@ void Reloader::reload(unsigned int pos,
 {
 	ScopeMeasure sm("Reloader::reload");
 	LOG(Level::DEBUG, "Reloader::reload: pos = %u", pos);
-	std::shared_ptr<RssFeed> oldfeed = ctrl.get_feedcontainer()->get_feed(pos);
+	std::shared_ptr<RssFeed> oldfeed = ctrl.get_feedcontainer().get_feed(pos);
 	if (oldfeed) {
 		LOG(Level::INFO, "Reloader::reload: starting reload of %s", oldfeed->rssurl());
 
@@ -102,7 +102,7 @@ void Reloader::reload(unsigned int pos,
 			message_lifetime.reset();
 			oldfeed->set_status(DlStatus::DURING_DOWNLOAD);
 
-			RssIgnores* ign = ignore_dl ? ctrl.get_ignores() : nullptr;
+			RssIgnores* ign = ignore_dl ? &ctrl.get_ignores() : nullptr;
 
 			LOG(Level::INFO, "Reloader::reload: retrieving feed");
 			sm.stopover("start retrieving");
@@ -197,12 +197,12 @@ void Reloader::reload_all(bool unattended)
 	ScopeMeasure sm("Reloader::reload_all");
 
 	const auto unread_feeds =
-		ctrl.get_feedcontainer()->unread_feed_count();
+		ctrl.get_feedcontainer().unread_feed_count();
 	const auto unread_articles =
-		ctrl.get_feedcontainer()->unread_item_count();
+		ctrl.get_feedcontainer().unread_item_count();
 
-	ctrl.get_feedcontainer()->reset_feeds_status();
-	const auto num_feeds = ctrl.get_feedcontainer()->feeds_size();
+	ctrl.get_feedcontainer().reset_feeds_status();
+	const auto num_feeds = ctrl.get_feedcontainer().feeds_size();
 
 	std::vector<unsigned int> v;
 	for (unsigned int i = 0; i < num_feeds; ++i) {
@@ -212,7 +212,7 @@ void Reloader::reload_all(bool unattended)
 
 	// refresh query feeds (update and sort)
 	LOG(Level::DEBUG, "Reloader::reload_all: refresh query feeds");
-	for (const auto& feed : ctrl.get_feedcontainer()->get_all_feeds()) {
+	for (const auto& feed : ctrl.get_feedcontainer().get_all_feeds()) {
 		if (feed->is_query_feed()) {
 			try {
 				ctrl.get_view()->prepare_query_feed(feed);
@@ -223,7 +223,7 @@ void Reloader::reload_all(bool unattended)
 		}
 	}
 
-	ctrl.get_feedcontainer()->sort_feeds(cfg.get_feed_sort_strategy());
+	ctrl.get_feedcontainer().sort_feeds(cfg.get_feed_sort_strategy());
 	ctrl.update_feedlist();
 	ctrl.get_view()->force_redraw();
 
@@ -240,7 +240,7 @@ void Reloader::reload_indexes_impl(std::vector<unsigned int> indexes, bool unatt
 		s = suff.substr(0, p);
 	};
 
-	const auto feeds = ctrl.get_feedcontainer()->get_all_feeds();
+	const auto feeds = ctrl.get_feedcontainer().get_all_feeds();
 
 	// Sort the feeds based on domain, so feeds on the same domain
 	// can share the curl handle.
@@ -274,9 +274,9 @@ void Reloader::reload_indexes(const std::vector<unsigned int>& indexes, bool una
 {
 	ScopeMeasure m1("Reloader::reload_indexes");
 	const auto unread_feeds =
-		ctrl.get_feedcontainer()->unread_feed_count();
+		ctrl.get_feedcontainer().unread_feed_count();
 	const auto unread_articles =
-		ctrl.get_feedcontainer()->unread_item_count();
+		ctrl.get_feedcontainer().unread_item_count();
 
 	reload_indexes_impl(indexes, unattended);
 
@@ -312,9 +312,9 @@ void Reloader::notify_reload_finished(unsigned int unread_feeds_before,
 	unsigned int unread_articles_before)
 {
 	const auto unread_feeds =
-		ctrl.get_feedcontainer()->unread_feed_count();
+		ctrl.get_feedcontainer().unread_feed_count();
 	const auto unread_articles =
-		ctrl.get_feedcontainer()->unread_item_count();
+		ctrl.get_feedcontainer().unread_item_count();
 	const bool notify_always = cfg.get_configvalue_as_bool("notify-always");
 
 	if (notify_always || unread_feeds > unread_feeds_before ||

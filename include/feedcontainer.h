@@ -21,13 +21,13 @@ public:
 	void add_feed(const std::shared_ptr<RssFeed> feed);
 	void mark_all_feed_items_read(std::shared_ptr<RssFeed> feed);
 	void mark_all_feeds_read();
-	unsigned int get_feed_count_per_tag(const std::string& tag);
+	unsigned int get_feed_count_per_tag(const std::string& tag) const;
 
 	/// Count feeds tagged with `tag` that have unread items
-	unsigned int get_unread_feed_count_per_tag(const std::string& tag);
+	unsigned int get_unread_feed_count_per_tag(const std::string& tag) const;
 
 	/// Count unread items in feeds tagged with `tag`
-	unsigned int get_unread_item_count_per_tag(const std::string& tag);
+	unsigned int get_unread_item_count_per_tag(const std::string& tag) const;
 
 	std::shared_ptr<RssFeed> get_feed_by_url(const std::string& feedurl);
 	void populate_query_feeds();

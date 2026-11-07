@@ -26,13 +26,10 @@ struct EnqueueResult {
 };
 
 class QueueManager {
-	ConfigContainer* cfg = nullptr;
-	Filepath queue_file;
-
 public:
 	/// Construct `QueueManager` instance out of a config container and a path
 	/// to the queue file.
-	QueueManager(ConfigContainer* cfg, Filepath queue_file);
+	QueueManager(ConfigContainer& cfg, Filepath queue_file);
 
 	/// Adds the podcast URL to Podboat's queue file
 	EnqueueResult enqueue_url(RssItem& item, RssFeed& feed);
@@ -42,6 +39,9 @@ public:
 
 private:
 	Filepath generate_enqueue_filename(RssItem& item, RssFeed& feed);
+
+	ConfigContainer& cfg;
+	Filepath queue_file;
 };
 
 }

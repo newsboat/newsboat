@@ -132,7 +132,7 @@ public:
 	}
 
 	void set_tags(const std::vector<std::string>& tags);
-	bool matches_tag(const std::string& tag);
+	bool matches_tag(const std::string& tag) const;
 	std::vector<std::string> get_tags() const;
 	std::string get_firsttag();
 

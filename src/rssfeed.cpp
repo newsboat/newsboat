@@ -78,7 +78,7 @@ unsigned int RssFeed::unread_item_count() const
 	});
 }
 
-bool RssFeed::matches_tag(const std::string& tag)
+bool RssFeed::matches_tag(const std::string& tag) const
 {
 	return std::find_if(
 	tags_.begin(), tags_.end(), [&](const std::string& t) {

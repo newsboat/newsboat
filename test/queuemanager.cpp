@@ -28,7 +28,7 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 		RssFeed feed(rsscache.get(), "https://example.com/news.atom");
 
 		test_helpers::TempFile queue_file;
-		QueueManager manager(&cfg, queue_file.get_path());
+		QueueManager manager(cfg, queue_file.get_path());
 
 		THEN("the queue file is not automatically created") {
 			REQUIRE_FALSE(test_helpers::file_exists(queue_file.get_path()));
@@ -149,7 +149,7 @@ TEST_CASE("QueueManager sanitizes control characters in queue data",
 	feed.set_title("Feed\r\n\tname");
 
 	test_helpers::TempFile queue_file;
-	QueueManager manager(&cfg, queue_file.get_path());
+	QueueManager manager(cfg, queue_file.get_path());
 
 	const auto result = manager.enqueue_url(item, feed);
 
@@ -181,7 +181,7 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 		RssFeed feed(rsscache.get(), "https://example.com/news.atom");
 
 		test_helpers::TempFile queue_file;
-		QueueManager manager(&cfg, queue_file.get_path());
+		QueueManager manager(cfg, queue_file.get_path());
 
 		WHEN("first item is enqueued") {
 			const auto result = manager.enqueue_url(item1, feed);
@@ -253,7 +253,7 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 		RssFeed feed(rsscache.get(), "https://example.com/news.atom");
 
 		test_helpers::TempFile queue_file;
-		QueueManager manager(&cfg, queue_file.get_path());
+		QueueManager manager(cfg, queue_file.get_path());
 
 		test_helpers::copy_file("data/empty-file"_path,
 			queue_file.get_path());
@@ -302,7 +302,7 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 	RssFeed feed(rsscache.get(), "https://example.com/podcasts.atom");
 
 	test_helpers::TempFile queue_file;
-	QueueManager manager(&cfg, queue_file.get_path());
+	QueueManager manager(cfg, queue_file.get_path());
 
 	const auto result1 = manager.enqueue_url(item1, feed);
 	REQUIRE(result1.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
@@ -346,7 +346,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 	auto feed = std::make_shared<RssFeed>(rsscache.get(), "https://example.com/podcasts.atom");
 
 	test_helpers::TempFile queue_file;
-	QueueManager manager(&cfg, queue_file.get_path());
+	QueueManager manager(cfg, queue_file.get_path());
 
 	SECTION("%n for current feed title, with slashes replaced by underscores") {
 		cfg.set_configvalue("download-filename-format", "%n");
@@ -486,7 +486,7 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 		feed.add_item(item3);
 
 		test_helpers::TempFile queue_file;
-		QueueManager manager(&cfg, queue_file.get_path());
+		QueueManager manager(cfg, queue_file.get_path());
 
 		WHEN("autoenqueue() is called") {
 			const auto result = manager.autoenqueue(feed);
@@ -539,7 +539,7 @@ SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]
 		feed.add_item(item2);
 
 		test_helpers::TempFile queue_file;
-		QueueManager manager(&cfg, queue_file.get_path());
+		QueueManager manager(cfg, queue_file.get_path());
 
 		WHEN("autoenqueue() is called") {
 			const auto result = manager.autoenqueue(feed);
@@ -587,7 +587,7 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 		feed.add_item(item);
 
 		test_helpers::TempFile queue_file;
-		QueueManager manager(&cfg, queue_file.get_path());
+		QueueManager manager(cfg, queue_file.get_path());
 
 		test_helpers::copy_file("data/empty-file"_path,
 			queue_file.get_path());
@@ -638,7 +638,7 @@ TEST_CASE("autoenqueue() skips already-enqueued items", "[QueueManager]")
 	feed.add_item(item3);
 
 	test_helpers::TempFile queue_file;
-	QueueManager manager(&cfg, queue_file.get_path());
+	QueueManager manager(cfg, queue_file.get_path());
 
 	const auto result = manager.autoenqueue(feed);
 	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
@@ -681,7 +681,7 @@ TEST_CASE("autoenqueue() only enqueues HTTP and HTTPS URLs", "[QueueManager]")
 	feed.add_item(item3);
 
 	test_helpers::TempFile queue_file;
-	QueueManager manager(&cfg, queue_file.get_path());
+	QueueManager manager(cfg, queue_file.get_path());
 
 	const auto result = manager.autoenqueue(feed);
 	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
@@ -727,7 +727,7 @@ TEST_CASE("autoenqueue() does not enqueue items with an invalid podcast type",
 		feed.add_item(item4);
 
 		test_helpers::TempFile queue_file;
-		QueueManager manager(&cfg, queue_file.get_path());
+		QueueManager manager(cfg, queue_file.get_path());
 
 		WHEN("autoenqueue() is called") {
 			const auto result = manager.autoenqueue(feed);

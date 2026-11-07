@@ -10,7 +10,7 @@
 
 namespace newsboat {
 
-QueueManager::QueueManager(ConfigContainer* cfg_, Filepath queue_file)
+QueueManager::QueueManager(ConfigContainer& cfg_, Filepath queue_file)
 	: cfg(cfg_)
 	, queue_file(std::move(queue_file))
 {}
@@ -91,8 +91,8 @@ Filepath QueueManager::generate_enqueue_filename(RssItem& item, RssFeed& feed)
 	const time_t pubDate = item.pubDate_timestamp();
 
 	const Filepath dlformat =
-		cfg->get_configvalue_as_filepath("download-path")
-		.join(Filepath::from_locale_string(cfg->get_configvalue("download-filename-format")));
+		cfg.get_configvalue_as_filepath("download-path")
+		.join(Filepath::from_locale_string(cfg.get_configvalue("download-filename-format")));
 
 	const std::string base = utils::get_basename(url);
 	std::string extension;
