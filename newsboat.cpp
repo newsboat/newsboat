@@ -258,17 +258,15 @@ int main(int argc, char* argv[])
 
 	rsspp::Parser::global_init();
 
-	ConfigPaths configpaths;
-	if (!configpaths.initialized()) {
-		std::cerr << configpaths.error_message() << std::endl;
+	CliArgsParser args(argc, argv);
+	auto configpaths = ConfigPaths::init_configpaths(args);
+	if (!configpaths.has_value()) {
+		std::cerr << configpaths.error() << std::endl;
 		return EXIT_FAILURE;
 	}
 
-	CliArgsParser args(argc, argv);
-	configpaths.process_args(args);
-
 	if (args.should_print_usage()) {
-		print_usage(args.program_name(), configpaths);
+		print_usage(args.program_name(), configpaths.value());
 		if (args.return_code().has_value()) {
 			return args.return_code().value();
 		}
@@ -277,7 +275,7 @@ int main(int argc, char* argv[])
 		return EXIT_SUCCESS;
 	}
 
-	Controller c(configpaths);
+	Controller c(configpaths.value());
 	newsboat::View v(c);
 	c.set_view(&v);
 
