@@ -5,7 +5,6 @@
 #include "3rd-party/catch.hpp"
 #include "controller.h"
 #include "configpaths.h"
-#include "cache.h"
 #include "filepath.h"
 
 using namespace newsboat;
@@ -18,8 +17,9 @@ TEST_CASE("get_filename_suggestion() normalizes filenames for saving articles", 
 
 	const std::string example_en("Comparing Visual");
 
-	ConfigPaths paths{};
-	Controller c(paths);
+	CliArgsParser cliargs(0, nullptr);
+	auto paths = ConfigPaths::init_configpaths(cliargs);
+	Controller c(paths.value());
 	newsboat::View v(c);
 
 	ConfigContainer cfg{};

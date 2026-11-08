@@ -2,6 +2,19 @@
 
 namespace newsboat {
 
+nonstd::expected<ConfigPaths, std::string> ConfigPaths::init_configpaths(
+	CliArgsParser& args)
+{
+	ConfigPaths configpaths;
+	if (!configpaths.initialized()) {
+		return nonstd::unexpected<std::string>(configpaths.error_message());
+	}
+
+	configpaths.process_args(args);
+
+	return nonstd::expected<ConfigPaths, std::string>(std::move(configpaths));
+}
+
 ConfigPaths::ConfigPaths()
 	: rs_object(configpaths::bridged::create())
 {
