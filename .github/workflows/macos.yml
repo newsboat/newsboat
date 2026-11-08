@@ -2,17 +2,34 @@ name: macOS
 
 on:
   push:
-    paths-ignore: &ignored_paths
-      - contrib/**
-      - doc/**
-      - po/**
-      - snap/**
   pull_request:
-    paths_ignore: *ignored_paths
 
 jobs:
+  changes:
+    name: "Detect relevant changes"
+    runs-on: ubuntu-24.04
+    outputs:
+      relevant: ${{ steps.filter.outputs.relevant }}
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      - name: Filter paths
+        uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          predicate-quantifier: 'some-with-excludes'
+          filters: |
+            relevant:
+              - '**'
+              - '!contrib/**'
+              - '!doc/**'
+              - '!po/**'
+              - '!snap/**'
   build_and_test_macos:
     name: macOS
+    needs: changes
+    if: needs.changes.outputs.relevant == 'true'
     runs-on: ${{ matrix.os }}
     env:
       # Disable progress bar in Cargo. This cuts down on output, avoiding log length limits.
@@ -74,3 +91,13 @@ jobs:
 
       - name: Run Clippy
         run: cargo clippy --all-targets --all-features -- -D warnings -A unknown-lints
+
+  report_success:
+    name: All succeeded or skipped
+    needs: build_and_test_macos
+    if: ${{ always() && !cancelled() && !failure() }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Report success
+        run: |
+          echo "Everything either finished or got skipped because it wasn't necessary"

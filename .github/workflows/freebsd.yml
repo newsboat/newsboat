@@ -2,21 +2,38 @@ name: FreeBSD
 
 on:
   push:
-    paths-ignore: &ignored_paths
-      - contrib/**
-      - doc/**
-      - docker/**
-      - po/**
-      - snap/**
   pull_request:
-    paths_ignore: *ignored_paths
 
 jobs:
+  changes:
+    name: "Detect relevant changes"
+    runs-on: ubuntu-24.04
+    outputs:
+      relevant: ${{ steps.filter.outputs.relevant }}
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      - name: Filter paths
+        uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          predicate-quantifier: 'some-with-excludes'
+          filters: |
+            relevant:
+              - '**'
+              - '!contrib/**'
+              - '!doc/**'
+              - '!docker/**'
+              - '!po/**'
+              - '!snap/**'
   build_and_test_freebsd:
     strategy:
       matrix:
         release: ["14.5", "15.1"]
     name: FreeBSD ${{ matrix.release }}
+    needs: changes
+    if: needs.changes.outputs.relevant == 'true'
     runs-on: ubuntu-latest
     env:
       RUSTFLAGS: '-D warnings'
@@ -85,3 +102,13 @@ jobs:
             su testuser -c 'cd ~ && RUST_TEST_THREADS=5 RUST_BACKTRACE=1 gmake -j5 NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check'
             su testuser -c 'cd ~ && mkdir fakeroot && gmake DESTDIR=fakeroot install && gmake DESTDIR=fakeroot uninstall && [ $(find fakeroot -type f -print | wc -l) -eq 0 ]'
             su testuser -c 'cd ~ && cargo clippy --all-targets --all-features -- -D warnings -A unknown-lints'
+
+  report_success:
+    name: All succeeded or skipped
+    needs: build_and_test_freebsd
+    if: ${{ always() && !cancelled() && !failure() }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Report success
+        run: |
+          echo "Everything either finished or got skipped because it wasn't necessary"
