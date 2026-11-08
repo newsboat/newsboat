@@ -17,6 +17,8 @@ use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use url::Url;
 
+"This shouldn't compile, let's see if the CI checks work as expected"
+
 pub fn replace_all(input: &str, from: &str, to: &str) -> String {
     input.replace(from, to)
 }
