@@ -18,13 +18,25 @@
 
 using namespace newsboat;
 
-TEST_CASE("OP_OPEN displays article using an external pager",
+class CliArgsParserTest {
+protected:
+	CliArgsParserTest()
+		: cliargs(0, nullptr)
+		, paths(ConfigPaths::init_configpaths(cliargs).value())
+		, c(paths)
+		, v(c)
+	{
+	}
+
+	CliArgsParser cliargs;
+	ConfigPaths paths;
+	Controller c;
+	newsboat::View v;
+};
+
+TEST_CASE_METHOD(CliArgsParserTest, "OP_OPEN displays article using an external pager",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	test_helpers::TempFile pagerfile;
 
 	const std::string test_url = "http://test_url";
@@ -73,13 +85,9 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 		test_description);
 }
 
-TEST_CASE("OP_PURGE_DELETED purges previously deleted items",
+TEST_CASE_METHOD(CliArgsParserTest, "OP_PURGE_DELETED purges previously deleted items",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	ConfigContainer cfg;
 	auto rsscache = Cache::in_memory(cfg);
 	FilterContainer filters;
@@ -108,14 +116,10 @@ TEST_CASE("OP_PURGE_DELETED purges previously deleted items",
 	}
 }
 
-TEST_CASE(
+TEST_CASE_METHOD(CliArgsParserTest,
 	"OP_OPENBROWSER_AND_MARK passes the url to the browser and marks read",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	test_helpers::TempFile browserfile;
 
 	const std::string test_url = "http://test_url";
@@ -149,15 +153,10 @@ TEST_CASE(
 	REQUIRE(feed->unread_item_count() == 0);
 }
 
-TEST_CASE(
+TEST_CASE_METHOD(CliArgsParserTest,
 	"OP_OPENBROWSER_AND_MARK does not mark read when browser fails",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
-
 	const std::string test_url = "http://test_url";
 
 	ConfigContainer cfg;
@@ -184,13 +183,9 @@ TEST_CASE(
 	REQUIRE(feed->unread_item_count() == 1);
 }
 
-TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
+TEST_CASE_METHOD(CliArgsParserTest, "OP_OPENINBROWSER passes the url to the browser",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	test_helpers::TempFile browserfile;
 	const std::string test_url = "http://test_url";
 	std::string line;
@@ -220,13 +215,10 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	REQUIRE(line == test_url);
 }
 
-TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
+TEST_CASE_METHOD(CliArgsParserTest,
+	"OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	test_helpers::TempFile browserfile;
 	const std::string test_url = "http://test_url";
 	std::string line;
@@ -256,13 +248,10 @@ TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
 	REQUIRE(line == test_url);
 }
 
-TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
+TEST_CASE_METHOD(CliArgsParserTest,
+	"OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	test_helpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
 	const std::string test_url = "http://test_url";
@@ -341,15 +330,11 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	}
 }
 
-TEST_CASE(
+TEST_CASE_METHOD(CliArgsParserTest,
 	"OP_OPENALLUNREADINBROWSER_AND_MARK passes the url list to the browser "
 	"and marks them read",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	test_helpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
 	const std::string test_url = "http://test_url";
@@ -430,12 +415,9 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
+TEST_CASE_METHOD(CliArgsParserTest, "OP_SHOWURLS shows the article's properties",
+	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	ConfigContainer cfg;
 	auto rsscache = Cache::in_memory(cfg);
 	FilterContainer filters;
@@ -496,13 +478,10 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 	}
 }
 
-TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
+TEST_CASE_METHOD(CliArgsParserTest,
+	"OP_BOOKMARK pipes articles url and title to bookmark-command",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	ConfigContainer cfg;
 	auto rsscache = Cache::in_memory(cfg);
 	FilterContainer filters;
@@ -560,13 +539,9 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 
 }
 
-TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
+TEST_CASE_METHOD(CliArgsParserTest, "OP_EDITFLAGS arguments are added to an item's flags",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	ConfigContainer cfg;
 	auto rsscache = Cache::in_memory(cfg);
 	FilterContainer filters;
@@ -619,13 +594,10 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	}
 }
 
-TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
+TEST_CASE_METHOD(CliArgsParserTest,
+	"OP_SAVE writes an article's attributes to the specified file",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	test_helpers::TempFile saveFile;
 	ConfigContainer cfg;
 	auto rsscache = Cache::in_memory(cfg);
@@ -684,12 +656,8 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 
 }
 
-TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
+TEST_CASE_METHOD(CliArgsParserTest, "OP_HELP command is processed", "[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	ConfigContainer cfg;
 	auto rsscache = Cache::in_memory(cfg);
 
@@ -710,12 +678,9 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 	REQUIRE_NOTHROW(itemlist->process_op(OP_HELP, args));
 }
 
-TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
+TEST_CASE_METHOD(CliArgsParserTest, "OP_HARDQUIT command is processed",
+	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	ConfigContainer cfg;
 	auto rsscache = Cache::in_memory(cfg);
 	FilterContainer filters;
@@ -736,17 +701,13 @@ TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 	REQUIRE_NOTHROW(itemlist.process_op(OP_HARDQUIT, args));
 }
 
-TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
+TEST_CASE_METHOD(CliArgsParserTest, "Navigate back and forth using OP_NEXT and OP_PREV",
 	"[ItemListFormAction]")
 {
 	// We are using the OP_SHOWURLS command to print the current
 	// article'attibutes to a file, and assert the position was indeed
 	// updated.
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
 	test_helpers::TempFile articleFile;
-	newsboat::View v(c);
 	ConfigContainer cfg;
 	cfg.set_configvalue(
 		"external-url-viewer", "tee > " + articleFile.get_path().to_locale_string());
@@ -791,13 +752,10 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
 	REQUIRE(line == prefix_title + first_article_title);
 }
 
-TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
+TEST_CASE_METHOD(CliArgsParserTest,
+	"OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	ConfigContainer cfg;
 	auto rsscache = Cache::in_memory(cfg);
 
@@ -830,13 +788,10 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	}
 }
 
-TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
+TEST_CASE_METHOD(CliArgsParserTest,
+	"OP_PIPE_TO pipes an article's content to an external command",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
-	newsboat::View v(c);
 	test_helpers::TempFile articleFile;
 	ConfigContainer cfg;
 	auto rsscache = Cache::in_memory(cfg);
@@ -894,15 +849,12 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	}
 }
 
-TEST_CASE("OP_OPENINBROWSER does not result in itemlist invalidation",
+TEST_CASE_METHOD(CliArgsParserTest,
+	"OP_OPENINBROWSER does not result in itemlist invalidation",
 	"[ItemListFormAction]")
 {
-	CliArgsParser cliargs(0, nullptr);
-	auto paths = ConfigPaths::init_configpaths(cliargs);
-	Controller c(paths.value());
 	ConfigContainer cfg;
 	KeyMap k(KM_NEWSBOAT);
-	newsboat::View v(c);
 	v.set_config_container(&cfg);
 	v.set_keymap(&k);
 	auto rsscache = Cache::in_memory(cfg);
