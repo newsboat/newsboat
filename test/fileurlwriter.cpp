@@ -114,23 +114,17 @@ TEST_CASE("FileUrlWriter percent-encodes URLs", "[FileUrlWriter]")
 {
 	test_helpers::TempFile file;
 
-	const auto get_feed_origin = []() -> FeedOrigin {
-		static std::size_t file_origin;
-		FeedOrigin ret;
-		ret.file_origin = { file_origin++ };
-		return ret;
-	};
 	const std::vector<std::string> no_tags;
 	const std::vector<UrlReader::FeedUrl> urls {
 		{
 			"https://example.com/feed.xml\nexec:echo boo",
-			get_feed_origin(),
+			FeedOrigin(),
 			no_tags
 		},
 
 		{
 			"https://example.com/another_feed.xml\rexec:echo\tboo",
-			get_feed_origin(),
+			FeedOrigin(),
 			no_tags
 		}
 	};
@@ -151,17 +145,11 @@ TEST_CASE("FileUrlWriter replaces newlines in tags with underscore",
 {
 	test_helpers::TempFile file;
 
-	const auto get_feed_origin = []() -> FeedOrigin {
-		static std::size_t file_origin;
-		FeedOrigin ret;
-		ret.file_origin = { file_origin++ };
-		return ret;
-	};
 	const std::vector<std::string> no_tags;
 	const std::vector<UrlReader::FeedUrl> urls {
 		{
 			"https://example.org/feed2.xml",
-			get_feed_origin(),
+			FeedOrigin(),
 			{ "sneaky tag\nexec:echo foo", "weird\tag" }
 		}
 	};
@@ -180,28 +168,22 @@ TEST_CASE("FileUrlWriter puts tags in double quotes", "[FileUrlWriter]")
 {
 	test_helpers::TempFile file;
 
-	const auto get_feed_origin = []() -> FeedOrigin {
-		static std::size_t file_origin;
-		FeedOrigin ret;
-		ret.file_origin = { file_origin++ };
-		return ret;
-	};
 	const std::vector<UrlReader::FeedUrl> urls {
 		{
 			"https://example.com/news.atom",
-			get_feed_origin(),
+			FeedOrigin(),
 			{ "tag1", "tag two", "tag \"three\"" }
 		},
 
 		{
 			"https://example.com/feed.xml",
-			get_feed_origin(),
+			FeedOrigin(),
 			{ "the quick", "brown fox \"jumps", "tag1", "the lazy", "tag two" }
 		},
 
 		{
 			"https://example.com/feed2.xml",
-			get_feed_origin(),
+			FeedOrigin(),
 			{ "tricky tag\\", "that extends" }
 		}
 	};
