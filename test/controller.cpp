@@ -26,8 +26,9 @@ TEST_CASE("write_item correctly parses path", "[Controller]")
 	test_helpers::EnvVar home("HOME");
 	home.set(home_dir.to_locale_string());
 
-	ConfigPaths paths{};
-	Controller c(paths);
+	CliArgsParser cliargs(0, nullptr);
+	auto paths = ConfigPaths::init_configpaths(cliargs);
+	Controller c(paths.value());
 
 	auto& cfg = c.get_config();
 	cfg.set_configvalue("save-path", save_path.to_locale_string());

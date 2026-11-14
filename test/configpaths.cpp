@@ -31,15 +31,16 @@ TEST_CASE("ConfigPaths returns paths to Newsboat dotdir if no Newsboat dirs "
 	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
-	REQUIRE(paths.url_file() == newsboat_dir.join("urls"_path));
-	REQUIRE(paths.cache_file() == newsboat_dir.join("cache.db"_path));
-	REQUIRE(paths.lock_file() == newsboat_dir.join("cache.db.lock"_path));
-	REQUIRE(paths.config_file() == newsboat_dir.join("config"_path));
-	REQUIRE(paths.queue_file() == newsboat_dir.join("queue"_path));
-	REQUIRE(paths.search_history_file() == newsboat_dir.join("history.search"_path));
-	REQUIRE(paths.cmdline_history_file() == newsboat_dir.join("history.cmdline"_path));
+	CliArgsParser cliargs(0, nullptr);
+	auto paths = ConfigPaths::init_configpaths(cliargs);
+	REQUIRE(paths.has_value());
+	REQUIRE(paths->url_file() == newsboat_dir.join("urls"_path));
+	REQUIRE(paths->cache_file() == newsboat_dir.join("cache.db"_path));
+	REQUIRE(paths->lock_file() == newsboat_dir.join("cache.db.lock"_path));
+	REQUIRE(paths->config_file() == newsboat_dir.join("config"_path));
+	REQUIRE(paths->queue_file() == newsboat_dir.join("queue"_path));
+	REQUIRE(paths->search_history_file() == newsboat_dir.join("history.search"_path));
+	REQUIRE(paths->cmdline_history_file() == newsboat_dir.join("history.cmdline"_path));
 }
 
 TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
@@ -63,15 +64,16 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 	xdg_data.unset();
 
 	const auto check = [&]() {
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
-		REQUIRE(paths.config_file() == config_dir.join("config"_path));
-		REQUIRE(paths.url_file() == config_dir.join("urls"_path));
-		REQUIRE(paths.cache_file() == data_dir.join("cache.db"_path));
-		REQUIRE(paths.lock_file() == data_dir.join("cache.db.lock"_path));
-		REQUIRE(paths.queue_file() == data_dir.join("queue"_path));
-		REQUIRE(paths.search_history_file() == data_dir.join("history.search"_path));
-		REQUIRE(paths.cmdline_history_file() == data_dir.join("history.cmdline"_path));
+		CliArgsParser cliargs(0, nullptr);
+		auto paths = ConfigPaths::init_configpaths(cliargs);
+		REQUIRE(paths.has_value());
+		REQUIRE(paths->config_file() == config_dir.join("config"_path));
+		REQUIRE(paths->url_file() == config_dir.join("urls"_path));
+		REQUIRE(paths->cache_file() == data_dir.join("cache.db"_path));
+		REQUIRE(paths->lock_file() == data_dir.join("cache.db.lock"_path));
+		REQUIRE(paths->queue_file() == data_dir.join("queue"_path));
+		REQUIRE(paths->search_history_file() == data_dir.join("history.search"_path));
+		REQUIRE(paths->cmdline_history_file() == data_dir.join("history.cmdline"_path));
 	};
 
 	SECTION("XDG_CONFIG_HOME is set") {
@@ -134,13 +136,12 @@ TEST_CASE("ConfigPaths::process_args replaces paths with the ones supplied by "
 		"-C", config_file.to_locale_string(),
 		"-q"});
 	CliArgsParser parser(opts.argc(), opts.argv());
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
-	paths.process_args(parser);
-	REQUIRE(paths.url_file() == url_file);
-	REQUIRE(paths.cache_file() == cache_file);
-	REQUIRE(paths.lock_file() == lock_file);
-	REQUIRE(paths.config_file() == config_file);
+	auto paths = ConfigPaths::init_configpaths(parser);
+	REQUIRE(paths.has_value());
+	REQUIRE(paths->url_file() == url_file);
+	REQUIRE(paths->cache_file() == cache_file);
+	REQUIRE(paths->lock_file() == lock_file);
+	REQUIRE(paths->config_file() == config_file);
 }
 
 TEST_CASE("ConfigPaths::set_cache_file changes paths to cache and lock files",
@@ -159,19 +160,20 @@ TEST_CASE("ConfigPaths::set_cache_file changes paths to cache and lock files",
 	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
+	CliArgsParser cliargs(0, nullptr);
+	auto paths = ConfigPaths::init_configpaths(cliargs);
+	REQUIRE(paths.has_value());
 
 	const auto newsboat_dir = tmp.get_path().join(".newsboat"_path);
-	REQUIRE(paths.cache_file() == newsboat_dir.join("cache.db"_path));
-	REQUIRE(paths.lock_file() == newsboat_dir.join("cache.db.lock"_path));
+	REQUIRE(paths->cache_file() == newsboat_dir.join("cache.db"_path));
+	REQUIRE(paths->lock_file() == newsboat_dir.join("cache.db.lock"_path));
 
 	const auto new_cache = "something/entirely different.sqlite3"_path;
-	paths.set_cache_file(new_cache);
-	REQUIRE(paths.cache_file() == new_cache);
+	paths->set_cache_file(new_cache);
+	REQUIRE(paths->cache_file() == new_cache);
 	auto expected_lock_file = new_cache;
 	expected_lock_file.add_extension("lock");
-	REQUIRE(paths.lock_file() == expected_lock_file);
+	REQUIRE(paths->lock_file() == expected_lock_file);
 }
 
 TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs "
@@ -191,18 +193,19 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 	xdg_data.unset();
 
 	const auto require_exists = [&tmp](std::vector<Filepath> dirs) {
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
+		CliArgsParser cliargs(0, nullptr);
+		auto paths = ConfigPaths::init_configpaths(cliargs);
+		REQUIRE(paths.has_value());
 
-		paths.url_file().starts_with(tmp.get_path());
-		paths.config_file().starts_with(tmp.get_path());
-		paths.cache_file().starts_with(tmp.get_path());
-		paths.lock_file().starts_with(tmp.get_path());
-		paths.queue_file().starts_with(tmp.get_path());
-		paths.search_history_file().starts_with(tmp.get_path());
-		paths.cmdline_history_file().starts_with(tmp.get_path());
+		paths->url_file().starts_with(tmp.get_path());
+		paths->config_file().starts_with(tmp.get_path());
+		paths->cache_file().starts_with(tmp.get_path());
+		paths->lock_file().starts_with(tmp.get_path());
+		paths->queue_file().starts_with(tmp.get_path());
+		paths->search_history_file().starts_with(tmp.get_path());
+		paths->cmdline_history_file().starts_with(tmp.get_path());
 
-		REQUIRE(paths.create_dirs());
+		REQUIRE(paths->create_dirs());
 
 		for (const auto& dir : dirs) {
 			INFO("Checking directory " << dir);
@@ -510,12 +513,11 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 			"-C", config_file.to_locale_string(),
 			"-q"});
 		CliArgsParser parser(opts.argc(), opts.argv());
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
-		paths.process_args(parser);
+		auto paths = ConfigPaths::init_configpaths(parser);
+		REQUIRE(paths.has_value());
 
 		// No migration should occur, so should return false.
-		REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
+		REQUIRE_FALSE(paths->try_migrate_from_newsbeuter());
 
 		INFO("Newsbeuter's urls file sentry: " << beuter_sentries.urls);
 		REQUIRE(test_helpers::file_contents(url_file).at(0) == boat_sentries.urls);
@@ -559,11 +561,12 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 	FileSentries boat_sentries;
 
 	const auto check = [&](const Filepath& urls_filepath) {
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
+		CliArgsParser cliargs(0, nullptr);
+		auto paths = ConfigPaths::init_configpaths(cliargs);
+		REQUIRE(paths.has_value());
 
 		// No migration should occur, so should return false.
-		REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
+		REQUIRE_FALSE(paths->try_migrate_from_newsbeuter());
 
 		INFO("Newsbeuter's urls file sentry: " << beuter_sentries.urls);
 		REQUIRE(test_helpers::file_contents(urls_filepath).at(0) == boat_sentries.urls);
@@ -746,11 +749,12 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter dotdir from "
 
 	mock_newsbeuter_dotdir(tmp, sentries);
 
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
+	CliArgsParser cliargs(0, nullptr);
+	auto paths = ConfigPaths::init_configpaths(cliargs);
+	REQUIRE(paths.has_value());
 
 	// Files should be migrated, so should return true.
-	REQUIRE(paths.try_migrate_from_newsbeuter());
+	REQUIRE(paths->try_migrate_from_newsbeuter());
 
 	const auto dotdir = tmp.get_path().join(".newsboat"_path);
 
@@ -785,11 +789,12 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
 
 	const auto check =
 	[&](const Filepath& config_dir, const Filepath& data_dir) {
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
+		CliArgsParser cliargs(0, nullptr);
+		auto paths = ConfigPaths::init_configpaths(cliargs);
+		REQUIRE(paths.has_value());
 
 		// Files should be migrated, so should return true.
-		REQUIRE(paths.try_migrate_from_newsbeuter());
+		REQUIRE(paths->try_migrate_from_newsbeuter());
 
 		REQUIRE(test_helpers::file_contents(config_dir.join("config"_path)).at(0)
 			== sentries.config);
@@ -860,11 +865,12 @@ void verify_xdg_not_migrated(
 	const Filepath& config_dir,
 	const Filepath& data_dir)
 {
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
+	CliArgsParser cliargs(0, nullptr);
+	auto paths = ConfigPaths::init_configpaths(cliargs);
+	REQUIRE(paths.has_value());
 
 	// Shouldn't migrate anything, so should return false.
-	REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
+	REQUIRE_FALSE(paths->try_migrate_from_newsbeuter());
 
 	REQUIRE_FALSE(test_helpers::file_available_for_reading(config_dir.join("config"_path)));
 	REQUIRE_FALSE(test_helpers::file_available_for_reading(config_dir.join("urls"_path)));
@@ -1213,11 +1219,12 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 
 void verify_dotdir_not_migrated(const Filepath& dotdir)
 {
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
+	CliArgsParser cliargs(0, nullptr);
+	auto paths = ConfigPaths::init_configpaths(cliargs);
+	REQUIRE(paths.has_value());
 
 	// Shouldn't migrate anything, so should return false.
-	REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
+	REQUIRE_FALSE(paths->try_migrate_from_newsbeuter());
 
 	REQUIRE_FALSE(test_helpers::file_available_for_reading(dotdir.join("config"_path)));
 	REQUIRE_FALSE(test_helpers::file_available_for_reading(dotdir.join("urls"_path)));
@@ -1290,9 +1297,10 @@ void verify_create_dirs_returns_false(const test_helpers::TempDir& tmp)
 	const mode_t readonly = S_IRUSR | S_IXUSR;
 	test_helpers::Chmod home_chmod(tmp.get_path(), readonly);
 
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
-	REQUIRE_FALSE(paths.create_dirs());
+	CliArgsParser cliargs(0, nullptr);
+	auto paths = ConfigPaths::init_configpaths(cliargs);
+	REQUIRE(paths.has_value());
+	REQUIRE_FALSE(paths->create_dirs());
 }
 
 TEST_CASE("create_dirs() returns false if dotdir doesn't exist and couldn't "
