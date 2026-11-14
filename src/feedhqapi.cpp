@@ -1,9 +1,9 @@
 #include "feedhqapi.h"
 
 #include <curl/curl.h>
-#include <json.h>
 #include <vector>
 
+#include "3rd-party/json.hpp"
 #include "config.h"
 #include "curldatareceiver.h"
 #include "curlhandle.h"
@@ -22,6 +22,8 @@
 #define FEEDHQ_API_MARK_ALL_READ_URL FEEDHQ_API_PREFIX "mark-all-as-read"
 #define FEEDHQ_API_EDIT_TAG_URL FEEDHQ_API_PREFIX "edit-tag"
 #define FEEDHQ_API_TOKEN_URL FEEDHQ_API_PREFIX "token"
+
+using json = nlohmann::json;
 
 namespace newsboat {
 
@@ -106,56 +108,55 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 		"FeedHqApi::get_subscribed_urls: document = %s",
 		result);
 
-	json_object* reply = json_tokener_parse(result.c_str());
-	if (reply == nullptr) {
+	json reply;
+	try {
+		reply = json::parse(result);
+	} catch (json::parse_error& e) {
 		LOG(Level::ERROR,
-			"FeedHqApi::get_subscribed_urls: failed to parse "
-			"response "
-			"as JSON.");
+			"FeedHqApi::get_subscribed_urls: failed to parse response as JSON: %s",
+			e.what());
 		return urls;
 	}
 
-	json_object* subscription_obj{};
-	json_object_object_get_ex(reply, "subscriptions", &subscription_obj);
-	array_list* subscriptions = json_object_get_array(subscription_obj);
+	try {
+		const json& subscriptions = reply.at("subscriptions");
 
-	int len = array_list_length(subscriptions);
+		for (std::size_t i = 0; i < subscriptions.size(); i++) {
+			std::vector<std::string> tags;
+			const json& sub = subscriptions.at(i);
 
-	for (int i = 0; i < len; i++) {
-		std::vector<std::string> tags;
-		json_object* sub = json_object_array_get_idx(subscription_obj, i);
+			if (!sub.contains("id") || sub.at("id").is_null()) {
+				LOG(Level::WARN, "Skipping a subscription without an id");
+				continue;
+			}
 
-		json_object* id_str{};
-		json_object_object_get_ex(sub, "id", &id_str);
-		const char* id = json_object_get_string(id_str);
-		if (id == nullptr) {
-			LOG(Level::WARN, "Skipping a subscription without an id");
-			continue;
+			const std::string id = sub.at("id");
+
+			if (sub.contains("title") && !sub.at("title").is_null()) {
+				const std::string title = sub.at("title");
+				tags.push_back(std::string("~") + title);
+			} else {
+				LOG(Level::WARN, "Subscription has no title, so let's call it \"%zu\"", i);
+				tags.push_back(std::string("~") + std::to_string(i));
+			}
+
+			char* escaped_id = curl_easy_escape(handle.ptr(), id.c_str(), 0);
+
+			auto url = strprintf::fmt("%s%s%s?n=%u",
+					cfg.get_configvalue("feedhq-url"),
+					FEEDHQ_FEED_PREFIX,
+					escaped_id,
+					cfg.get_configvalue_as_int("feedhq-min-items"));
+			urls.push_back(TaggedFeedUrl(url, tags));
+
+			curl_free(escaped_id);
 		}
-
-		json_object* title_str{};
-		json_object_object_get_ex(sub, "title", &title_str);
-		const char* title = json_object_get_string(title_str);
-		if (title != nullptr) {
-			tags.push_back(std::string("~") + title);
-		} else {
-			LOG(Level::WARN, "Subscription has no title, so let's call it \"%i\"", i);
-			tags.push_back(std::string("~") + std::to_string(i));
-		}
-
-		char* escaped_id = curl_easy_escape(handle.ptr(), id, 0);
-
-		auto url = strprintf::fmt("%s%s%s?n=%u",
-				cfg.get_configvalue("feedhq-url"),
-				FEEDHQ_FEED_PREFIX,
-				escaped_id,
-				cfg.get_configvalue_as_int("feedhq-min-items"));
-		urls.push_back(TaggedFeedUrl(url, tags));
-
-		curl_free(escaped_id);
+	} catch (json::exception& e) {
+		LOG(Level::ERROR,
+			"FeedHqApi::get_subscribed_urls: failed to parse subscriptions: %s",
+			e.what());
+		return urls;
 	}
-
-	json_object_put(reply);
 
 	return urls;
 }
