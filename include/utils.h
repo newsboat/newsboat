@@ -35,6 +35,7 @@ enum class HTTPMethod {
 
 std::string strip_comments(const std::string& line);
 bool contains_control_characters(std::string_view str);
+std::string replace_newlines(std::string_view str, char replacement = '_');
 std::string replace_control_characters(std::string_view str,
 	char replacement = '_');
 std::vector<std::string> tokenize(const std::string& str,

@@ -109,3 +109,114 @@ TEST_CASE("UrlFileWriter returns error when urls file is not writable", "[FileUr
 		}
 	}
 }
+
+TEST_CASE("FileUrlWriter percent-encodes URLs", "[FileUrlWriter]")
+{
+	test_helpers::TempFile file;
+
+	const std::vector<std::string> no_tags;
+	const std::vector<UrlReader::FeedUrl> urls {
+		{
+			"https://example.com/feed.xml\nexec:echo boo",
+			FeedOrigin(),
+			no_tags
+		},
+
+		{
+			"https://example.com/another_feed.xml\rexec:echo\tboo",
+			FeedOrigin(),
+			no_tags
+		}
+	};
+
+	FileUrlWriter::write_urls(urls, file.get_path());
+
+	const auto result = test_helpers::file_contents(file.get_path());
+	const std::vector<std::string> expected_result {
+		R"("https://example.com/feed.xml%0Aexec:echo boo")",
+		R"(https://example.com/another_feed.xml%0Dexec:echo%09boo)",
+		""
+	};
+	REQUIRE(result == expected_result);
+}
+
+TEST_CASE("FileUrlWriter replaces newlines in tags with underscore",
+	"[FileUrlWriter]")
+{
+	test_helpers::TempFile file;
+
+	const std::vector<std::string> no_tags;
+	const std::vector<UrlReader::FeedUrl> urls {
+		{
+			"https://example.org/feed2.xml",
+			FeedOrigin(),
+			{ "sneaky tag\nexec:echo foo", "weird\tag" }
+		}
+	};
+
+	FileUrlWriter::write_urls(urls, file.get_path());
+
+	const auto result = test_helpers::file_contents(file.get_path());
+	const std::vector<std::string> expected_result {
+		R"(https://example.org/feed2.xml "sneaky tag_exec:echo foo" "weird	ag")",
+		""
+	};
+	REQUIRE(result == expected_result);
+}
+
+TEST_CASE("FileUrlWriter puts tags in double quotes", "[FileUrlWriter]")
+{
+	test_helpers::TempFile file;
+
+	const std::vector<UrlReader::FeedUrl> urls {
+		{
+			"https://example.com/news.atom",
+			FeedOrigin(),
+			{ "tag1", "tag two", "tag \"three\"" }
+		},
+
+		{
+			"https://example.com/feed.xml",
+			FeedOrigin(),
+			{ "the quick", "brown fox \"jumps", "tag1", "the lazy", "tag two" }
+		},
+
+		{
+			"https://example.com/feed2.xml",
+			FeedOrigin(),
+			{ "tricky tag\\", "that extends" }
+		}
+	};
+
+	FileUrlWriter::write_urls(urls, file.get_path());
+
+	FileUrlReader reader(file.get_path());
+	reader.reload();
+
+	const auto into_map = [](const std::vector<UrlReader::FeedUrl>& urls)
+	-> std::map<std::string, std::vector<std::string>> {
+		std::map<std::string, std::vector<std::string>> ret;
+		for (const auto& url : urls)
+		{
+			ret[url.url] = url.tags;
+		}
+		return ret;
+	};
+	const auto actual_urls = into_map(reader.get_urls());
+	for (const auto& url : urls) {
+		auto it = actual_urls.find(url.url);
+		REQUIRE(it != std::end(actual_urls));
+		REQUIRE(it->second == url.tags);
+	}
+
+	const std::set<std::string> expected_alltags {
+		"tag1", "tag two", "tag \"three\"",
+		"the quick", "brown fox \"jumps", "the lazy",
+		"tricky tag\\", "that extends"
+	};
+	const auto actual_alltags = reader.get_alltags();
+	const std::set<std::string> actual_alltags_set {
+		actual_alltags.begin(), actual_alltags.end()
+	};
+	REQUIRE(actual_alltags_set == expected_alltags);
+}

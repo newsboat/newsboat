@@ -59,6 +59,17 @@ bool utils::contains_control_characters(std::string_view str)
 	return false;
 }
 
+std::string utils::replace_newlines(std::string_view str, char replacement)
+{
+	std::string result(str);
+	for (char& c : result) {
+		if (c == '\n') {
+			c = replacement;
+		}
+	}
+	return result;
+}
+
 std::string utils::replace_control_characters(std::string_view str,
 	char replacement)
 {

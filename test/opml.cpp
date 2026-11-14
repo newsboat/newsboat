@@ -460,6 +460,101 @@ TEST_CASE("import() skips URLs with unsupported schemas", "[Opml]")
 	REQUIRE(urlcfg.get_alltags().empty());
 }
 
+TEST_CASE("import() replaces newlines with underscores in text attribute", "[Opml]")
+{
+	test_helpers::TempFile urlsFile;
+
+	FileUrlReader urlcfg(urlsFile.get_path());
+	urlcfg.reload();
+
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/with_escaped_newline_in_text_field.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
+
+	urlcfg.reload();
+	const auto urls = urlcfg.get_urls();
+	REQUIRE(urls.size() == 1);
+	REQUIRE(urls[0].url == "http://example.org/feed1.xml");
+	std::vector<std::string> expected_tags({ "~demo_exec:echo${IFS}boo" });
+	REQUIRE(urls[0].tags == expected_tags);
+	REQUIRE(urlcfg.get_alltags().empty());
+}
+
+TEST_CASE("import() replaces newlines with underscores in title attribute", "[Opml]")
+{
+	test_helpers::TempFile urlsFile;
+
+	FileUrlReader urlcfg(urlsFile.get_path());
+	urlcfg.reload();
+
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/with_escaped_newline_in_title_field.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
+
+	urlcfg.reload();
+	const auto urls = urlcfg.get_urls();
+	REQUIRE(urls.size() == 1);
+	REQUIRE(urls[0].url == "http://example.org/feed2.xml");
+	std::vector<std::string> expected_tags({ "~demo_exec:echo${IFS}oops" });
+	REQUIRE(urls[0].tags == expected_tags);
+	REQUIRE(urlcfg.get_alltags().empty());
+}
+
+TEST_CASE("import() percent-encodes the URL", "[Opml]")
+{
+	test_helpers::TempFile urlsFile;
+
+	FileUrlReader urlcfg(urlsFile.get_path());
+	urlcfg.reload();
+
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/with_escaped_newline_in_xmlurl_field.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
+
+	urlcfg.reload();
+	const auto urls = urlcfg.get_urls();
+	REQUIRE(urls.size() == 1);
+	REQUIRE(urls[0].url == "http://example.org/feed1.xml%0Aexec:echo${IFS}boo");
+	std::vector<std::string> expected_tags({ "~A normal site" });
+	REQUIRE(urls[0].tags == expected_tags);
+	REQUIRE(urlcfg.get_alltags().empty());
+}
+
+TEST_CASE("import() replaces newlines with underscores in tags (nested OPML outlines)",
+	"[Opml]")
+{
+	test_helpers::TempFile urlsFile;
+
+	FileUrlReader urlcfg(urlsFile.get_path());
+	urlcfg.reload();
+
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/with_escaped_newline_in_nested_outlines.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
+
+	urlcfg.reload();
+	const auto urls = urlcfg.get_urls();
+	REQUIRE(urls.size() == 1);
+	REQUIRE(urls[0].url == "http://example.org/feed2.xml");
+	std::vector<std::string> expected_tags({
+		"~Nothing special about this feed",
+		"one_exec:echo${IFS}foobar/three_exec:echo${IFS}bazquux"
+	});
+	REQUIRE(urls[0].tags == expected_tags);
+	std::vector<std::string> expected_alltags({
+		"one_exec:echo${IFS}foobar/three_exec:echo${IFS}bazquux"
+	});
+	REQUIRE(urlcfg.get_alltags() == expected_alltags);
+}
+
 // falls back to "url" if "xmlUrl" is absent
 
 // skips an entry if xmlUrl/url is absent

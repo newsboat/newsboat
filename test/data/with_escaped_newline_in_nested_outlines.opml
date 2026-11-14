@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Example OPML with a hidden newline in the nested outlines</title>
+    </head>
+
+    <body>
+        <outline text="one&#10;exec:echo${IFS}foobar">
+            <outline text="three&#10;exec:echo${IFS}bazquux">
+                <outline type="rss"
+                         xmlUrl="http://example.org/feed2.xml"
+                         text="Nothing special about this feed"/>
+            </outline>
+        </outline>
+    </body>
+</opml>
