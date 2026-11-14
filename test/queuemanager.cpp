@@ -361,6 +361,34 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 		REQUIRE(lines[1] == "");
 	}
 
+	SECTION("feed data cannot create parent directory components") {
+		cfg.set_configvalue("download-path", "/example/%n");
+		cfg.set_configvalue("download-filename-format", "%u");
+		feed->set_title("..");
+		item.set_enclosure_url("https://example.com/.bashrc");
+
+		manager.enqueue_url(item, *feed);
+
+		const auto lines = test_helpers::file_contents(queue_file.get_path());
+		REQUIRE(lines.size() == 2);
+		REQUIRE(lines[0] ==
+			R"(https://example.com/.bashrc "/example/_./_bashrc")");
+		REQUIRE(lines[1] == "");
+	}
+
+	SECTION("field widths cannot create parent directory components") {
+		cfg.set_configvalue("download-filename-format", "%2n");
+		feed->set_title("..episode");
+
+		manager.enqueue_url(item, *feed);
+
+		const auto lines = test_helpers::file_contents(queue_file.get_path());
+		REQUIRE(lines.size() == 2);
+		REQUIRE(lines[0] ==
+			R"(https://example.com/~adam/podcast.mp3 "/example/_.")");
+		REQUIRE(lines[1] == "");
+	}
+
 	SECTION("%h for the enclosure URL's hostname") {
 		cfg.set_configvalue("download-filename-format", "%h");
 
