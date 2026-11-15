@@ -77,6 +77,7 @@ public:
 	void set_status(const std::string& text);
 
 	void draw_form();
+	Event get_queued_event_non_blocking();
 	Event wait_for_event();
 	void recalculate_widget_dimensions();
 

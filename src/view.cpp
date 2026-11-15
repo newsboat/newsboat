@@ -71,6 +71,8 @@ View::View(Controller& c)
 	, rsscache(nullptr)
 	, filters(ctrl.get_filtercontainer())
 	, colorman(ctrl.get_colormanager())
+	, high_prio_waiting(0)
+	, general_state_lock(lock_high_prio())
 {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
@@ -80,6 +82,24 @@ View::View(Controller& c)
 View::~View()
 {
 	Stfl::reset();
+}
+
+std::unique_lock<std::mutex> View::lock_low_prio()
+{
+	std::unique_lock<std::mutex> lock(general_state_mutex);
+	high_prio_done.wait(lock, [this] {return high_prio_waiting == 0;});
+	return lock;
+}
+
+std::unique_lock<std::mutex> View::lock_high_prio()
+{
+	high_prio_waiting++;
+	std::unique_lock<std::mutex> lock(general_state_mutex);
+	high_prio_waiting--;
+	if (high_prio_waiting == 0) {
+		high_prio_done.notify_all();
+	}
+	return lock;
 }
 
 void View::set_config_container(ConfigContainer* cfgcontainer)
@@ -174,7 +194,8 @@ int View::run()
 
 		fa->prepare();
 		fa->draw_form();
-		const auto event = fa->wait_for_event();
+
+		const auto event = wait_for_event(*fa);
 
 		if (ctrl_c_hit) {
 			ctrl_c_hit = false;
@@ -264,7 +285,9 @@ void View::run_modal(std::shared_ptr<FormAction> f)
 		fa->prepare();
 
 		fa->draw_form();
-		const auto event = fa->wait_for_event();
+
+		const auto event = wait_for_event(*fa);
+
 		LOG(Level::DEBUG, "View::run: event = %s", event.name);
 		if (event.name.empty() || event.name == "TIMEOUT") {
 			continue;
@@ -705,7 +728,8 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 
 	do {
 		f->draw_form();
-		const auto event =f->wait_for_event();
+		const auto event = wait_for_event(*f);
+
 		LOG(Level::DEBUG, "View::confirm: event = %s", event.name);
 		if (event.name.empty() || event.name == "TIMEOUT") {
 			continue;
@@ -1202,6 +1226,20 @@ void View::handle_resize()
 			form->set_redraw(true);
 		}
 	}
+}
+
+Event View::wait_for_event(FormAction& fa)
+{
+	const auto queued_event = fa.get_queued_event_non_blocking();
+	if (!queued_event.name.empty() && queued_event.name != "TIMEOUT") {
+		return queued_event;
+	}
+
+	general_state_lock.unlock();
+	const auto event = fa.wait_for_event();
+	general_state_lock = lock_high_prio();
+
+	return event;
 }
 
 void View::ctrl_c_action(int /* sig */)

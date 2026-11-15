@@ -124,6 +124,11 @@ void FormAction::draw_form()
 	f.draw_form();
 }
 
+Event FormAction::get_queued_event_non_blocking()
+{
+	return f.get_event_non_blocking();
+}
+
 Event FormAction::wait_for_event()
 {
 	return f.wait_for_event(INT_MAX);

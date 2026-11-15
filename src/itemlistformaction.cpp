@@ -434,7 +434,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_RELOAD:
 		LOG(Level::INFO, "ItemListFormAction: reloading current feed");
-		v.get_ctrl().get_reloader()->reload(pos);
+		v.get_ctrl().get_reloader()->reload_single_feed_from_main_thread(pos);
 		invalidate_list();
 		break;
 	case OP_QUIT:

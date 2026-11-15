@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <mutex>
 #include <ncurses.h>
 #include <thread>
 
@@ -66,7 +67,7 @@ bool Reloader::trylock_reload_mutex()
 
 void Reloader::reload(unsigned int pos,
 	CurlHandle& easyhandle,
-	bool show_progress,
+	bool single_feed_reload_from_main_thread,
 	bool unattended)
 {
 	ScopeMeasure sm("Reloader::reload");
@@ -85,9 +86,9 @@ void Reloader::reload(unsigned int pos,
 		std::string errmsg;
 		std::shared_ptr<AutoDiscardMessage> message_lifetime;
 		if (!unattended) {
-			const std::string progress = show_progress ?
-				strprintf::fmt("(%u/%u) ", ++reload_progress, reload_progress_max) :
-				"";
+			const std::string progress = single_feed_reload_from_main_thread ?
+				"" :
+				strprintf::fmt("(%u/%u) ", ++reload_progress, reload_progress_max);
 			message_lifetime = ctrl.get_view()->get_statusline().show_message_until_finished(
 					strprintf::fmt(_("%sLoading %s..."),
 						progress,
@@ -97,6 +98,7 @@ void Reloader::reload(unsigned int pos,
 		const bool ignore_dl =
 			(cfg.get_configvalue("ignore-mode") == "download");
 
+		std::unique_lock<std::mutex> lock;
 		try {
 			const auto inner_message_lifetime = message_lifetime;
 			message_lifetime.reset();
@@ -114,6 +116,10 @@ void Reloader::reload(unsigned int pos,
 			RssParser parser(oldfeed->rssurl(), rsscache, cfg, ign);
 
 			std::shared_ptr<RssFeed> newfeed = parser.parse(feed);
+			if (!single_feed_reload_from_main_thread) {
+				sm.stopover("lock mutex");
+				lock = ctrl.get_view()->lock_low_prio();
+			}
 			sm.stopover("start replacing feed");
 			if (newfeed != nullptr) {
 				ctrl.replace_feed(
@@ -210,6 +216,8 @@ void Reloader::reload_all(bool unattended)
 	}
 	reload_indexes_impl(v, unattended);
 
+	auto lock = ctrl.get_view()->lock_low_prio();
+
 	// refresh query feeds (update and sort)
 	LOG(Level::DEBUG, "Reloader::reload_all: refresh query feeds");
 	for (const auto& feed : ctrl.get_feedcontainer().get_all_feeds()) {
@@ -265,7 +273,8 @@ void Reloader::reload_indexes_impl(std::vector<unsigned int> indexes, bool unatt
 			LOG(Level::DEBUG,
 				"Reloader::reload_indexes_impl: reloading feed #%u",
 				feed_index);
-			reload(feed_index, easyhandle, true, unattended);
+			constexpr bool single_feed_reload_from_main_thread = false;
+			reload(feed_index, easyhandle, single_feed_reload_from_main_thread, unattended);
 		}
 	}, indexes.size());
 }

@@ -33,10 +33,11 @@ public:
 	///
 	/// Reloads the feed at position \a pos in the feeds list (as kept by
 	/// feedscontainer). Only updates status bar if \a unattended is false.
-	void reload(unsigned int pos, bool unattended = false)
+	void reload_single_feed_from_main_thread(unsigned int pos, bool unattended = false)
 	{
 		CurlHandle easyHandle;
-		reload(pos, easyHandle, false, unattended);
+		constexpr bool single_feed_reload_from_main_thread = true;
+		reload(pos, easyHandle, single_feed_reload_from_main_thread, unattended);
 	}
 
 	/// \brief Reloads all feeds, spawning threads as necessary.
@@ -59,7 +60,9 @@ private:
 	/// \brief Reloads given feed.
 	///
 	/// Reloads the feed at position \a pos in the feeds list (as kept by
-	/// feedscontainer). \a show_progress specifies if a progress indicator
+	/// feedscontainer). \a single_feed_reload_from_main_thread specifies whether
+	/// this reload is a single feed reload called from the main thread.
+	/// If this is not a single feed reload, a progress indicator
 	/// (`[<progress>/<total_feeds>]`) should be included when updating the status
 	/// message (at the bottom of the screen). Status messages are only shown
 	/// if \a unattended is false. All network requests are made through
@@ -67,7 +70,7 @@ private:
 	/// a temporary handle which is destroyed before returning from it.
 	void reload(unsigned int pos,
 		CurlHandle& easyhandle,
-		bool show_progress,
+		bool single_feed_reload_from_main_thread,
 		bool unattended);
 
 	/// \brief Notify in various ways that there are new unread feeds or

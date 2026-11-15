@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_VIEW_H_
 #define NEWSBOAT_VIEW_H_
 
+#include <atomic>
+#include <condition_variable>
 #include <cstdint>
 #include <mutex>
 #include <optional>
@@ -175,7 +177,17 @@ protected:
 	const ColorManager& colorman;
 
 private:
+	Event wait_for_event(FormAction& fa);
 	bool try_prepare_query_feed(std::shared_ptr<RssFeed> feed);
+
+public:
+	std::unique_lock<std::mutex> lock_low_prio();
+	std::unique_lock<std::mutex> lock_high_prio();
+private:
+	std::atomic<unsigned int> high_prio_waiting;
+	std::condition_variable high_prio_done;
+	std::mutex general_state_mutex;
+	std::unique_lock<std::mutex> general_state_lock;
 };
 
 } // namespace newsboat

@@ -32,6 +32,7 @@ public:
 		void recalculate_widget_dimensions();
 
 		Event wait_for_event(int timeout);
+		Event get_event_non_blocking();
 
 		std::string get(const std::string& name);
 		void set(const std::string& name, const std::string& value);
@@ -47,6 +48,7 @@ public:
 			const std::string& text);
 
 	private:
+		Event get_input(int timeout);
 		std::string convert(std::wstring input);
 		std::string key_to_string(wint_t wch);
 		std::string function_key_to_string(wint_t wch);
