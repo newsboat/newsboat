@@ -285,13 +285,22 @@ rsspp::Feed FeedRetriever::download_filterplugin(const std::string& filter,
 			filter.c_str(),
 			nullptr
 		};
-	const std::string result = utils::run_program(argv, buf);
+	const nonstd::expected<std::string, int> result = utils::run_program(argv, buf);
+
+	if (!result) {
+		LOG(Level::USERERROR,
+			"FeedRetriever::download_filterplugin: filter `%s' failed with exit code %d",
+			filter,
+			result.error());
+		return rsspp::Feed();
+	}
+
 	LOG(Level::DEBUG,
 		"FeedRetriever::download_filterplugin: output of `%s' is: %s",
 		filter,
-		result);
+		result.value());
 	rsspp::Parser p;
-	const rsspp::Feed f = p.parse_buffer(result);
+	const rsspp::Feed f = p.parse_buffer(result.value());
 	LOG(Level::DEBUG,
 		"FeedRetriever::download_filterplugin: filterplugin %s, valid = %s",
 		filter,
