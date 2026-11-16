@@ -27,7 +27,7 @@ max-items        100 # such comments are possible, too
 browser          links
 show-read-feeds  no
 
-unbind-key       R
+unbind           R everywhere
 bind             ^R feedlist reload-all
 ----
 
