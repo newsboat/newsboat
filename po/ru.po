@@ -237,7 +237,7 @@ msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
 msgstr ""
-"%N %V - Заметки в ленте '%T' (непрочитанно %u, всего %t)%?F? соответствующие "
+"%N %V - Заметки в ленте '%T' (не прочитано %u, всего %t)%?F? соответствующие "
 "фильтру '%F'&? - %U"
 
 #: src/configcontainer.cpp:321
@@ -249,7 +249,7 @@ msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
-"%N %V - %?F?Ленты&Ваши ленты? (непрочитанно %u, всего %t)%?F? "
+"%N %V - %?F?Ленты&Ваши ленты? (не прочитано %u, всего %t)%?F? "
 "соответствующие фильтру '%F'&?%?T? - метка '%T'&?"
 
 #: src/configcontainer.cpp:328
@@ -266,14 +266,14 @@ msgstr "%N %V - Помощь"
 
 #: src/configcontainer.cpp:339
 msgid "%N %V - Article '%T' (%u unread, %t total)"
-msgstr "%N %V - Заметок в ленте '%T' (непрочитанно %u, всего %t)"
+msgstr "%N %V - Заметок в ленте '%T' (не прочитано %u, всего %t)"
 
 #: src/configcontainer.cpp:343
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr ""
-"%N %V - Результаты поиска '%s' (непрочитанно %u, всего %t)%?F?, "
+"%N %V - Результаты поиска '%s' (не прочитано %u, всего %t)%?F?, "
 "соответствующие фильтру '%F'&?"
 
 #: src/configcontainer.cpp:347
