@@ -7,6 +7,6 @@
     <body>
     <outline type="rss"
              xmlUrl="http://example.org/feed2.xml"
-             title="demo&#10;exec:echo${IFS}oops"/>
+             title="demo&#10;exec:echo${IFS}oops&#13;ie"/>
     </body>
 </opml>

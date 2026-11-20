@@ -140,7 +140,7 @@ TEST_CASE("FileUrlWriter percent-encodes URLs", "[FileUrlWriter]")
 	REQUIRE(result == expected_result);
 }
 
-TEST_CASE("FileUrlWriter replaces newlines in tags with underscore",
+TEST_CASE("FileUrlWriter replaces control characters in tags with underscore",
 	"[FileUrlWriter]")
 {
 	test_helpers::TempFile file;
@@ -150,7 +150,7 @@ TEST_CASE("FileUrlWriter replaces newlines in tags with underscore",
 		{
 			"https://example.org/feed2.xml",
 			FeedOrigin(),
-			{ "sneaky tag\nexec:echo foo", "weird\tag" }
+			{ "sneaky tag\nexec:echo foo", "w\ei\rd\tag" }
 		}
 	};
 
@@ -158,7 +158,7 @@ TEST_CASE("FileUrlWriter replaces newlines in tags with underscore",
 
 	const auto result = test_helpers::file_contents(file.get_path());
 	const std::vector<std::string> expected_result {
-		R"(https://example.org/feed2.xml "sneaky tag_exec:echo foo" "weird	ag")",
+		R"(https://example.org/feed2.xml "sneaky tag_exec:echo foo" "w_i_d_ag")",
 		""
 	};
 	REQUIRE(result == expected_result);

@@ -5,8 +5,8 @@
     </head>
 
     <body>
-        <outline text="one&#10;exec:echo${IFS}foobar">
-            <outline text="three&#10;exec:echo${IFS}bazquux">
+        <outline text="one&#10;exec:echo${IFS}foo&#xd;bar">
+            <outline text="three&#10;exec:echo${IFS}baz&#x9;quux">
                 <outline type="rss"
                          xmlUrl="http://example.org/feed2.xml"
                          text="Nothing special about this feed"/>

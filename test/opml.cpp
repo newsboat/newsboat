@@ -460,7 +460,8 @@ TEST_CASE("import() skips URLs with unsupported schemas", "[Opml]")
 	REQUIRE(urlcfg.get_alltags().empty());
 }
 
-TEST_CASE("import() replaces newlines with underscores in text attribute", "[Opml]")
+TEST_CASE("import() replaces control characters with underscores in text attribute",
+	"[Opml]")
 {
 	test_helpers::TempFile urlsFile;
 
@@ -477,12 +478,13 @@ TEST_CASE("import() replaces newlines with underscores in text attribute", "[Opm
 	const auto urls = urlcfg.get_urls();
 	REQUIRE(urls.size() == 1);
 	REQUIRE(urls[0].url == "http://example.org/feed1.xml");
-	std::vector<std::string> expected_tags({ "~demo_exec:echo${IFS}boo" });
+	std::vector<std::string> expected_tags({ "~demo_exec:echo${IFS}boo_" });
 	REQUIRE(urls[0].tags == expected_tags);
 	REQUIRE(urlcfg.get_alltags().empty());
 }
 
-TEST_CASE("import() replaces newlines with underscores in title attribute", "[Opml]")
+TEST_CASE("import() replaces control characters with underscores in title attribute",
+	"[Opml]")
 {
 	test_helpers::TempFile urlsFile;
 
@@ -499,7 +501,7 @@ TEST_CASE("import() replaces newlines with underscores in title attribute", "[Op
 	const auto urls = urlcfg.get_urls();
 	REQUIRE(urls.size() == 1);
 	REQUIRE(urls[0].url == "http://example.org/feed2.xml");
-	std::vector<std::string> expected_tags({ "~demo_exec:echo${IFS}oops" });
+	std::vector<std::string> expected_tags({ "~demo_exec:echo${IFS}oops_ie" });
 	REQUIRE(urls[0].tags == expected_tags);
 	REQUIRE(urlcfg.get_alltags().empty());
 }
@@ -526,7 +528,7 @@ TEST_CASE("import() percent-encodes the URL", "[Opml]")
 	REQUIRE(urlcfg.get_alltags().empty());
 }
 
-TEST_CASE("import() replaces newlines with underscores in tags (nested OPML outlines)",
+TEST_CASE("import() replaces control characters with underscores in tags (nested OPML outlines)",
 	"[Opml]")
 {
 	test_helpers::TempFile urlsFile;
@@ -546,11 +548,11 @@ TEST_CASE("import() replaces newlines with underscores in tags (nested OPML outl
 	REQUIRE(urls[0].url == "http://example.org/feed2.xml");
 	std::vector<std::string> expected_tags({
 		"~Nothing special about this feed",
-		"one_exec:echo${IFS}foobar/three_exec:echo${IFS}bazquux"
+		"one_exec:echo${IFS}foo_bar/three_exec:echo${IFS}baz_quux"
 	});
 	REQUIRE(urls[0].tags == expected_tags);
 	std::vector<std::string> expected_alltags({
-		"one_exec:echo${IFS}foobar/three_exec:echo${IFS}bazquux"
+		"one_exec:echo${IFS}foo_bar/three_exec:echo${IFS}baz_quux"
 	});
 	REQUIRE(urlcfg.get_alltags() == expected_alltags);
 }

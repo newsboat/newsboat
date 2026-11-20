@@ -23,7 +23,7 @@ std::optional<std::string> FileUrlWriter::write_urls(const std::vector<UrlReader
 	for (auto& feed_url : feed_urls) {
 		f << utils::quote_if_necessary(utils::sanitize_url(feed_url.url));
 		for (const auto& tag : feed_url.tags) {
-			f << " " << utils::quote(utils::replace_newlines(tag));
+			f << " " << utils::quote(utils::replace_control_characters(tag));
 		}
 		f << std::endl;
 	}
