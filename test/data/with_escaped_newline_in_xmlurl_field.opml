@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Example OPML with a hidden newline in the `xmlUrl` field</title>
+    </head>
+
+    <body>
+    <outline type="rss"
+             xmlUrl="http://example.org/feed1.xml&#10;exec:echo${IFS}boo"
+             text="A normal site"/>
+    </body>
+</opml>
