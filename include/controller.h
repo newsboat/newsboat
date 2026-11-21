@@ -124,6 +124,7 @@ private:
 	void export_read_information(const Filepath& readinfofile);
 
 	View* v;
+	std::unique_ptr<RemoteApi> api;
 	std::unique_ptr<UrlReader> urlcfg;
 	std::unique_ptr<Cache> rsscache;
 	bool refresh_on_start;
@@ -135,7 +136,6 @@ private:
 	ConfigParser cfgparser;
 	ColorManager colorman;
 	RegexManager rxman;
-	std::unique_ptr<RemoteApi> api;
 
 	FsLock fslock;
 

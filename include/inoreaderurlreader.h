@@ -10,17 +10,17 @@ class RemoteApi;
 
 class InoreaderUrlReader : public UrlReader {
 public:
-	InoreaderUrlReader(ConfigContainer* c,
+	InoreaderUrlReader(ConfigContainer& c,
 		const Filepath& url_file,
-		RemoteApi* a);
-	virtual ~InoreaderUrlReader();
+		RemoteApi& a);
+	virtual ~InoreaderUrlReader() override = default;
 	virtual std::optional<utils::ReadTextFileError> reload() override;
 	virtual std::string get_source() const override;
 
 private:
-	ConfigContainer* cfg;
+	ConfigContainer& cfg;
 	Filepath file;
-	RemoteApi* api;
+	RemoteApi& api;
 };
 
 } // namespace newsboat
