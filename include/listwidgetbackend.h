@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <mutex>
 #include <string>
 
 #include "dialog.h"
@@ -44,6 +45,14 @@ private:
 	std::uint32_t scroll_offset;
 	std::map<std::uint32_t, StflRichText> line_cache;
 	std::function<StflRichText(std::uint32_t, std::uint32_t)> get_formatted_line;
+
+	// Reload threads call invalidate_list_content() (through
+	// View::set_feedlist()) while the UI thread moves the cursor, which calls
+	// update_position() and render(). Every method takes this lock, so the
+	// members above are never read and written at the same time. It is
+	// recursive because invalidate_list_content() calls on_list_changed(),
+	// which calls update_position() again.
+	std::recursive_mutex mtx;
 };
 
 } // namespace newsboat

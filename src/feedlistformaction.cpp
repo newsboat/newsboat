@@ -635,16 +635,23 @@ void FeedListFormAction::set_feedlist(
 
 	update_visible_feeds(feeds);
 
-	auto render_line = [this, feedlist_format](std::uint32_t line,
+	// The list widget calls render_line from the UI thread (cursor movement)
+	// and from reload threads (this function). Give it its own copy of the
+	// visible feeds, so a later update_visible_feeds() on another thread
+	// cannot free the vector it is reading.
+	const auto feeds_snapshot =
+		std::make_shared<const std::vector<FeedPtrPosPair>>(visible_feeds);
+
+	auto render_line = [this, feedlist_format, feeds_snapshot](std::uint32_t line,
 	std::uint32_t width) -> StflRichText {
-		if (line >= visible_feeds.size())
+		if (line >= feeds_snapshot->size())
 		{
 			return StflRichText::from_plaintext("ERROR");
 		}
-		auto& feed = visible_feeds[line];
+		auto& feed = (*feeds_snapshot)[line];
 		return format_line(feedlist_format, feed.first, feed.second, width);
 	};
-	list.invalidate_list_content(visible_feeds.size(), render_line);
+	list.invalidate_list_content(feeds_snapshot->size(), render_line);
 
 	update_form_title(width);
 }
