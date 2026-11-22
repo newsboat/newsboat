@@ -45,6 +45,7 @@ Stfl::Form::~Form()
 
 std::string Stfl::Form::run(int timeout)
 {
+	std::lock_guard<std::mutex> guard(mtx);
 	const auto event = stfl_ipool_fromwc(ipool, stfl_run(f, timeout));
 	if (event != nullptr) {
 		return std::string(event);
@@ -65,6 +66,7 @@ void Stfl::Form::recalculate_widget_dimensions()
 
 std::string Stfl::Form::convert(std::wstring input)
 {
+	std::lock_guard<std::mutex> guard(mtx);
 	const auto output = stfl_ipool_fromwc(ipool, input.c_str());
 	return output == nullptr ? "" : std::string{output};
 }
@@ -134,6 +136,7 @@ Event Stfl::Form::wait_for_event(int timeout)
 
 std::string Stfl::Form::get(const std::string& name)
 {
+	std::lock_guard<std::mutex> guard(mtx);
 	const char* text = stfl_ipool_fromwc(
 			ipool, stfl_get(f, stfl_ipool_towc(ipool, name.c_str())));
 	std::string retval;
@@ -146,6 +149,7 @@ std::string Stfl::Form::get(const std::string& name)
 
 void Stfl::Form::set(const std::string& name, const std::string& value)
 {
+	std::lock_guard<std::mutex> guard(mtx);
 	stfl_set(f,
 		stfl_ipool_towc(ipool, name.c_str()),
 		stfl_ipool_towc(ipool, value.c_str()));
@@ -154,6 +158,7 @@ void Stfl::Form::set(const std::string& name, const std::string& value)
 
 std::string Stfl::Form::get_focus()
 {
+	std::lock_guard<std::mutex> guard(mtx);
 	const char* focus = stfl_ipool_fromwc(ipool, stfl_get_focus(f));
 	std::string retval;
 	if (focus) {
@@ -165,6 +170,7 @@ std::string Stfl::Form::get_focus()
 
 void Stfl::Form::set_focus(const std::string& name)
 {
+	std::lock_guard<std::mutex> guard(mtx);
 	stfl_set_focus(f, stfl_ipool_towc(ipool, name.c_str()));
 	LOG(Level::DEBUG, "Stfl::Form::set_focus: %s", name);
 }
@@ -173,6 +179,7 @@ void Stfl::Form::modify(const std::string& name,
 	const std::string& mode,
 	const std::string& text)
 {
+	std::lock_guard<std::mutex> guard(mtx);
 	const wchar_t* wname, *wmode, *wtext;
 	wname = stfl_ipool_towc(ipool, name.c_str());
 	wmode = stfl_ipool_towc(ipool, mode.c_str());
@@ -202,6 +209,7 @@ std::string Stfl::quote(const std::string& text)
 std::string Stfl::Form::dump(const std::string& name, const std::string& prefix,
 	int focus)
 {
+	std::lock_guard<std::mutex> guard(mtx);
 	const char* text = stfl_ipool_fromwc(ipool,
 			stfl_dump(f,
 				stfl_ipool_towc(ipool, name.c_str()),
