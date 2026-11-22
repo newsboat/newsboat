@@ -5,6 +5,7 @@ extern "C" {
 #include <stfl.h>
 }
 
+#include <mutex>
 #include <string>
 
 #include "event.h"
@@ -53,6 +54,14 @@ public:
 
 		stfl_form* f;
 		stfl_ipool* ipool;
+
+		// Reload threads update forms (list contents, title, status line)
+		// while the UI thread uses the same forms. `ipool` owns the strings
+		// passed to and returned from STFL and is flushed after each call, so
+		// one thread's flush must not free another thread's strings. Every
+		// method that touches `ipool` holds this lock. It is not held while
+		// waiting for input in wait_for_event().
+		std::mutex mtx;
 	};
 
 	static void reset();
