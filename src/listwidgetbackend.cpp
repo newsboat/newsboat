@@ -28,6 +28,8 @@ ListWidgetBackend::ListWidgetBackend(const std::string& list_name, Stfl::Form& f
 
 void ListWidgetBackend::stfl_replace_list(std::string stfl)
 {
+	std::lock_guard<std::recursive_mutex> guard(mtx);
+
 	num_lines = 0;
 	scroll_offset = 0;
 	line_cache.clear();
@@ -41,22 +43,27 @@ void ListWidgetBackend::stfl_replace_list(std::string stfl)
 
 std::uint32_t ListWidgetBackend::get_width()
 {
+	std::lock_guard<std::recursive_mutex> guard(mtx);
 	return utils::to_u(form.get(list_name + ":w"));
 }
 
 std::uint32_t ListWidgetBackend::get_height()
 {
+	std::lock_guard<std::recursive_mutex> guard(mtx);
 	return utils::to_u(form.get(list_name + ":h"));
 }
 
 std::uint32_t ListWidgetBackend::get_num_lines()
 {
+	std::lock_guard<std::recursive_mutex> guard(mtx);
 	return num_lines;
 }
 
 void ListWidgetBackend::invalidate_list_content(std::uint32_t line_count,
 	std::function<StflRichText(std::uint32_t, std::uint32_t)> get_line_method)
 {
+	std::lock_guard<std::recursive_mutex> guard(mtx);
+
 	line_cache.clear();
 	get_formatted_line = get_line_method;
 	num_lines = line_count;
@@ -69,6 +76,8 @@ void ListWidgetBackend::invalidate_list_content(std::uint32_t line_count,
 void ListWidgetBackend::update_position(std::uint32_t pos,
 	std::uint32_t new_scroll_offset)
 {
+	std::lock_guard<std::recursive_mutex> guard(mtx);
+
 	scroll_offset = new_scroll_offset;
 	form.set(list_name + "_pos", std::to_string(pos - scroll_offset));
 	form.set(list_name + "_offset", "0");
@@ -78,6 +87,8 @@ void ListWidgetBackend::update_position(std::uint32_t pos,
 
 void ListWidgetBackend::render()
 {
+	std::lock_guard<std::recursive_mutex> guard(mtx);
+
 	const auto viewport_width = get_width();
 	const auto viewport_height = get_height();
 	const auto visible_content_lines = std::min(viewport_height, num_lines - scroll_offset);
