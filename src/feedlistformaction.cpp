@@ -112,7 +112,7 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: reloading feed at position `%d'", pos);
 		if (visible_feeds.size() > 0) {
-			v.get_ctrl().get_reloader()->reload(pos);
+			v.get_ctrl().get_reloader()->reload_single_feed_from_main_thread(pos);
 		} else {
 			v.get_statusline().show_error(
 				_("No feed selected!")); // should not happen
