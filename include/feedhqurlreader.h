@@ -1,26 +1,23 @@
 #ifndef NEWSBOAT_FEEDHQURLREADER_H_
 #define NEWSBOAT_FEEDHQURLREADER_H_
 
-#include "urlreader.h"
+#include "remoteapiurlreader.h"
 
 namespace newsboat {
 
 class ConfigContainer;
 class RemoteApi;
 
-class FeedHqUrlReader : public UrlReader {
+class FeedHqUrlReader : public RemoteApiUrlReader {
 public:
 	FeedHqUrlReader(ConfigContainer& c,
 		const Filepath& url_file,
 		RemoteApi& a);
-	~FeedHqUrlReader() override;
-	std::optional<utils::ReadTextFileError> reload() override;
-	std::string get_source() const override;
+	~FeedHqUrlReader() override = default;
+	void add_special_feeds() override;
 
 private:
 	ConfigContainer& cfg;
-	Filepath file;
-	RemoteApi& api;
 };
 
 } // namespace newsboat
