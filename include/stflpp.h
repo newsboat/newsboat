@@ -52,7 +52,6 @@ public:
 		std::string function_key_to_string(wint_t wch);
 
 		stfl_form* f;
-		stfl_ipool* ipool;
 	};
 
 	static void reset();
