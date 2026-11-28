@@ -10,17 +10,17 @@ class RemoteApi;
 
 class OldReaderUrlReader : public UrlReader {
 public:
-	OldReaderUrlReader(ConfigContainer* c,
+	OldReaderUrlReader(ConfigContainer& c,
 		const Filepath& url_file,
-		RemoteApi* a);
-	~OldReaderUrlReader() override;
+		RemoteApi& a);
+	~OldReaderUrlReader() override = default;
 	std::optional<utils::ReadTextFileError> reload() override;
 	std::string get_source() const override;
 
 private:
-	ConfigContainer* cfg;
+	ConfigContainer& cfg;
 	Filepath file;
-	RemoteApi* api;
+	RemoteApi& api;
 };
 
 } // namespace newsboat

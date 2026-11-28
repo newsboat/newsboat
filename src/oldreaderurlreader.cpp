@@ -8,16 +8,14 @@
 
 namespace newsboat {
 
-OldReaderUrlReader::OldReaderUrlReader(ConfigContainer* c,
+OldReaderUrlReader::OldReaderUrlReader(ConfigContainer& c,
 	const Filepath& url_file,
-	RemoteApi* a)
+	RemoteApi& a)
 	: cfg(c)
 	, file(url_file)
 	, api(a)
 {
 }
-
-OldReaderUrlReader::~OldReaderUrlReader() {}
 
 #define BROADCAST_FRIENDS_URL                                           \
 	"https://theoldreader.com/reader/atom/user/-/state/com.google/" \
@@ -32,7 +30,7 @@ std::optional<utils::ReadTextFileError> OldReaderUrlReader::reload()
 {
 	feed_urls.clear();
 
-	if (cfg->get_configvalue_as_bool("oldreader-show-special-feeds")) {
+	if (cfg.get_configvalue_as_bool("oldreader-show-special-feeds")) {
 		feed_urls.emplace_back(FeedUrl{BROADCAST_FRIENDS_URL, FeedOrigin{}, {std::string("~") + _("People you follow")}});
 		feed_urls.emplace_back(FeedUrl{STARRED_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Starred items")}});
 		feed_urls.emplace_back(FeedUrl{SHARED_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Shared items")}});
@@ -40,7 +38,7 @@ std::optional<utils::ReadTextFileError> OldReaderUrlReader::reload()
 
 	load_query_urls_from_file(file);
 
-	std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
+	std::vector<TaggedFeedUrl> feedurls = api.get_subscribed_urls();
 	for (const auto& url : feedurls) {
 		LOG(Level::DEBUG, "added %s to URL list", url.first);
 		feed_urls.emplace_back(FeedUrl{url.first, FeedOrigin{}, url.second});

@@ -8,9 +8,9 @@
 
 namespace newsboat {
 
-FeedHqUrlReader::FeedHqUrlReader(ConfigContainer* c,
+FeedHqUrlReader::FeedHqUrlReader(ConfigContainer& c,
 	const Filepath& url_file,
-	RemoteApi* a)
+	RemoteApi& a)
 	: cfg(c)
 	, file(url_file)
 	, api(a)
@@ -31,7 +31,7 @@ std::optional<utils::ReadTextFileError> FeedHqUrlReader::reload()
 {
 	feed_urls.clear();
 
-	if (cfg->get_configvalue_as_bool("feedhq-show-special-feeds")) {
+	if (cfg.get_configvalue_as_bool("feedhq-show-special-feeds")) {
 		feed_urls.emplace_back(FeedUrl{BROADCAST_FRIENDS_URL, FeedOrigin{}, {std::string("~") + _("People you follow")}});
 		feed_urls.emplace_back(FeedUrl{STARRED_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Starred items")}});
 		feed_urls.emplace_back(FeedUrl{SHARED_ITEMS_URL, FeedOrigin{}, {std::string("~") + _("Shared items")}});
@@ -39,7 +39,7 @@ std::optional<utils::ReadTextFileError> FeedHqUrlReader::reload()
 
 	load_query_urls_from_file(file);
 
-	std::vector<TaggedFeedUrl> subscribed_urls = api->get_subscribed_urls();
+	std::vector<TaggedFeedUrl> subscribed_urls = api.get_subscribed_urls();
 	for (const auto& tagged : subscribed_urls) {
 		std::string url = tagged.first;
 		std::vector<std::string> url_tags = tagged.second;

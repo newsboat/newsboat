@@ -8,28 +8,26 @@
 
 namespace newsboat {
 
-MinifluxUrlReader::MinifluxUrlReader(ConfigContainer* c,
+MinifluxUrlReader::MinifluxUrlReader(ConfigContainer& c,
 	const Filepath& url_file,
-	RemoteApi* a)
+	RemoteApi& a)
 	: cfg(c)
 	, file(url_file)
 	, api(a)
 {
 }
 
-MinifluxUrlReader::~MinifluxUrlReader() {}
-
 std::optional<utils::ReadTextFileError> MinifluxUrlReader::reload()
 {
 	feed_urls.clear();
 
-	if (cfg->get_configvalue_as_bool("miniflux-show-special-feeds")) {
+	if (cfg.get_configvalue_as_bool("miniflux-show-special-feeds")) {
 		feed_urls.emplace_back(FeedUrl{"starred", FeedOrigin{}, {std::string("~") + _("Starred items")}});
 	}
 
 	load_query_urls_from_file(file);
 
-	const std::vector<TaggedFeedUrl> subscribed_urls = api->get_subscribed_urls();
+	const std::vector<TaggedFeedUrl> subscribed_urls = api.get_subscribed_urls();
 
 	for (const auto& url : subscribed_urls) {
 		LOG(Level::INFO, "added %s to URL list", url.first);

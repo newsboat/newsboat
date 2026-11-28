@@ -246,8 +246,7 @@ int Controller::run(const CliArgsParser& args)
 		urlcfg = std::make_unique<OpmlUrlReader>(cfg, configpaths.url_file());
 	} else if (type == "oldreader") {
 		api = std::make_unique<OldReaderApi>(cfg);
-		urlcfg = std::make_unique<OldReaderUrlReader>(
-				&cfg, configpaths.url_file(), api.get());
+		urlcfg = std::make_unique<OldReaderUrlReader>(cfg, configpaths.url_file(), *api);
 	} else if (type == "ttrss") {
 		api = std::make_unique<TtRssApi>(cfg);
 		urlcfg = std::make_unique<RemoteApiUrlReader>("Tiny Tiny RSS", configpaths.url_file(),
@@ -273,7 +272,7 @@ int Controller::run(const CliArgsParser& args)
 		urlcfg = std::make_unique<RemoteApiUrlReader>("NewsBlur", configpaths.url_file(), *api);
 	} else if (type == "feedhq") {
 		api = std::make_unique<FeedHqApi>(cfg);
-		urlcfg = std::make_unique<FeedHqUrlReader>(&cfg, configpaths.url_file(), api.get());
+		urlcfg = std::make_unique<FeedHqUrlReader>(cfg, configpaths.url_file(), *api);
 	} else if (type == "feedbin") {
 		const std::string user = cfg.get_configvalue("feedbin-login");
 		const std::string pass = cfg.get_configvalue("feedbin-password");
@@ -314,7 +313,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 
 		api = std::make_unique<FreshRssApi>(cfg);
-		urlcfg = std::make_unique<FreshRssUrlReader>(&cfg, configpaths.url_file(), api.get());
+		urlcfg = std::make_unique<FreshRssUrlReader>(cfg, configpaths.url_file(), *api);
 	} else if (type == "ocnews") {
 		api = std::make_unique<OcNewsApi>(cfg);
 		urlcfg = std::make_unique<RemoteApiUrlReader>("ownCloud News", configpaths.url_file(),
@@ -345,7 +344,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 
 		api = std::make_unique<MinifluxApi>(cfg);
-		urlcfg = std::make_unique<MinifluxUrlReader>(&cfg, configpaths.url_file(), api.get());
+		urlcfg = std::make_unique<MinifluxUrlReader>(cfg, configpaths.url_file(), *api);
 	} else if (type == "inoreader") {
 		const auto all_set = !cfg.get_configvalue("inoreader-app-id").empty()
 			&& !cfg.get_configvalue("inoreader-app-key").empty();
@@ -356,7 +355,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 
 		api = std::make_unique<InoreaderApi>(cfg);
-		urlcfg = std::make_unique<InoreaderUrlReader>(&cfg, configpaths.url_file(), api.get());
+		urlcfg = std::make_unique<InoreaderUrlReader>(cfg, configpaths.url_file(), *api);
 	} else {
 		std::cerr << strprintf::fmt(_("ERROR: Unknown urls-source `%s'"),
 				type) << std::endl;
