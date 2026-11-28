@@ -1,26 +1,23 @@
 #ifndef NEWSBOAT_INOREADERURLREADER_H_
 #define NEWSBOAT_INOREADERURLREADER_H_
 
-#include "urlreader.h"
+#include "remoteapiurlreader.h"
 
 namespace newsboat {
 
 class ConfigContainer;
 class RemoteApi;
 
-class InoreaderUrlReader : public UrlReader {
+class InoreaderUrlReader : public RemoteApiUrlReader {
 public:
 	InoreaderUrlReader(ConfigContainer& c,
 		const Filepath& url_file,
 		RemoteApi& a);
 	virtual ~InoreaderUrlReader() override = default;
-	virtual std::optional<utils::ReadTextFileError> reload() override;
-	virtual std::string get_source() const override;
+	void add_special_feeds() override;
 
 private:
 	ConfigContainer& cfg;
-	Filepath file;
-	RemoteApi& api;
 };
 
 } // namespace newsboat

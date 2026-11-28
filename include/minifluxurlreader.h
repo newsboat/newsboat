@@ -1,23 +1,20 @@
 #ifndef NEWSBOAT_MINIFLUXURLREADER_H_
 #define NEWSBOAT_MINIFLUXURLREADER_H_
 
-#include "urlreader.h"
+#include "remoteapiurlreader.h"
 
 namespace newsboat {
 
 class RemoteApi;
 
-class MinifluxUrlReader : public UrlReader {
+class MinifluxUrlReader : public RemoteApiUrlReader {
 public:
 	MinifluxUrlReader(ConfigContainer& c, const Filepath& url_file, RemoteApi& a);
 	~MinifluxUrlReader() override = default;
-	std::optional<utils::ReadTextFileError> reload() override;
-	std::string get_source() const override;
+	void add_special_feeds() override;
 
 private:
 	ConfigContainer& cfg;
-	Filepath file;
-	RemoteApi& api;
 };
 
 } // namespace newsboat

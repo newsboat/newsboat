@@ -21,6 +21,8 @@ std::optional<utils::ReadTextFileError> RemoteApiUrlReader::reload()
 {
 	feed_urls.clear();
 
+	add_special_feeds();
+
 	load_query_urls_from_file(file);
 
 	const std::vector<TaggedFeedUrl> subsribed_urls = api.get_subscribed_urls();
